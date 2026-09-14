@@ -1,2 +1,3 @@
-# halfacre-research-site
-Public website for Halfacre Research
+# Halfacre Research site
+
+Public website for Halfacre Research.
