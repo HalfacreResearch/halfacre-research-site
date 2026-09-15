@@ -10,7 +10,7 @@
   .sub { color: #9bb0d0; font-size: 0.9rem; margin-bottom: 20px; }
   section { background: #141e33; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
   h2 { font-size: 1.05rem; margin: 0 0 10px; color: #8ec5ff; }
-  ul { margin: 0; padding-left: 1.1rem; }
+  ol, ul { margin: 0; padding-left: 1.2rem; }
   li { margin: 6px 0; }
   .tag { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
   .live { background: #143d2a; color: #6dffa6; }
@@ -20,22 +20,20 @@
 </style>
 </head>
 <body>
-  <h1>Company bot fleet — as is</h1>
-  <p class="sub">Updated 2026-09-15. Live only. Empty = not created. Nothing invented. Phone-friendly.</p>
+  <h1>Company bot fleet</h1>
+  <p class="sub">Updated 2026-09-15. Phone-friendly. LIVE = exists. EMPTY = named, not created.</p>
 
   <section>
-    <h2>Above the sectors</h2>
+    <h2>Above</h2>
     <ul>
       <li>Matthew</li>
       <li>ChiefOfStaffBot <span class="tag live">LIVE</span> — company</li>
-      <li>ExecAssistantBot <span class="tag live">LIVE</span> — personal
-        <ul><li>EmailBot <span class="tag live">LIVE</span></li></ul>
-      </li>
+      <li>ExecAssistantBot <span class="tag live">LIVE</span> — personal → EmailBot <span class="tag live">LIVE</span></li>
     </ul>
   </section>
 
   <section>
-    <h2>Five sectors (names locked)</h2>
+    <h2>Five sectors</h2>
     <ul>
       <li>CTOBot <span class="tag live">LIVE</span></li>
       <li>CMOBot <span class="tag live">LIVE</span></li>
@@ -46,7 +44,22 @@
   </section>
 
   <section>
-    <h2>Under CTOBot (live wiring today)</h2>
+    <h2>CFOBot Divisions (locked names — not created yet)</h2>
+    <ol>
+      <li>BankingBot <span class="tag empty">EMPTY</span></li>
+      <li>TaxFilingsBot <span class="tag empty">EMPTY</span></li>
+      <li>TaxLoopholesBot <span class="tag empty">EMPTY</span></li>
+      <li>PaymentServicesBot <span class="tag empty">EMPTY</span></li>
+      <li>CryptoExchangesBot <span class="tag empty">EMPTY</span></li>
+      <li>StockExchangesBot <span class="tag empty">EMPTY</span></li>
+      <li>CreditBot <span class="tag empty">EMPTY</span></li>
+      <li>LiquidityBot <span class="tag empty">EMPTY</span></li>
+      <li>SavingsBot <span class="tag empty">EMPTY</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Under CTOBot (live today)</h2>
     <ul>
       <li>SecureStorageBot (Vault) <span class="tag live">LIVE</span></li>
       <li>DocsArchiveBot <span class="tag live">LIVE</span></li>
@@ -61,37 +74,24 @@
 
   <section>
     <h2>Under CMOBot</h2>
-    <ul>
-      <li>LinkedInBot <span class="tag live">LIVE</span></li>
-    </ul>
+    <ul><li>LinkedInBot <span class="tag live">LIVE</span></li></ul>
   </section>
 
   <section>
-    <h2>Under CFOBot</h2>
-    <ul>
-      <li>No Division locked yet</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Rules house (placement TBD)</h2>
-    <ul>
-      <li>EscalationListsBot <span class="tag live">LIVE</span> — company escalation/approval rules; may have zero email monitors</li>
-    </ul>
+    <h2>Rules house</h2>
+    <ul><li>EscalationListsBot <span class="tag live">LIVE</span> — company rules; not listed as a CFO Division above</li></ul>
   </section>
 
   <section>
     <h2>Other</h2>
-    <ul>
-      <li>BotBuilder <span class="tag live">LIVE</span> — creates/trains bots (not under ChiefOfStaff)</li>
-    </ul>
+    <ul><li>BotBuilder <span class="tag live">LIVE</span> — creates/trains (not under CoS)</li></ul>
   </section>
 
   <section>
     <h2>Email monitors</h2>
-    <p class="note">Raw company sender list exists. Nothing assigned to departments yet. Org first, then monitors.</p>
+    <p class="note">Raw company senders on file. Nothing assigned yet.</p>
   </section>
 
-  <p class="note">Also: <a href="https://halfacreresearch.tech/">halfacreresearch.tech</a> product UI (separate from this fleet page).</p>
+  <p class="note"><a href="https://halfacreresearch.tech/">halfacreresearch.tech</a> product UI</p>
 </body>
 </html>
