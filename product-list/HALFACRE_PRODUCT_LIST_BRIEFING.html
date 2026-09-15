@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halfacre Research — Modules we offer</title>
+<style>
+  :root {
+    --dark: #0A0A0A;
+    --rail: #111111;
+    --card: #161616;
+    --foot: #121212;
+    --orange: #F7931A;
+    --white: #FFFFFF;
+    --muted: #A8A8A8;
+    --neon: #39FF14;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #050505; color: var(--white); font-family: Arial, Helvetica, sans-serif; }
+  .stage { height: 100%; display: flex; align-items: center; justify-content: center; padding: 18px; }
+  .slide {
+    display: none;
+    width: min(1280px, 100%);
+    aspect-ratio: 16 / 9;
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 60px rgba(0,0,0,.7);
+  }
+  .slide.on { display: block; }
+  .rail {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 9.5%;
+    background: var(--rail); color: var(--white);
+    padding: 28px 10px 18px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    box-shadow: inset -3px 0 0 var(--orange);
+  }
+  .brand { font-family: "Courier New", monospace; font-size: 11px; font-weight: 700; letter-spacing: .04em; writing-mode: vertical-rl; transform: rotate(180deg); }
+  .rail-meta { font-family: "Courier New", monospace; font-size: 10px; color: var(--orange); line-height: 1.35; }
+  .body { margin-left: 9.5%; height: calc(100% - 16.5%); padding: 24px 32px 8px; }
+  h1 { margin: 0 0 8px; font-size: 32px; line-height: .95; color: var(--white); }
+  .hero h1 { font-size: 50px; margin-top: 72px; max-width: 18ch; }
+  .sub { font-family: "Courier New", monospace; color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .hero .sub { max-width: 56ch; font-size: 16px; margin-top: 18px; color: var(--orange); }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card { background: var(--card); border-left: 6px solid var(--orange); padding: 12px 14px 14px; }
+  .card h3 { font-family: "Courier New", monospace; font-size: 11px; letter-spacing: .04em; margin: 0 0 8px; color: var(--orange); }
+  .card p { margin: 0 0 8px; font-size: 14px; line-height: 1.32; }
+  .card p:last-child { margin-bottom: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    background: var(--card);
+    border-left: 4px solid var(--orange);
+    padding: 6px 8px;
+    min-width: 92px;
+  }
+  .chip b { display: block; font-size: 13px; line-height: 1.15; }
+  .chip i { display: block; font-style: normal; font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .chip span { display: block; font-family: "Courier New", monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .chip.both { box-shadow: inset 0 -2px 0 var(--orange); }
+  .table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .table th { font-family: "Courier New", monospace; font-size: 10px; color: var(--orange); text-align: left; padding: 0 8px 4px 0; }
+  .table td { padding: 2px 8px 2px 0; border-top: 1px solid #222; vertical-align: top; }
+  .foot {
+    position: absolute; left: 9.5%; right: 0; bottom: 0; height: 16.5%;
+    background: var(--foot); border-top: 2px solid var(--orange);
+    display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12px 28px 0;
+  }
+  .foot span { display: block; font-family: "Courier New", monospace; font-size: 11px; color: var(--orange); }
+  .foot b { display: block; margin-top: 4px; font-size: 15px; color: var(--white); }
+  .foot.action b { color: var(--neon); }
+  .nav { position: fixed; bottom: 14px; right: 18px; color: var(--neon); font-family: "Courier New", monospace; font-size: 12px; cursor: pointer; }
+  @page { size: 13.333in 7.5in; margin: 0; }
+  body.print-all .stage { display: block; height: auto; padding: 0; }
+  body.print-all .slide { display: block; width: 13.333in; height: 7.5in; box-shadow: none; page-break-after: always; break-after: page; }
+  body.print-all .nav { display: none; }
+  @media print {
+    html, body { height: auto; background: #0A0A0A; }
+    .stage { display: block; height: auto; padding: 0; }
+    .slide { display: block !important; width: 13.333in; height: 7.5in; box-shadow: none; page-break-after: always; break-after: page; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+<section class="slide on">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">PRODUCT LIST<br>14 SEP 2026</div></div>
+  <div class="body hero">
+    <h1>The modules we offer.</h1>
+    <p class="sub">Data and research. $1.99 a module. Buy the ones you need.</p>
+  </div>
+  <div class="foot"><div><span>COMPANY</span><b>Halfacre Research</b></div><div><span>THE OFFER</span><b>Data and research</b></div><div><span>PRICE</span><b>$1.99 per module</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">PITCH<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Small modules. Real-life next moves.</h1>
+    <p class="sub">This is the online offer. Every name below is $1.99.</p>
+    <div class="grid3">
+      <div class="card"><h3>WHAT YOU BUY</h3><p>Data and research for the next move in your real life.</p><p>Pick the modules that match that move.</p></div>
+      <div class="card"><h3>THE PRICE</h3><p>$1.99 a module.</p><p>Many small modules. You do not have to buy the whole list.</p></div>
+      <div class="card"><h3>THE LIST</h3><p>Crypto. Tech. Dividend. Metals. Commodities. ETFs. Mutual funds. Research. Three IRA wrappers.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>PRICE</span><b>$1.99</b></div><div><span>HOW MANY</span><b>One or many</b></div><div><span>WHAT IT IS</span><b>Data and research</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">DEPARTMENTS<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Ten departments.</h1>
+    <p class="sub">Every module on this list is $1.99.</p>
+    <div class="grid2">
+      <div class="card"><h3>MARKETS</h3>
+        <p>1. Crypto</p>
+        <p>2. Tech stocks</p>
+        <p>3. Dividend stocks</p>
+        <p>4. Precious metals</p>
+        <p>5. Commodities</p>
+        <p>6. ETFs</p>
+        <p>7. Mutual funds</p>
+      </div>
+      <div class="card"><h3>RESEARCH AND WRAPPERS</h3>
+        <p>8. Research</p>
+        <p>9. Derivatives data</p>
+        <p>10. Traditional / Roth / SEP</p>
+        <p>A name that is both tech and dividend sits in both departments.</p>
+        <p>Physical gold is metals. GLD is funds.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><div><span>NAMED MODULES</span><b>157</b></div><div><span>EACH</span><b>$1.99</b></div><div><span>WRAPPERS</span><b>3</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">CRYPTO OFFER<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Crypto: two modules when a public pair exists.</h1>
+    <p class="sub">Bitcoin. Versus Bitcoin. Versus the dollar. $1.99 each.</p>
+    <div class="grid3">
+      <div class="card"><h3>BITCOIN</h3><p>The first Bitcoin module.</p><p>BTC only. $1.99.</p></div>
+      <div class="card"><h3>VERSUS THE DOLLAR</h3><p>That name priced in dollars.</p><p>BTC and every other coin on this list. $1.99.</p></div>
+      <div class="card"><h3>VERSUS BITCOIN</h3><p>That name priced in Bitcoin.</p><p>On the list when a public BTC market is open. $1.99.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>BTC</span><b>Bitcoin + vs dollar</b></div><div><span>OTHER COINS</span><b>vs BTC + vs dollar</b></div><div><span>STOCKS / FUNDS / METALS</span><b>vs dollar</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">CRYPTO<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Crypto department. Twenty names.</h1>
+    <p class="sub">33 modules on the offer  ·  $1.99 each</p>
+    <table class="table">
+      <thead><tr><th>NAME</th><th>BITCOIN</th><th>VERSUS BITCOIN</th><th>VERSUS DOLLAR</th></tr></thead>
+      <tbody>
+        <tr><td>BTC</td><td>$1.99</td><td>—</td><td>$1.99</td></tr>
+        <tr><td>ETH</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>SOL</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>XRP</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>LINK</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>BNB</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>TRX</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>ADA</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>BCH</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>UNI</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>HBAR</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>AVAX</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>ATOM</td><td>—</td><td>$1.99</td><td>$1.99</td></tr>
+        <tr><td>HYPE</td><td>—</td><td>—</td><td>$1.99</td></tr>
+        <tr><td>NEAR</td><td>—</td><td>—</td><td>$1.99</td></tr>
+        <tr><td>SUI</td><td>—</td><td>—</td><td>$1.99</td></tr>
+        <tr><td>KAS</td><td>—</td><td>—</td><td>$1.99</td></tr>
+        <tr><td>ARB</td><td>—</td><td>—</td><td>$1.99</td></tr>
+        <tr><td>RENDER</td><td>—</td><td>—</td><td>$1.99</td></tr>
+        <tr><td>INJ</td><td>—</td><td>—</td><td>$1.99</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="foot"><div><span>CRYPTO MODULES</span><b>33</b></div><div><span>VERSUS BITCOIN</span><b>12 names</b></div><div><span>VERSUS THE DOLLAR</span><b>All 20</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">TECH<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Tech department. Twenty-five modules.</h1>
+    <p class="sub">Tech stock research  ·  $1.99 each</p>
+    <div class="chips">
+      <div class="chip both"><b>NVDA</b><i>also dividend</i><span>$1.99</span></div>
+      <div class="chip"><b>AAPL</b><span>$1.99</span></div>
+      <div class="chip"><b>GOOG</b><span>$1.99</span></div>
+      <div class="chip"><b>MSFT</b><span>$1.99</span></div>
+      <div class="chip"><b>AMZN</b><span>$1.99</span></div>
+      <div class="chip both"><b>TSM</b><i>also dividend</i><span>$1.99</span></div>
+      <div class="chip both"><b>AVGO</b><i>also dividend</i><span>$1.99</span></div>
+      <div class="chip"><b>META</b><span>$1.99</span></div>
+      <div class="chip"><b>TSLA</b><span>$1.99</span></div>
+      <div class="chip"><b>005930.KS</b><i>Samsung</i><span>$1.99</span></div>
+      <div class="chip both"><b>MU</b><i>also dividend</i><span>$1.99</span></div>
+      <div class="chip both"><b>000660.KS</b><i>SK Hynix · also dividend</i><span>$1.99</span></div>
+      <div class="chip"><b>AMD</b><span>$1.99</span></div>
+      <div class="chip both"><b>ASML</b><i>also dividend</i><span>$1.99</span></div>
+      <div class="chip"><b>INTC</b><span>$1.99</span></div>
+      <div class="chip"><b>IONQ</b><span>$1.99</span></div>
+      <div class="chip"><b>AVAV</b><span>$1.99</span></div>
+      <div class="chip"><b>JOBY</b><span>$1.99</span></div>
+      <div class="chip"><b>CRSP</b><span>$1.99</span></div>
+      <div class="chip"><b>ENPH</b><span>$1.99</span></div>
+      <div class="chip"><b>BEAM</b><span>$1.99</span></div>
+      <div class="chip"><b>QUBT</b><span>$1.99</span></div>
+      <div class="chip"><b>RXRX</b><span>$1.99</span></div>
+      <div class="chip"><b>NTLA</b><span>$1.99</span></div>
+      <div class="chip"><b>RCAT</b><span>$1.99</span></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>LARGE</span><b>15</b></div><div><span>MID / SMALL</span><b>5 / 5</b></div><div><span>ALSO DIVIDEND</span><b>6 names</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">DIVIDEND<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Dividend department. Twenty-six modules.</h1>
+    <p class="sub">Dividend stock research  ·  $1.99 each</p>
+    <div class="chips">
+      <div class="chip both"><b>NVDA</b><i>also tech</i><span>$1.99</span></div>
+      <div class="chip both"><b>MU</b><i>also tech</i><span>$1.99</span></div>
+      <div class="chip both"><b>000660.KS</b><i>also tech</i><span>$1.99</span></div>
+      <div class="chip both"><b>AVGO</b><i>also tech</i><span>$1.99</span></div>
+      <div class="chip both"><b>ASML</b><i>also tech</i><span>$1.99</span></div>
+      <div class="chip both"><b>TSM</b><i>also tech</i><span>$1.99</span></div>
+      <div class="chip"><b>FIX</b><span>$1.99</span></div>
+      <div class="chip"><b>DELL</b><span>$1.99</span></div>
+      <div class="chip"><b>STX</b><span>$1.99</span></div>
+      <div class="chip"><b>LRCX</b><span>$1.99</span></div>
+      <div class="chip"><b>KLAC</b><span>$1.99</span></div>
+      <div class="chip"><b>PWR</b><span>$1.99</span></div>
+      <div class="chip"><b>MRVL</b><span>$1.99</span></div>
+      <div class="chip"><b>LLY</b><span>$1.99</span></div>
+      <div class="chip"><b>AMAT</b><span>$1.99</span></div>
+      <div class="chip"><b>TER</b><span>$1.99</span></div>
+      <div class="chip"><b>MPWR</b><span>$1.99</span></div>
+      <div class="chip"><b>HWM</b><span>$1.99</span></div>
+      <div class="chip"><b>JBL</b><span>$1.99</span></div>
+      <div class="chip"><b>VST</b><span>$1.99</span></div>
+      <div class="chip"><b>TPL</b><span>$1.99</span></div>
+      <div class="chip"><b>EME</b><span>$1.99</span></div>
+      <div class="chip"><b>NRG</b><span>$1.99</span></div>
+      <div class="chip"><b>WSM</b><span>$1.99</span></div>
+      <div class="chip"><b>MPC</b><span>$1.99</span></div>
+      <div class="chip"><b>CAT</b><span>$1.99</span></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>NEW NAMES</span><b>20</b></div><div><span>ALSO TECH</span><b>6</b></div><div><span>ON THE OFFER</span><b>26 × $1.99</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">METALS<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Precious metals. Seven modules.</h1>
+    <p class="sub">Metal research  ·  $1.99 each  ·  physical gold is here, GLD is funds</p>
+    <div class="chips">
+      <div class="chip"><b>XAU</b><i>Gold</i><span>$1.99</span></div>
+      <div class="chip"><b>XAG</b><i>Silver</i><span>$1.99</span></div>
+      <div class="chip"><b>XPT</b><i>Platinum</i><span>$1.99</span></div>
+      <div class="chip"><b>XPD</b><i>Palladium</i><span>$1.99</span></div>
+      <div class="chip"><b>XRH</b><i>Rhodium</i><span>$1.99</span></div>
+      <div class="chip"><b>XIR</b><i>Iridium</i><span>$1.99</span></div>
+      <div class="chip"><b>XRU</b><i>Ruthenium</i><span>$1.99</span></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>METAL MODULES</span><b>7</b></div><div><span>PRICE</span><b>$1.99 each</b></div><div><span>GLD</span><b>The gold fund</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">COMMODITIES<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Commodities. Twenty modules.</h1>
+    <p class="sub">Commodity research  ·  $1.99 each</p>
+    <div class="chips">
+      <div class="chip"><b>CL</b><i>WTI crude</i><span>$1.99</span></div>
+      <div class="chip"><b>BZ</b><i>Brent</i><span>$1.99</span></div>
+      <div class="chip"><b>NG</b><i>Natural gas</i><span>$1.99</span></div>
+      <div class="chip"><b>HO</b><i>ULS diesel</i><span>$1.99</span></div>
+      <div class="chip"><b>RB</b><i>RBOB</i><span>$1.99</span></div>
+      <div class="chip"><b>ZC</b><i>Corn</i><span>$1.99</span></div>
+      <div class="chip"><b>ZS</b><i>Soybeans</i><span>$1.99</span></div>
+      <div class="chip"><b>ZM</b><i>Soy meal</i><span>$1.99</span></div>
+      <div class="chip"><b>ZL</b><i>Soy oil</i><span>$1.99</span></div>
+      <div class="chip"><b>ZW</b><i>Chicago wheat</i><span>$1.99</span></div>
+      <div class="chip"><b>KE</b><i>KC wheat</i><span>$1.99</span></div>
+      <div class="chip"><b>HG</b><i>Copper</i><span>$1.99</span></div>
+      <div class="chip"><b>ALI</b><i>Aluminum</i><span>$1.99</span></div>
+      <div class="chip"><b>ZNC</b><i>Zinc</i><span>$1.99</span></div>
+      <div class="chip"><b>SB</b><i>Sugar</i><span>$1.99</span></div>
+      <div class="chip"><b>KC</b><i>Coffee</i><span>$1.99</span></div>
+      <div class="chip"><b>CC</b><i>Cocoa</i><span>$1.99</span></div>
+      <div class="chip"><b>CT</b><i>Cotton</i><span>$1.99</span></div>
+      <div class="chip"><b>LE</b><i>Live cattle</i><span>$1.99</span></div>
+      <div class="chip"><b>HE</b><i>Lean hogs</i><span>$1.99</span></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>COMMODITY MODULES</span><b>20</b></div><div><span>PRICE</span><b>$1.99 each</b></div><div><span>GOLD / SILVER</span><b>Metals</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">ETFS<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>ETF department. Twenty modules.</h1>
+    <p class="sub">Fund research  ·  $1.99 each</p>
+    <div class="chips">
+      <div class="chip"><b>VOO</b><span>$1.99</span></div>
+      <div class="chip"><b>IVV</b><span>$1.99</span></div>
+      <div class="chip"><b>SPY</b><span>$1.99</span></div>
+      <div class="chip"><b>VTI</b><span>$1.99</span></div>
+      <div class="chip"><b>QQQ</b><span>$1.99</span></div>
+      <div class="chip"><b>VEA</b><span>$1.99</span></div>
+      <div class="chip"><b>VUG</b><span>$1.99</span></div>
+      <div class="chip"><b>IEFA</b><span>$1.99</span></div>
+      <div class="chip"><b>VTV</b><span>$1.99</span></div>
+      <div class="chip"><b>SPYM</b><span>$1.99</span></div>
+      <div class="chip"><b>VXUS</b><span>$1.99</span></div>
+      <div class="chip"><b>IEMG</b><span>$1.99</span></div>
+      <div class="chip"><b>BND</b><span>$1.99</span></div>
+      <div class="chip"><b>GLD</b><i>gold fund, not the metal</i><span>$1.99</span></div>
+      <div class="chip"><b>VGT</b><span>$1.99</span></div>
+      <div class="chip"><b>AGG</b><span>$1.99</span></div>
+      <div class="chip"><b>VWO</b><span>$1.99</span></div>
+      <div class="chip"><b>IWF</b><span>$1.99</span></div>
+      <div class="chip"><b>IJH</b><span>$1.99</span></div>
+      <div class="chip"><b>XLK</b><span>$1.99</span></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>ON THE OFFER</span><b>20</b></div><div><span>PRICE</span><b>$1.99 each</b></div><div><span>GLD</span><b>The gold fund</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">FUNDS<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Mutual funds. Ten modules.</h1>
+    <p class="sub">Fund research  ·  $1.99 each</p>
+    <div class="chips">
+      <div class="chip"><b>VTSAX</b><span>$1.99</span></div>
+      <div class="chip"><b>VFIAX</b><span>$1.99</span></div>
+      <div class="chip"><b>FXAIX</b><span>$1.99</span></div>
+      <div class="chip"><b>VTIAX</b><span>$1.99</span></div>
+      <div class="chip"><b>VBTLX</b><span>$1.99</span></div>
+      <div class="chip"><b>AGTHX</b><span>$1.99</span></div>
+      <div class="chip"><b>ABALX</b><span>$1.99</span></div>
+      <div class="chip"><b>FCNTX</b><span>$1.99</span></div>
+      <div class="chip"><b>FCTDX</b><span>$1.99</span></div>
+      <div class="chip"><b>VWELX</b><span>$1.99</span></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>ON THE OFFER</span><b>10</b></div><div><span>PRICE</span><b>$1.99 each</b></div><div><span>FUNDS TOTAL</span><b>30 with the ETFs</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">RESEARCH<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Research. Sixteen modules.</h1>
+    <p class="sub">Market and network research  ·  $1.99 each</p>
+    <div class="chips">
+      <div class="chip"><b>Macro indicators</b><span>$1.99</span></div>
+      <div class="chip"><b>Social sentiment</b><span>$1.99</span></div>
+      <div class="chip"><b>Capital flows and ownership</b><span>$1.99</span></div>
+      <div class="chip"><b>Market liquidity and infrastructure</b><span>$1.99</span></div>
+      <div class="chip"><b>Cross-asset relationships</b><span>$1.99</span></div>
+      <div class="chip"><b>Market breadth and index mechanics</b><span>$1.99</span></div>
+      <div class="chip"><b>Event timing</b><span>$1.99</span></div>
+      <div class="chip"><b>Rules and restrictions</b><span>$1.99</span></div>
+      <div class="chip"><b>Public positioning</b><span>$1.99</span></div>
+      <div class="chip"><b>Physical disruption</b><span>$1.99</span></div>
+      <div class="chip"><b>Forecasts and ratings</b><span>$1.99</span></div>
+      <div class="chip"><b>Bitcoin network</b><span>$1.99</span></div>
+      <div class="chip"><b>Mining</b><span>$1.99</span></div>
+      <div class="chip"><b>Lightning and payments</b><span>$1.99</span></div>
+      <div class="chip"><b>Bitcoin core and nodes</b><span>$1.99</span></div>
+      <div class="chip"><b>Derivatives data</b><span>$1.99</span></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>ON THE OFFER</span><b>16</b></div><div><span>PRICE</span><b>$1.99 each</b></div><div><span>DERIVATIVES</span><b>Data. Not a trade.</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">WRAPPERS<br>14 SEP 2026</div></div>
+  <div class="body">
+    <h1>Three wrappers. Not one IRA.</h1>
+    <p class="sub">Traditional. Roth. SEP. Each stands alone.</p>
+    <div class="grid3">
+      <div class="card"><h3>TRADITIONAL</h3><p>Its own wrapper. Its own rules.</p></div>
+      <div class="card"><h3>ROTH</h3><p>Its own wrapper. Its own rules.</p></div>
+      <div class="card"><h3>SEP</h3><p>Its own wrapper. Employer money on a regular SEP.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>WRAPPERS</span><b>3</b></div><div><span>NOT</span><b>One blended IRA</b></div><div><span>WITH THE LIST</span><b>The IRA department</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">THE LIST<br>14 SEP 2026</div></div>
+  <div class="body hero">
+    <h1>That is the product list.</h1>
+    <p class="sub">Data and research. $1.99 a module. Buy the ones you need.</p>
+  </div>
+  <div class="foot action"><div><span>COMPANY</span><b>Halfacre Research</b></div><div><span>THE OFFER</span><b>157 modules</b></div><div><span>PRICE</span><b>$1.99 each</b></div></div>
+</section>
+
+</div>
+<div class="nav"><span id="pos">1 / 14</span> · arrows or click</div>
+<script>
+  if (location.search.includes('print=1')) document.body.classList.add('print-all');
+  const slides = [...document.querySelectorAll('.slide')];
+  let i = 0;
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, idx) => s.classList.toggle('on', idx === i));
+    document.getElementById('pos').textContent = (i + 1) + ' / ' + slides.length;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  });
+  document.addEventListener('click', e => {
+    if (e.target.closest('.nav')) return;
+    if (e.clientX > innerWidth / 2) show(i + 1); else show(i - 1);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Standard avatar 4">
+  <rect width="160" height="160" fill="#0A0A0A"/>
+  <rect x="40" y="34" width="80" height="92" rx="28" fill="#161616" stroke="#A8A8A8" stroke-width="4"/>
+  <circle cx="80" cy="40" r="10" fill="#F7931A"/>
+  <circle cx="66" cy="74" r="5" fill="#FFFFFF"/>
+  <circle cx="94" cy="74" r="5" fill="#FFFFFF"/>
+  <path d="M66 98c8 8 20 8 28 0" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+</svg>

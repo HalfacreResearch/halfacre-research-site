@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Charlie Van Halfacre — The Hivemind</title>
+  <link rel="stylesheet" href="hivemind.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <div class="brand">CHARLIE VAN HALFACRE</div>
+      <div class="rail-meta">HIVEMIND<br>CLIENT</div>
+    </aside>
+    <div class="main" data-client-id="charlie-van-halfacre">
+      <div class="sticky">
+        <span>CLIENT ACCOUNT</span>
+        <b data-account-status>Not a client yet. 0 of 3. Name, email, and phone create the client.</b>
+      </div>
+      <div class="body">
+        <h1>Charlie Van Halfacre</h1>
+        <p class="sub">Named client slot · he creates himself</p>
+
+        <div class="identity">
+          <div class="shot-wrap">
+            <img class="shot" data-shot alt="Charlie Van Halfacre headshot" hidden>
+            <div class="shot-empty" data-shot-empty>Waiting for his headshot or a standard avatar.</div>
+          </div>
+          <div class="facts">
+            <div class="fact"><span>NAME</span><b data-fact="name">Waiting for the client.</b></div>
+            <div class="fact"><span>EMAIL</span><b data-fact="email">Waiting for the client.</b></div>
+            <div class="fact"><span>PHONE</span><b data-fact="phone">Waiting for the client.</b></div>
+          </div>
+        </div>
+
+        <div class="steps five">
+          <div class="step"><div class="n">01</div><h3>Name</h3><p>He types it.</p></div>
+          <div class="step"><div class="n">02</div><h3>Email</h3><p>He types it.</p></div>
+          <div class="step"><div class="n">03</div><h3>Phone</h3><p>He types it. Then he is in.</p></div>
+          <div class="step"><div class="n">04</div><h3>Welcome</h3><p>First act as a client.</p></div>
+          <div class="step"><div class="n">05</div><h3>Face</h3><p>Upload or a standard avatar.</p></div>
+        </div>
+
+        <div class="wizard" data-wizard>
+          <h2>CREATE THIS CLIENT</h2>
+          <p data-error class="err"></p>
+          <form data-step="1">
+            <label for="charlie-name">NAME</label>
+            <input id="charlie-name" name="client-name" type="text" autocomplete="name">
+            <button class="go" type="submit">Continue</button>
+          </form>
+          <form data-step="2" hidden>
+            <label for="charlie-email">EMAIL</label>
+            <input id="charlie-email" name="client-email" type="email" autocomplete="email">
+            <button class="go" type="submit">Continue</button>
+          </form>
+          <form data-step="3" hidden>
+            <label for="charlie-phone">PHONE</label>
+            <input id="charlie-phone" name="client-phone" type="tel" autocomplete="tel">
+            <button class="go" type="submit">Continue</button>
+          </form>
+          <form data-step="4" hidden>
+            <label>WELCOME FROM MATTHEW</label>
+            <div class="video-slot">Matthew’s welcome video plays here. It is not filmed yet. This is the first act after they become a client.</div>
+            <button class="go" type="submit">I watched the welcome</button>
+          </form>
+          <form data-step="5" hidden>
+            <label for="charlie-shot">FACE</label>
+            <p class="choice">Upload a headshot if you want an avatar designed from your face. If you do not like that idea, pick a standard avatar.</p>
+            <label class="filego" for="charlie-shot">Upload headshot</label>
+            <input id="charlie-shot" name="client-headshot" type="file" accept="image/*">
+            <p class="choice-label">STANDARD AVATARS</p>
+            <div class="avatar-row">
+              <button type="button" class="avatar-pick" data-standard-avatar="avatars/standard-01.svg"><img src="avatars/standard-01.svg" alt="Standard avatar 1"></button>
+              <button type="button" class="avatar-pick" data-standard-avatar="avatars/standard-02.svg"><img src="avatars/standard-02.svg" alt="Standard avatar 2"></button>
+              <button type="button" class="avatar-pick" data-standard-avatar="avatars/standard-03.svg"><img src="avatars/standard-03.svg" alt="Standard avatar 3"></button>
+              <button type="button" class="avatar-pick" data-standard-avatar="avatars/standard-04.svg"><img src="avatars/standard-04.svg" alt="Standard avatar 4"></button>
+            </div>
+          </form>
+        </div>
+
+        <section class="next locked" data-financial id="financial-scope">
+          <article class="card">
+            <h2>NEXT · EXISTING FINANCIAL DATA</h2>
+            <p class="wait" data-financial-wait>Locked until he is a client, has watched the welcome, and has a face (upload or standard avatar).</p>
+            <p hidden data-financial-ready>He is a client. Bring in every bank, asset, company, and other financial fact already in his scope. Prefer APIs. No API means a later legal, protected connection. This page does not collect logins.</p>
+            <details class="slot">
+              <summary>Begin financial-scope upload</summary>
+              <div class="panel">This browser has no uploaded financial data yet. When it arrives, it stays on this client page. It does not go into the Bitcoin dump.</div>
+            </details>
+          </article>
+        </section>
+
+        <div class="grid3">
+          <article class="card">
+            <h2>DOWNLOAD · IRA</h2>
+            <p>Company tax spoke. Downloads onto this page after the account is open. Traditional, Roth, and SEP stay separate.</p>
+            <a class="go" href="ira-module.html">Open IRA module</a>
+          </article>
+          <article class="card">
+            <h2>DOWNLOAD · 401(k)</h2>
+            <p>Named in the first tax-setup cluster. Desk not built yet.</p>
+          </article>
+          <article class="card">
+            <h2>DOWNLOAD · BITCOIN</h2>
+            <p>Coin spoke. Not his coins until he brings them in.</p>
+            <a class="go" href="../product-list/HALFACRE_PRODUCT_LIST_BRIEFING.html">Open Bitcoin deck</a>
+          </article>
+        </div>
+      </div>
+      <footer class="foot">
+        <a href="open-account.html">Client creation portal</a>
+        ·
+        <a href="index.html">Hivemind hub</a>
+        ·
+        <a href="matthew-halfacre.html">Matthew Halfacre</a>
+      </footer>
+    </div>
+  </div>
+  <script src="account-opening.js"></script>
+</body>
+</html>

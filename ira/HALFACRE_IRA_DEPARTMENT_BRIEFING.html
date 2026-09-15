@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halfacre Research — IRA Department Fact Pack</title>
+<style>
+  :root {
+    --dark: #0A0A0A;
+    --rail: #111111;
+    --card: #161616;
+    --foot: #121212;
+    --orange: #F7931A;
+    --white: #FFFFFF;
+    --muted: #A8A8A8;
+    --neon: #39FF14;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #050505; color: var(--white); font-family: Arial, Helvetica, sans-serif; }
+  .stage { height: 100%; display: flex; align-items: center; justify-content: center; padding: 18px; }
+  .slide {
+    display: none;
+    width: min(1280px, 100%);
+    aspect-ratio: 16 / 9;
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 60px rgba(0,0,0,.7);
+  }
+  .slide.on { display: block; }
+  .rail {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 9.5%;
+    background: var(--rail); color: var(--white);
+    padding: 28px 10px 18px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    box-shadow: inset -3px 0 0 var(--orange);
+  }
+  .brand { font-family: "Courier New", monospace; font-size: 11px; font-weight: 700; letter-spacing: .04em; writing-mode: vertical-rl; transform: rotate(180deg); }
+  .rail-meta { font-family: "Courier New", monospace; font-size: 10px; color: var(--orange); line-height: 1.35; }
+  .body { margin-left: 9.5%; height: calc(100% - 16.5%); padding: 28px 36px 10px; }
+  h1 { margin: 0 0 8px; font-size: 34px; line-height: .95; color: var(--white); }
+  .hero h1 { font-size: 54px; margin-top: 86px; max-width: 14ch; }
+  .sub { font-family: "Courier New", monospace; color: var(--muted); font-size: 15px; margin-bottom: 22px; }
+  .hero .sub { max-width: 52ch; font-size: 16px; margin-top: 18px; color: var(--orange); }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: var(--card); border-left: 6px solid var(--orange); padding: 14px 16px 16px; min-height: 250px; }
+  .card h3 { font-family: "Courier New", monospace; font-size: 12px; letter-spacing: .04em; margin: 0 0 10px; color: var(--orange); }
+  .card p, .row p { margin: 0 0 10px; font-size: 15px; line-height: 1.35; }
+  .rows { display: flex; flex-direction: column; gap: 10px; }
+  .rows.tight { gap: 6px; }
+  .rows.tight .row p { margin: 0; font-size: 14px; }
+  .row { display: grid; grid-template-columns: 220px 1fr; gap: 16px; align-items: start; }
+  .row h3 { margin: 0; font-family: "Courier New", monospace; font-size: 13px; color: var(--orange); }
+  .steps .row { grid-template-columns: 42px 1fr; align-items: center; }
+  .num { width: 36px; height: 36px; background: var(--neon); color: var(--dark); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .foot {
+    position: absolute; left: 9.5%; right: 0; bottom: 0; height: 16.5%;
+    background: var(--foot); border-top: 2px solid var(--orange);
+    display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 14px 28px 0;
+  }
+  .foot span { display: block; font-family: "Courier New", monospace; font-size: 11px; color: var(--orange); }
+  .foot b { display: block; margin-top: 4px; font-size: 16px; color: var(--white); }
+  .foot.action b { color: var(--neon); }
+  .nav { position: fixed; bottom: 14px; right: 18px; color: var(--neon); font-family: "Courier New", monospace; font-size: 12px; cursor: pointer; }
+  @page { size: 13.333in 7.5in; margin: 0; }
+  body.print-all, body.print-all html { height: auto; }
+  body.print-all .stage { display: block; height: auto; padding: 0; }
+  body.print-all .slide { display: block; width: 13.333in; height: 7.5in; box-shadow: none; page-break-after: always; break-after: page; }
+  body.print-all .nav { display: none; }
+  @media print {
+    html, body { height: auto; background: #0A0A0A; }
+    .stage { display: block; height: auto; padding: 0; }
+    .slide { display: block !important; width: 13.333in; height: 7.5in; box-shadow: none; page-break-after: always; break-after: page; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+<section class="slide on">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">TEAM BRIEFING<br>12 SEP 2026</div></div>
+  <div class="body hero">
+    <h1>IRA Department<br>Fact Pack</h1>
+    <p class="sub">Sourced law and named-shop pages. Same verification standard as the Bitcoin data-export deck.</p>
+  </div>
+  <div class="foot"><div><span>PACK TYPE</span><b>Notes, not a dump</b></div><div><span>WRAPPERS</span><b>Traditional / Roth / SEP</b></div><div><span>PURPOSE</span><b>Team discussion</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">SCOPE<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>This is an information asset.</h1>
+    <p class="sub">bots/crypto-ira/  ·  not written into the market dump</p>
+    <div class="grid3">
+      <div class="card"><h3>WHAT IT IS</h3><p>Markdown notes with a source URL on every claim.</p><p>28 fact files. Official DOR pages for 50 states + DC. Desk list + shop universe.</p><p>The same method as the Bitcoin export: open the page, copy the sentence, leave the hole.</p></div>
+      <div class="card"><h3>WHAT IT IS NOT</h3><p>Not a second database.</p><p>Not a row in halfacre_raw_database_2026-09-09_verified.sql.gz.</p><p>Not an invented conversion table. Not an invented case holding. Not a finished UBIT staking rule.</p></div>
+      <div class="card"><h3>COMPANY POSITION</h3><p>Halfacre sells information and data.</p><p>Every product already carries the company disclaimer.</p><p>We do not need a license to publish sourced facts. We do need a source.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>FACT FILES</span><b>28</b></div><div><span>STATES OPENED</span><b>50 + DC</b></div><div><span>INVENTED ROWS</span><b>0</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">WRAPPERS<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>Three wrappers. Not one IRA.</h1>
+    <p class="sub">2026 IRS pages already filed  ·  stale comparison page still says RMD age 72</p>
+    <div class="grid3">
+      <div class="card"><h3>TRADITIONAL</h3><p>Personal account. Deduction may apply.</p><p>2026 cap $7,500 / $8,600 if 50+.</p><p>Income can kill the deduction, not the deposit.</p><p>Owner RMD at 73.</p></div>
+      <div class="card"><h3>ROTH</h3><p>Designated Roth at setup. No deduction.</p><p>Same personal cap. MAGI can kill the contribution.</p><p>2026 single $153k–$168k. Joint $242k–$252k.</p><p>No owner RMD while the original owner is alive.</p></div>
+      <div class="card"><h3>SEP</h3><p>Employer money only on a regular SEP.</p><p>2026 lesser of 25% or $72,000. Comp cap $360,000.</p><p>Deadline includes extensions.</p><p>Robinhood pages do not offer this wrapper.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>PERSONAL CAP</span><b>$7,500 / $8,600</b></div><div><span>SEP CAP</span><b>$72,000</b></div><div><span>ROBINHOOD SEP</span><b>None on opened pages</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">INVENTORY<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>What is already on the desk.</h1>
+    <p class="sub">If it is not in facts/ with a URL, it is a hole</p>
+    <div class="rows">
+      <div class="row"><h3>FEDERAL</h3><p>408 / 408A / 4975. 11 USC 522(n) COLA $1,711,975. 590-A Roth MAGI worksheets. 590-B inherited clocks + Table I / III. Form 5329 2025. Notices through 2025-33. RR 2019-24, 2023-14. RP 2024-28 all 24 pages.</p></div>
+      <div class="row"><h3>WASH SALE</h3><p>Pub 550 Ch. 4 is stock or securities. Intro: those rules do not apply to IRAs. No blanket wash-sale-for-all-coins statute.</p></div>
+      <div class="row"><h3>UBIT</h3><p>Full 990-T instructions filed. Equity Trust vendor 990-T page filed. IRS still has no sentence that IRA staking, lending, or margin is UBIT.</p></div>
+      <div class="row"><h3>SHOPS</h3><p>Robinhood legal PDFs complete. Confirmed SEP+crypto now include Unchained (Fortis Bank). Wider universe: Fidelity Crypto Traditional/Roth/Rollover, Schwab/Vanguard brokerage SEP, Swan Traditional/Roth, Entrust/Forge/Quest. Two Equity Trust fee tracks.</p></div>
+      <div class="row"><h3>STATES</h3><p>Official DOR pages for 50 states + DC. Conversion, 529-to-Roth, and pension-exclusion sentences only where the state printed them.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>STATUTES</span><b>408 · 408A · 4975 · 522</b></div><div><span>QCD 2026</span><b>$111,000</b></div><div><span>522(n) COLA</span><b>$1,711,975</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">PRODUCT USE<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>What this pack lets the company build.</h1>
+    <p class="sub">Same conversation the Bitcoin deck started for market data</p>
+    <div class="rows">
+      <div class="row"><h3>01  DEPARTMENT BOT</h3><p>Train CryptoIRABot from facts/ only. Draft rules are in instructions.md. Matthew has not trained it yet.</p></div>
+      <div class="row"><h3>02  WRAPPER-CORRECT COPY</h3><p>Every Bitcoin-style IRA product names Traditional, Roth, or SEP. Never one blended cap.</p></div>
+      <div class="row"><h3>03  SHOP COMPARISON</h3><p>Who will hold BTC/ETH/SOL in a SEP. Who stakes ETH/SOL inside Traditional / Roth / SEP. Two Equity Trust fee tracks.</p></div>
+      <div class="row"><h3>04  STATE OVERLAY</h3><p>NY conforms 529-to-Roth. SC letter is nonprecedential. IN recaptures the 529 credit. AL taxes the conversion on Schedule RS. MD excludes IRA from the pension exclusion.</p></div>
+      <div class="row"><h3>05  DESK CONTROLS</h3><p>Tag every dollar: contribution / transfer / rollover / conversion / match. Prohibited-transaction stop before any coin movement.</p></div>
+      <div class="row"><h3>06  NEXT DATABASES</h3><p>When this pack is actually finished: tech-stock and dividend-stock data in database form. Not before. Not mixed into the Bitcoin dump.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>BOT STATUS</span><b>Not trained</b></div><div><span>NEXT DB</span><b>Tech + dividend stocks</b></div><div><span>DUMP MIX</span><b>Forbidden</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">CLAIMS<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>Bitcoin-style IRA products: what the pack supports.</h1>
+    <p class="sub">Marketing copy is only as strong as the opened URL</p>
+    <div class="grid2">
+      <div class="card"><h3>THE PACK SUPPORTS</h3>
+        <p>Digital assets are property, not currency.</p>
+        <p>Coins in an IRA stay with a qualified custodian. Personal keys are a prohibited-transaction problem.</p>
+        <p>Wash-sale loss disallowance in Pub 550 does not apply to IRAs.</p>
+        <p>Robinhood IRA: stocks / options Level 2 / no Crypto product / no SEP.</p>
+        <p>Named shops advertise SEP + crypto. Vendor dollars can be stale. IRS numbers live in the IRS files.</p>
+        <p>QCD 2026 cap is $111,000.</p>
+      </div>
+      <div class="card"><h3>THE PACK DOES NOT SUPPORT</h3>
+        <p>“IRA staking is UBIT.” That IRS sentence is not on the opened pages.</p>
+        <p>Paschall / TC Memo 2026-46 as a holding. Official-host search is still empty.</p>
+        <p>Wash sale for all coins.</p>
+        <p>One IRA cap for Traditional, Roth, and SEP.</p>
+        <p>A 50-state crypto-IRA map.</p>
+        <p>Robinhood Crypto inside the Robinhood IRA.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><div><span>SOURCE RULE</span><b>URL or hole</b></div><div><span>VENDOR COPY</span><b>Not IRS</b></div><div><span>BLOCKED IS</span><b>Better than guessed</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">SHOPS<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>Who advertises the crypto IRA wrappers.</h1>
+    <p class="sub">Vendor pages are sales copy. Caps stay in the IRS files.</p>
+    <div class="rows">
+      <div class="row"><h3>Equity Trust</h3><p>SEP + crypto. Self-traded: 0.05% AUC / $20 min / 1% trade. Retail PDF: 2% buy / 1% sell / up to 1% liquidity. Two tracks.</p></div>
+      <div class="row"><h3>IRA Financial</h3><p>Traditional / Roth / SEP / SIMPLE on self-directed and checkbook cards. IRAfi settles at Bitstamp.</p></div>
+      <div class="row"><h3>iTrustCapital</h3><p>ETH / SOL stake in Traditional, Roth, and SEP. Leftover articles sometimes name only Traditional / Roth.</p></div>
+      <div class="row"><h3>BitcoinIRA / Digital Trust</h3><p>SEP + staking marketing (ADA / ETH / SOL / DOT / SUI). Digital Trust SEP custodial PDF opened.</p></div>
+      <div class="row"><h3>Robinhood</h3><p>Traditional and Roth only. Crypto products are not in the IRA. 1% / 3% Gold match is not an IRS contribution.</p></div>
+      <div class="row"><h3>Not confirmed</h3><p>Swan/Fidelity crypto pages are not SEP. Gemini/Coinbase learn pages are not company IRAs. Rocket Dollar homepage is not a SEP.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>FEE TRACKS</span><b>Do not overwrite</b></div><div><span>990-T $ PDFs</span><b>Access Denied</b></div><div><span>STAKING</span><b>Vendor, not IRS</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">STATES<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>State overlay is a product. An invented conversion table is not.</h1>
+    <p class="sub">Official DOR pages for 50 states + DC  ·  leftover worksheets still holes</p>
+    <div class="grid2">
+      <div class="card"><h3>PATTERNS ALREADY FILED</h3>
+        <p>No individual PIT: TX, FL, NV, SD, AK, WY. WA has none now; 9.9% AGI &gt; $1M in 2028, composition still future guidance.</p>
+        <p>NH I&amp;D repealed after 2024. TN Hall repealed 2021. MT repealed the partial pension / IRA deduction for 2024+.</p>
+        <p>Conversion follows federal / FAGI: VA 98-44, OR-17, AL Schedule RS, MI if in AGI (RAB 2017-21 Example 3), GA same as IRS. IA names Roth conversion income inside the 55+ exclusion.</p>
+        <p>529-to-Roth: NY conforms on/after 9/5/2024. SC letter says not SC taxable (no precedential value). IN recaptures the Indiana529 credit. VT charges 10% VHEIP repayment. NC Bailey-to-Roth is NC-exempt (PD-14-1).</p>
+        <p>IRA inside DE’s $12,500 age-60+ exclusion, ME’s 2025 $48,216 pension deduction, and OK’s $10,000 Other Retirement Income line. IRA out: MD and ID Form 39R.</p>
+      </div>
+      <div class="card"><h3>DO NOT SELL YET</h3>
+        <p>Sellable new pages: RI (IRA of any type out of the $50k/$100k pension mod). HI (employer-funded rollover IRA / Roth can stay nontaxable). AR ($6,000 traditional IRA; Subject 300 conversion sentence, stale dollars). KY Schedule M names conversion income. MO-A names IRAs on the private-pension worksheet.</p>
+        <p>MN 2025 M1 instructions still unposted. AZ ITR 93-27 / 96-3, RI Section 4, ME pension worksheet, UT TC-40A Part 2 still unopened.</p>
+        <p>KS / LA / UT / NE / NM / ND / DC / WV pages opened; IRA often not named as an exclusion.</p>
+        <p>No state printed a crypto-IRA sentence on the pages opened.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><div><span>OPENED</span><b>50 + DC</b></div><div><span>CONVERSION TABLE</span><b>Not invented</b></div><div><span>CRYPTO-IRA LINE</span><b>None found</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">RAILS<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>Desk-killer rules already on paper.</h1>
+    <p class="sub">A structure that relies on a prohibited transaction is a blown IRA</p>
+    <div class="rows">
+      <div class="row"><h3>PROHIBITED TRANSACTIONS</h3><p>Borrowing, selling to the IRA, personal-use property, personal-wallet keys, paying expenses from the wrong pocket. Account stops being an IRA as of January 1 of that year.</p></div>
+      <div class="row"><h3>CUSTODY</h3><p>A bank, trust company, or other IRS-accepted custodian must hold the coins. Equity Trust’s own CryptoConnect page prints that the owner cannot hold the keys.</p></div>
+      <div class="row"><h3>COLLECTIBLES / NFTS</h3><p>IRC 408(m) inside an IRA. Notice 2023-27 is the NFT collectible discussion. Not a finished NFT-is-always-a-collectible statute.</p></div>
+      <div class="row"><h3>BANKRUPTCY</h3><p>11 USC 522(b)(3)(C), (d)(12), (n). Live 522(n) COLA $1,711,975 from 90 FR 8941. State opt-out still thin.</p></div>
+      <div class="row"><h3>FORMS</h3><p>5498 / 1099-R / 8606 / 5329 / 990-T / 1099-DA. Robinhood 1099-R available Jan 31 of the following year.</p></div>
+      <div class="row"><h3>STALE PAGES</h3><p>Flag vendor and old DOR reprints against IRS files: $6,000 IRA, $100,000 QCD, age 70½, 1998 MAGI, SC $7,000 2024 Roth cap.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>PT EFFECT</span><b>IRA ends Jan 1</b></div><div><span>KEYS</span><b>Custodian only</b></div><div><span>STALE $</span><b>Flag, do not copy</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">GAPS<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>Eight items remain explicitly blocked.</h1>
+    <p class="sub">Blocked is a product fact. Guessing is a product defect.</p>
+    <div class="rows tight">
+      <div class="row"><h3>01</h3><p>TC Memo 2026-46 / Paschall — official-host search still zero. Do not file KPMG / EY / Fenwick as the holding.</p></div>
+      <div class="row"><h3>02</h3><p>FinCEN FBAR-crypto final rule after Notice 2020-2. Hub still only links 2020-2.</p></div>
+      <div class="row"><h3>03</h3><p>Checkbook / IRA LLC cases (Swanson, Ellis) — official hosts still empty.</p></div>
+      <div class="row"><h3>04</h3><p>IRS sentence that IRA staking / lending / margin is UBIT.</p></div>
+      <div class="row"><h3>05</h3><p>Notice 2024-2 Q&amp;A K-8 is future guidance by the notice’s own words.</p></div>
+      <div class="row"><h3>06</h3><p>590-B Table II joint grid (PDF pp. 52–66) not copied cell-by-cell.</p></div>
+      <div class="row"><h3>07</h3><p>Equity Trust 990-T dollar fee PDFs — Access Denied.</p></div>
+      <div class="row"><h3>08</h3><p>Leftover official worksheets (MN 2025 M1 instructions, AZ ITR 93-27 / 96-3, RI Pub 2026-01 Section 4, ME pension worksheet, UT TC-40A Part 2). WA 2028 AGI composition is still future guidance. Keep opening remaining SDIRA shops.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div><span>BLOCKED</span><b>8 named gaps</b></div><div><span>SECONDARY FIRMS</span><b>Not holdings</b></div><div><span>FILL</span><b>Forbidden</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">SEQUENCE<br>12 SEP 2026</div></div>
+  <div class="body">
+    <h1>Safe sequence from here.</h1>
+    <p class="sub">Do not start the next database until the fact pack is actually finished</p>
+    <div class="rows steps">
+      <div class="row"><div class="num">1</div><p>Finish leftover official pages. Same method. Same folder.</p></div>
+      <div class="row"><div class="num">2</div><p>Keep Traditional / Roth / SEP separate in every product sketch.</p></div>
+      <div class="row"><div class="num">3</div><p>Use the briefing to decide which IRA data products the team will sell first: bot, shop compare, state overlay, Bitcoin-style IRA copy.</p></div>
+      <div class="row"><div class="num">4</div><p>When facts are finished: download tech-stock and dividend-stock data in database form.</p></div>
+      <div class="row"><div class="num">5</div><p>Never write IRA notes into the Bitcoin/USD dump.</p></div>
+    </div>
+  </div>
+  <div class="foot action"><div><span>NOW</span><b>Finish official pages</b></div><div><span>THEN</span><b>Tech + dividend DBs</b></div><div><span>NEVER</span><b>Mix into the dump</b></div></div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="brand">HALFACRE RESEARCH / DATA CONTROL</div><div class="rail-meta">DISCUSSION<br>12 SEP 2026</div></div>
+  <div class="body hero">
+    <h1>The pack is ready<br>to discuss. It is<br>not finished.</h1>
+    <p class="sub">Agenda: which Bitcoin-style IRA products we can ship from sourced sentences, which claims stay blocked, and who owns the leftover official-page pulls.</p>
+  </div>
+  <div class="foot action"><div><span>READ FIRST</span><b>TRACKING_LIST.md</b></div><div><span>THEN</span><b>facts/ + SOURCES.md</b></div><div><span>SHOW</span><b>This deck</b></div></div>
+</section>
+
+</div>
+<div class="nav"><span id="pos">1 / 12</span> · arrows or click</div>
+<script>
+  if (location.search.includes('print=1')) document.body.classList.add('print-all');
+  const slides = [...document.querySelectorAll('.slide')];
+  let i = 0;
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, idx) => s.classList.toggle('on', idx === i));
+    document.getElementById('pos').textContent = (i + 1) + ' / ' + slides.length;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  });
+  document.addEventListener('click', e => {
+    if (e.clientX > innerWidth / 2) show(i + 1); else show(i - 1);
+  });
+</script>
+</body>
+</html>

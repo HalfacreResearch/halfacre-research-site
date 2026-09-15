@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Standard avatar 3">
+  <rect width="160" height="160" fill="#0A0A0A"/>
+  <polygon points="80,28 124,80 80,132 36,80" fill="#161616" stroke="#F7931A" stroke-width="4"/>
+  <circle cx="68" cy="76" r="4" fill="#FFFFFF"/>
+  <circle cx="92" cy="76" r="4" fill="#FFFFFF"/>
+  <path d="M70 96h20" stroke="#A8A8A8" stroke-width="3"/>
+</svg>
