@@ -1,12 +1,12 @@
-# Unpaid PACK.zip gate. Returns Apache/LiteSpeed 403, not Hostinger's
-# missing-document-root platform page. Fulfillment uses /dl tokens (not public).
+# TechStack ZIP gate 2026-09-21 — unpaid sold blobs blocked
+# Rewrite 403s missing unpaid PACK.zip (FilesMatch alone would 404).
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteRule ^(etf-flow-v2026-09-09|macro-btc-v2026-09-09)/PACK\.zip$ - [F,L]
 </IfModule>
 
 <IfModule mod_authz_core.c>
-  <FilesMatch "^PACK\.zip$">
+  <FilesMatch "\.(zip|csv|json)$">
     Require all denied
   </FilesMatch>
 </IfModule>

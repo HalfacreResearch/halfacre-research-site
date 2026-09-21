@@ -1,0 +1,177 @@
+{
+  "pack": "macro-btc-v2026-09-09",
+  "title": "Macro + BTC Market Pack",
+  "freeze_date": "2026-09-09",
+  "dump_sha256": "43836c100ec2f02fb62e49ade4d98e3721b14040995c82342d872494067fe211",
+  "dump_file": "halfacre_raw_database_2026-09-09_verified.sql.gz",
+  "not_investment_advice": true,
+  "cadence": "frozen until live updater",
+  "excluded_open_series": [
+    "Bitcoin Daily Technical Factors",
+    "Global Stablecoin Supply",
+    "Global Money Supply",
+    "STH/LTH Holder Supply",
+    "Supply Age Bands",
+    "Miner Net Position Change",
+    "Lightning Daily Channel/Capacity",
+    "Binance BTCUSD Perp Liquidations"
+  ],
+  "cpi_disclosure": {
+    "excluded_observation_date": "2025-10-01",
+    "reason": "consumerPriceInflationYearOverYearPercent = -100 (impossible YoY); excluded from sold CSV/JSON chart series",
+    "disclosure_file": "DISCLOSURE.md",
+    "dump_point_count": 210,
+    "sold_point_count": 209,
+    "excluded_rows": [
+      {
+        "date": "2025-10-01",
+        "observedAt": "2025-10-01 00:00:00",
+        "consumerPriceInflationYearOverYearPercent": -100
+      }
+    ]
+  },
+  "series": [
+    {
+      "slug": "btc-usd-daily-market",
+      "human_name": "BTC/USD Daily Market History",
+      "fields": [
+        "date",
+        "priceUsd",
+        "marketCapUsd",
+        "totalVolumeUsd"
+      ],
+      "point_count": 4882,
+      "date_min": "2013-04-28",
+      "date_max": "2026-09-07",
+      "notes": "",
+      "csv": "csv/btc-usd-daily-market.csv",
+      "json": "json/btc-usd-daily-market.json"
+    },
+    {
+      "slug": "btc-fear-greed-daily",
+      "human_name": "Bitcoin Fear and Greed History",
+      "fields": [
+        "date",
+        "fearAndGreedIndex"
+      ],
+      "point_count": 3139,
+      "date_min": "2018-02-01",
+      "date_max": "2026-09-09",
+      "notes": "",
+      "csv": "csv/btc-fear-greed-daily.csv",
+      "json": "json/btc-fear-greed-daily.json"
+    },
+    {
+      "slug": "btc-fred-cpi-inflation",
+      "human_name": "US Consumer Price Inflation",
+      "fields": [
+        "date",
+        "consumerPriceInflationYearOverYearPercent"
+      ],
+      "point_count": 209,
+      "date_min": "2009-02-01",
+      "date_max": "2026-07-01",
+      "notes": "Sold CSV/JSON for `btc-fred-cpi-inflation` **excludes** observation `2025-10-01` (dump stored YoY = -100). Documented in DISCLOSURE.md. Dump had 210 points; sold series has 209.",
+      "csv": "csv/btc-fred-cpi-inflation.csv",
+      "json": "json/btc-fred-cpi-inflation.json"
+    },
+    {
+      "slug": "btc-fred-federal-funds-rate",
+      "human_name": "US Federal Funds Rate",
+      "fields": [
+        "date",
+        "federalFundsRatePercent"
+      ],
+      "point_count": 210,
+      "date_min": "2009-02-01",
+      "date_max": "2026-07-01",
+      "notes": "",
+      "csv": "csv/btc-fred-federal-funds-rate.csv",
+      "json": "json/btc-fred-federal-funds-rate.json"
+    },
+    {
+      "slug": "btc-fred-treasury-10-year-yield",
+      "human_name": "US 10-Year Treasury Yield",
+      "fields": [
+        "date",
+        "treasury10YearYieldPercent"
+      ],
+      "point_count": 16344,
+      "date_min": "1962-01-02",
+      "date_max": "2026-09-04",
+      "notes": "",
+      "csv": "csv/btc-fred-treasury-10-year-yield.csv",
+      "json": "json/btc-fred-treasury-10-year-yield.json"
+    },
+    {
+      "slug": "btc-fred-treasury-2-year-yield",
+      "human_name": "US 2-Year Treasury Yield",
+      "fields": [
+        "date",
+        "treasury2YearYieldPercent"
+      ],
+      "point_count": 12752,
+      "date_min": "1976-06-01",
+      "date_max": "2026-09-04",
+      "notes": "",
+      "csv": "csv/btc-fred-treasury-2-year-yield.csv",
+      "json": "json/btc-fred-treasury-2-year-yield.json"
+    },
+    {
+      "slug": "btc-fred-vix-index",
+      "human_name": "CBOE Volatility Index",
+      "fields": [
+        "date",
+        "vixClose"
+      ],
+      "point_count": 9401,
+      "date_min": "1990-01-02",
+      "date_max": "2026-09-07",
+      "notes": "",
+      "csv": "csv/btc-fred-vix-index.csv",
+      "json": "json/btc-fred-vix-index.json"
+    },
+    {
+      "slug": "btc-fred-us-dollar-index",
+      "human_name": "US Dollar Index",
+      "fields": [
+        "date",
+        "tradeWeightedDollarIndex"
+      ],
+      "point_count": 5393,
+      "date_min": "2006-01-02",
+      "date_max": "2026-09-04",
+      "notes": "",
+      "csv": "csv/btc-fred-us-dollar-index.csv",
+      "json": "json/btc-fred-us-dollar-index.json"
+    },
+    {
+      "slug": "btc-fred-sp-500-index",
+      "human_name": "S&P 500 Index",
+      "fields": [
+        "date",
+        "sp500Close"
+      ],
+      "point_count": 2616,
+      "date_min": "2016-08-29",
+      "date_max": "2026-09-08",
+      "notes": "",
+      "csv": "csv/btc-fred-sp-500-index.csv",
+      "json": "json/btc-fred-sp-500-index.json"
+    },
+    {
+      "slug": "btc-gold-price-history",
+      "human_name": "Gold Futures Price History",
+      "fields": [
+        "date",
+        "goldFuturesCloseUsdPerTroyOunce"
+      ],
+      "point_count": 6535,
+      "date_min": "2000-08-30",
+      "date_max": "2026-09-04",
+      "notes": "",
+      "csv": "csv/btc-gold-price-history.csv",
+      "json": "json/btc-gold-price-history.json"
+    }
+  ]
+}
