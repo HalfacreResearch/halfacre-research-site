@@ -1,24 +1,20 @@
-# CPI anomalous observation disclosure
+# Macro×BTC Pack — DISCLOSURE (rebuild 2026-09-21 CT)
 
-Pack freeze date: 2026-09-09
-Series: `btc-fred-cpi-inflation` (US Consumer Price Inflation)
+## Live auto-update scope (honest)
+ONLY these series are on the Macro daily Action / MAIN prove path and may refresh after purchase:
+- Fear & Greed (`btc-fear-greed-daily`)
+- FRED: CPI, Fed Funds, 10Y, 2Y, VIX, USD index, S&P 500
 
-## Excluded from sold CSV/JSON
+## NOT in the live auto-update slice
+- Gold futures — UNMAPPED (no honest futures feed wired); **not included** in this rebuild ZIP
+- CoinGecko BTC/USD daily market — FAIL/429 on prove; **not included**
+- ETF flow series — separate pack; not Macro live
 
-Observation date `2025-10-01` was present in the verified MAIN dump with `consumerPriceInflationYearOverYearPercent = -100`, which is an impossible year-over-year inflation reading. Per pack policy this row is **omitted** from the sold chart/CSV/JSON series so buyers do not chart a trash spike.
+## Provenance
+- MAIN tip: `3ace0672e30b462ff9fc7fd6f9db754d8803111f` (PR #8 Macro daily Action)
+- Prove ledger: `ingest/prove/2026-09-21/ledger.json`
+- Rebuild time (UTC): 2026-09-21T23:35:07.190233+00:00
+- Fail-closed: no synthetic / interpolate / forward-fill
 
-## Raw dump row(s) for that date (as extracted)
-
-```json
-[
-  {
-    "date": "2025-10-01",
-    "observedAt": "2025-10-01 00:00:00",
-    "consumerPriceInflationYearOverYearPercent": -100
-  }
-]
-```
-
-Sold point_count for this series = dump count (210) minus excluded row(s) (1) = 209.
-
-This is a dump-level bad cell, not one of the eight quality-ledger OPEN series.
+## Prior freeze
+Historic freeze tip 2026-09-09 remains the baseline; this ZIP appends MAIN-proven new rows past that tip for F&G+FRED only.
