@@ -1,0 +1,15 @@
+{
+  "pack": "macro-btc-v2026-09-09",
+  "title": "Macro×BTC Pack",
+  "freeze": "2026-09-09",
+  "price_usd": 99,
+  "pack_zip_sha256": "bbbe0ccb20b893d3e59f8f6c5fe4f3ff5eb5725239dba7924dd62199644b6624",
+  "exclusions": [
+    "CPI observation 2025-10-01 YoY -100"
+  ],
+  "contents": [
+    "Verified MAIN-dump series as CSV + JSON",
+    "MANIFEST.json",
+    "BTC/USD daily, Fear & Greed, FRED macro, gold futures"
+  ]
+}
