@@ -1,4 +1,11 @@
-# Soft HOLD sell — deny all zip under /dl until CoS unpark (Matthew HARD)
-<FilesMatch "\.(zip|csv|json)$">
-  Require all denied
+# Soft HOLD sell — deny zip/csv/json under /dl until CoS unpark (Matthew HARD)
+# Dual-compatible: Apache 2.4 Require + Apache 2.2 Deny fallback (Hostinger)
+<FilesMatch "\.(?i:zip|csv|json)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
 </FilesMatch>
