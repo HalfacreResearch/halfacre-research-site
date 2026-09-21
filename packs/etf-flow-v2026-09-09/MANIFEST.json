@@ -1,0 +1,12 @@
+{
+  "pack": "etf-flow-v2026-09-09",
+  "title": "ETF Flow Pack",
+  "freeze": "2026-09-09",
+  "price_usd": 149,
+  "pack_zip_sha256": "c107efef4fd705522a528ffdcccaca674cee70b8c69b35b35becc6886aef8c5d",
+  "contents": [
+    "Verified MAIN-dump series as CSV + JSON",
+    "MANIFEST.json",
+    "IBIT daily volume, holdings snapshot, IBIT SEC filing snapshot"
+  ]
+}
