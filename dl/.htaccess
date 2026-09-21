@@ -1,0 +1,4 @@
+# Soft HOLD sell — deny all zip under /dl until CoS unpark (Matthew HARD)
+<FilesMatch "\.(zip|csv|json)$">
+  Require all denied
+</FilesMatch>
