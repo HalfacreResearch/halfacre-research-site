@@ -1,51 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>They clicked a link on one of our posts. — Halfacre Research</title>
-  <link rel="stylesheet" href="hivemind/hivemind.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halfacre Research — Data Packs</title>
+<meta name="description" content="Downloadable research data packs: BTC spot ETF flows and Macro×BTC. Frozen CSV/JSON for bots, pipelines, and file buyers.">
+<style>
+  :root { --bg:#0f1115; --fg:#e8eaed; --muted:#9aa0a6; --line:#2a2f3a; --card:#171a21; --accent:#c9a227; --link:#8ab4f8; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg); line-height:1.55; }
+  a { color:var(--link); }
+  .wrap { max-width:760px; margin:0 auto; padding:48px 20px 80px; }
+  header h1 { font-size:1.65rem; font-weight:650; margin:0 0 6px; letter-spacing:-0.02em; }
+  header .sub { color:var(--muted); margin:0 0 28px; font-size:0.98rem; }
+  .note { border:1px solid var(--line); background:var(--card); padding:14px 16px; border-radius:8px; color:var(--muted); font-size:0.92rem; margin:0 0 32px; }
+  h2 { font-size:1.05rem; margin:28px 0 10px; font-weight:600; }
+  p, li { color:#d3d7de; font-size:0.98rem; }
+  ul { padding-left:1.2rem; margin:8px 0 0; }
+  .packs { display:grid; gap:16px; margin:20px 0 8px; }
+  .pack { border:1px solid var(--line); background:var(--card); border-radius:10px; padding:20px 20px 18px; }
+  .pack h3 { margin:0 0 6px; font-size:1.15rem; }
+  .price { font-size:1.35rem; font-weight:700; color:var(--accent); margin:10px 0 14px; }
+  .price span { font-size:0.85rem; font-weight:500; color:var(--muted); }
+  .btn { display:inline-block; background:var(--accent); color:#111; text-decoration:none; font-weight:650; padding:10px 16px; border-radius:6px; font-size:0.95rem; }
+  .btn:hover { filter:brightness(1.05); }
+  .btn.disabled { opacity:0.85; }
+  .meta { color:var(--muted); font-size:0.88rem; margin:12px 0 0; }
+  .previews { margin-top:8px; font-size:0.92rem; color:var(--muted); }
+  .previews a { margin-right:14px; }
+  footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:0.85rem; }
+  .stripe-note { margin:18px 0 0; font-size:0.9rem; color:#c9a86a; border-left:3px solid var(--accent); padding-left:12px; }
+</style>
 </head>
 <body>
-  <div class="shell">
-    <aside class="rail">
-      <div class="brand">HALFACRE RESEARCH</div>
-      <div class="rail-meta">SCENE 01<br>THE POST</div>
-    </aside>
-    <div class="main">
-      <div class="sticky">
-        <span>OPENING SCENES · 01 / 07</span>
-        <b>THE POST</b>
-      </div>
-      <div class="body">
-        <h1>They clicked a link on one of our posts.</h1>
-        <p class="sub">That is how they enter.</p>
-        
-        <p>
-          <a class="go" href="matthew-funnel.html">Matthew takes the tour</a>
-          <a class="go" href="pages.html">All pages</a>
-        </p>
-      </div>
-      <footer class="foot">
-        <a href="index.html">Start</a>
-        ·
-        <a href="matthew-funnel.html">Matthew funnel</a>
-        ·
-        <a href="becky-welcome.html">Becky</a>
-        ·
-        <a href="matthew-welcome.html">Welcome</a>
-        ·
-        <a href="becky-avatar.html">Avatar</a>
-        ·
-        <a href="matthew-who-is-van.html">Who is Van</a>
-        ·
-        <a href="van-desk.html">Van’s desk</a>
-        ·
-        <a href="hivemind/index.html">Hivemind</a>
-        ·
-        <a href="product-list/HALFACRE_PRODUCT_LIST_BRIEFING.html">Product list</a>
-      </footer>
+  <div class="wrap">
+    <header>
+      <h1>Halfacre Research — Data Packs</h1>
+      <p class="sub">Plain downloadable CSV/JSON snapshots. Not a funnel. Not a chart carnival.</p>
+    </header>
+
+    <div class="note">
+      <strong style="color:var(--fg);">Freeze honesty:</strong>
+      Packs are frozen as of <strong style="color:var(--fg);">2026-09-09</strong> until a live updater ships.
+      The updater <em>may slip</em>. What you buy today is the freeze — not a promise of continuous refresh.
+      <strong style="color:var(--fg);">Not investment advice.</strong>
     </div>
+
+    <h2>What you get</h2>
+    <ul>
+      <li>Verified MAIN-dump series as CSV + JSON, plus MANIFEST.json for audit.</li>
+      <li>One-shot purchase. Download after payment.</li>
+      <li>No login wall for the pack files once you have the thank-you links.</li>
+    </ul>
+
+    <h2>Who this is for</h2>
+    <ul>
+      <li>Bots and pipelines that need clean file drops.</li>
+      <li>File buyers who want ETF flow or macro×BTC history without a SaaS seat.</li>
+    </ul>
+
+    <div class="packs">
+      <article class="pack" id="etf-flow">
+        <h3>ETF Flow Pack</h3>
+        <p>U.S. spot Bitcoin ETF flow history, IBIT daily volume, holdings snapshot, IBIT SEC filing snapshot.</p>
+        <p class="price">$149 <span>one-shot</span></p>
+        <a class="btn" id="buy-etf" href="https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML">Buy with PayPal — ETF Flow Pack $149</a>
+        <p class="meta">Freeze 2026-09-09 · SHA256 of PACK.zip: <code>c107efef4fd705522a528ffdcccaca674cee70b8c69b35b35becc6886aef8c5d</code></p>
+        <p class="previews">Preview only: <a href="/draft/etf-flow-desk.html">ETF flow desk (draft)</a></p>
+      </article>
+
+      <article class="pack" id="macro-btc">
+        <h3>Macro×BTC Pack</h3>
+        <p>BTC/USD daily, Fear &amp; Greed, FRED macro (CPI, fed funds, Treasuries, VIX, dollar, S&amp;P 500), gold futures.</p>
+        <p class="price">$99 <span>one-shot</span></p>
+        <a class="btn" id="buy-macro" href="https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE">Buy with PayPal — Macro×BTC Pack $99</a>
+        <p class="meta">Freeze 2026-09-09 · Macro CPI 2025-10-01 YoY −100 excluded (see pack DISCLOSURE) · SHA256 of PACK.zip: <code>bbbe0ccb20b893d3e59f8f6c5fe4f3ff5eb5725239dba7924dd62199644b6624</code></p>
+        <p class="previews">Preview only: <a href="/draft/macro-btc-brief.html">Macro×BTC brief (draft)</a></p>
+      </article>
+    </div>
+
+    <p class="stripe-note">Checkout: <strong>PayPal</strong> (Live). Buy buttons link to Live Payment Links.</p>
+
+    <h2>Disclosures</h2>
+    <ul>
+      <li>Data freeze Sep-09 2026 until live updater; updater may slip.</li>
+      <li>Not investment advice. Research / tooling data only.</li>
+      <li>Macro×BTC: CPI observation 2025-10-01 with YoY −100 is excluded from sold CSV/JSON (see pack <code>DISCLOSURE.md</code>).</li>
+    </ul>
+
+    <footer>
+      Halfacre Research · halfacreresearch.tech · Support: reply from your purchase receipt or email the address on your receipt.
+    </footer>
   </div>
 </body>
 </html>
