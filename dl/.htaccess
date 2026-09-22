@@ -9,3 +9,9 @@
     Deny from all
   </IfModule>
 </FilesMatch>
+
+# Preferred Soft HOLD: Rewrite [F] so PACK.zip is forbidden even if authz is ignored.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule (^|/)PACK\.zip$ - [F,L]
+</IfModule>
