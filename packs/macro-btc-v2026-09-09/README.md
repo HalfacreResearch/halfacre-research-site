@@ -1,9 +1,9 @@
-# Macro×BTC Pack (freeze 2026-09-09)
+# Macro×BTC Pack (14/14 Live DONE)
 
-BTC/USD daily, Fear & Greed, FRED macro (CPI, fed funds, Treasuries, VIX, dollar, S&P 500), gold futures.
+Fear & Greed + FRED + BTC/USD + gold — live-updating (CoS STAMP 2026-09-21; data-blob tip `c966c31d0106` / stamp tip `3ba6af9a2f1b`).
 
 - Price: $99 one-shot
-- Checkout: https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE
+- Checkout: Soft HOLD — not for sale until full bot-economy marketing plan (research + funnels + cost-per-customer acquisition / CAC + self-sustaining daily routines/skills) AND Matthew YES. Thin roster-only plans are REJECTED.
 - `PACK.zip` SHA256: `bbbe0ccb20b893d3e59f8f6c5fe4f3ff5eb5725239dba7924dd62199644b6624`
 
-Unpaid `PACK.zip` is denied by `packs/.htaccess`. Download is after payment.
+Unpaid `PACK.zip` is denied by Soft HOLD 403 (`packs/.htaccess` + `dl/.htaccess`). Download is after payment — sell is not unlocked.
