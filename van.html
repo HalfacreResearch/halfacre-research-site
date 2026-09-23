@@ -4,837 +4,132 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Charlie Van Halfacre — Halfacre Research</title>
-  <meta name="description" content="Private page for Charlie Van Halfacre. On-page Grok. Live research: pay, download, power up the avatar. Unlocks persist. Only BTCTreasuryBot is live among 18 bots. No Stripe.">
+  <title>Charlie Van Halfacre</title>
   <style>
     :root {
-      --dark: #0A0A0A;
+      --bg: #0A0A0A;
       --card: #161616;
-      --foot: #121212;
+      --line: #2a2a2a;
       --orange: #F7931A;
       --white: #FFFFFF;
-      --muted: #A8A8A8;
-      --neon: #39FF14;
-      --bubble: #1c1c1c;
-      --mine: #241a10;
-      --warn: #c9a227;
+      --muted: #9a9a9a;
+      --btn: #39FF14;
     }
     * { box-sizing: border-box; }
-    html, body {
+    body {
       margin: 0;
-      height: 100%;
-      background: var(--dark);
+      background: var(--bg);
       color: var(--white);
       font-family: Arial, Helvetica, sans-serif;
     }
-    body {
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
+    header { padding: 22px 18px 8px; }
+    header p {
+      margin: 0;
+      color: var(--orange);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
-    .top {
-      background: var(--foot);
-      border-bottom: 2px solid var(--orange);
-      padding: 16px 18px 14px;
-    }
-    .brand-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: baseline;
-      margin-bottom: 10px;
-    }
-    .brand, .mode {
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      font-weight: 700;
-    }
-    .brand { color: var(--orange); }
-    .mode { color: var(--muted); }
-    .gate {
-      border: 2px solid var(--warn);
-      background: #1a1408;
-      color: #f3e2b0;
-      padding: 10px 12px;
+    h1 { margin: 8px 0 4px; font-size: 30px; }
+    .sub { margin: 0; color: var(--muted); font-size: 14px; }
+    .wrap { padding: 16px; max-width: 560px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
       margin: 0 0 12px;
+    }
+    .card h2 {
+      margin: 0 0 10px;
       font-size: 13px;
-      line-height: 1.4;
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(28px, 8vw, 42px);
-      line-height: 0.95;
-    }
-    .contact {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 18px;
-      font-size: 15px;
-    }
-    .contact a {
-      color: var(--white);
-      text-decoration: none;
-      border-bottom: 1px solid #333;
-    }
-    .contact a:hover { border-bottom-color: var(--orange); }
-    .contact span {
-      font-family: "Courier New", monospace;
-      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--orange);
-      letter-spacing: 0.04em;
-      margin-right: 8px;
-    }
-    .chat-shell {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      max-width: 720px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0 14px;
-    }
-    .codex, .codex-free {
-      background: var(--card);
-      border-left: 6px solid var(--neon);
-      padding: 14px 14px 16px;
-      margin: 12px 0 10px;
-    }
-    .codex-free p, .codex p { margin: 0 0 10px; font-size: 14px; line-height: 1.4; color: #d7d7d7; }
-    .codex-free p:last-child { margin-bottom: 0; }
-    .codex h2, .codex-free h2 {
-      margin: 0 0 6px;
-      font-size: 20px;
-    }
-    .pill {
-      display: inline-block;
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      padding: 4px 8px;
-      margin: 0 6px 8px 0;
-      background: #102010;
-      color: var(--neon);
-    }
-    .pill.wait { background: #1a1408; color: var(--warn); }
-    .sfox label {
-      display: block;
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      color: var(--orange);
-      letter-spacing: 0.04em;
-      margin: 0 0 6px;
-    }
-    .sfox input {
-      width: 100%;
-      background: var(--dark);
-      color: var(--white);
-      border: 1px solid #333;
-      padding: 10px 12px;
-      font-size: 16px;
-      margin: 0 0 8px;
-    }
-    .sfox input:focus {
-      outline: 2px solid var(--neon);
-      outline-offset: 2px;
-    }
-    .sfox .err { color: #f0b4b4; font-size: 13px; min-height: 1.1em; margin: 0 0 8px; }
-    .go, .chip, .send, .ghost {
-      font-family: "Courier New", monospace;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      border: 0;
-      cursor: pointer;
-    }
-    .go {
-      background: var(--neon);
-      color: var(--dark);
-      padding: 10px 14px;
-    }
-    .ghost {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid #333;
-      padding: 10px 14px;
-    }
-    .inventory h2 {
-      font-family: "Courier New", monospace;
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      color: var(--orange);
-      margin: 4px 0 8px;
-    }
-    .inventory p { margin: 0 0 10px; font-size: 13px; color: #d7d7d7; line-height: 1.4; }
-    #just-paid { color: var(--neon); font-family: "Courier New", monospace; font-size: 12px; }
-    .modules {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 0 0 10px;
-    }
-    .mod {
-      display: block;
-      background: var(--card);
-      border-left: 4px solid var(--warn);
-      padding: 10px 10px 12px;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .mod.unlocked { border-left-color: var(--neon); }
-    .mod.protocol { border-left-color: var(--orange); }
-    .mod.protocol.unlocked { border-left-color: var(--neon); }
-    .mod b { display: block; font-size: 14px; margin-bottom: 4px; }
-    .mod small { color: var(--muted); font-size: 12px; }
-    .owned {
-      display: inline-block;
-      font-family: "Courier New", monospace;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--warn);
-      margin-bottom: 6px;
-    }
-    .mod.unlocked .owned { color: var(--neon); }
-    .mod.more, .mod.soon {
-      border-left-color: #555;
-      border-style: dashed;
-      border-left-style: solid;
-      cursor: default;
-    }
-    .mod.more .owned, .mod.soon .owned { color: var(--muted); }
-    .mod.advanced { border-left-color: var(--orange); }
-    .mod.advanced.unlocked { border-left-color: var(--neon); }
-    .dept { margin: 0 0 16px; }
-    .dept h3 {
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      color: var(--orange);
-      margin: 0 0 8px;
-    }
-    .intent-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .intent {
-      display: block;
-      background: var(--card);
-      border-left: 3px solid #555;
-      padding: 6px 8px;
-      min-width: 88px;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .intent.live { border-left-color: var(--orange); }
-    .intent.soon { color: #c8c8c8; cursor: default; }
-    .intent b { display: block; font-size: 13px; line-height: 1.15; }
-    .intent small {
-      display: block;
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 2px;
-      font-family: "Courier New", monospace;
-    }
-    .bot-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 0 0 12px;
-    }
-    .bot-card {
-      display: block;
-      background: var(--card);
-      border-left: 4px solid #444;
-      padding: 12px 12px 14px;
-      color: #9a9a9a;
-      text-decoration: none;
-    }
-    .bot-card.soon { pointer-events: none; cursor: default; opacity: 0.72; }
-    .bot-card.live {
-      border-left-color: var(--neon);
-      color: var(--white);
-      outline: 1px solid #1a3a16;
-    }
-    .bot-card .owned { margin-bottom: 6px; }
-    .bot-card b { display: block; font-size: 16px; margin-bottom: 4px; word-break: break-word; }
-    .bot-card small { color: var(--muted); font-size: 12px; }
-    #codex, #btctreasury { scroll-margin-top: 12px; }
-    .btct-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    .codex-steps {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 12px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
-    }
-    .codex-steps li {
-      background: var(--dark);
-      border: 1px solid #333;
-      padding: 8px 8px 10px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .codex-steps li b {
-      display: block;
-      font-family: "Courier New", monospace;
-      font-size: 10px;
-      letter-spacing: 0.04em;
-      color: var(--orange);
-      margin-bottom: 4px;
-    }
-    .codex-free[data-connected="no"] .codex-steps li[data-step="1"],
-    .codex-free[data-connected="no"] .codex-steps li[data-step="2"] {
-      border-color: var(--warn);
-      color: #f3e2b0;
-    }
-    .codex-free[data-connected="yes"] .codex-steps li[data-step="3"] {
-      border-color: var(--neon);
-      color: var(--white);
-    }
-    @media (max-width: 560px) {
-      .codex-steps { grid-template-columns: 1fr; }
-    }
-    .powerups {
-      background: #102010;
-      border-left: 4px solid var(--neon);
-      padding: 10px 12px 12px;
-      margin: 0 0 12px;
-    }
-    .powerups h2 {
-      font-family: "Courier New", monospace;
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      color: var(--neon);
-      margin: 0 0 6px;
-    }
-    .powerups p { margin: 0 0 8px; font-size: 13px; color: #d7d7d7; line-height: 1.4; }
-    .powerups ul { margin: 0; padding-left: 18px; color: #d7d7d7; font-size: 13px; }
-    .powerups a { color: var(--neon); }
-    .mod .go { display: inline-block; margin-top: 8px; padding: 8px 10px; text-decoration: none; }
-    .coach-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 6px 2px 8px;
-    }
-    .avatar {
-      width: 48px;
-      height: 48px;
-      border: 2px solid var(--orange);
-      background: var(--card);
-      border-radius: 50%;
-      flex: 0 0 48px;
-      display: grid;
-      place-items: center;
-    }
-    .coach-bar b { display: block; font-size: 16px; }
-    .coach-bar small { color: var(--muted); font-size: 13px; }
-    #log {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 0 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
     }
     .msg {
-      max-width: 92%;
+      background: #101010;
+      border-radius: 12px;
       padding: 12px 14px;
-      border-left: 4px solid var(--orange);
-      background: var(--bubble);
-      white-space: pre-wrap;
-      line-height: 1.4;
+      line-height: 1.45;
       font-size: 15px;
+      margin: 0 0 12px;
     }
-    .msg.user {
-      align-self: flex-end;
-      border-left-color: var(--neon);
-      background: var(--mine);
+    .btn, .file {
+      display: inline-block;
+      background: var(--btn);
+      color: #111;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 0;
+      margin: 0 8px 8px 0;
     }
-    .msg.pending { color: var(--muted); }
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 0 0 10px;
-    }
-    .chip {
-      background: var(--card);
+    .file { cursor: pointer; }
+    .ghost {
+      background: transparent;
       color: var(--white);
-      border: 1px solid #333;
-      padding: 8px 10px;
+      border: 1px solid #444;
     }
-    .chip:hover, .chip:focus-visible {
-      border-color: var(--orange);
-      outline: none;
-    }
-    form.composer {
+    form {
       display: flex;
       gap: 8px;
-      padding: 0 0 10px;
+      margin: 0;
     }
-    #line {
+    input[type="text"] {
       flex: 1;
       min-width: 0;
-      background: var(--card);
+      background: #101010;
       color: var(--white);
       border: 1px solid #333;
-      padding: 12px 12px;
+      border-radius: 10px;
+      padding: 12px;
       font-size: 16px;
     }
-    #line:focus {
-      outline: 2px solid var(--neon);
-      outline-offset: 2px;
-    }
-    .send {
-      background: var(--neon);
-      color: var(--dark);
+    button.send {
+      background: var(--btn);
+      color: #111;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 700;
       padding: 0 16px;
     }
-    .send:disabled { opacity: 0.45; cursor: default; }
-    footer {
-      background: var(--foot);
-      border-top: 2px solid var(--orange);
-      padding: 12px 18px 16px;
-      font-family: "Courier New", monospace;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    footer a { color: var(--neon); text-decoration: none; }
-    .hint { margin: 0 0 6px; }
-    @media (max-width: 560px) {
-      .modules, .bot-grid { grid-template-columns: 1fr; }
-    }
-    @media (min-width: 720px) {
-      .top { padding: 20px 28px 16px; }
-      .chat-shell { padding: 0 8px; }
-      footer { padding: 14px 28px 18px; }
-    }
+    #log { min-height: 80px; }
   </style>
 </head>
 <body>
-  <header class="top">
-    <div class="brand-row">
-      <div class="brand">HALFACRE RESEARCH · PERSONAL</div>
-      <div class="mode" id="mode" aria-live="polite">NOT SHOW-VAN</div>
-    </div>
-    <div class="gate" id="gate">
-      <strong>NOT SHOW-VAN.</strong>
-      Free Codex module is on this page (autotrades-engine SoT: connect → trade). sFOX connect is the Codex unlock. Hostinger DB export is not a blocker. Live research: pay $4.99, download, power up. Only BTCTreasuryBot is the live $149 assembled bot. Grey cards are Coming soon / Not ready. Nothing is gifted. No Stripe.
-    </div>
+  <header>
+    <p>Client 1</p>
     <h1>Charlie Van Halfacre</h1>
-    <div class="contact">
-      <div><span>PHONE</span><a href="tel:+16014088342">(601) 408-8342</a></div>
-      <div><span>EMAIL</span><a href="mailto:cvhalfacre@msn.com">cvhalfacre@msn.com</a></div>
-    </div>
+    <p class="sub">Dad’s page · not the company desk</p>
   </header>
 
-  <main class="chat-shell">
-    <section class="codex-free" id="codex" data-sfox>
-      <span class="pill">FREE · CODEX</span>
-      <span class="pill wait" data-sfox-status>1 · Not connected</span>
-      <h2>Codex</h2>
-      <p>Founder Codex product surface. The sFOX API key in the box below is the unlock — not a new engine built on this page. Execution SoT is the existing autotrades-engine: <code>server/sfoxEngine.ts</code>, with <code>dcaEngine</code> and <code>rotationEngine</code>. Live operator path is admin tRPC on autotrades.codexyield.com. Keys plus that scheduler path are not wired from here yet, so this page does not claim a live autotrade is firing.</p>
-      <ol class="codex-steps" data-sfox-steps>
-        <li data-step="1"><b>1 · NOT CONNECTED</b> No sFOX key on this device yet.</li>
-        <li data-step="2"><b>2 · CONNECT sFOX</b> Paste the API key. That is the Codex unlock.</li>
-        <li data-step="3"><b>3 · CONNECTED</b> Trading follow-on — not firing until keys + scheduler are wired.</li>
-      </ol>
-      <p data-sfox-hint>Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Trade later uses sfoxEngine / dcaEngine / rotationEngine on autotrades-engine, not a fake engine on this page.</p>
-      <form class="sfox" data-sfox-form autocomplete="off">
-        <label for="sfox-key">sFOX API KEY (this device only)</label>
-        <input id="sfox-key" data-sfox-key type="password" name="sfox-local-only" autocomplete="off" spellcheck="false" placeholder="Paste here, never in chat">
-        <p class="err" data-sfox-error></p>
-        <button class="go" type="submit">Connect sFOX</button>
+  <div class="wrap">
+    <section class="card">
+      <h2>Dad</h2>
+      <div id="log">
+        <div class="msg">Two pictures: starting at zero, and the best retirement structure there is. Upload a statement and I’ll put you on the line between them.</div>
+      </div>
+      <form id="form">
+        <input id="line" type="text" autocomplete="off" placeholder="Talk to Dad">
+        <button class="send" type="submit">Send</button>
       </form>
-      <button class="ghost" type="button" data-sfox-disconnect hidden>Disconnect sFOX</button>
-      <div class="btct-actions" id="btctreasury">
-        <a class="go" id="btct-pay" href="pay.html?id=btc-treasury-bot&amp;sku=btc-treasury-bot&amp;product=BTCTreasuryBot&amp;amount=149">BTCTreasuryBot · Pay $149</a>
-      </div>
     </section>
 
-    <section class="inventory" id="live-shop">
-      <h2 id="inventory-title">LIVE · PAY · DOWNLOAD · POWER UP</h2>
-      <p>These modules already exist in Halfacre SoT. Click to pay, then download the series and write a lasting unlock to Van’s account so this avatar stays powered up. Unlocks survive a reload. Grey names below are Coming soon / Not ready — not permanent teasers.</p>
-      <p id="just-paid" hidden></p>
-      <div class="modules" id="modules"></div>
+    <section class="card">
+      <h2>Upload</h2>
+      <p class="sub" style="margin:0 0 12px">Bank, brokerage, or tax form. That’s how the plan starts.</p>
+      <label class="btn file">
+        Add a statement
+        <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv" hidden>
+      </label>
     </section>
 
-    <section class="inventory" id="bot-vision">
-      <h2 id="bot-title">ASSEMBLED BOTS · $149</h2>
-      <p>Matthew’s batch 1 — exact names. Free Codex (autotrades-engine) is the working connect → trade UI above. Only BTCTreasuryBot is the live $149 assembled bot on that same path. The other 17 are Coming soon until built. More bot names are still coming; nothing extra was invented.</p>
-      <div class="bot-grid" id="bot-grid"></div>
-    </section>
+    <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
+  </div>
 
-    <section class="inventory intentions" id="intentions">
-      <h2 id="intentions-title">RESEARCH + PACKS</h2>
-      <p>Full intended list. Live cards: $4.99 research or $29.99 packs — pay, download, power up. Grey cards: Coming soon / Not ready. DIY à la carte of ~89 series ≈ $444, so a live pack is the deal.</p>
-      <div id="intentions-list"></div>
-    </section>
-
-    <section class="powerups" id="powerups" hidden>
-      <h2>AVATAR KNOWS</h2>
-      <p id="powerups-note">Loaded from Van’s unlock list (charlie-van-halfacre) before this chat.</p>
-      <ul id="powerups-list"></ul>
-    </section>
-
-    <div class="coach-bar">
-      <div class="avatar" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="40">
-          <circle cx="24" cy="18" r="8" fill="none" stroke="#F7931A" stroke-width="2"/>
-          <path d="M10 40c3-9 11-12 14-12s11 3 14 12" fill="none" stroke="#F7931A" stroke-width="2"/>
-        </svg>
-      </div>
-      <div>
-        <b>Grok</b>
-        <small>xAI on this page · not a fleet bot · full-time chat</small>
-      </div>
-    </div>
-    <div id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
-    <div class="chips" id="chips"></div>
-    <form class="composer" id="form">
-      <label class="visually-hidden" for="line" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Message</label>
-      <input id="line" name="line" type="text" autocomplete="off" enterkeyhint="send" placeholder="Talk to Grok — no keys here">
-      <button class="send" type="submit">Send</button>
-    </form>
-  </main>
-
-  <footer>
-    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. Free Codex is the founder surface: sFOX API connect is the unlock. Execution SoT is autotrades-engine sfoxEngine / dcaEngine / rotationEngine (admin tRPC on autotrades.codexyield.com) — not a fake engine on this page, and not firing until that scheduler path is wired. Unlocks persist on Van’s account. Contacts: (601) 408-8342 · cvhalfacre@msn.com. No Stripe. Not investment advice.</p>
-    <p>
-      <a href="pay.html">Universal pay page</a>
-      ·
-      <a href="pages.html">All pages</a>
-      ·
-      <a href="van-desk.html">Opening scene: Van’s desk</a>
-    </p>
-  </footer>
-
-  <script src="pay-catalog.js"></script>
-  <script src="van-owned.js"></script>
-  <script src="van-sfox.js"></script>
   <script src="van-grok.js"></script>
-  <script>
-    (function () {
-      var log = document.getElementById("log");
-      var form = document.getElementById("form");
-      var line = document.getElementById("line");
-      var chips = document.getElementById("chips");
-      var modeEl = document.getElementById("mode");
-      var gate = document.getElementById("gate");
-      var sendBtn = form.querySelector(".send");
-      var grok = window.HalfacreGrok;
-      var memory = grok.createMemory();
-      var history = [];
-
-      window.VanSfox.bind(document.getElementById("codex"));
-
-      function setMode(payLive) {
-        var coach = "Grok";
-        if (payLive) {
-          modeEl.textContent = "PAYPAL PRESENT · " + coach;
-          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A PayPal path is configured. Live research modules are $4.99 (packs $29.99): pay, download, power up — unlocks persist on Van’s account. Only BTCTreasuryBot is live among the 18 bots ($149). Coming soon / Not ready stays not for sale. CoS confirms a real digital payment before any “show Van” stamp.";
-        } else {
-          modeEl.textContent = "NOT SHOW-VAN · " + coach;
-        }
-      }
-
-      function linkify(text) {
-        var frag = document.createDocumentFragment();
-        var re = /(pay\.html\?[^\s]+|pay\.html)/g;
-        var last = 0;
-        var match;
-        while ((match = re.exec(text))) {
-          if (match.index > last) {
-            frag.appendChild(document.createTextNode(text.slice(last, match.index)));
-          }
-          var a = document.createElement("a");
-          a.href = match[0];
-          a.textContent = match[0];
-          a.style.color = "#8ab4f8";
-          frag.appendChild(a);
-          last = match.index + match[0].length;
-        }
-        if (last < text.length) {
-          frag.appendChild(document.createTextNode(text.slice(last)));
-        }
-        return frag;
-      }
-
-      function addMsg(role, text, pending) {
-        var el = document.createElement("div");
-        el.className = "msg " + (role === "user" ? "user" : "coach") + (pending ? " pending" : "");
-        if (role === "assistant" && !pending) {
-          el.appendChild(linkify(text));
-        } else {
-          el.textContent = text;
-        }
-        log.appendChild(el);
-        log.scrollTop = log.scrollHeight;
-        return el;
-      }
-
-      function priceLabel(item) {
-        return window.HalfacrePay.formatMoney(item.amount || item.price_usd);
-      }
-
-      function isAdvanced(item) {
-        return item.tier === "advanced" || item.kind === "bot" || item.kind === "protocol" || item.kind === "system";
-      }
-
-      function bots() {
-        return (window.HalfacrePay.products || []).filter(function (item) {
-          return item.kind === "bot" || item.department === "bots";
-        });
-      }
-
-      function renderPowerups() {
-        var box = document.getElementById("powerups");
-        var list = document.getElementById("powerups-list");
-        var note = document.getElementById("powerups-note");
-        var rows = window.VanOwned.ownedModules();
-        list.replaceChildren();
-        if (!rows.length) {
-          box.hidden = true;
-          return;
-        }
-        box.hidden = false;
-        note.textContent = "Loaded from Van’s unlock list (" + window.VanOwned.userId + ") before this chat. Re-fetch anytime.";
-        rows.forEach(function (row) {
-          var li = document.createElement("li");
-          var name = document.createElement("span");
-          name.textContent = row.name + " — " + (row.avatar_knowledge || "powered up");
-          li.appendChild(name);
-          if (row.download_href && row.kind !== "bot") {
-            li.appendChild(document.createTextNode(" "));
-            var a = document.createElement("a");
-            a.href = row.download_href;
-            a.textContent = "Re-fetch download";
-            li.appendChild(a);
-          }
-          list.appendChild(li);
-        });
-      }
-
-      function renderModules(justPaid) {
-        var box = document.getElementById("modules");
-        var title = document.getElementById("inventory-title");
-        var paidNote = document.getElementById("just-paid");
-        var owned = window.VanOwned;
-        var live = (window.HalfacrePay.liveProducts || []).filter(function (item) {
-          return item.kind !== "bot" && item.kind !== "codex" && !item.free && item.department !== "bots";
-        });
-        box.replaceChildren();
-        title.textContent = "LIVE · " + live.length + " READY · PAY / DOWNLOAD / POWER UP";
-        if (justPaid && justPaid.ok && justPaid.sku) {
-          paidNote.hidden = false;
-          paidNote.textContent = (justPaid.already ? "Already on the unlock list: " : "Unlock written after PayPal: ") + justPaid.sku + " · avatar powered up";
-        }
-        live.forEach(function (item) {
-          var unlocked = owned.owns(item.id);
-          var card = document.createElement(unlocked ? "article" : "a");
-          card.className = "mod" + (item.kind === "pack" ? " protocol" : "") + (unlocked ? " unlocked" : " locked");
-          card.setAttribute("data-sku", item.id);
-          if (!unlocked) {
-            card.href = window.HalfacrePay.buildUrl(item);
-          }
-          card.innerHTML = "<div class=\"owned\"></div><b></b><small></small>";
-          card.querySelector(".owned").textContent = unlocked
-            ? "UNLOCKED · POWERED UP · RE-FETCH"
-            : "LIVE · PAY " + priceLabel(item) + " · DOWNLOAD · POWER UP";
-          card.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
-          card.querySelector("small").textContent = unlocked
-            ? ((item.avatar_knowledge || item.description || "On the avatar unlock list.") + " Download remains available.")
-            : (item.description || "PayPal unlock writes this module to Van’s account, then download and power up.");
-          if (unlocked && item.kind !== "bot") {
-            var dl = document.createElement("a");
-            dl.className = "go";
-            dl.href = owned.downloadUrl(item.id);
-            dl.textContent = "Download again";
-            card.appendChild(dl);
-          }
-          box.appendChild(card);
-        });
-        renderBots();
-        renderIntentions();
-        renderPowerups();
-      }
-
-      function renderBots() {
-        var grid = document.getElementById("bot-grid");
-        var title = document.getElementById("bot-title");
-        var owned = window.VanOwned;
-        var rows = bots();
-        grid.replaceChildren();
-        title.textContent = "ASSEMBLED BOTS · " + rows.length + " NAMED · $149 · ONLY BTCTREASURYBOT LIVE";
-        rows.forEach(function (item) {
-          var live = Boolean(item.live);
-          var unlocked = owned.owns(item.id);
-          var el = document.createElement(live ? "a" : "article");
-          el.className = "bot-card " + (live ? "live" : "soon");
-          el.setAttribute("data-sku", item.id);
-          if (live) {
-            el.href = "#btctreasury";
-          }
-          el.innerHTML = "<div class=\"owned\"></div><b></b><small></small>";
-          el.querySelector(".owned").textContent = live
-            ? (unlocked ? "LIVE · UNLOCKED · POWERED UP" : "LIVE · CLICKABLE")
-            : "COMING SOON · NOT READY";
-          el.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
-          el.querySelector("small").textContent = live
-            ? "Working autotrades / sFOX UI · $149"
-            : "$149 · Coming soon until built";
-          grid.appendChild(el);
-        });
-      }
-
-      function renderIntentions() {
-        var host = document.getElementById("intentions-list");
-        var title = document.getElementById("intentions-title");
-        var owned = window.VanOwned;
-        var all = window.HalfacrePay.products || [];
-        var coming = all.filter(function (item) { return !item.live; }).length;
-        var groups = [
-          { key: "crypto", label: "CRYPTO · $4.99 RESEARCH" },
-          { key: "tech", label: "TECH · $4.99 RESEARCH" },
-          { key: "dividend", label: "DIVIDEND · $4.99 RESEARCH" },
-          { key: "metals", label: "PRECIOUS METALS · $4.99 RESEARCH" },
-          { key: "commodities", label: "COMMODITIES · $4.99 RESEARCH" },
-          { key: "etf", label: "ETFS · $4.99 RESEARCH" },
-          { key: "mutual_fund", label: "MUTUAL FUNDS · $4.99 RESEARCH" },
-          { key: "research", label: "RESEARCH / MACRO / ON-CHAIN · $4.99" },
-          { key: "wrappers", label: "IRA WRAPPERS · $4.99" },
-          { key: "packs", label: "THEME PACKS · $29.99" }
-        ];
-        host.replaceChildren();
-        title.textContent = "RESEARCH + PACKS · LIVE = PAY / DOWNLOAD / POWER UP";
-        groups.forEach(function (dept) {
-          var rows = all.filter(function (item) {
-            return (item.departments || [item.department]).indexOf(dept.key) !== -1;
-          });
-          if (!rows.length) {
-            return;
-          }
-          var wrap = document.createElement("div");
-          wrap.className = "dept";
-          wrap.setAttribute("data-department", dept.key);
-          var h = document.createElement("h3");
-          h.textContent = dept.label + " · " + rows.length;
-          wrap.appendChild(h);
-          var grid = document.createElement("div");
-          grid.className = "intent-grid";
-          rows.forEach(function (item) {
-            var unlocked = owned.owns(item.id);
-            var live = Boolean(item.live);
-            var el = document.createElement(live && !unlocked ? "a" : "article");
-            el.className = "intent " + (live ? "live" : "soon");
-            el.setAttribute("data-sku", item.id);
-            if (live && !unlocked) {
-              el.href = window.HalfacrePay.buildUrl(item);
-            }
-            var tag = live
-              ? (unlocked ? "POWERED UP · RE-FETCH" : "LIVE · PAY " + priceLabel(item) + " · POWER UP")
-              : "COMING SOON · NOT READY";
-            el.innerHTML = "<b></b><small></small>";
-            el.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
-            el.querySelector("small").textContent = tag;
-            if (unlocked && item.kind !== "bot") {
-              var dl = document.createElement("a");
-              dl.href = owned.downloadUrl(item.id);
-              dl.textContent = "Download";
-              dl.style.color = "#39FF14";
-              dl.style.fontSize = "11px";
-              el.appendChild(dl);
-            }
-            grid.appendChild(el);
-          });
-          wrap.appendChild(grid);
-          host.appendChild(wrap);
-        });
-      }
-
-      function renderChips() {
-        chips.replaceChildren();
-        grok.starters.forEach(function (item) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.className = "chip";
-          b.textContent = item.label;
-          b.addEventListener("click", function () {
-            line.value = item.send;
-            form.requestSubmit();
-          });
-          chips.appendChild(b);
-        });
-      }
-
-      function lock(on) {
-        sendBtn.disabled = on;
-        line.disabled = on;
-        chips.querySelectorAll("button").forEach(function (b) { b.disabled = on; });
-      }
-
-      window.HalfacrePay.load().then(function () {
-        return window.VanOwned.load().then(function () {
-          var claimed = window.VanOwned.claimFromSearch(window.location.search);
-          if (claimed && claimed.ok && window.history && window.history.replaceState) {
-            window.history.replaceState({}, "", "van.html");
-          }
-          renderModules(claimed);
-          setMode(window.HalfacrePay.anyPaypalLive());
-          var hello = typeof grok.greeting === "function" ? grok.greeting() : grok.greeting;
-          if (!history.length) {
-            history.push({ role: "assistant", content: hello });
-            addMsg("assistant", hello);
-          }
-          renderChips();
-        });
-      }).catch(function () {
-        setMode(false);
-        var hello = typeof grok.greeting === "function" ? grok.greeting() : grok.greeting;
-        if (!history.length) {
-          history.push({ role: "assistant", content: hello });
-          addMsg("assistant", hello);
-        }
-        renderChips();
-      });
-
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        var text = String(line.value || "").trim();
-        if (!text) {
-          return;
-        }
-        if (grok.looksLikeSecret(text)) {
-          addMsg("user", "[key or secret not kept in the chat]");
-        } else {
-          addMsg("user", text);
-        }
-        history.push({
-          role: "user",
-          content: grok.looksLikeSecret(text)
-            ? "[redacted — key or secret was not kept]"
-            : text
-        });
-        line.value = "";
-        var pending = addMsg("assistant", "Grok is thinking…", true);
-        lock(true);
-        grok.reply(text, memory, history).then(function (reply) {
-          pending.classList.remove("pending");
-          pending.replaceChildren(linkify(reply));
-          history.push({ role: "assistant", content: reply });
-          log.scrollTop = log.scrollHeight;
-        }).finally(function () {
-          lock(false);
-          line.focus();
-        });
-      });
-    })();
-  </script>
 </body>
 </html>
