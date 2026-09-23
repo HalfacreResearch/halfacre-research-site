@@ -303,7 +303,7 @@
     rail: "paypal-day1",
     paidUsd: PAID_USD,
     stripe: false,
-    square: false,
+    square: { enabled: false, live: false, status: "coming_next" },
     products: [],
     founder: null,
     client: null,
