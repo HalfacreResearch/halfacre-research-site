@@ -39,10 +39,21 @@ function grok_key(): string
   return "";
 }
 
-function system_prompt(array $catalog, array $owned, bool $sfox): string
+function catalog_rows($catalog): array
+{
+  if (isset($catalog["live"]) && is_array($catalog["live"])) {
+    return [
+      "live" => $catalog["live"],
+      "coming" => isset($catalog["coming_soon"]) && is_array($catalog["coming_soon"]) ? $catalog["coming_soon"] : []
+    ];
+  }
+  return ["live" => $catalog, "coming" => []];
+}
+
+function format_live_lines(array $rows, array $owned): string
 {
   $lines = [];
-  foreach ($catalog as $row) {
+  foreach ($rows as $row) {
     if (!is_array($row)) {
       continue;
     }
@@ -52,7 +63,38 @@ function system_prompt(array $catalog, array $owned, bool $sfox): string
     $state = in_array($id, $owned, true) ? "unlocked" : "locked";
     $lines[] = "- {$name} ({$id}) \${$price} {$state} pay.html?id={$id}";
   }
-  $shop = $lines ? implode("\n", $lines) : "- (catalog loading)";
+  return $lines ? implode("\n", $lines) : "- (no live SKUs)";
+}
+
+function format_coming_names(array $rows): string
+{
+  $names = [];
+  foreach ($rows as $row) {
+    if (!is_array($row)) {
+      continue;
+    }
+    $name = isset($row["name"]) ? (string) $row["name"] : "";
+    if ($name !== "") {
+      $names[] = $name;
+    }
+    if (count($names) >= 80) {
+      break;
+    }
+  }
+  $extra = max(0, count($rows) - count($names));
+  $list = $names ? implode(", ", $names) : "(coming-soon names loading)";
+  if ($extra > 0) {
+    $list .= ", plus {$extra} more on van.html";
+  }
+  return $list;
+}
+
+function system_prompt($catalog, array $owned, bool $sfox): string
+{
+  $pack = is_array($catalog) ? catalog_rows($catalog) : ["live" => [], "coming" => []];
+  $shop = format_live_lines($pack["live"], $owned);
+  $coming = format_coming_names($pack["coming"]);
+  $comingCount = count($pack["coming"]);
   $sfoxLine = $sfox ? "sFOX shows connected on this device." : "sFOX is not connected. Keys go in the page box, never chat.";
   return <<<TXT
 You are Grok (xAI), embedded full-time on Charlie Van Halfacre's Halfacre Research page (/van.html).
@@ -63,14 +105,21 @@ Speak warm and plain. No Soft HOLD jargon. No DataBazaar or Hermes. No Stripe.
 
 Job:
 1) Maximize this client's net worth in ordinary words.
-2) Flow him through Halfacre products and the PayPal buy path.
+2) Flow him through Halfacre products and the PayPal buy path for LIVE SKUs only.
 3) Extract useful client info (goals, accounts, risk, family) without logins or secrets.
-4) Show the value of research/data modules and drive a $1.99 buy when it fits.
+4) Show the value of research/data modules (\$1.99) and assembled trading systems (\$49.99).
 5) Keep sFOX connect in the dedicated box so Codex Buy / Codex Sell can autotrade later. Do not execute trades.
 
-Catalog is OPEN-ENDED. Matthew will add more modules. Do not say the shop is only seven.
-Starter billable set (each \$1.99, locked until that PayPal payment; paying one unlocks only that SKU):
+TWO LAYERS. Do not say the shop is only seven SKUs.
+1) FULL INTENTIONS — everything we intend to sell is visible on van.html (product-list briefing + systems roadmap). Coming soon is NOT for sale and has no pay.html link.
+2) CLICKABLE LIVE — only these SKUs may be sold. Research/data = \$1.99. Assembled systems = \$49.99. Locked until that PayPal payment; paying one unlocks only that SKU.
+
+LIVE (buyable):
 {$shop}
+
+COMING SOON ({$comingCount} names, visible, not clickable): {$coming}
+
+The Codex module on van.html is free (no checkout). Codex Buy and Codex Sell are separate \$49.99 live systems.
 
 {$sfoxLine}
 
@@ -79,8 +128,9 @@ Rules:
 - Never invent a Stripe checkout. PayPal only. Square is coming next.
 - Never bundle Codex Buy and Codex Sell.
 - Never pre-unlock or gift a module. Matthew cashes Van back privately off-app.
+- Never send a pay.html link for a coming-soon name.
 - Not investment advice. No live bank connect. No live trade from this page.
-- When you name a buy, include the pay.html?id=SKU link.
+- When you name a LIVE buy, include the pay.html?id=SKU link.
 TXT;
 }
 

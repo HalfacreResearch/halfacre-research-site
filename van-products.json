@@ -7,124 +7,3120 @@
   },
   "catalog": {
     "open_ended": true,
-    "starter": true,
+    "layers": [
+      "live",
+      "intentions"
+    ],
+    "tiers": [
+      "basic",
+      "advanced"
+    ],
+    "basic_usd": 1.99,
+    "advanced_usd": 49.99,
     "more_coming": true,
-    "note": "Open shop. Starter seven are billable $1.99 Codex-related modules. Matthew will name more. Do not claim the catalog is only seven."
+    "source": "product-list/HALFACRE_PRODUCT_LIST_BRIEFING.html + advanced trading systems roadmap",
+    "named_research_listings": 160,
+    "unique_research_skus": 154,
+    "advanced_systems": 11,
+    "live_count": 7,
+    "coming_soon_count": 158,
+    "note": "TWO LAYERS: full intentions list is visible (depth of the idea). Only live SKUs are clickable to PayPal. BASIC research/data = $1.99. ADVANCED assembled systems = $49.99. Do not shrink the visible catalog to seven SKUs. Dual tech+dividend names are one SKU shown in both departments. PayPal needs real $1.99 and $49.99 NCP links — do not reuse Macro $99 / ETF $149 pack buttons."
   },
   "account": {
     "viewer": "van_client",
     "owns_all_modules": false,
     "starting_owned": [],
-    "note": "Van pays $1.99 per listed module on PayPal like any client. Starting state: none owned. Unlock only the SKU that just paid. Matthew cashes him back privately off-app. Do not gift or pre-unlock. Do not merge Codex Buy + Codex Sell."
+    "note": "Paid live rows start locked. Unlock only the SKU that just paid. Coming-soon rows are visible and not buyable. Founder Codex module on /van.html is free (price 0, no checkout). Codex Buy and Codex Sell are separate $49.99 advanced products."
   },
   "pay": {
     "rail": "paypal",
-    "rails": ["paypal", "square"],
+    "rails": [
+      "paypal",
+      "square"
+    ],
     "stripe": false,
-    "default_paid_usd": 1.99,
-    "starter_count": 7,
-    "starter_usd": 13.93,
-    "forbidden_pack_usd": [99, 149],
+    "basic_usd": 1.99,
+    "advanced_usd": 49.99,
+    "allowed_paid_usd": [
+      1.99,
+      49.99
+    ],
+    "forbidden_pack_usd": [
+      99,
+      149
+    ],
     "paypal_business": "",
     "ncp_pattern": "https://www.paypal.com/ncp/payment/{NCP_ID}",
     "pack_ncp_do_not_use_for_van": {
       "macro_99": "https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE",
       "etf_149": "https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML"
     },
-    "mint_note": "SoT pack pattern is PayPal NCP (paypal.com/ncp/payment/PLB-…). Those two links are $99/$149 packs on Soft HOLD — do not use them for Van. Mint a new $1.99 NCP per SKU, set paypal_confirms_usd to 1.99, and set that NCP success URL to van.html?paid={SKU}. Card/guest checkout is whatever PayPal Checkout shows natively. Matthew reimburses Van off-app.",
+    "mint_note": "Mint new PayPal NCP links at $1.99 for LIVE BASIC research SKUs and $49.99 for LIVE ADVANCED systems. Set paypal_confirms_usd to that price and success URL to van.html?paid={SKU}. Do not reuse PLB-NGZRXTQA93RE ($99) or PLB-DN2KVZRLCUML ($149). Coming-soon rows must stay without a buy button.",
     "square": {
       "enabled": false,
       "status": "coming_next",
       "application_id": "",
       "location_id": "",
-      "note": "Matthew approved Square (Block) as a second rail. Day-1 checkout is PayPal. Flip enabled only after a Square application_id exists. Do not block this PR on a Square SDK."
+      "note": "Matthew approved Square (Block) as a second rail. Day-1 checkout is PayPal."
     }
   },
-  "pair_order_sot": ["BTC/USD", "ETH/BTC", "SOL/BTC", "XRP/BTC", "LINK/BTC"],
+  "founder_product": {
+    "id": "codex",
+    "name": "Codex",
+    "tier": "advanced",
+    "kind": "system",
+    "description": "Free Codex module on Van’s page: BTC long / bigger-gains crypto, explained in the UI. Live autotrade is not required for sit-down. Codex Buy and Codex Sell are separate $49.99 products — not included in this free module.",
+    "price_usd": 0,
+    "free": true,
+    "live": true,
+    "paypal_link_or_button_id": "",
+    "paypal_confirms_usd": null,
+    "avatar_upgrade_label": "Codex (free module)"
+  },
   "modules": [
     {
-      "id": "btc-usd-research",
-      "name": "BTC/USD Research",
+      "id": "btc-research",
+      "name": "Bitcoin Research",
+      "tier": "basic",
       "kind": "research",
-      "pair": "BTC/USD",
-      "description": "Research/data module for the BTC/USD pair (Codex autotrades Dashboard pairOrder + BTC/USD DCA).",
+      "pair": "BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "The first Bitcoin module. BTC only. Research/data power-up for a DIY avatar. $1.99.",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Bitcoin Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "btc-usd-research",
+      "name": "BTC/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BTC/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "Bitcoin priced in dollars. Live research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": 1.99,
       "avatar_upgrade_label": "BTC/USD Research",
-      "status": "listed"
+      "status": "live",
+      "live": true
     },
     {
       "id": "eth-btc-research",
       "name": "ETH/BTC Research",
+      "tier": "basic",
       "kind": "research",
       "pair": "ETH/BTC",
-      "description": "Research/data module for the ETH/BTC pair from Codex autotrades Dashboard pairOrder.",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "ETH priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": 1.99,
+      "avatar_upgrade_label": "ETH/BTC Research",
+      "status": "live",
+      "live": true
+    },
+    {
+      "id": "eth-usd-research",
+      "name": "ETH/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ETH/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "ETH priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "ETH/BTC Research",
-      "status": "listed"
+      "avatar_upgrade_label": "ETH/USD Research",
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "sol-btc-research",
       "name": "SOL/BTC Research",
+      "tier": "basic",
       "kind": "research",
       "pair": "SOL/BTC",
-      "description": "Research/data module for the SOL/BTC pair from Codex autotrades Dashboard pairOrder.",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "SOL priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": 1.99,
+      "avatar_upgrade_label": "SOL/BTC Research",
+      "status": "live",
+      "live": true
+    },
+    {
+      "id": "sol-usd-research",
+      "name": "SOL/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "SOL/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "SOL priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "SOL/BTC Research",
-      "status": "listed"
+      "avatar_upgrade_label": "SOL/USD Research",
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "xrp-btc-research",
       "name": "XRP/BTC Research",
+      "tier": "basic",
       "kind": "research",
       "pair": "XRP/BTC",
-      "description": "Research/data module for the XRP/BTC pair from Codex autotrades Dashboard pairOrder.",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "XRP priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": 1.99,
+      "avatar_upgrade_label": "XRP/BTC Research",
+      "status": "live",
+      "live": true
+    },
+    {
+      "id": "xrp-usd-research",
+      "name": "XRP/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XRP/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "XRP priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "XRP/BTC Research",
-      "status": "listed"
+      "avatar_upgrade_label": "XRP/USD Research",
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "link-btc-research",
       "name": "LINK/BTC Research",
+      "tier": "basic",
       "kind": "research",
       "pair": "LINK/BTC",
-      "description": "Research/data module for the LINK/BTC pair from Codex autotrades Dashboard pairOrder.",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "LINK priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": 1.99,
+      "avatar_upgrade_label": "LINK/BTC Research",
+      "status": "live",
+      "live": true
+    },
+    {
+      "id": "link-usd-research",
+      "name": "LINK/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "LINK/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "LINK priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "LINK/BTC Research",
-      "status": "listed"
+      "avatar_upgrade_label": "LINK/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "bnb-btc-research",
+      "name": "BNB/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BNB/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "BNB priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "BNB/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "bnb-usd-research",
+      "name": "BNB/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BNB/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "BNB priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "BNB/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "trx-btc-research",
+      "name": "TRX/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "TRX/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "TRX priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TRX/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "trx-usd-research",
+      "name": "TRX/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "TRX/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "TRX priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TRX/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "ada-btc-research",
+      "name": "ADA/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ADA/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "ADA priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ADA/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "ada-usd-research",
+      "name": "ADA/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ADA/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "ADA priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ADA/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "bch-btc-research",
+      "name": "BCH/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BCH/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "BCH priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "BCH/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "bch-usd-research",
+      "name": "BCH/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BCH/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "BCH priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "BCH/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "uni-btc-research",
+      "name": "UNI/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "UNI/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "UNI priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "UNI/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "uni-usd-research",
+      "name": "UNI/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "UNI/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "UNI priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "UNI/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "hbar-btc-research",
+      "name": "HBAR/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "HBAR/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "HBAR priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "HBAR/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "hbar-usd-research",
+      "name": "HBAR/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "HBAR/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "HBAR priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "HBAR/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "avax-btc-research",
+      "name": "AVAX/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AVAX/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "AVAX priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AVAX/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "avax-usd-research",
+      "name": "AVAX/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AVAX/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "AVAX priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AVAX/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "atom-btc-research",
+      "name": "ATOM/BTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ATOM/BTC",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "ATOM priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ATOM/BTC Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "atom-usd-research",
+      "name": "ATOM/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ATOM/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "ATOM priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ATOM/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "hype-usd-research",
+      "name": "HYPE/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "HYPE/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "HYPE priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "HYPE/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "near-usd-research",
+      "name": "NEAR/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "NEAR/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "NEAR priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "NEAR/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "sui-usd-research",
+      "name": "SUI/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "SUI/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "SUI priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "SUI/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "kas-usd-research",
+      "name": "KAS/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "KAS/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "KAS priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "KAS/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "arb-usd-research",
+      "name": "ARB/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ARB/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "ARB priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ARB/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "render-usd-research",
+      "name": "RENDER/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "RENDER/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "RENDER priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "RENDER/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "inj-usd-research",
+      "name": "INJ/USD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "INJ/USD",
+      "department": "crypto",
+      "departments": [
+        "crypto"
+      ],
+      "description": "INJ priced in dollars. Research/data power-up for a DIY avatar. Not a trading system.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "INJ/USD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "nvda-research",
+      "name": "NVDA Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "NVDA",
+      "department": "tech",
+      "departments": [
+        "tech",
+        "dividend"
+      ],
+      "description": "Tech stock research (NVDA). Research/data power-up for a DIY avatar. Also sits in the dividend department.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "NVDA Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "NVIDIA"
+    },
+    {
+      "id": "aapl-research",
+      "name": "AAPL Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AAPL",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (AAPL). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AAPL Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Apple"
+    },
+    {
+      "id": "goog-research",
+      "name": "GOOG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "GOOG",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (GOOG). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "GOOG Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Alphabet"
+    },
+    {
+      "id": "msft-research",
+      "name": "MSFT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "MSFT",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (MSFT). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "MSFT Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Microsoft"
+    },
+    {
+      "id": "amzn-research",
+      "name": "AMZN Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AMZN",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (AMZN). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AMZN Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Amazon"
+    },
+    {
+      "id": "tsm-research",
+      "name": "TSM Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "TSM",
+      "department": "tech",
+      "departments": [
+        "tech",
+        "dividend"
+      ],
+      "description": "Tech stock research (TSM). Research/data power-up for a DIY avatar. Also sits in the dividend department.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TSM Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "TSMC"
+    },
+    {
+      "id": "avgo-research",
+      "name": "AVGO Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AVGO",
+      "department": "tech",
+      "departments": [
+        "tech",
+        "dividend"
+      ],
+      "description": "Tech stock research (AVGO). Research/data power-up for a DIY avatar. Also sits in the dividend department.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AVGO Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Broadcom"
+    },
+    {
+      "id": "meta-research",
+      "name": "META Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "META",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (META). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "META Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Meta"
+    },
+    {
+      "id": "tsla-research",
+      "name": "TSLA Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "TSLA",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (TSLA). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TSLA Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Tesla"
+    },
+    {
+      "id": "samsung-research",
+      "name": "Samsung Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "005930.KS",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (005930.KS). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Samsung Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Samsung"
+    },
+    {
+      "id": "mu-research",
+      "name": "MU Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "MU",
+      "department": "tech",
+      "departments": [
+        "tech",
+        "dividend"
+      ],
+      "description": "Tech stock research (MU). Research/data power-up for a DIY avatar. Also sits in the dividend department.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "MU Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Micron"
+    },
+    {
+      "id": "sk-hynix-research",
+      "name": "SK Hynix Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "000660.KS",
+      "department": "tech",
+      "departments": [
+        "tech",
+        "dividend"
+      ],
+      "description": "Tech stock research (000660.KS). Research/data power-up for a DIY avatar. Also sits in the dividend department.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "SK Hynix Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "SK Hynix"
+    },
+    {
+      "id": "amd-research",
+      "name": "AMD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AMD",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (AMD). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AMD Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "AMD"
+    },
+    {
+      "id": "asml-research",
+      "name": "ASML Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ASML",
+      "department": "tech",
+      "departments": [
+        "tech",
+        "dividend"
+      ],
+      "description": "Tech stock research (ASML). Research/data power-up for a DIY avatar. Also sits in the dividend department.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ASML Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "ASML"
+    },
+    {
+      "id": "intc-research",
+      "name": "INTC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "INTC",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (INTC). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "INTC Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Intel"
+    },
+    {
+      "id": "ionq-research",
+      "name": "IONQ Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "IONQ",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (IONQ). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "IONQ Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "avav-research",
+      "name": "AVAV Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AVAV",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (AVAV). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AVAV Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "AeroVironment"
+    },
+    {
+      "id": "joby-research",
+      "name": "JOBY Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "JOBY",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (JOBY). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "JOBY Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "crsp-research",
+      "name": "CRSP Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "CRSP",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (CRSP). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "CRSP Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "CRISPR"
+    },
+    {
+      "id": "enph-research",
+      "name": "ENPH Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ENPH",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (ENPH). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ENPH Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Enphase"
+    },
+    {
+      "id": "beam-research",
+      "name": "BEAM Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BEAM",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (BEAM). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "BEAM Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "qubt-research",
+      "name": "QUBT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "QUBT",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (QUBT). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "QUBT Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "rxrx-research",
+      "name": "RXRX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "RXRX",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (RXRX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "RXRX Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Recursion"
+    },
+    {
+      "id": "ntla-research",
+      "name": "NTLA Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "NTLA",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (NTLA). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "NTLA Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Intellia"
+    },
+    {
+      "id": "rcat-research",
+      "name": "RCAT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "RCAT",
+      "department": "tech",
+      "departments": [
+        "tech"
+      ],
+      "description": "Tech stock research (RCAT). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "RCAT Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Red Cat"
+    },
+    {
+      "id": "fix-research",
+      "name": "FIX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "FIX",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (FIX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "FIX Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Comfort Systems"
+    },
+    {
+      "id": "dell-research",
+      "name": "DELL Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "DELL",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (DELL). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "DELL Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Dell"
+    },
+    {
+      "id": "stx-research",
+      "name": "STX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "STX",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (STX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "STX Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Seagate"
+    },
+    {
+      "id": "lrcx-research",
+      "name": "LRCX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "LRCX",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (LRCX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "LRCX Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Lam Research"
+    },
+    {
+      "id": "klac-research",
+      "name": "KLAC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "KLAC",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (KLAC). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "KLAC Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "KLA"
+    },
+    {
+      "id": "pwr-research",
+      "name": "PWR Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "PWR",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (PWR). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "PWR Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Quanta"
+    },
+    {
+      "id": "mrvl-research",
+      "name": "MRVL Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "MRVL",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (MRVL). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "MRVL Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Marvell"
+    },
+    {
+      "id": "lly-research",
+      "name": "LLY Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "LLY",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (LLY). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "LLY Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Eli Lilly"
+    },
+    {
+      "id": "amat-research",
+      "name": "AMAT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AMAT",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (AMAT). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AMAT Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Applied Materials"
+    },
+    {
+      "id": "ter-research",
+      "name": "TER Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "TER",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (TER). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TER Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Teradyne"
+    },
+    {
+      "id": "mpwr-research",
+      "name": "MPWR Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "MPWR",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (MPWR). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "MPWR Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Monolithic Power"
+    },
+    {
+      "id": "hwm-research",
+      "name": "HWM Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "HWM",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (HWM). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "HWM Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Howmet"
+    },
+    {
+      "id": "jbl-research",
+      "name": "JBL Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "JBL",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (JBL). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "JBL Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Jabil"
+    },
+    {
+      "id": "vst-research",
+      "name": "VST Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VST",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (VST). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VST Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Vistra"
+    },
+    {
+      "id": "tpl-research",
+      "name": "TPL Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "TPL",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (TPL). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TPL Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Texas Pacific Land"
+    },
+    {
+      "id": "eme-research",
+      "name": "EME Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "EME",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (EME). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "EME Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "EMCOR"
+    },
+    {
+      "id": "nrg-research",
+      "name": "NRG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "NRG",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (NRG). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "NRG Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "NRG Energy"
+    },
+    {
+      "id": "wsm-research",
+      "name": "WSM Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "WSM",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (WSM). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "WSM Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Williams-Sonoma"
+    },
+    {
+      "id": "mpc-research",
+      "name": "MPC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "MPC",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (MPC). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "MPC Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Marathon Petroleum"
+    },
+    {
+      "id": "cat-research",
+      "name": "CAT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "CAT",
+      "department": "dividend",
+      "departments": [
+        "dividend"
+      ],
+      "description": "Dividend stock research (CAT). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "CAT Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Caterpillar"
+    },
+    {
+      "id": "xau-research",
+      "name": "XAU Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XAU",
+      "department": "metals",
+      "departments": [
+        "metals"
+      ],
+      "description": "Precious metals research — Gold (XAU). Physical metal, not the gold fund. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XAU Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Gold"
+    },
+    {
+      "id": "xag-research",
+      "name": "XAG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XAG",
+      "department": "metals",
+      "departments": [
+        "metals"
+      ],
+      "description": "Precious metals research — Silver (XAG). Physical metal, not the gold fund. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XAG Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Silver"
+    },
+    {
+      "id": "xpt-research",
+      "name": "XPT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XPT",
+      "department": "metals",
+      "departments": [
+        "metals"
+      ],
+      "description": "Precious metals research — Platinum (XPT). Physical metal, not the gold fund. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XPT Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Platinum"
+    },
+    {
+      "id": "xpd-research",
+      "name": "XPD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XPD",
+      "department": "metals",
+      "departments": [
+        "metals"
+      ],
+      "description": "Precious metals research — Palladium (XPD). Physical metal, not the gold fund. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XPD Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Palladium"
+    },
+    {
+      "id": "xrh-research",
+      "name": "XRH Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XRH",
+      "department": "metals",
+      "departments": [
+        "metals"
+      ],
+      "description": "Precious metals research — Rhodium (XRH). Physical metal, not the gold fund. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XRH Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Rhodium"
+    },
+    {
+      "id": "xir-research",
+      "name": "XIR Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XIR",
+      "department": "metals",
+      "departments": [
+        "metals"
+      ],
+      "description": "Precious metals research — Iridium (XIR). Physical metal, not the gold fund. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XIR Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Iridium"
+    },
+    {
+      "id": "xru-research",
+      "name": "XRU Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XRU",
+      "department": "metals",
+      "departments": [
+        "metals"
+      ],
+      "description": "Precious metals research — Ruthenium (XRU). Physical metal, not the gold fund. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XRU Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Ruthenium"
+    },
+    {
+      "id": "cl-research",
+      "name": "CL Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "CL",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — WTI crude (CL). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "CL Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "WTI crude"
+    },
+    {
+      "id": "bz-research",
+      "name": "BZ Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BZ",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Brent (BZ). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "BZ Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Brent"
+    },
+    {
+      "id": "ng-research",
+      "name": "NG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "NG",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Natural gas (NG). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "NG Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Natural gas"
+    },
+    {
+      "id": "ho-research",
+      "name": "HO Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "HO",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — ULS diesel (HO). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "HO Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "ULS diesel"
+    },
+    {
+      "id": "rb-research",
+      "name": "RB Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "RB",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — RBOB (RB). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "RB Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "RBOB"
+    },
+    {
+      "id": "zc-research",
+      "name": "ZC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ZC",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Corn (ZC). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ZC Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Corn"
+    },
+    {
+      "id": "zs-research",
+      "name": "ZS Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ZS",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Soybeans (ZS). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ZS Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Soybeans"
+    },
+    {
+      "id": "zm-research",
+      "name": "ZM Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ZM",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Soy meal (ZM). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ZM Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Soy meal"
+    },
+    {
+      "id": "zl-research",
+      "name": "ZL Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ZL",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Soy oil (ZL). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ZL Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Soy oil"
+    },
+    {
+      "id": "zw-research",
+      "name": "ZW Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ZW",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Chicago wheat (ZW). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ZW Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Chicago wheat"
+    },
+    {
+      "id": "ke-research",
+      "name": "KE Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "KE",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — KC wheat (KE). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "KE Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "KC wheat"
+    },
+    {
+      "id": "hg-research",
+      "name": "HG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "HG",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Copper (HG). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "HG Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Copper"
+    },
+    {
+      "id": "ali-research",
+      "name": "ALI Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ALI",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Aluminum (ALI). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ALI Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Aluminum"
+    },
+    {
+      "id": "znc-research",
+      "name": "ZNC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ZNC",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Zinc (ZNC). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ZNC Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Zinc"
+    },
+    {
+      "id": "sb-research",
+      "name": "SB Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "SB",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Sugar (SB). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "SB Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Sugar"
+    },
+    {
+      "id": "kc-coffee-research",
+      "name": "KC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "KC",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Coffee (KC). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "KC Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Coffee"
+    },
+    {
+      "id": "cc-research",
+      "name": "CC Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "CC",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Cocoa (CC). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "CC Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Cocoa"
+    },
+    {
+      "id": "ct-research",
+      "name": "CT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "CT",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Cotton (CT). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "CT Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Cotton"
+    },
+    {
+      "id": "le-research",
+      "name": "LE Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "LE",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Live cattle (LE). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "LE Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Live cattle"
+    },
+    {
+      "id": "he-research",
+      "name": "HE Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "HE",
+      "department": "commodities",
+      "departments": [
+        "commodities"
+      ],
+      "description": "Commodity research — Lean hogs (HE). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "HE Research",
+      "status": "coming_soon",
+      "live": false,
+      "alias": "Lean hogs"
+    },
+    {
+      "id": "voo-research",
+      "name": "VOO Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VOO",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VOO). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VOO Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "ivv-research",
+      "name": "IVV Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "IVV",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (IVV). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "IVV Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "spy-research",
+      "name": "SPY Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "SPY",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (SPY). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "SPY Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vti-research",
+      "name": "VTI Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VTI",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VTI). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VTI Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "qqq-research",
+      "name": "QQQ Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "QQQ",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (QQQ). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "QQQ Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vea-research",
+      "name": "VEA Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VEA",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VEA). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VEA Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vug-research",
+      "name": "VUG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VUG",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VUG). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VUG Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "iefa-research",
+      "name": "IEFA Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "IEFA",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (IEFA). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "IEFA Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vtv-research",
+      "name": "VTV Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VTV",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VTV). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VTV Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "spym-research",
+      "name": "SPYM Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "SPYM",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (SPYM). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "SPYM Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vxus-research",
+      "name": "VXUS Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VXUS",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VXUS). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VXUS Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "iemg-research",
+      "name": "IEMG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "IEMG",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (IEMG). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "IEMG Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "bnd-research",
+      "name": "BND Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "BND",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (BND). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "BND Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "gld-research",
+      "name": "GLD Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "GLD",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (GLD). Gold fund, not the physical metal. Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "GLD Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vgt-research",
+      "name": "VGT Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VGT",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VGT). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VGT Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "agg-research",
+      "name": "AGG Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AGG",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (AGG). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AGG Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vwo-research",
+      "name": "VWO Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VWO",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (VWO). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VWO Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "iwf-research",
+      "name": "IWF Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "IWF",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (IWF). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "IWF Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "ijh-research",
+      "name": "IJH Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "IJH",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (IJH). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "IJH Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "xlk-research",
+      "name": "XLK Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "XLK",
+      "department": "etf",
+      "departments": [
+        "etf"
+      ],
+      "description": "ETF research (XLK). Research/data power-up for a DIY avatar. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XLK Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vtsax-research",
+      "name": "VTSAX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VTSAX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (VTSAX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VTSAX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vfiax-research",
+      "name": "VFIAX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VFIAX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (VFIAX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VFIAX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "fxaix-research",
+      "name": "FXAIX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "FXAIX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (FXAIX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "FXAIX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vtiax-research",
+      "name": "VTIAX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VTIAX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (VTIAX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VTIAX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vbtlx-research",
+      "name": "VBTLX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VBTLX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (VBTLX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VBTLX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "agthx-research",
+      "name": "AGTHX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "AGTHX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (AGTHX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "AGTHX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "abalx-research",
+      "name": "ABALX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "ABALX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (ABALX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ABALX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "fcntx-research",
+      "name": "FCNTX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "FCNTX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (FCNTX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "FCNTX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "fctdx-research",
+      "name": "FCTDX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "FCTDX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (FCTDX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "FCTDX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "vwelx-research",
+      "name": "VWELX Research",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "VWELX",
+      "department": "mutual_fund",
+      "departments": [
+        "mutual_fund"
+      ],
+      "description": "Mutual fund research (VWELX). Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VWELX Research",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "macro-indicators-research",
+      "name": "Macro indicators",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Macro indicators research. Research/data power-up for a DIY avatar. Not the Soft HOLD $99 Macro pack.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Macro indicators",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "social-sentiment-research",
+      "name": "Social sentiment",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Social sentiment research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Social sentiment",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "capital-flows-research",
+      "name": "Capital flows and ownership",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Capital flows and ownership research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Capital flows and ownership",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "market-liquidity-research",
+      "name": "Market liquidity and infrastructure",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Market liquidity and infrastructure research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Market liquidity and infrastructure",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "cross-asset-research",
+      "name": "Cross-asset relationships",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Cross-asset relationships research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Cross-asset relationships",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "market-breadth-research",
+      "name": "Market breadth and index mechanics",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Market breadth and index mechanics research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Market breadth and index mechanics",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "event-timing-research",
+      "name": "Event timing",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Event timing research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Event timing",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "rules-restrictions-research",
+      "name": "Rules and restrictions",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Rules and restrictions research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Rules and restrictions",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "public-positioning-research",
+      "name": "Public positioning",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Public positioning research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Public positioning",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "physical-disruption-research",
+      "name": "Physical disruption",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Physical disruption research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Physical disruption",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "forecasts-ratings-research",
+      "name": "Forecasts and ratings",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Forecasts and ratings research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Forecasts and ratings",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "bitcoin-network-research",
+      "name": "Bitcoin network",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Bitcoin network / on-chain research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Bitcoin network",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "mining-research",
+      "name": "Mining",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Mining research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Mining",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "lightning-payments-research",
+      "name": "Lightning and payments",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Lightning and payments research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Lightning and payments",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "bitcoin-core-nodes-research",
+      "name": "Bitcoin core and nodes",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Bitcoin core and nodes research. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Bitcoin core and nodes",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "derivatives-data-research",
+      "name": "Derivatives data",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "research",
+      "departments": [
+        "research"
+      ],
+      "description": "Derivatives data research. Data. Not a trade. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Derivatives data",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "ira-traditional-research",
+      "name": "Traditional IRA wrapper",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "wrappers",
+      "departments": [
+        "wrappers"
+      ],
+      "description": "Traditional IRA wrapper research. Its own rules. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Traditional IRA wrapper",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "ira-roth-research",
+      "name": "Roth IRA wrapper",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "wrappers",
+      "departments": [
+        "wrappers"
+      ],
+      "description": "Roth IRA wrapper research. Its own rules. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Roth IRA wrapper",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "ira-sep-research",
+      "name": "SEP IRA wrapper",
+      "tier": "basic",
+      "kind": "research",
+      "pair": "",
+      "department": "wrappers",
+      "departments": [
+        "wrappers"
+      ],
+      "description": "SEP IRA wrapper research. Employer money on a regular SEP. Research/data power-up for a DIY avatar.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "SEP IRA wrapper",
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "codex-buy",
       "name": "Codex Buy",
+      "tier": "advanced",
       "kind": "protocol",
       "pair": "",
-      "description": "Buying protocol. Separate $1.99 product from Codex Sell. Locked until this SKU is paid on PayPal.",
-      "price_usd": 1.99,
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled Codex buying protocol (BTC long / bigger-gains crypto). Separate $49.99 product from Codex Sell. Not the free founder Codex module.",
+      "price_usd": 49.99,
       "paypal_link_or_button_id": "",
-      "paypal_confirms_usd": null,
+      "paypal_confirms_usd": 49.99,
       "avatar_upgrade_label": "Codex Buy",
-      "status": "listed"
+      "status": "live",
+      "live": true
     },
     {
       "id": "codex-sell",
       "name": "Codex Sell",
+      "tier": "advanced",
       "kind": "protocol",
       "pair": "",
-      "description": "Selling protocol. Separate $1.99 product from Codex Buy. Locked until this SKU is paid on PayPal.",
-      "price_usd": 1.99,
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled Codex selling protocol. Separate $49.99 product from Codex Buy. Not the free founder Codex module.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": 49.99,
+      "avatar_upgrade_label": "Codex Sell",
+      "status": "live",
+      "live": true
+    },
+    {
+      "id": "tech-long-hold",
+      "name": "Tech long-hold",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled tech long-hold trading system. Coming soon — not yet selling.",
+      "price_usd": 49.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Codex Sell",
-      "status": "listed"
+      "avatar_upgrade_label": "Tech long-hold",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "tech-swing",
+      "name": "Tech swing",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled tech swing trading system. Coming soon — not yet selling.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Tech swing",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "dividend-long",
+      "name": "Dividend long",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled dividend long trading system. Coming soon — not yet selling.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Dividend long",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "precious-metals-long",
+      "name": "Precious metals long",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled precious metals long trading system. Coming soon — not yet selling.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Precious metals long",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "etf-mf-long",
+      "name": "ETF / MF long",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled ETF/mutual-fund long trading system. Coming soon — not yet selling. Not the Soft HOLD $149 ETF pack.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "ETF / MF long",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "commodities-long",
+      "name": "Commodities long",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled commodities long trading system. Coming soon — not yet selling.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Commodities long",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "tax-lane",
+      "name": "Tax lane",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled tax-lane trading system. Coming soon — not yet selling.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Tax lane",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "macro-lane",
+      "name": "Macro lane",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled macro-lane trading system. Coming soon — not yet selling. Not the Soft HOLD $99 Macro pack.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Macro lane",
+      "status": "coming_soon",
+      "live": false
+    },
+    {
+      "id": "onchain-lane",
+      "name": "On-chain lane",
+      "tier": "advanced",
+      "kind": "system",
+      "pair": "",
+      "department": "systems",
+      "departments": [
+        "systems"
+      ],
+      "description": "Assembled on-chain trading system. Coming soon — not yet selling.",
+      "price_usd": 49.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "On-chain lane",
+      "status": "coming_soon",
+      "live": false
     }
   ]
 }

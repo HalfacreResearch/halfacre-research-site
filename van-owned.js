@@ -1,9 +1,9 @@
 /**
- * Per-SKU unlock for listed Van modules (open catalog).
+ * Per-SKU unlock for live Van modules.
  *
  * Starting state: none owned. Never gift or pre-unlock.
- * Unlock only after a $1.99 PayPal return for that SKU.
- * Matthew cashes Van back privately off-app.
+ * Unlock only after a $1.99 or $49.99 PayPal return for that live SKU.
+ * Coming-soon intentions cannot unlock. Matthew cashes Van back privately.
  */
 (function (global) {
   "use strict";
@@ -11,7 +11,7 @@
   var OWNED_KEY = "halfacre.van.owned.v1";
   var PENDING_KEY = "halfacre.van.pending.v1";
   var PENDING_MS = 6 * 60 * 60 * 1000;
-  var PAID_USD = 1.99;
+  var ALLOWED = [1.99, 49.99];
 
   function trim(value) {
     return String(value == null ? "" : value).trim();
@@ -34,21 +34,33 @@
     global.localStorage.setItem(key, JSON.stringify(data));
   }
 
-  function catalogIds() {
-    var rows = (global.HalfacrePay && global.HalfacrePay.products) || [];
-    return rows.map(function (row) {
-      return trim(row.id);
-    }).filter(Boolean);
+  function catalogRows() {
+    return (global.HalfacrePay && global.HalfacrePay.products) || [];
   }
 
-  function isCatalogSku(id) {
+  function findRow(id) {
     var want = trim(id).toLowerCase();
-    if (!want || want === "codex") {
-      return false;
+    var rows = catalogRows();
+    var i;
+    for (i = 0; i < rows.length; i += 1) {
+      if (trim(rows[i].id).toLowerCase() === want) {
+        return rows[i];
+      }
     }
-    return catalogIds().some(function (item) {
-      return item.toLowerCase() === want;
-    });
+    return null;
+  }
+
+  function isLiveSku(id) {
+    var row = findRow(id);
+    return Boolean(row && row.live && trim(id).toLowerCase() !== "codex");
+  }
+
+  function expectedAmount(id) {
+    var row = findRow(id);
+    if (!row) {
+      return NaN;
+    }
+    return Number(row.price_usd);
   }
 
   function readOwned() {
@@ -78,8 +90,8 @@
 
   function markPending(id) {
     var sku = trim(id);
-    if (!isCatalogSku(sku)) {
-      return { ok: false, error: "Unknown module." };
+    if (!isLiveSku(sku)) {
+      return { ok: false, error: "Not a live module." };
     }
     writeJson(PENDING_KEY, { sku: sku, at: Date.now() });
     return { ok: true, sku: sku };
@@ -99,37 +111,46 @@
     return true;
   }
 
-  function amountOk(value) {
+  function amountOk(value, sku) {
     if (value == null || value === "") {
       return true;
     }
-    return Number(value) === PAID_USD;
+    var n = Number(value);
+    var expected = expectedAmount(sku);
+    if (Number.isFinite(expected)) {
+      return n === expected;
+    }
+    return ALLOWED.indexOf(n) !== -1;
   }
 
-  function paypalEvidence(query) {
+  function paypalEvidence(query, sku) {
     var tx = trim(query.get("tx") || query.get("txn_id"));
     var st = trim(query.get("st") || query.get("payment_status"));
     var amt = query.get("amt") || query.get("mc_gross") || query.get("amount");
     var txOk = tx.length >= 8;
     var stOk = /^completed$/i.test(st);
+    var listed = expectedAmount(sku);
     return {
-      ok: (txOk || stOk) && amountOk(amt),
+      ok: (txOk || stOk) && amountOk(amt, sku),
       tx: tx,
-      amount: amountOk(amt) ? String(PAID_USD) : ""
+      amount: amountOk(amt, sku)
+        ? String(Number.isFinite(listed) ? listed : 1.99)
+        : ""
     };
   }
 
   function unlock(id, meta) {
     var sku = trim(id);
-    if (!isCatalogSku(sku)) {
-      return { ok: false, error: "Unknown module." };
+    if (!isLiveSku(sku)) {
+      return { ok: false, error: "Not a live module." };
     }
     if (owns(sku)) {
       return { ok: true, already: true, sku: sku, receipt: receipt(sku) };
     }
+    var listed = expectedAmount(sku);
     var store = readOwned();
     store.skus[sku] = {
-      amount: (meta && meta.amount) || String(PAID_USD),
+      amount: (meta && meta.amount) || String(Number.isFinite(listed) ? listed : 1.99),
       tx: (meta && meta.tx) || "",
       paidAt: Date.now()
     };
@@ -148,18 +169,21 @@
     if (!sku) {
       return { ok: false, skipped: true };
     }
-    if (!isCatalogSku(sku)) {
-      return { ok: false, error: "That return is not a single paid module." };
+    if (!isLiveSku(sku)) {
+      return { ok: false, error: "That return is not a live paid module." };
     }
-    if (!amountOk(query.get("amt") || query.get("mc_gross") || query.get("amount"))) {
-      return { ok: false, error: "Return amount was not $1.99." };
+    if (!amountOk(query.get("amt") || query.get("mc_gross") || query.get("amount"), sku)) {
+      return { ok: false, error: "Return amount did not match that module’s $1.99 or $49.99 price." };
     }
-    var evidence = paypalEvidence(query);
+    var evidence = paypalEvidence(query, sku);
     var pending = takePending(sku);
     if (!evidence.ok && !pending) {
       return { ok: false, error: "No PayPal return for that module." };
     }
-    return unlock(sku, { tx: evidence.tx, amount: String(PAID_USD) });
+    return unlock(sku, {
+      tx: evidence.tx,
+      amount: evidence.amount || String(expectedAmount(sku))
+    });
   }
 
   function returnUrl(sku) {
@@ -190,7 +214,12 @@
     returnUrl: returnUrl,
     cancelUrl: cancelUrl,
     catalogCount: function () {
-      return catalogIds().length;
+      return catalogRows().length;
+    },
+    liveCount: function () {
+      return catalogRows().filter(function (row) {
+        return row.live;
+      }).length;
     }
   };
 })(window);

@@ -1,8 +1,13 @@
 /**
  * Loads van-products.json — the one file Matthew/staff edit.
  *
- * Seven separate SKUs at $1.99 each. Locked until that SKU is paid.
- * Five pair research modules + Codex Buy + Codex Sell. Never merge Buy+Sell.
+ * TWO LAYERS: full intentions (everything we intend to sell) + live
+ * (already selling). Only live SKUs are clickable to PayPal.
+ *
+ * TWO TIERS: BASIC research/data @ $1.99. ADVANCED assembled systems
+ * @ $49.99. Codex Buy and Codex Sell are separate $49.99 products.
+ * Never merge Buy+Sell. Do not shrink the visible catalog to seven SKUs.
+ *
  * Do not pre-unlock or gift modules. Matthew reimburses Van off-app.
  * Macro $99 / ETF $149 pack prices are forbidden on this pay path.
  *
@@ -10,7 +15,7 @@
  * Square (Block) is an approved second rail — config stub only until SDK.
  * SoT pack NCP pattern: https://www.paypal.com/ncp/payment/PLB-…
  * Those pack links are $99/$149 — never used as Van checkout.
- * Van live path: new $1.99 NCP link + paypal_confirms_usd 1.99,
+ * Live path: new $1.99 or $49.99 NCP + matching paypal_confirms_usd,
  * or dynamic _xclick when paypal_business is set. No Stripe.
  */
 (function (global) {
@@ -18,7 +23,9 @@
 
   var PAGE = "pay.html";
   var SRC = "van-products.json";
-  var PAID_USD = 1.99;
+  var BASIC_USD = 1.99;
+  var ADVANCED_USD = 49.99;
+  var ALLOWED = [BASIC_USD, ADVANCED_USD];
   var FORBIDDEN = [99, 149];
   var cache = null;
 
@@ -31,19 +38,52 @@
     return Number.isFinite(n) ? n : NaN;
   }
 
+  function asStringList(value) {
+    if (!value) {
+      return [];
+    }
+    if (Array.isArray(value)) {
+      return value.map(trim).filter(Boolean);
+    }
+    return [trim(value)].filter(Boolean);
+  }
+
   function isForbiddenAmount(value) {
     var n = asNumber(value);
     return FORBIDDEN.indexOf(n) !== -1;
   }
 
   function isPaidAmount(value) {
-    return asNumber(value) === PAID_USD;
+    return ALLOWED.indexOf(asNumber(value)) !== -1;
+  }
+
+  function isLiveRow(row) {
+    if (!row) {
+      return false;
+    }
+    if (row.live === true) {
+      return true;
+    }
+    return trim(row.status) === "live";
+  }
+
+  function defaultPrice(row) {
+    if (trim(row.tier) === "advanced" || trim(row.kind) === "protocol" || trim(row.kind) === "system") {
+      return ADVANCED_USD;
+    }
+    return BASIC_USD;
   }
 
   function normalizePaid(row) {
     var price = row.price_usd;
     if (price === null || price === undefined || price === "") {
-      price = PAID_USD;
+      price = defaultPrice(row);
+    }
+    var live = isLiveRow(row);
+    var departments = asStringList(row.departments);
+    var department = trim(row.department) || departments[0] || "";
+    if (!departments.length && department) {
+      departments = [department];
     }
     return {
       id: trim(row.id),
@@ -54,12 +94,17 @@
       amount: String(price),
       price_usd: price,
       currency: "USD",
+      tier: trim(row.tier) || (asNumber(price) === ADVANCED_USD ? "advanced" : "basic"),
       kind: trim(row.kind) || "research",
       pair: trim(row.pair),
+      department: department,
+      departments: departments,
+      alias: trim(row.alias),
       paypal_link_or_button_id: trim(row.paypal_link_or_button_id),
       paypal_confirms_usd: row.paypal_confirms_usd == null ? null : asNumber(row.paypal_confirms_usd),
       avatar_upgrade_label: trim(row.avatar_upgrade_label) || trim(row.name),
-      status: trim(row.status) || "listed",
+      status: live ? "live" : (trim(row.status) || "coming_soon"),
+      live: live,
       van_unlocked: false,
       free: false
     };
@@ -122,15 +167,19 @@
         id: "codex",
         sku: "codex",
         product: "Codex is two products",
-        amount: String(PAID_USD),
+        amount: String(ADVANCED_USD),
         currency: "USD",
-        description: "Do not merge. Buy Codex Buy and Codex Sell as separate $1.99 products.",
+        description: "Do not merge. Buy Codex Buy and Codex Sell as separate $49.99 products. The founder Codex module on van.html is free and is not this checkout.",
+        tier: "advanced",
         kind: "protocol",
         pair: "",
+        department: "systems",
+        departments: ["systems"],
         paypal_link_or_button_id: "",
         paypal_confirms_usd: null,
         avatar_upgrade_label: "Codex Buy + Codex Sell",
         status: "split",
+        live: false,
         free: false,
         split: true,
         forbidden: false,
@@ -143,9 +192,10 @@
       amount = known.amount;
     }
     if (!amount) {
-      amount = String(PAID_USD);
+      amount = known && known.tier === "advanced" ? String(ADVANCED_USD) : String(BASIC_USD);
     }
     var forbidden = isForbiddenAmount(amount);
+    var live = known ? known.live : false;
     return {
       id: id || (known && known.id) || "",
       sku: trim(partial && partial.sku) || (known && known.sku) || id,
@@ -153,12 +203,16 @@
       amount: forbidden ? "" : amount,
       currency: "USD",
       description: trim(partial && partial.description) || (known && known.description) || "",
+      tier: (known && known.tier) || (asNumber(amount) === ADVANCED_USD ? "advanced" : "basic"),
       kind: (known && known.kind) || "",
       pair: (known && known.pair) || "",
+      department: (known && known.department) || "",
+      departments: (known && known.departments) || [],
       paypal_link_or_button_id: (known && known.paypal_link_or_button_id) || "",
       paypal_confirms_usd: known ? known.paypal_confirms_usd : null,
       avatar_upgrade_label: (known && known.avatar_upgrade_label) || "",
       status: (known && known.status) || "",
+      live: live,
       van_unlocked: false,
       free: false,
       split: false,
@@ -180,7 +234,7 @@
     if (line.sku) {
       q.set("sku", line.sku);
     }
-    if (line.amount && !line.forbidden && !line.free) {
+    if (line.amount && !line.forbidden && !line.free && line.live) {
       q.set("amount", line.amount);
     }
     q.set("currency", "USD");
@@ -204,28 +258,37 @@
     return "$" + n.toFixed(2);
   }
 
+  function listedPrice(line) {
+    return asNumber(line && line.amount);
+  }
+
   function checkoutPlan(line) {
     var pay = (cache && cache.pay) || {};
     var business = trim(pay.paypal_business);
+    var price = listedPrice(line);
+    var priceText = Number.isFinite(price) ? price.toFixed(2) : "";
     if (!line || line.free) {
       return { ok: false, reason: "No PayPal on a free line." };
     }
     if (line.split) {
-      return { ok: false, reason: "Codex is two products. Charge Codex Buy and Codex Sell separately at $1.99 each." };
+      return { ok: false, reason: "Codex is two products. Charge Codex Buy and Codex Sell separately at $49.99 each." };
+    }
+    if (!line.live) {
+      return { ok: false, reason: "Coming soon — not yet selling. This SKU is on the intentions list only." };
     }
     if (line.forbidden || isForbiddenAmount(line.amount)) {
       return { ok: false, reason: "Blocked: Macro $99 / ETF $149 pack prices are not allowed on Van’s pay page." };
     }
     if (!isPaidAmount(line.amount)) {
-      return { ok: false, reason: "Van paid modules are $1.99. This amount cannot be charged here." };
+      return { ok: false, reason: "Van paid modules are $1.99 (research) or $49.99 (assembled systems). This amount cannot be charged here." };
     }
     if (business) {
       return {
         ok: true,
         kind: "dynamic",
         business: business,
-        amount: "1.99",
-        item_name: line.product || line.sku || "Halfacre research module",
+        amount: priceText,
+        item_name: line.product || line.sku || "Halfacre module",
         item_number: line.sku || line.id,
         custom: line.sku || line.id
       };
@@ -234,30 +297,42 @@
     if (kind.kind === "pack-ncp") {
       return {
         ok: false,
-        reason: "Blocked: that PayPal NCP link is a Macro $99 or ETF $149 pack. Mint a new $1.99 NCP link. Do not reuse pack SoT."
+        reason: "Blocked: that PayPal NCP link is a Macro $99 or ETF $149 pack. Mint a new $1.99 or $49.99 NCP link. Do not reuse pack SoT."
       };
     }
-    if (kind.kind !== "empty" && line.paypal_confirms_usd === PAID_USD) {
-      return { ok: true, kind: kind.kind, value: kind.value, amount: "1.99" };
+    if (kind.kind !== "empty" && line.paypal_confirms_usd === price) {
+      return { ok: true, kind: kind.kind, value: kind.value, amount: priceText };
     }
     if (kind.kind !== "empty") {
       return {
         ok: false,
-        reason: "A PayPal link is set, but paypal_confirms_usd is not 1.99. Mint a $1.99 NCP link (same paypal.com/ncp/payment/PLB- pattern as the packs). Do not reuse the $99/$149 pack links."
+        reason: "A PayPal link is set, but paypal_confirms_usd does not match the listed $1.99 or $49.99 price. Mint a matching NCP link (same paypal.com/ncp/payment/PLB- pattern as the packs). Do not reuse the $99/$149 pack links."
       };
     }
     return {
       ok: false,
-      reason: "PayPal not live yet. Mint a $1.99 PayPal NCP link per SKU, set paypal_confirms_usd to 1.99, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic $1.99 _xclick."
+      reason: "PayPal not live yet. Mint a $1.99 or $49.99 PayPal NCP link per live SKU, set paypal_confirms_usd to that price, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic _xclick at the listed price."
     };
   }
 
+  function liveProducts() {
+    return ((cache && cache.paid) || []).filter(function (row) {
+      return row.live;
+    });
+  }
+
+  function comingSoonProducts() {
+    return ((cache && cache.paid) || []).filter(function (row) {
+      return !row.live;
+    });
+  }
+
   function anyPaypalLive() {
-    var list = (cache && cache.paid) || [];
-    return list.some(function (row) {
+    return liveProducts().some(function (row) {
       return checkoutPlan(row).ok;
     }) || checkoutPlan({
       free: false,
+      live: true,
       forbidden: false,
       amount: "1.99",
       product: "draft",
@@ -296,16 +371,19 @@
         return res.json();
       })
       .then(function (json) {
+        var founder = json.founder_product || json.founder || null;
         cache = {
           client: json.client || {},
           account: json.account || {},
           catalog: json.catalog || { open_ended: true },
-          founder: null,
+          founder: founder,
           paid: (json.modules || json.paid_modules || []).map(normalizePaid),
           pay: json.pay || {},
           raw: json
         };
         global.HalfacrePay.products = cache.paid;
+        global.HalfacrePay.liveProducts = liveProducts();
+        global.HalfacrePay.comingSoonProducts = comingSoonProducts();
         global.HalfacrePay.account = cache.account;
         global.HalfacrePay.catalog = cache.catalog;
         global.HalfacrePay.founder = cache.founder;
@@ -320,10 +398,14 @@
     page: PAGE,
     src: SRC,
     rail: "paypal-day1",
-    paidUsd: PAID_USD,
+    paidUsd: BASIC_USD,
+    basicUsd: BASIC_USD,
+    advancedUsd: ADVANCED_USD,
     stripe: false,
     square: { enabled: false, live: false, status: "coming_next" },
     products: [],
+    liveProducts: [],
+    comingSoonProducts: [],
     account: {},
     catalog: { open_ended: true },
     founder: null,
@@ -339,6 +421,7 @@
     checkoutPlan: checkoutPlan,
     isForbiddenAmount: isForbiddenAmount,
     isPaidAmount: isPaidAmount,
+    isLive: isLiveRow,
     anyPaypalLive: anyPaypalLive,
     squareStatus: squareStatus
   };

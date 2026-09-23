@@ -22,7 +22,7 @@
     "",
     "I’m here the whole sitting. My job is to grow your net worth in plain English, learn what accounts and goals matter, and walk you through Halfacre’s research and Codex products when they help.",
     "",
-    "The shop is open-ended. Matthew will add more modules. Today’s starter set is $1.99 each on PayPal, locked until that payment: BTC/USD, ETH/BTC, SOL/BTC, XRP/BTC, LINK/BTC Research, plus Codex Buy and Codex Sell as two separate products. Paying one unlocks only that one. Matthew cashes you back off this page.",
+    "The shop has two layers. The full intentions list shows everything we intend to sell — the product-list briefing (~157 $1.99 research modules) plus assembled systems. Only live SKUs are clickable to PayPal. Live research/data is $1.99. Live assembled systems are $49.99. Codex Buy and Codex Sell are separate $49.99 products. The Codex module on this page is free. Paying one live SKU unlocks only that one. Matthew cashes you back off this page.",
     "",
     "sFOX keys go in the box above, never here. After sFOX is linked, Codex Buy and Codex Sell can autotrade later — not today.",
     "",
@@ -31,7 +31,7 @@
 
   var STARTERS = [
     { label: "Connect sFOX", send: "How do I connect sFOX?" },
-    { label: "What can I buy?", send: "Walk me through the research and Codex modules I can buy." },
+    { label: "What can I buy?", send: "What is live to buy on PayPal versus coming soon on the intentions list?" },
     { label: "Grow net worth", send: "Help me grow my net worth. What should you know about my situation?" },
     { label: "Codex Buy vs Sell", send: "What is the difference between Codex Buy and Codex Sell?" }
   ];
@@ -47,13 +47,33 @@
 
   function catalogSnapshot() {
     var rows = (global.HalfacrePay && global.HalfacrePay.products) || [];
-    return rows.map(function (row) {
-      return {
-        id: row.id,
-        name: row.product || row.name,
-        price: row.amount || "1.99"
-      };
+    var live = [];
+    var coming = [];
+    rows.forEach(function (row) {
+      var name = row.product || row.name;
+      if (row.live) {
+        live.push({
+          id: row.id,
+          name: name,
+          price: row.amount || row.price_usd,
+          tier: row.tier || "",
+          buyable: true
+        });
+      } else {
+        coming.push({
+          id: row.id,
+          name: name,
+          price: row.amount || row.price_usd,
+          tier: row.tier || "",
+          buyable: false
+        });
+      }
     });
+    return {
+      live: live,
+      coming_soon: coming,
+      note: "Only live SKUs are for sale. Coming soon is visible on van.html and not clickable. Do not shrink the catalog to seven SKUs."
+    };
   }
 
   function ownedIds() {
@@ -75,7 +95,7 @@
     return [
       "I’m Grok on this page. The live xAI path is waiting on Hostinger: set XAI_API_KEY or van-grok.secret.php for van-grok.php.",
       "",
-      "I still won’t take keys in chat. Use the sFOX box. Starter modules are $1.99 on pay.html — locked until that PayPal payment. The catalog is open; Matthew will name more.",
+      "I still won’t take keys in chat. Use the sFOX box. Live research is $1.99 and live assembled systems are $49.99 on pay.html — locked until that PayPal payment. Coming soon is visible and not for sale.",
       "",
       "Tell me a goal or pick a module and I’ll keep going."
     ].join("\n");

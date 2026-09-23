@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Pay — Halfacre Research</title>
-  <meta name="description" content="Universal pay page for Van’s seven $1.99 modules. PayPal is Day-1. Square coming next. No Stripe. Codex Buy and Codex Sell are separate. Locked until paid.">
+  <meta name="description" content="Universal pay page for Van’s live modules. Research $1.99. Assembled systems $49.99. PayPal is Day-1. Square coming next. No Stripe. Coming soon is not for sale.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -101,7 +101,7 @@
       cursor: not-allowed;
       pointer-events: none;
     }
-    .list a {
+    .list a, .list .soon-row {
       display: block;
       color: var(--white);
       text-decoration: none;
@@ -109,6 +109,7 @@
       padding: 10px 0;
     }
     .list a:hover { color: var(--orange); }
+    .list .soon-row { color: #9a9a9a; cursor: default; }
     .list small { display: block; color: var(--muted); font-size: 13px; }
     footer {
       margin-top: 28px;
@@ -129,15 +130,15 @@
     <div class="brand">HALFACRE RESEARCH · PAY</div>
     <div class="gate" id="gate">
       <strong>PAYPAL GATE.</strong>
-      Do not stamp “show Van” until a $1.99 PayPal NCP can take money for a single locked module.
-      Open catalog. Starter Codex SKUs start locked at $1.99. PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe. Never bundle Codex Buy + Codex Sell.
+      Do not stamp “show Van” until a $1.99 or $49.99 PayPal NCP can take money for a live locked module.
+      Only live SKUs are clickable. Research/data is $1.99. Assembled trading systems are $49.99. PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe. Never bundle Codex Buy + Codex Sell.
     </div>
-    <h1>Pay $1.99 for one upgrade.</h1>
-    <p class="sub">Any listed module is $1.99 and unlocks only after that PayPal payment. Catalog is open-ended — starter Codex set is listed, more coming. Link params: product, sku, name, amount, description. Codex Buy and Codex Sell are separate. PayPal first. Square stub below. Macro $99 and ETF $149 pack NCP links are not used here.</p>
+    <h1>Pay for one live upgrade.</h1>
+    <p class="sub">Live research/data is $1.99. Live assembled systems are $49.99. Unlock only after that PayPal payment. Coming soon stays on van.html and is not for sale here. Link params: product, sku, name, amount, description. Codex Buy and Codex Sell are separate. PayPal first. Square stub below. Macro $99 and ETF $149 pack NCP links are not used here.</p>
 
     <section class="card" id="line">
       <h2>LINE ITEM</h2>
-      <p id="empty">No product in the link yet. Pick any paid module below.</p>
+      <p id="empty">No product in the link yet. Pick a live module below.</p>
       <div id="filled" hidden>
         <div class="fact"><span>PRODUCT</span><b id="f-product"></b></div>
         <div class="fact"><span>SKU</span><b id="f-sku"></b></div>
@@ -149,8 +150,13 @@
     </section>
 
     <section class="card">
-      <h2>LISTED MODULES (open catalog)</h2>
+      <h2>LIVE · CLICKABLE</h2>
       <div class="list" id="known"></div>
+    </section>
+
+    <section class="card">
+      <h2>COMING SOON · NOT YET SELLING</h2>
+      <p id="soon-note" class="sub">Full intentions list lives on van.html. Those names are visible there and not clickable to buy.</p>
     </section>
 
     <section class="card square-card" id="square">
@@ -163,7 +169,7 @@
     </section>
 
     <footer>
-      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Pack SoT NCP pattern is <code>paypal.com/ncp/payment/PLB-…</code> (Macro $99 / ETF $149 links exist in history and stay unused here). Mint a $1.99 NCP per SKU and set its success URL to <code>van.html?paid={SKU}</code>. Card/guest is whatever PayPal Checkout shows. No Stripe. Van starts with none owned.</p>
+      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Pack SoT NCP pattern is <code>paypal.com/ncp/payment/PLB-…</code> (Macro $99 / ETF $149 links exist in history and stay unused here). Mint a $1.99 or $49.99 NCP per live SKU and set its success URL to <code>van.html?paid={SKU}</code>. Card/guest is whatever PayPal Checkout shows. No Stripe. Van starts with none owned.</p>
       <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
     </footer>
   </div>
@@ -178,6 +184,10 @@
       var filled = document.getElementById("filled");
       var known = document.getElementById("known");
       var gate = document.getElementById("gate");
+
+      function money(line) {
+        return pay.formatMoney((line && (line.amount || line.price_usd)) || "");
+      }
 
       function addDisabled(label) {
         var b = document.createElement("button");
@@ -216,19 +226,28 @@
       function renderPay(line) {
         actions.replaceChildren();
         var sku = line.sku || line.id;
+        var label = money(line);
         if (line.split) {
           addDisabled("Not sold as one Codex");
           ["codex-buy", "codex-sell"].forEach(function (id) {
             var a = document.createElement("a");
             a.className = "go";
             a.href = pay.buildUrl({ id: id, sku: id });
-            a.textContent = id === "codex-buy" ? "Pay Codex Buy $1.99" : "Pay Codex Sell $1.99";
+            a.textContent = id === "codex-buy" ? "Pay Codex Buy $49.99" : "Pay Codex Sell $49.99";
             actions.appendChild(a);
           });
           return;
         }
         if (line.forbidden) {
           addDisabled("PayPal blocked — pack $99/$149 not allowed");
+          return;
+        }
+        if (!line.live) {
+          addDisabled("Coming soon — not yet selling");
+          var soon = document.createElement("p");
+          soon.style.cssText = "color:#c9a227;font-size:13px;margin:8px 0 0;width:100%;";
+          soon.textContent = "This name is on the intentions list. It is not clickable to buy yet. See van.html.";
+          actions.appendChild(soon);
           return;
         }
         if (sku && owned.owns(sku)) {
@@ -251,13 +270,15 @@
             '<input type="hidden" name="item_name" value="">' +
             '<input type="hidden" name="item_number" value="">' +
             '<input type="hidden" name="custom" value="">' +
-            '<input type="hidden" name="amount" value="1.99">' +
+            '<input type="hidden" name="amount" value="">' +
             '<input type="hidden" name="currency_code" value="USD">' +
-            '<button class="paypal" type="submit">Pay $1.99 with PayPal</button>';
+            '<button class="paypal" type="submit"></button>';
           dyn.querySelector("[name=business]").value = plan.business;
           dyn.querySelector("[name=item_name]").value = plan.item_name;
           dyn.querySelector("[name=item_number]").value = plan.item_number;
           dyn.querySelector("[name=custom]").value = plan.custom || sku;
+          dyn.querySelector("[name=amount]").value = plan.amount;
+          dyn.querySelector("button").textContent = "Pay " + label + " with PayPal";
           addPayPalFields(dyn, sku);
           actions.appendChild(dyn);
         } else if (plan.ok && (plan.kind === "url" || plan.kind === "ncp")) {
@@ -265,7 +286,7 @@
           a.className = "paypal";
           a.href = plan.value;
           a.rel = "noopener noreferrer";
-          a.textContent = "Pay $1.99 with PayPal";
+          a.textContent = "Pay " + label + " with PayPal";
           a.addEventListener("click", function () {
             owned.markPending(sku);
           });
@@ -278,12 +299,13 @@
           form.innerHTML =
             '<input type="hidden" name="cmd" value="_s-xclick">' +
             '<input type="hidden" name="hosted_button_id" value="">' +
-            '<button class="paypal" type="submit">Pay $1.99 with PayPal</button>';
+            '<button class="paypal" type="submit"></button>';
           form.querySelector("[name=hosted_button_id]").value = plan.value;
+          form.querySelector("button").textContent = "Pay " + label + " with PayPal";
           addPayPalFields(form, sku);
           actions.appendChild(form);
         } else {
-          addDisabled("PayPal — $1.99 path not live");
+          addDisabled("PayPal — " + label + " path not live");
           var note = document.createElement("p");
           note.style.cssText = "color:#c9a227;font-size:13px;margin:8px 0 0;width:100%;";
           note.textContent = plan.reason;
@@ -295,15 +317,20 @@
         var sq = pay.squareStatus();
         var flag = document.getElementById("square-flag");
         var sqNote = document.getElementById("square-note");
+        var soonNote = document.getElementById("soon-note");
+        var live = pay.liveProducts || [];
+        var coming = pay.comingSoonProducts || [];
         flag.textContent = "pay.square.enabled = " + String(sq.enabled) + " · " + sq.status;
         if (sq.note) {
           sqNote.textContent = sq.note;
         }
+        soonNote.textContent = coming.length +
+          " names are on the intentions list (product-list briefing + systems roadmap). They are visible on van.html and not clickable to buy. Do not shrink that list to seven SKUs.";
 
         if (!pay.anyPaypalLive()) {
-          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No payable $1.99 catalog yet. Mint a PayPal NCP link at $1.99 (same pattern as the old pack links) and set <code>paypal_confirms_usd</code> to 1.99. Do not reuse Macro $99 / ETF $149 NCP links. Square is coming next — do not wait on it. Do not instruct Hostinger to “show Dad.”";
+          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No payable $1.99 / $49.99 catalog yet. Mint a PayPal NCP link at the listed price (same pattern as the old pack links) and set <code>paypal_confirms_usd</code> to 1.99 or 49.99. Do not reuse Macro $99 / ETF $149 NCP links. Coming soon is not for sale. Square is coming next — do not wait on it. Do not instruct Hostinger to “show Dad.”";
         } else {
-          gate.innerHTML = "<strong>PAYPAL $1.99 PRESENT.</strong> A $1.99 PayPal path is configured. Each module stays locked until that payment returns. Square (Block) stays a stub until application_id is set. CoS still confirms a real digital payment before any “show Van” stamp.";
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $1.99 / $49.99 PayPal path is configured. Only live SKUs stay clickable. Each stays locked until that payment returns. Square (Block) stays a stub until application_id is set. CoS still confirms a real digital payment before any “show Van” stamp.";
         }
 
         var query = pay.fromQuery(window.location.search);
@@ -316,27 +343,29 @@
           document.getElementById("f-product").textContent = line.product || "(no name)";
           document.getElementById("f-sku").textContent = line.sku || line.id || "(no sku)";
           document.getElementById("f-label").textContent = line.split
-            ? "Split — buy Codex Buy and Codex Sell separately"
+            ? "Split — buy Codex Buy and Codex Sell separately at $49.99"
             : (line.avatar_upgrade_label || "—");
           document.getElementById("f-desc").textContent = line.forbidden
             ? "Blocked. Van’s pay page does not sell the Macro $99 or ETF $149 packs."
-            : (line.description || "—");
+            : (!line.live && line.known
+              ? "Coming soon — not yet selling."
+              : (line.description || "—"));
           document.getElementById("f-price").textContent = line.forbidden
             ? "Blocked pack price"
-            : pay.formatMoney(line.amount || "1.99");
+            : (!line.live && line.known ? "Not for sale yet" : money(line));
           renderPay(line);
         } else {
-          addDisabled("PayPal — pick a module");
+          addDisabled("PayPal — pick a live module");
         }
 
-        pay.products.forEach(function (item) {
+        live.forEach(function (item) {
           var a = document.createElement("a");
           a.href = pay.buildUrl(item);
           a.innerHTML = "<b></b><small></small>";
           a.querySelector("b").textContent = item.product + " · " + item.id;
           a.querySelector("small").textContent =
-            pay.formatMoney(item.amount) + " · " +
-            (owned.owns(item.id) ? "unlocked" : "locked") + " · " +
+            money(item) + " · " +
+            (owned.owns(item.id) ? "unlocked" : "locked · live") + " · " +
             item.description;
           known.appendChild(a);
         });
