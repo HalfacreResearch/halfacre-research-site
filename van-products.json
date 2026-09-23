@@ -1,0 +1,59 @@
+{
+  "client": {
+    "display_name": "Charlie Van Halfacre",
+    "phone": "601-408-8342",
+    "phone_tel": "+16014088342",
+    "email": "cvhalfacre@msn.com"
+  },
+  "pay": {
+    "rail": "paypal",
+    "square": "stub",
+    "stripe": false,
+    "default_paid_usd": 1.99,
+    "forbidden_pack_usd": [99, 149],
+    "paypal_business": "",
+    "mint_note": "Mint new PayPal $1.99 links or hosted buttons per SKU (TechStack / PayPal). Do not reuse Macro $99 or ETF $149 buttons. A hosted button is live only when paypal_confirms_usd is 1.99."
+  },
+  "founder_product": {
+    "id": "codex",
+    "name": "Bitcoin Treasury Codex",
+    "description": "Van’s first product. Free for the founder. After sFOX is linked on this page, Codex can autotrade. Live autotrade wiring is a follow-on.",
+    "price_usd": 0,
+    "free": true,
+    "paypal_link_or_button_id": "",
+    "paypal_confirms_usd": null,
+    "avatar_upgrade_label": "Founder Codex"
+  },
+  "paid_modules": [
+    {
+      "id": "draft-module-a",
+      "name": "DRAFT module A (name pending CoS)",
+      "description": "Placeholder $1.99 research/data upgrade. Real name waits on CoS catalog Q&A with Matthew.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "DRAFT A",
+      "status": "draft"
+    },
+    {
+      "id": "draft-module-b",
+      "name": "DRAFT module B (name pending CoS)",
+      "description": "Placeholder $1.99 research/data upgrade. Real name waits on CoS catalog Q&A with Matthew.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "DRAFT B",
+      "status": "draft"
+    },
+    {
+      "id": "draft-module-c",
+      "name": "DRAFT module C (name pending CoS)",
+      "description": "Placeholder $1.99 research/data upgrade. Real name waits on CoS catalog Q&A with Matthew.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "DRAFT C",
+      "status": "draft"
+    }
+  ]
+}

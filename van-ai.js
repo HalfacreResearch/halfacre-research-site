@@ -1,18 +1,9 @@
 /**
  * Charlie Van Halfacre — on-page coach.
  *
- * Demo-ready scripted conversation. No passwords, API keys, bank logins,
- * or live trading. Chat stays in this browser tab unless a later model
- * endpoint is configured.
- *
- * Later wiring (Matthew):
- *   window.VAN_AI_ENDPOINT = "https://example.invalid/van-coach";
- * Expected contract: POST JSON { messages: [{ role, content }] }
- * Expected reply:    JSON { reply: "..." }
- * If the endpoint is empty or the request fails, this file answers locally.
- *
- * Purchases: always send Van UX to pay.html (HalfacrePay.buildUrl).
- * Checkout is blocked until CoS / Matthew payment-rail answers.
+ * Priority 1: get Van to connect sFOX in the dedicated field (not chat).
+ * Codex is free for the founder. Paid upgrades go to pay.html.
+ * Never log keys. Never send keys to VAN_AI_ENDPOINT.
  */
 (function (global) {
   "use strict";
@@ -20,44 +11,66 @@
   var FULL_NAME = "Charlie Van Halfacre";
   var FIRST_NAME = "Van";
 
-  function payHref(sku) {
+  function sfoxConnected() {
+    return global.VanSfox && global.VanSfox.state().connected;
+  }
+
+  function paidList() {
+    var rows = (global.HalfacrePay && global.HalfacrePay.products) || [];
+    return rows.filter(function (row) {
+      return !row.free;
+    });
+  }
+
+  function payHref(id) {
     if (global.HalfacrePay && typeof global.HalfacrePay.buildUrl === "function") {
-      return global.HalfacrePay.buildUrl({ sku: sku });
+      return global.HalfacrePay.buildUrl({ id: id, sku: id });
     }
-    return "pay.html?sku=" + encodeURIComponent(sku);
+    return "pay.html?id=" + encodeURIComponent(id);
+  }
+
+  function moduleLines() {
+    var rows = paidList();
+    if (!rows.length) {
+      return "Staff can add paid modules in van-products.json. Each one uses the same PayPal pay page.";
+    }
+    return rows.map(function (row, i) {
+      var price = global.HalfacrePay.formatMoney(row.amount);
+      return (i + 1) + ". " + row.product + " — " + price + " — " + payHref(row.id);
+    }).join("\n");
   }
 
   var GREETING = [
     "Hi Van. I’m your Halfacre coach.",
     "",
-    "I’m here to help you get started. We can talk about whatever you’re willing to share — accounts, goals, the ordinary picture of your money — and I’ll introduce Halfacre research modules as ways to power up this page and think about your net worth.",
+    "Your first product is already on this page: Bitcoin Treasury Codex. It is free for you. Matthew is not charging you for Codex.",
     "",
-    "We never need a password or an API key here. Connecting a bank or an exchange can happen later, with Matthew, through a proper setup. Not on this page, and not today.",
+    "The most useful next step is to connect sFOX in the box above — not in this chat. That box is a special key field. The key stays on this device until Matthew has a vault. After sFOX is linked, Codex can autotrade. We will not place live trades from this page today.",
     "",
-    "If you want a research module, every purchase from this page goes to the same pay page. Digital pay is not live yet — Matthew still has to choose the payment rail — so this page is not ready to present as a finished client product.",
+    "When you want more later, other research modules can power up this page. Those paid upgrades all go to one PayPal page.",
     "",
-    "What would you like to talk about first?"
+    "Want to connect sFOX first?"
   ].join("\n");
 
   var STARTERS = [
-    { label: "My accounts", send: "I can tell you a little about my accounts." },
-    { label: "My goals", send: "Let’s talk about my goals." },
-    { label: "Research modules", send: "What research can help me?" },
-    { label: "Open pay page", send: "Show me the pay page for a module." },
-    { label: "Connect later", send: "How would connecting a bank work later?" },
-    { label: "Bitcoin later", send: "Tell me about the Bitcoin Treasury Codex." }
+    { label: "Connect sFOX", send: "How do I connect sFOX?" },
+    { label: "What is Codex?", send: "Tell me about Codex." },
+    { label: "After sFOX", send: "What happens after sFOX is linked?" },
+    { label: "Other power-ups", send: "What other research can help me?" }
   ];
 
-  var SECRET_RE =
-    /\b(password|passwd|passcode|pin\b|api[_\s-]?key|secret[_\s-]?key|private[_\s-]?key|seed[_\s-]?phrase|recovery[_\s-]?phrase|mnemonic|ssn|social security)\b|[:=]\s*\S{8,}|sk-[A-Za-z0-9]{10,}|pk_[A-Za-z0-9]{10,}/i;
+  var PASTED_KEY_RE = /(?:^|\s)[A-Za-z0-9_\-]{24,}(?:\s|$)/;
+  var SECRET_WORDS_RE =
+    /\b(password|passwd|passcode|pin\b|secret[_\s-]?key|private[_\s-]?key|seed[_\s-]?phrase|recovery[_\s-]?phrase|mnemonic|ssn|social security)\b/i;
 
   function nowMode() {
     var endpoint = typeof global.VAN_AI_ENDPOINT === "string" ? global.VAN_AI_ENDPOINT.trim() : "";
     return endpoint ? "live" : "demo";
   }
 
-  function looksLikeSecret(text) {
-    return SECRET_RE.test(String(text || ""));
+  function looksLikePastedSecret(text) {
+    var raw = String(text || "");
+    return PASTED_KEY_RE.test(raw) || SECRET_WORDS_RE.test(raw);
   }
 
   function normalize(text) {
@@ -101,31 +114,28 @@
   }
 
   function detectTopic(n) {
-    if (looksLikeSecret(n) || has(n, ["password", "api key", "private key", "seed phrase", "login", "log in", "username"])) {
-      return "secret";
+    if (has(n, ["sfox", "s fox", "api connection", "connect sfox", "link sfox", "the key field", "the box"])) {
+      return "sfox";
     }
-    if (has(n, ["paypal", "buy now", "check out", "checkout", "pay now", "purchase", "how much", "price", "cost", "pay page", "pay for"])) {
-      return "purchase";
+    if (has(n, ["after sfox", "autotrade", "auto trade", "once it is linked", "once its linked"])) {
+      return "autotrade";
     }
-    if (has(n, ["codex", "autotrade", "auto trade", "live trade", "trading bot", "place a trade", "buy bitcoin now"])) {
+    if (has(n, ["codex"])) {
       return "codex";
     }
-    if (has(n, ["macro", "fear", "greed", "gold", "rates", "fed", "inflation"])) {
-      return "macro";
+    if (has(n, ["paypal", "buy now", "check out", "checkout", "pay now", "purchase", "how much", "price", "pay page", "pay for"])) {
+      return "purchase";
     }
-    if (has(n, ["etf", "flow", "ibit", "spot bitcoin fund"])) {
-      return "etf";
-    }
-    if (has(n, ["module", "research", "power up", "powerup", "pack", "what can help"])) {
+    if (has(n, ["module", "research", "power up", "powerup", "upgrade", "what can help", "climate", "flow", "tax wrapper"])) {
       return "modules";
     }
-    if (has(n, ["connect", "link a bank", "link bank", "plaid", "exchange later", "sfox"])) {
-      return "connect";
+    if (has(n, ["plaid", "link a bank", "link bank", "bank login"])) {
+      return "bank";
     }
-    if (has(n, ["account", "bank", "401", "ira", "roth", "broker", "exchange", "cash app", "venmo", "retirement", "checking", "savings", "coin", "wallet"])) {
+    if (has(n, ["account", "bank", "401", "ira", "roth", "broker", "exchange", "cash app", "venmo", "retirement", "checking", "savings"])) {
       return "accounts";
     }
-    if (has(n, ["goal", "retire", "net worth", "grow", "save", "debt", "house", "family", "income", "spend"])) {
+    if (has(n, ["goal", "retire", "net worth", "grow", "save", "debt", "house", "family"])) {
       return "goals";
     }
     if (has(n, ["matthew", "son", "my boy"])) {
@@ -140,6 +150,9 @@
     if (has(n, ["thank", "thanks", "appreciate"])) {
       return "thanks";
     }
+    if (has(n, ["connect"])) {
+      return "sfox";
+    }
     return "";
   }
 
@@ -148,25 +161,70 @@
 
     if (topic === "secret") {
       return [
-        "Please don’t type a password, PIN, or API key here.",
+        "Please don’t type a key, password, or PIN in this chat.",
         "",
-        "This page does not collect logins and it does not connect to a bank or exchange. If something looks like a secret, treat it as if it should not be on this screen.",
+        "sFOX has its own box on this page. Paste the API key there. It stays on this device. I never need to see it, and it should not go into a conversation.",
         "",
-        "When you and Matthew are ready, a later setup can connect accounts the right way. For today, ordinary words are enough — “I have a bank and a retirement account” is plenty."
+        "If you already typed one here, treat it as exposed: disconnect, make a new key in sFOX, and use the box."
       ].join("\n");
     }
 
-    if (topic === "purchase") {
+    if (topic === "sfox") {
+      memory.lastTopic = "sfox";
+      if (sfoxConnected()) {
+        return [
+          "sFOX shows as connected on this page.",
+          "",
+          "After it is linked, Codex can autotrade. Live autotrade is a follow-on — this page will not place a trade today.",
+          "",
+          "If you want, we can look at other research power-ups next. Those paid upgrades use one PayPal page."
+        ].join("\n");
+      }
+      return [
+        "Use the sFOX box on this page. Do not paste the key into this chat.",
+        "",
+        "1. Open your sFOX account and create an API key.",
+        "2. Put it only in the dedicated field above.",
+        "3. When the page says “sFOX connected,” Codex can autotrade later.",
+        "",
+        "The key stays on this device until Matthew has a vault. We are not sending live trades from here today."
+      ].join("\n");
+    }
+
+    if (topic === "autotrade") {
+      memory.lastTopic = "autotrade";
+      return [
+        "After sFOX is linked, Codex can autotrade.",
+        "",
+        "That is the point of the connection: Codex can act through sFOX instead of you typing trades by hand. Live autotrade wiring is a follow-on once the key exists. This page only keeps the connected / not connected state.",
+        "",
+        sfoxConnected()
+          ? "You’re already connected. The next ship can use that key from a vault."
+          : "Connect sFOX in the box above when you’re ready. Don’t put the key in chat."
+      ].join("\n");
+    }
+
+    if (topic === "codex") {
+      memory.lastTopic = "codex";
+      return [
+        "Bitcoin Treasury Codex is already on this page. It is your first product, and it is free for you as the founder. There is no Codex charge and no Codex PayPal button.",
+        "",
+        "To make Codex useful, connect sFOX in the box — not in this chat. After sFOX is linked, Codex can autotrade. We will not fire live trades from this sitting.",
+        "",
+        sfoxConnected()
+          ? "sFOX already shows connected."
+          : "Want help with that sFOX box?"
+      ].join("\n");
+    }
+
+    if (topic === "purchase" || topic === "modules") {
       memory.lastTopic = "modules";
       return [
-        "Every module purchase from this page lands on the same pay page — any name, price, or SKU, not just one pack.",
+        "After Codex, other research modules can power up this page. The list is custom — staff edit van-products.json. Early paid upgrades are $1.99 each. They use the same PayPal page. Not the Macro $99 or ETF $149 packs. Square is only a stub. No Stripe. Codex is not on that page.",
         "",
-        "Digital pay is not live. Matthew still has to answer how money is collected. There is no live PayPal button and no Stripe on that page. You can still open the line item:",
-        payHref("MACRO-BTC"),
-        payHref("ETF-FLOW"),
-        payHref("HR-MOD-BTC"),
+        moduleLines(),
         "",
-        "This page stays not-client-ready until that pay gate works."
+        "PayPal has to work for a paid upgrade before this is ready to show as a finished client visit. Connecting sFOX is still the first job."
       ].join("\n");
     }
 
@@ -180,150 +238,68 @@
       return [
         "I’m the coach on " + FULL_NAME + "’s page.",
         "",
-        "Three jobs, all in ordinary language:",
-        "1. Help you start, at your pace.",
-        "2. Hear what you are willing to share about accounts and goals. You choose the words. No logins.",
-        "3. Introduce Halfacre research modules as power-ups for this page — ways to see the picture more clearly and think about net worth.",
+        "First job: help you connect sFOX in the box on this page, so Codex — already yours, free — can autotrade later.",
+        "Second: talk in ordinary words about accounts and goals. No keys in chat.",
+        "Third: if you want more, paid research power-ups go to one PayPal page.",
         "",
-        "I will not move money, place a trade, or ask you to connect a bank today."
+        "I will not move money or place a live trade today."
       ].join("\n");
     }
 
     if (topic === "matthew") {
       memory.lastTopic = "matthew";
       return [
-        "Matthew built this page so the two of you can sit together and talk it through.",
+        "Matthew built this so the two of you can sit together.",
         "",
-        "I’m the on-page coach. He is the person who can unlock research later and, down the road, a proper account connection. You do not have to figure out the technical side.",
+        "Codex is already yours, free. He wants sFOX connected in the box on this page. Paid upgrades, when you’re ready, use one PayPal page he can fill in from van-products.json.",
         "",
-        "Want to sketch your accounts, talk goals, or hear about the research modules?"
+        "Want to do the sFOX box first?"
       ].join("\n");
     }
 
     if (topic === "thanks") {
-      return "You’re welcome, Van. I’m right here if you want to keep going — accounts, goals, or the research modules.";
+      return "You’re welcome, Van. The sFOX box is the useful next step if it still says not connected.";
     }
 
-    if (topic === "connect") {
-      memory.lastTopic = "connect";
-      memory.mentionedConnect = true;
+    if (topic === "bank") {
+      memory.lastTopic = "bank";
       return [
-        "Later — not on this page — Matthew can help you connect a bank or an exchange through a proper setup.",
+        "A bank connection is a later step, not this page, and not a login form here.",
         "",
-        "That future step is meant to save typing and keep a cleaner picture of accounts. It is not live here. There is no login form, no Plaid button, and no exchange key to paste.",
-        "",
-        "For this sitting, you can just tell me what exists, in your own words. A checking account. A retirement account. Some bitcoin. Whatever you’re comfortable saying."
+        "The connection that matters for Codex today is sFOX, in the dedicated box. After sFOX is linked, Codex can autotrade. Don’t paste bank passwords or sFOX keys into this chat."
       ].join("\n");
     }
 
     if (topic === "accounts") {
       memory.lastTopic = "accounts";
       memory.mentionedAccounts = true;
-      if (spoken.length > 40) {
-        memory.notes.push(spoken);
-      }
       return [
-        "Good. You don’t need to log in or paste anything sensitive.",
+        "Ordinary words are enough: a bank, a retirement account, some bitcoin. No logins in chat.",
         "",
-        "A useful first picture is just the list: bank, retirement, brokerage, cash apps, coins, a house, debt — whatever is actually yours. Rough is fine. “I have a 401(k) and a checking account” is a real start.",
-        "",
-        "When you want a tighter picture later, Matthew can help connect a bank or exchange the right way. Not today, and never with a password on this page.",
-        "",
-        "Want to name a couple of accounts you already have, or shift to goals?"
+        "For Codex, the account that matters is sFOX. Use the box on this page for that key. After it is linked, Codex can autotrade — live wiring comes later."
       ].join("\n");
     }
 
     if (topic === "goals") {
       memory.lastTopic = "goals";
       memory.mentionedGoals = true;
-      if (spoken.length > 20) {
-        memory.notes.push(spoken);
-      }
       return [
-        "Goals can stay simple.",
+        "Goals can stay simple: sleep better about cash, grow something, help family.",
         "",
-        "Sleep better about cash. Grow something for later. Help family. Pay down a balance. You don’t need a spreadsheet to start.",
-        "",
-        "Once we have even a rough aim, the research modules are how this page gets smarter — Macro×BTC for the bigger climate, ETF flow for money moving in and out of bitcoin funds, and the Bitcoin Treasury Codex later as a trading product Matthew can unlock.",
-        "",
-        "What would “better” look like for you in a year, in your own words?"
-      ].join("\n");
-    }
-
-    if (topic === "macro") {
-      memory.lastTopic = "modules";
-      memory.mentionedModules = true;
-      return [
-        "Macro×BTC research is the “what’s the weather?” module.",
-        "",
-        "It looks at bitcoin next to ordinary things people already hear about — rates, the dollar, gold, fear and greed. The point is not a hot tip. It’s a clearer climate so your avatar — this page — can get smarter over time.",
-        "",
-        "If you want this module later, it uses the same pay page as every other upgrade:",
-        payHref("MACRO-BTC"),
-        "Pay is not live yet. No password, no bank login, and no trade from here.",
-        "",
-        "Want ETF flow next, or the future Codex?"
-      ].join("\n");
-    }
-
-    if (topic === "etf") {
-      memory.lastTopic = "modules";
-      memory.mentionedModules = true;
-      return [
-        "ETF flow research watches money moving in and out of the big spot bitcoin funds.",
-        "",
-        "In plain English: when a lot of people put money into those funds, or take it out, that shows up as a flow. It’s a way to see demand without staring at a single price tick.",
-        "",
-        "This is research for your page, not a trade button. Same pay page as every other module:",
-        payHref("ETF-FLOW"),
-        "Checkout is not live yet.",
-        "",
-        "I can also walk through Macro×BTC, or the Bitcoin Treasury Codex as a future product."
-      ].join("\n");
-    }
-
-    if (topic === "codex") {
-      memory.lastTopic = "codex";
-      memory.mentionedModules = true;
-      return [
-        "Bitcoin Treasury Codex is a future trading product — a way this page could get more active later.",
-        "",
-        "It is not live. There is no trade button here, no auto-trading, and no exchange key to paste. When Matthew is ready, he can introduce it properly.",
-        "",
-        "Same pay page as the other modules, with no amount until Matthew sets one:",
-        payHref("BTC-TREASURY-CODEX"),
-        "",
-        "Want to stay with research, or sketch your accounts so the page has something to grow from?"
-      ].join("\n");
-    }
-
-    if (topic === "modules") {
-      memory.lastTopic = "modules";
-      memory.mentionedModules = true;
-      return [
-        "Think of these as power-ups for this page. Different name, price, and SKU — all of them use the same pay page. Pay is not live yet.",
-        "",
-        "1. Macro×BTC research — bigger climate. " + payHref("MACRO-BTC"),
-        "2. ETF flow research — fund flows. " + payHref("ETF-FLOW"),
-        "3. Bitcoin module ($1.99 named module). " + payHref("HR-MOD-BTC"),
-        "4. Bitcoin Treasury Codex — future trading product, not live. " + payHref("BTC-TREASURY-CODEX"),
-        "",
-        "Which of those do you want in plain English?"
+        "Codex is already here, free, to help that picture get more active later. Connecting sFOX is the first practical step. Other research power-ups can wait on the PayPal page."
       ].join("\n");
     }
 
     if (isShortAffirm(normalize(spoken)) && memory.lastTopic) {
-      return replyFor(memory.lastTopic === "hello" ? "help" : memory.lastTopic, memory, spoken);
+      return replyFor(memory.lastTopic === "hello" ? "sfox" : memory.lastTopic, memory, spoken);
     }
 
     if (isDefer(normalize(spoken))) {
-      memory.lastTopic = "help";
+      memory.lastTopic = "sfox";
       return [
-        "That’s fine. Nothing has to be decided today.",
+        "That’s fine. Nothing has to be decided this minute.",
         "",
-        "We can sit with a light picture: you, this page, and a coach that does not ask for logins. When you want to go further, we can name accounts, talk goals, or walk the research modules.",
-        "",
-        "I’m here either way."
+        "When you’re ready, the useful box is sFOX on this page. Codex is already yours."
       ].join("\n");
     }
 
@@ -331,25 +307,17 @@
     return [
       "I’m with you.",
       "",
-      spoken
-        ? "I heard you. I won’t turn that into a form or a login."
-        : "Say it in whatever words are comfortable.",
+      "I won’t turn that into a login. If it was a key, use the sFOX box instead of chat.",
       "",
-      "Useful next steps from here:",
-      "• Name accounts you already have — no passwords.",
-      "• Say a goal in plain English.",
-      "• Hear about research modules that can power up this page later.",
-      "",
-      "Which of those feels easiest?"
+      "Easiest next step: connect sFOX so Codex can autotrade later. After that, we can look at paid research power-ups."
     ].join("\n");
   }
 
   function scriptedReply(userText, memory) {
-    var topic = detectTopic(normalize(userText));
-    if (looksLikeSecret(userText)) {
-      topic = "secret";
+    if (looksLikePastedSecret(userText)) {
+      return replyFor("secret", memory, userText);
     }
-    return replyFor(topic, memory, userText);
+    return replyFor(detectTopic(normalize(userText)), memory, userText);
   }
 
   function fetchWithTimeout(url, options, ms) {
@@ -364,6 +332,15 @@
     });
   }
 
+  function scrub(messages) {
+    return (messages || []).map(function (item) {
+      if (looksLikePastedSecret(item && item.content)) {
+        return { role: item.role, content: "[redacted — key or secret was not sent]" };
+      }
+      return item;
+    });
+  }
+
   function askLive(messages) {
     var url = typeof global.VAN_AI_ENDPOINT === "string" ? global.VAN_AI_ENDPOINT.trim() : "";
     if (!url) {
@@ -374,7 +351,7 @@
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: messages, client: FULL_NAME })
+        body: JSON.stringify({ messages: scrub(messages), client: FULL_NAME })
       },
       8000
     )
@@ -397,11 +374,10 @@
 
   function createMemory() {
     return {
-      lastTopic: "hello",
+      lastTopic: "sfox",
       mentionedAccounts: false,
       mentionedGoals: false,
       mentionedModules: false,
-      mentionedConnect: false,
       notes: []
     };
   }
@@ -413,7 +389,7 @@
     starters: STARTERS,
     mode: nowMode,
     createMemory: createMemory,
-    looksLikeSecret: looksLikeSecret,
+    looksLikeSecret: looksLikePastedSecret,
     reply: function (userText, memory, history) {
       var local = scriptedReply(userText, memory || createMemory());
       return askLive(history || []).then(function (live) {

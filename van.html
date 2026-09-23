@@ -4,12 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Charlie Van Halfacre — NOT client-ready — Halfacre Research</title>
-  <meta name="description" content="Private personal page for Charlie Van Halfacre. On-page Halfacre coach. NOT client-ready until digital payment works. No bank login. No live trading.">
+  <title>Charlie Van Halfacre — Halfacre Research</title>
+  <meta name="description" content="Private page for Charlie Van Halfacre. Founder Codex is free. sFOX connect stays local. Paid upgrades use one PayPal page. Not show-Van until PayPal can take a real payment.">
   <style>
     :root {
       --dark: #0A0A0A;
-      --rail: #111111;
       --card: #161616;
       --foot: #121212;
       --orange: #F7931A;
@@ -18,6 +17,7 @@
       --neon: #39FF14;
       --bubble: #1c1c1c;
       --mine: #241a10;
+      --warn: #c9a227;
     }
     * { box-sizing: border-box; }
     html, body {
@@ -53,7 +53,7 @@
     .brand { color: var(--orange); }
     .mode { color: var(--muted); }
     .gate {
-      border: 2px solid #c9a227;
+      border: 2px solid var(--warn);
       background: #1a1408;
       color: #f3e2b0;
       padding: 10px 12px;
@@ -95,11 +95,91 @@
       margin: 0 auto;
       padding: 0 14px;
     }
+    .codex {
+      background: var(--card);
+      border-left: 6px solid var(--neon);
+      padding: 14px 14px 16px;
+      margin: 12px 0 10px;
+    }
+    .codex h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .pill {
+      display: inline-block;
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 4px 8px;
+      margin: 0 6px 8px 0;
+      background: #102010;
+      color: var(--neon);
+    }
+    .pill.wait { background: #1a1408; color: var(--warn); }
+    .codex p { margin: 0 0 10px; font-size: 14px; line-height: 1.4; color: #d7d7d7; }
+    .sfox label {
+      display: block;
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      color: var(--orange);
+      letter-spacing: 0.04em;
+      margin: 0 0 6px;
+    }
+    .sfox input {
+      width: 100%;
+      background: var(--dark);
+      color: var(--white);
+      border: 1px solid #333;
+      padding: 10px 12px;
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+    .sfox input:focus {
+      outline: 2px solid var(--neon);
+      outline-offset: 2px;
+    }
+    .sfox .err { color: #f0b4b4; font-size: 13px; min-height: 1.1em; margin: 0 0 8px; }
+    .go, .chip, .send, .ghost {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      border: 0;
+      cursor: pointer;
+    }
+    .go {
+      background: var(--neon);
+      color: var(--dark);
+      padding: 10px 14px;
+    }
+    .ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid #333;
+      padding: 10px 14px;
+    }
+    .modules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 0 0 10px;
+    }
+    .mod {
+      display: block;
+      background: var(--card);
+      border-left: 4px solid var(--orange);
+      padding: 10px 10px 12px;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .mod b { display: block; font-size: 14px; margin-bottom: 4px; }
+    .mod small { color: var(--muted); font-size: 12px; }
     .coach-bar {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 2px 8px;
+      padding: 6px 2px 8px;
     }
     .avatar {
       width: 48px;
@@ -141,14 +221,6 @@
       flex-wrap: wrap;
       gap: 8px;
       padding: 0 0 10px;
-    }
-    .chip, .send {
-      font-family: "Courier New", monospace;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      border: 0;
-      cursor: pointer;
     }
     .chip {
       background: var(--card);
@@ -194,22 +266,6 @@
     }
     footer a { color: var(--neon); text-decoration: none; }
     .hint { margin: 0 0 6px; }
-    .modules {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 0 0 10px;
-    }
-    .mod {
-      display: block;
-      background: var(--card);
-      border-left: 4px solid var(--orange);
-      padding: 10px 10px 12px;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .mod b { display: block; font-size: 14px; margin-bottom: 4px; }
-    .mod small { color: var(--muted); font-size: 12px; }
     @media (max-width: 560px) {
       .modules { grid-template-columns: 1fr; }
     }
@@ -224,12 +280,11 @@
   <header class="top">
     <div class="brand-row">
       <div class="brand">HALFACRE RESEARCH · PERSONAL</div>
-      <div class="mode" id="mode" aria-live="polite">NOT CLIENT-READY</div>
+      <div class="mode" id="mode" aria-live="polite">NOT SHOW-VAN</div>
     </div>
-    <div class="gate">
-      <strong>NOT CLIENT-READY.</strong>
-      Do not show this page to Van and do not instruct Hostinger to “show Dad” until digital payment works.
-      Pay is <strong>BLOCKED</strong> on Matthew’s payment-rail answers (CoS asking now).
+    <div class="gate" id="gate">
+      <strong>NOT SHOW-VAN.</strong>
+      Founder Codex is free and can sit on this page. Do not stamp “show Van” and do not instruct Hostinger to “show Dad” until a paid $1.99 upgrade can take a real PayPal payment. Not Macro $99 / ETF $149.
     </div>
     <h1>Charlie Van Halfacre</h1>
     <div class="contact">
@@ -239,6 +294,23 @@
   </header>
 
   <main class="chat-shell">
+    <section class="codex" id="codex" data-sfox>
+      <span class="pill">FIRST PRODUCT · FREE FOR VAN</span>
+      <span class="pill wait" data-sfox-status>sFOX not connected</span>
+      <h2>Bitcoin Treasury Codex</h2>
+      <p>Already yours. No charge. After sFOX is linked in this box, Codex can autotrade. Live autotrade is a follow-on — this page will not place a trade today.</p>
+      <p data-sfox-hint>Use this box — not the chat — for the sFOX API key. It stays on this device until a vault exists.</p>
+      <form class="sfox" data-sfox-form autocomplete="off">
+        <label for="sfox-key">sFOX API KEY (this device only)</label>
+        <input id="sfox-key" data-sfox-key type="password" name="sfox-local-only" autocomplete="off" spellcheck="false" placeholder="Paste here, never in chat">
+        <p class="err" data-sfox-error></p>
+        <button class="go" type="submit">Connect sFOX</button>
+      </form>
+      <button class="ghost" type="button" data-sfox-disconnect hidden>Disconnect sFOX</button>
+    </section>
+
+    <div class="modules" id="modules"></div>
+
     <div class="coach-bar">
       <div class="avatar" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="40">
@@ -248,23 +320,22 @@
       </div>
       <div>
         <b>Halfacre coach</b>
-        <small>Talk in plain English. No logins. No trades. Pay is not live.</small>
+        <small>First job: sFOX box, not chat. Codex is free.</small>
       </div>
     </div>
-    <div class="modules" id="modules"></div>
     <div id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
     <div class="chips" id="chips"></div>
     <form class="composer" id="form">
       <label class="visually-hidden" for="line" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Message</label>
-      <input id="line" name="line" type="text" autocomplete="off" enterkeyhint="send" placeholder="Type to Van’s coach…">
+      <input id="line" name="line" type="text" autocomplete="off" enterkeyhint="send" placeholder="Talk to the coach — no keys here">
       <button class="send" type="submit">Send</button>
     </form>
   </main>
 
   <footer>
-    <p class="hint">NOT client-ready. Conversation stays in this tab. This page does not collect passwords or API keys. Not investment advice. Not a bank or exchange login. Purchases go to the same pay page; checkout is a stub.</p>
+    <p class="hint">sFOX keys stay in this browser (pending vault). They are not sent to chat, analytics, or a live trade. Paid upgrades use one PayPal page. No Stripe. Not investment advice.</p>
     <p>
-      <a href="pay.html">Universal pay page (stub)</a>
+      <a href="pay.html">Universal pay page</a>
       ·
       <a href="pages.html">All pages</a>
       ·
@@ -273,6 +344,7 @@
   </footer>
 
   <script src="pay-catalog.js"></script>
+  <script src="van-sfox.js"></script>
   <script src="van-ai.js"></script>
   <script>
     (function () {
@@ -281,13 +353,21 @@
       var line = document.getElementById("line");
       var chips = document.getElementById("chips");
       var modeEl = document.getElementById("mode");
+      var gate = document.getElementById("gate");
       var sendBtn = form.querySelector(".send");
       var memory = window.VanCoach.createMemory();
       var history = [{ role: "assistant", content: window.VanCoach.greeting }];
 
-      function setMode() {
+      window.VanSfox.bind(document.getElementById("codex"));
+
+      function setMode(payLive) {
         var coach = window.VanCoach.mode() === "live" ? "live model" : "on-page demo";
-        modeEl.textContent = "NOT CLIENT-READY · " + coach;
+        if (payLive) {
+          modeEl.textContent = "PAYPAL PRESENT · " + coach;
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A paid module has a PayPal target. CoS still confirms a real digital payment before any “show Van” stamp. Codex stays free. Do not instruct Hostinger to “show Dad” until that confirm.";
+        } else {
+          modeEl.textContent = "NOT SHOW-VAN · " + coach;
+        }
       }
 
       function linkify(text) {
@@ -333,9 +413,9 @@
           a.className = "mod";
           a.href = window.HalfacrePay.buildUrl(item);
           a.innerHTML = "<b></b><small></small>";
-          a.querySelector("b").textContent = item.product;
+          a.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
           a.querySelector("small").textContent =
-            window.HalfacrePay.formatMoney(item.amount, item.currency) + " · pay page stub · " + item.sku;
+            window.HalfacrePay.formatMoney(item.amount) + " · " + (item.status || "listed") + " · PayPal page · " + item.id;
           box.appendChild(a);
         });
       }
@@ -361,10 +441,16 @@
         chips.querySelectorAll("button").forEach(function (b) { b.disabled = on; });
       }
 
+      window.HalfacrePay.load().then(function () {
+        renderModules();
+        setMode(window.HalfacrePay.anyPaypalLive());
+      }).catch(function () {
+        setMode(false);
+      });
+
       addMsg("assistant", window.VanCoach.greeting);
-      renderModules();
       renderChips();
-      setMode();
+      setMode(false);
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -372,9 +458,18 @@
         if (!text) {
           return;
         }
+        if (window.VanCoach.looksLikeSecret(text)) {
+          addMsg("user", "[key or secret not kept in the chat]");
+        } else {
+          addMsg("user", text);
+        }
+        history.push({
+          role: "user",
+          content: window.VanCoach.looksLikeSecret(text)
+            ? "[redacted — key or secret was not kept]"
+            : text
+        });
         line.value = "";
-        addMsg("user", text);
-        history.push({ role: "user", content: text });
         var pending = addMsg("assistant", "One moment…", true);
         lock(true);
         window.VanCoach.reply(text, memory, history).then(function (reply) {
