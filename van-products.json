@@ -7,6 +7,7 @@
   },
   "pay": {
     "rail": "paypal",
+    "rails": ["paypal", "square"],
     "stripe": false,
     "default_paid_usd": 1.99,
     "forbidden_pack_usd": [99, 149],
@@ -16,7 +17,14 @@
       "macro_99": "https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE",
       "etf_149": "https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML"
     },
-    "mint_note": "SoT pack pattern is PayPal NCP (paypal.com/ncp/payment/PLB-…). Those two links are $99/$149 packs on Soft HOLD — do not use them for Van. Mint new NCP links at $1.99 per module and set paypal_confirms_usd to 1.99. Card/guest checkout is whatever PayPal Checkout shows natively."
+    "mint_note": "SoT pack pattern is PayPal NCP (paypal.com/ncp/payment/PLB-…). Those two links are $99/$149 packs on Soft HOLD — do not use them for Van. Mint new NCP links at $1.99 per module and set paypal_confirms_usd to 1.99. Card/guest checkout is whatever PayPal Checkout shows natively.",
+    "square": {
+      "enabled": false,
+      "status": "coming_next",
+      "application_id": "",
+      "location_id": "",
+      "note": "Matthew approved Square (Block) as a second rail. Day-1 checkout is PayPal. Flip enabled only after a Square application_id exists. Do not block this PR on a Square SDK."
+    }
   },
   "founder_product": {
     "id": "codex",

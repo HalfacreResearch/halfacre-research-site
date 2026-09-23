@@ -123,7 +123,7 @@
     if (has(n, ["codex"])) {
       return "codex";
     }
-    if (has(n, ["paypal", "buy now", "check out", "checkout", "pay now", "purchase", "how much", "price", "pay page", "pay for"])) {
+    if (has(n, ["paypal", "square", "buy now", "check out", "checkout", "pay now", "purchase", "how much", "price", "pay page", "pay for"])) {
       return "purchase";
     }
     if (has(n, ["module", "research", "power up", "powerup", "upgrade", "what can help", "climate", "flow", "tax wrapper"])) {
@@ -220,7 +220,7 @@
     if (topic === "purchase" || topic === "modules") {
       memory.lastTopic = "modules";
       return [
-        "After Codex, other research modules can power up this page. The list is custom — staff edit van-products.json. Early paid upgrades are $1.99 each. They use the same PayPal page. Card or guest pay is whatever PayPal shows. Not the Macro $99 or ETF $149 packs. No Stripe. Codex is not on that page.",
+        "After Codex, other research modules can power up this page. The list is custom — staff edit van-products.json. Early paid upgrades are $1.99 each. They use the same PayPal page first. Square is approved as a second rail and is coming next. Card or guest pay is whatever PayPal shows. Not the Macro $99 or ETF $149 packs. No Stripe. Codex is not on that page.",
         "",
         moduleLines(),
         "",

@@ -4,7 +4,8 @@
  * Paid Van modules are $1.99. Codex is free and is never charged.
  * Macro $99 / ETF $149 pack prices are forbidden on this pay path.
  *
- * PayPal only. Card/guest is native PayPal Checkout.
+ * PayPal is Day-1. Card/guest is native PayPal Checkout.
+ * Square (Block) is an approved second rail — config stub only until SDK.
  * SoT pack NCP pattern: https://www.paypal.com/ncp/payment/PLB-…
  * Those pack links are $99/$149 — never used as Van checkout.
  * Van live path: new $1.99 NCP link + paypal_confirms_usd 1.99,
@@ -251,6 +252,23 @@
     }).ok;
   }
 
+  function squareStatus() {
+    var pay = (cache && cache.pay) || {};
+    var sq = pay.square || {};
+    var enabled = sq.enabled === true;
+    var appId = trim(sq.application_id);
+    var locationId = trim(sq.location_id);
+    var live = enabled && Boolean(appId) && Boolean(locationId);
+    return {
+      enabled: enabled,
+      live: live,
+      status: live ? "ready" : (trim(sq.status) || "coming_next"),
+      application_id: appId,
+      location_id: locationId,
+      note: trim(sq.note) || "Square (Block) is the approved second rail. Coming next. Day-1 checkout is PayPal."
+    };
+  }
+
   function load() {
     if (cache) {
       return Promise.resolve(cache);
@@ -274,6 +292,7 @@
         global.HalfacrePay.founder = cache.founder;
         global.HalfacrePay.client = cache.client;
         global.HalfacrePay.pay = cache.pay;
+        global.HalfacrePay.square = squareStatus();
         return cache;
       });
   }
@@ -284,6 +303,7 @@
     rail: "paypal-day1",
     paidUsd: PAID_USD,
     stripe: false,
+    square: false,
     products: [],
     founder: null,
     client: null,
@@ -298,6 +318,7 @@
     checkoutPlan: checkoutPlan,
     isForbiddenAmount: isForbiddenAmount,
     isPaidAmount: isPaidAmount,
-    anyPaypalLive: anyPaypalLive
+    anyPaypalLive: anyPaypalLive,
+    squareStatus: squareStatus
   };
 })(window);

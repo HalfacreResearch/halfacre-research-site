@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Pay — Halfacre Research</title>
-  <meta name="description" content="Universal PayPal pay page for any paid Van avatar module. Square stub. No Stripe. Codex is free and is not sold here.">
+  <meta name="description" content="Universal pay page for any paid Van avatar module. PayPal is Day-1. Square (Block) coming next. No Stripe. Codex is free and is not sold here.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -74,6 +74,15 @@
     }
     .price { font-size: 28px; font-weight: 700; color: var(--orange); margin: 8px 0 0; }
     .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+    .square-card { border-left-color: #888; }
+    .square-card p { color: var(--muted); font-size: 14px; line-height: 1.45; margin: 0 0 10px; }
+    .flag {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--warn);
+      margin: 0 0 8px;
+    }
     button, .go, .paypal {
       font-family: "Courier New", monospace;
       font-size: 12px;
@@ -121,10 +130,10 @@
     <div class="gate" id="gate">
       <strong>PAYPAL GATE.</strong>
       Do not stamp “show Van” until CoS clears a real payable catalog and a $1.99 PayPal NCP can take money.
-      Founder Codex is free and is not sold on this page. PayPal only. Card/guest is native PayPal Checkout. No Stripe.
+      Founder Codex is free and is not sold on this page. PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe.
     </div>
     <h1>Pay $1.99 for one upgrade.</h1>
-    <p class="sub">Early paid research/data modules are $1.99. Link params: product, sku, name, amount, description. Codex is free. Macro $99 and ETF $149 pack NCP links are not used here.</p>
+    <p class="sub">Early paid research/data modules are $1.99. Link params: product, sku, name, amount, description. Codex is free. PayPal first. Square stub below. Macro $99 and ETF $149 pack NCP links are not used here.</p>
 
     <section class="card" id="line">
       <h2>LINE ITEM</h2>
@@ -144,8 +153,17 @@
       <div class="list" id="known"></div>
     </section>
 
+    <section class="card square-card" id="square">
+      <h2>SQUARE (BLOCK) · SECOND RAIL</h2>
+      <p class="flag" id="square-flag">pay.square.enabled = false · coming next</p>
+      <p id="square-note">Matthew likes Square as a second rail. This PR does not wait on a Square SDK. Day-1 money path is PayPal above. Flip <code>pay.square.enabled</code> and add <code>application_id</code> / <code>location_id</code> in van-products.json when Square is ready.</p>
+      <div class="actions">
+        <button type="button" disabled>Square — coming next</button>
+      </div>
+    </section>
+
     <footer>
-      <p>PayPal only. Pack SoT NCP pattern is <code>paypal.com/ncp/payment/PLB-…</code> (Macro $99 / ETF $149 links exist in history and stay unused here). Mint new $1.99 NCP links. Card/guest is whatever PayPal Checkout shows. No Stripe. Codex stays free on <a href="van.html">van.html</a>.</p>
+      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Pack SoT NCP pattern is <code>paypal.com/ncp/payment/PLB-…</code> (Macro $99 / ETF $149 links exist in history and stay unused here). Mint new $1.99 NCP links. Card/guest is whatever PayPal Checkout shows. No Stripe. Codex stays free on <a href="van.html">van.html</a>.</p>
       <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
     </footer>
   </div>
@@ -227,10 +245,18 @@
       }
 
       pay.load().then(function () {
+        var sq = pay.squareStatus();
+        var flag = document.getElementById("square-flag");
+        var sqNote = document.getElementById("square-note");
+        flag.textContent = "pay.square.enabled = " + String(sq.enabled) + " · " + sq.status;
+        if (sq.note) {
+          sqNote.textContent = sq.note;
+        }
+
         if (!pay.anyPaypalLive()) {
-          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No payable $1.99 catalog yet. Mint a PayPal NCP link at $1.99 (same pattern as the old pack links) and set <code>paypal_confirms_usd</code> to 1.99. Do not reuse Macro $99 / ETF $149 NCP links. Do not instruct Hostinger to “show Dad.”";
+          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No payable $1.99 catalog yet. Mint a PayPal NCP link at $1.99 (same pattern as the old pack links) and set <code>paypal_confirms_usd</code> to 1.99. Do not reuse Macro $99 / ETF $149 NCP links. Square is coming next — do not wait on it. Do not instruct Hostinger to “show Dad.”";
         } else {
-          gate.innerHTML = "<strong>PAYPAL $1.99 PRESENT.</strong> A $1.99 PayPal path is configured. CoS still confirms a real digital payment before any “show Van” stamp. Codex stays free.";
+          gate.innerHTML = "<strong>PAYPAL $1.99 PRESENT.</strong> A $1.99 PayPal path is configured. Square (Block) stays a stub until application_id is set. CoS still confirms a real digital payment before any “show Van” stamp. Codex stays free.";
         }
 
         var query = pay.fromQuery(window.location.search);
