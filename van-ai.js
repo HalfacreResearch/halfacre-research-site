@@ -10,12 +10,22 @@
  * Expected contract: POST JSON { messages: [{ role, content }] }
  * Expected reply:    JSON { reply: "..." }
  * If the endpoint is empty or the request fails, this file answers locally.
+ *
+ * Purchases: always send Van UX to pay.html (HalfacrePay.buildUrl).
+ * Checkout is blocked until CoS / Matthew payment-rail answers.
  */
 (function (global) {
   "use strict";
 
   var FULL_NAME = "Charlie Van Halfacre";
   var FIRST_NAME = "Van";
+
+  function payHref(sku) {
+    if (global.HalfacrePay && typeof global.HalfacrePay.buildUrl === "function") {
+      return global.HalfacrePay.buildUrl({ sku: sku });
+    }
+    return "pay.html?sku=" + encodeURIComponent(sku);
+  }
 
   var GREETING = [
     "Hi Van. I’m your Halfacre coach.",
@@ -24,6 +34,8 @@
     "",
     "We never need a password or an API key here. Connecting a bank or an exchange can happen later, with Matthew, through a proper setup. Not on this page, and not today.",
     "",
+    "If you want a research module, every purchase from this page goes to the same pay page. Digital pay is not live yet — Matthew still has to choose the payment rail — so this page is not ready to present as a finished client product.",
+    "",
     "What would you like to talk about first?"
   ].join("\n");
 
@@ -31,6 +43,7 @@
     { label: "My accounts", send: "I can tell you a little about my accounts." },
     { label: "My goals", send: "Let’s talk about my goals." },
     { label: "Research modules", send: "What research can help me?" },
+    { label: "Open pay page", send: "Show me the pay page for a module." },
     { label: "Connect later", send: "How would connecting a bank work later?" },
     { label: "Bitcoin later", send: "Tell me about the Bitcoin Treasury Codex." }
   ];
@@ -91,7 +104,7 @@
     if (looksLikeSecret(n) || has(n, ["password", "api key", "private key", "seed phrase", "login", "log in", "username"])) {
       return "secret";
     }
-    if (has(n, ["paypal", "buy now", "check out", "checkout", "pay now", "purchase", "how much", "price", "cost"])) {
+    if (has(n, ["paypal", "buy now", "check out", "checkout", "pay now", "purchase", "how much", "price", "cost", "pay page", "pay for"])) {
       return "purchase";
     }
     if (has(n, ["codex", "autotrade", "auto trade", "live trade", "trading bot", "place a trade", "buy bitcoin now"])) {
@@ -146,11 +159,14 @@
     if (topic === "purchase") {
       memory.lastTopic = "modules";
       return [
-        "Nothing to buy on this page today.",
+        "Every module purchase from this page lands on the same pay page — any name, price, or SKU, not just one pack.",
         "",
-        "The research modules are real Halfacre work — Macro×BTC, ETF flow, and a future Bitcoin Treasury Codex — but Matthew will unlock purchase when he is ready. I will not send you to a checkout or invent a PayPal button.",
+        "Digital pay is not live. Matthew still has to answer how money is collected. There is no live PayPal button and no Stripe on that page. You can still open the line item:",
+        payHref("MACRO-BTC"),
+        payHref("ETF-FLOW"),
+        payHref("HR-MOD-BTC"),
         "",
-        "If you want, I can walk through what each module is for, in plain English."
+        "This page stays not-client-ready until that pay gate works."
       ].join("\n");
     }
 
@@ -242,7 +258,9 @@
         "",
         "It looks at bitcoin next to ordinary things people already hear about — rates, the dollar, gold, fear and greed. The point is not a hot tip. It’s a clearer climate so your avatar — this page — can get smarter over time.",
         "",
-        "Purchase is not open on this page. Matthew will unlock it when he is ready. I can still explain it so you know what it is.",
+        "If you want this module later, it uses the same pay page as every other upgrade:",
+        payHref("MACRO-BTC"),
+        "Pay is not live yet. No password, no bank login, and no trade from here.",
         "",
         "Want ETF flow next, or the future Codex?"
       ].join("\n");
@@ -256,7 +274,9 @@
         "",
         "In plain English: when a lot of people put money into those funds, or take it out, that shows up as a flow. It’s a way to see demand without staring at a single price tick.",
         "",
-        "This is research for your page, not a trade button. Matthew will unlock purchase later. Nothing to pay today.",
+        "This is research for your page, not a trade button. Same pay page as every other module:",
+        payHref("ETF-FLOW"),
+        "Checkout is not live yet.",
         "",
         "I can also walk through Macro×BTC, or the Bitcoin Treasury Codex as a future product."
       ].join("\n");
@@ -270,7 +290,8 @@
         "",
         "It is not live. There is no trade button here, no auto-trading, and no exchange key to paste. When Matthew is ready, he can introduce it properly.",
         "",
-        "For today it is a power-up on the map: research first (Macro×BTC, ETF flow), then, later, a Codex that knows more about your picture.",
+        "Same pay page as the other modules, with no amount until Matthew sets one:",
+        payHref("BTC-TREASURY-CODEX"),
         "",
         "Want to stay with research, or sketch your accounts so the page has something to grow from?"
       ].join("\n");
@@ -280,11 +301,12 @@
       memory.lastTopic = "modules";
       memory.mentionedModules = true;
       return [
-        "Three Halfacre modules worth knowing. Think of them as power-ups for this page — they make the coach smarter and give you a clearer net-worth picture. Nothing to buy here today; Matthew unlocks purchase when he is ready.",
+        "Think of these as power-ups for this page. Different name, price, and SKU — all of them use the same pay page. Pay is not live yet.",
         "",
-        "1. Macro×BTC research — bitcoin in the bigger climate: rates, gold, fear and greed.",
-        "2. ETF flow research — money moving in and out of spot bitcoin funds.",
-        "3. Bitcoin Treasury Codex — a future trading product. Not live. No trades from this page.",
+        "1. Macro×BTC research — bigger climate. " + payHref("MACRO-BTC"),
+        "2. ETF flow research — fund flows. " + payHref("ETF-FLOW"),
+        "3. Bitcoin module ($1.99 named module). " + payHref("HR-MOD-BTC"),
+        "4. Bitcoin Treasury Codex — future trading product, not live. " + payHref("BTC-TREASURY-CODEX"),
         "",
         "Which of those do you want in plain English?"
       ].join("\n");

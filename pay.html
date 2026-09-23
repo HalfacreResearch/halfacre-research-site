@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pay — Halfacre Research</title>
+  <meta name="description" content="Universal pay page for any Halfacre research or avatar module. Checkout pending CoS / Matthew payment-rail answers.">
+  <style>
+    :root {
+      --dark: #0A0A0A;
+      --card: #161616;
+      --foot: #121212;
+      --orange: #F7931A;
+      --white: #FFFFFF;
+      --muted: #A8A8A8;
+      --neon: #39FF14;
+      --warn: #c9a227;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--dark);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+    .brand {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+    .gate {
+      border: 2px solid var(--warn);
+      background: #1a1408;
+      color: #f3e2b0;
+      padding: 12px 14px;
+      margin: 0 0 18px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 7vw, 36px); line-height: 0.95; }
+    .sub { color: var(--muted); font-size: 15px; margin: 0 0 20px; }
+    .card {
+      background: var(--card);
+      border-left: 6px solid var(--orange);
+      padding: 16px 16px 18px;
+      margin: 0 0 16px;
+    }
+    .card h2 {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--orange);
+      margin: 0 0 10px;
+    }
+    .fact {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 8px;
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+    .fact span {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      color: var(--orange);
+      letter-spacing: 0.04em;
+      padding-top: 3px;
+    }
+    .price { font-size: 28px; font-weight: 700; color: var(--orange); margin: 8px 0 0; }
+    label {
+      display: block;
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      color: var(--orange);
+      letter-spacing: 0.04em;
+      margin: 10px 0 6px;
+    }
+    input, textarea {
+      width: 100%;
+      background: var(--dark);
+      color: var(--white);
+      border: 1px solid #333;
+      padding: 10px 12px;
+      font-size: 16px;
+    }
+    input:focus, textarea:focus {
+      outline: 2px solid var(--neon);
+      outline-offset: 2px;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    button, .go {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      border: 0;
+      cursor: pointer;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .go { background: var(--neon); color: var(--dark); }
+    button[disabled] {
+      background: #3a3a3a;
+      color: #888;
+      cursor: not-allowed;
+    }
+    .list a {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 10px 0;
+    }
+    .list a:hover { color: var(--orange); }
+    .list small { display: block; color: var(--muted); font-size: 13px; }
+    footer {
+      margin-top: 28px;
+      padding-top: 14px;
+      border-top: 2px solid var(--orange);
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: var(--neon); text-decoration: none; }
+    @media (max-width: 560px) {
+      .row, .fact { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">HALFACRE RESEARCH · PAY</div>
+    <div class="gate">
+      <strong>NOT LIVE.</strong>
+      Digital checkout is <strong>BLOCKED</strong> on Matthew’s payment-rail answers (CoS asking now).
+      Do not treat this page as ready to show Van. Do not instruct Hostinger to “show Dad.”
+      No Stripe. PayPal is a stub until CoS sends a real rail.
+    </div>
+    <h1>Pay for one module.</h1>
+    <p class="sub">One pay page for every research or avatar upgrade. Name, price, and SKU come from the link — not from two hard-coded packs.</p>
+
+    <section class="card" id="line">
+      <h2>LINE ITEM</h2>
+      <p id="empty">No product in the link yet. Pick a module below, or describe any SKU.</p>
+      <div id="filled" hidden>
+        <div class="fact"><span>PRODUCT</span><b id="f-product"></b></div>
+        <div class="fact"><span>SKU</span><b id="f-sku"></b></div>
+        <div class="fact"><span>DESCRIPTION</span><b id="f-desc"></b></div>
+        <p class="price" id="f-price"></p>
+      </div>
+      <div class="actions">
+        <button type="button" disabled>PayPal — pending CoS</button>
+        <span style="color:#888;font-size:13px;align-self:center;">No live PayPal link in this repo. Stripe will not be added here.</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>ANY MODULE</h2>
+      <p style="color:#A8A8A8;margin:0 0 8px;">This is the same page for every SKU. Query params: product, sku, amount, description.</p>
+      <form id="any" method="get" action="pay.html">
+        <label for="product">PRODUCT</label>
+        <input id="product" name="product" type="text" placeholder="Any avatar upgrade name">
+        <div class="row">
+          <div>
+            <label for="sku">SKU</label>
+            <input id="sku" name="sku" type="text" placeholder="ANY-SKU-001">
+          </div>
+          <div>
+            <label for="amount">AMOUNT</label>
+            <input id="amount" name="amount" type="text" inputmode="decimal" placeholder="1.99">
+          </div>
+        </div>
+        <label for="description">DESCRIPTION</label>
+        <textarea id="description" name="description" rows="2" placeholder="What this module is"></textarea>
+        <div class="actions">
+          <button class="go" type="submit">Show this line item</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>KNOWN MODULES (CATALOG)</h2>
+      <div class="list" id="known"></div>
+    </section>
+
+    <footer>
+      <p>Van path: every purchase from <a href="van.html">van.html</a> lands here. Checkout stays stubbed until CoS clears the rail.</p>
+      <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
+    </footer>
+  </div>
+  <script src="pay-catalog.js"></script>
+  <script>
+    (function () {
+      var pay = window.HalfacrePay;
+      var query = pay.fromQuery(window.location.search);
+      var line = pay.resolve(query);
+      var hasLine = Boolean(line.product || line.sku || line.amount || line.description);
+      var empty = document.getElementById("empty");
+      var filled = document.getElementById("filled");
+
+      if (hasLine) {
+        empty.hidden = true;
+        filled.hidden = false;
+        document.getElementById("f-product").textContent = line.product || "(no name)";
+        document.getElementById("f-sku").textContent = line.sku || "(no sku)";
+        document.getElementById("f-desc").textContent = line.description || "—";
+        document.getElementById("f-price").textContent = pay.formatMoney(line.amount, line.currency);
+        document.getElementById("product").value = line.product;
+        document.getElementById("sku").value = line.sku;
+        document.getElementById("amount").value = line.amount;
+        document.getElementById("description").value = line.description;
+      }
+
+      var known = document.getElementById("known");
+      pay.products.forEach(function (item) {
+        var a = document.createElement("a");
+        a.href = pay.buildUrl(item);
+        a.innerHTML = "<b></b><small></small>";
+        a.querySelector("b").textContent = item.product + " · " + item.sku;
+        a.querySelector("small").textContent = pay.formatMoney(item.amount, item.currency) + " — " + item.description;
+        known.appendChild(a);
+      });
+    })();
+  </script>
+</body>
+</html>

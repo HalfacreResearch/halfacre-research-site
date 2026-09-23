@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Charlie Van Halfacre — Halfacre Research</title>
-  <meta name="description" content="Private personal page for Charlie Van Halfacre. On-page Halfacre coach. No bank login. No live trading.">
+  <title>Charlie Van Halfacre — NOT client-ready — Halfacre Research</title>
+  <meta name="description" content="Private personal page for Charlie Van Halfacre. On-page Halfacre coach. NOT client-ready until digital payment works. No bank login. No live trading.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -52,6 +52,15 @@
     }
     .brand { color: var(--orange); }
     .mode { color: var(--muted); }
+    .gate {
+      border: 2px solid #c9a227;
+      background: #1a1408;
+      color: #f3e2b0;
+      padding: 10px 12px;
+      margin: 0 0 12px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
     h1 {
       margin: 0 0 8px;
       font-size: clamp(28px, 8vw, 42px);
@@ -185,6 +194,25 @@
     }
     footer a { color: var(--neon); text-decoration: none; }
     .hint { margin: 0 0 6px; }
+    .modules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 0 0 10px;
+    }
+    .mod {
+      display: block;
+      background: var(--card);
+      border-left: 4px solid var(--orange);
+      padding: 10px 10px 12px;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .mod b { display: block; font-size: 14px; margin-bottom: 4px; }
+    .mod small { color: var(--muted); font-size: 12px; }
+    @media (max-width: 560px) {
+      .modules { grid-template-columns: 1fr; }
+    }
     @media (min-width: 720px) {
       .top { padding: 20px 28px 16px; }
       .chat-shell { padding: 0 8px; }
@@ -196,7 +224,12 @@
   <header class="top">
     <div class="brand-row">
       <div class="brand">HALFACRE RESEARCH · PERSONAL</div>
-      <div class="mode" id="mode" aria-live="polite">Coach: on-page demo</div>
+      <div class="mode" id="mode" aria-live="polite">NOT CLIENT-READY</div>
+    </div>
+    <div class="gate">
+      <strong>NOT CLIENT-READY.</strong>
+      Do not show this page to Van and do not instruct Hostinger to “show Dad” until digital payment works.
+      Pay is <strong>BLOCKED</strong> on Matthew’s payment-rail answers (CoS asking now).
     </div>
     <h1>Charlie Van Halfacre</h1>
     <div class="contact">
@@ -215,9 +248,10 @@
       </div>
       <div>
         <b>Halfacre coach</b>
-        <small>Talk in plain English. No logins. No trades.</small>
+        <small>Talk in plain English. No logins. No trades. Pay is not live.</small>
       </div>
     </div>
+    <div class="modules" id="modules"></div>
     <div id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
     <div class="chips" id="chips"></div>
     <form class="composer" id="form">
@@ -228,14 +262,17 @@
   </main>
 
   <footer>
-    <p class="hint">Conversation stays in this tab. This page does not collect passwords or API keys. Not investment advice. Not a bank or exchange login.</p>
+    <p class="hint">NOT client-ready. Conversation stays in this tab. This page does not collect passwords or API keys. Not investment advice. Not a bank or exchange login. Purchases go to the same pay page; checkout is a stub.</p>
     <p>
+      <a href="pay.html">Universal pay page (stub)</a>
+      ·
       <a href="pages.html">All pages</a>
       ·
       <a href="van-desk.html">Opening scene: Van’s desk</a>
     </p>
   </footer>
 
+  <script src="pay-catalog.js"></script>
   <script src="van-ai.js"></script>
   <script>
     (function () {
@@ -249,18 +286,58 @@
       var history = [{ role: "assistant", content: window.VanCoach.greeting }];
 
       function setMode() {
-        modeEl.textContent = window.VanCoach.mode() === "live"
-          ? "Coach: live model"
-          : "Coach: on-page demo · set window.VAN_AI_ENDPOINT later";
+        var coach = window.VanCoach.mode() === "live" ? "live model" : "on-page demo";
+        modeEl.textContent = "NOT CLIENT-READY · " + coach;
+      }
+
+      function linkify(text) {
+        var frag = document.createDocumentFragment();
+        var re = /(pay\.html\?[^\s]+|pay\.html)/g;
+        var last = 0;
+        var match;
+        while ((match = re.exec(text))) {
+          if (match.index > last) {
+            frag.appendChild(document.createTextNode(text.slice(last, match.index)));
+          }
+          var a = document.createElement("a");
+          a.href = match[0];
+          a.textContent = match[0];
+          a.style.color = "#8ab4f8";
+          frag.appendChild(a);
+          last = match.index + match[0].length;
+        }
+        if (last < text.length) {
+          frag.appendChild(document.createTextNode(text.slice(last)));
+        }
+        return frag;
       }
 
       function addMsg(role, text, pending) {
         var el = document.createElement("div");
         el.className = "msg " + (role === "user" ? "user" : "coach") + (pending ? " pending" : "");
-        el.textContent = text;
+        if (role === "assistant" && !pending) {
+          el.appendChild(linkify(text));
+        } else {
+          el.textContent = text;
+        }
         log.appendChild(el);
         log.scrollTop = log.scrollHeight;
         return el;
+      }
+
+      function renderModules() {
+        var box = document.getElementById("modules");
+        box.replaceChildren();
+        window.HalfacrePay.products.forEach(function (item) {
+          var a = document.createElement("a");
+          a.className = "mod";
+          a.href = window.HalfacrePay.buildUrl(item);
+          a.innerHTML = "<b></b><small></small>";
+          a.querySelector("b").textContent = item.product;
+          a.querySelector("small").textContent =
+            window.HalfacrePay.formatMoney(item.amount, item.currency) + " · pay page stub · " + item.sku;
+          box.appendChild(a);
+        });
       }
 
       function renderChips() {
@@ -285,6 +362,7 @@
       }
 
       addMsg("assistant", window.VanCoach.greeting);
+      renderModules();
       renderChips();
       setMode();
 
@@ -301,7 +379,7 @@
         lock(true);
         window.VanCoach.reply(text, memory, history).then(function (reply) {
           pending.classList.remove("pending");
-          pending.textContent = reply;
+          pending.replaceChildren(linkify(reply));
           history.push({ role: "assistant", content: reply });
           log.scrollTop = log.scrollHeight;
         }).finally(function () {
