@@ -1,0 +1,26 @@
+{
+  "user_scoped": true,
+  "sku": "pack-bitcoin-macro",
+  "name": "Bitcoin / macro stack pack",
+  "price_usd": 29.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "macro-btc-fg-fred-live-slice",
+    "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+    "series": [
+      "btc-fear-greed-daily",
+      "btc-fred-cpi-inflation",
+      "btc-fred-federal-funds-rate",
+      "btc-fred-treasury-10-year-yield",
+      "btc-fred-treasury-2-year-yield",
+      "btc-fred-vix-index",
+      "btc-fred-us-dollar-index",
+      "btc-fred-sp-500-index"
+    ],
+    "avatar_knowledge": "Full Macro\u00d7BTC live slice: Fear & Greed plus FRED CPI, fed funds, Treasuries, VIX, dollar index, and S&P 500.",
+    "download_href": "van-download.php?sku=pack-bitcoin-macro",
+    "receipt_href": "van-fulfillment/pack-bitcoin-macro.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}

@@ -1,17 +1,41 @@
 /**
- * Per-SKU unlock for live Van modules.
+ * User-scoped unlock list for Charlie Van Halfacre.
  *
- * Starting state: none owned. Never gift or pre-unlock.
- * Unlock only after a $4.99 / $29.99 / $149 / $199 PayPal return for that live SKU.
- * Coming-soon intentions cannot unlock. Matthew cashes Van back privately.
+ * userId: charlie-van-halfacre (hivemind client slot + pay identity
+ * cvhalfacre@msn.com). Unlock list is source of truth for what the
+ * avatar knows. Downloads are a re-fetch.
+ *
+ * Storage:
+ *  1) van-unlocks.php → van-unlocks.store.json on Hostinger (durable)
+ *  2) localStorage halfacre.entitlements.v1.charlie-van-halfacre
+ *  3) mirrors moduleUnlocks onto hivemind.client.charlie-van-halfacre
+ *
+ * Starting owned is empty. PayPal success appends moduleId.
+ * Coming-soon / not-ready SKUs cannot unlock.
  */
 (function (global) {
   "use strict";
 
-  var OWNED_KEY = "halfacre.van.owned.v1";
+  var USER_ID = "charlie-van-halfacre";
+  var HIVEMIND_KEY = "hivemind.client.charlie-van-halfacre";
+  var OWNED_KEY = "halfacre.entitlements.v1." + USER_ID;
+  var LEGACY_KEY = "halfacre.van.owned.v1";
   var PENDING_KEY = "halfacre.van.pending.v1";
   var PENDING_MS = 6 * 60 * 60 * 1000;
-  var ALLOWED = [4.99, 29.99, 149];
+  var UNLOCK_API = "van-unlocks.php";
+  var ALLOWED = [4.99, 29.99, 149, 199];
+  var IDENTITY = {
+    userId: USER_ID,
+    display_name: "Charlie Van Halfacre",
+    email: "cvhalfacre@msn.com",
+    phone: "601-408-8342",
+    hivemind_client_id: USER_ID,
+    pay_identity: "cvhalfacre@msn.com"
+  };
+
+  var cache = { skus: {} };
+  var loaded = false;
+  var listeners = [];
 
   function trim(value) {
     return String(value == null ? "" : value).trim();
@@ -66,21 +90,68 @@
     return Number(row.price_usd);
   }
 
-  function readOwned() {
-    var data = readJson(OWNED_KEY, { skus: {} });
-    if (!data.skus || typeof data.skus !== "object") {
-      data.skus = {};
+  function migrateLegacy() {
+    var current = readJson(OWNED_KEY, null);
+    if (current && current.skus && typeof current.skus === "object") {
+      return current;
     }
-    return data;
+    var legacy = readJson(LEGACY_KEY, null);
+    if (legacy && legacy.skus && typeof legacy.skus === "object") {
+      var moved = {
+        userId: USER_ID,
+        identity: IDENTITY,
+        skus: legacy.skus
+      };
+      writeJson(OWNED_KEY, moved);
+      return moved;
+    }
+    return { userId: USER_ID, identity: IDENTITY, skus: {} };
+  }
+
+  function persist() {
+    cache.userId = USER_ID;
+    cache.identity = IDENTITY;
+    writeJson(OWNED_KEY, cache);
+    try {
+      var rec = readJson(HIVEMIND_KEY, {});
+      if (!rec || typeof rec !== "object") {
+        rec = {};
+      }
+      rec.name = rec.name || IDENTITY.display_name;
+      rec.email = rec.email || IDENTITY.email;
+      rec.phone = rec.phone || IDENTITY.phone;
+      rec.moduleUnlocks = ownedIds();
+      writeJson(HIVEMIND_KEY, rec);
+    } catch (err) {
+      /* hivemind mirror is best-effort */
+    }
+    listeners.forEach(function (fn) {
+      try {
+        fn(ownedModules());
+      } catch (ignored) {
+        /* listener errors must not break unlock */
+      }
+    });
+  }
+
+  function mergeSkus(incoming) {
+    if (!incoming || typeof incoming !== "object") {
+      return;
+    }
+    Object.keys(incoming).forEach(function (sku) {
+      if (!cache.skus[sku] && incoming[sku]) {
+        cache.skus[sku] = incoming[sku];
+      }
+    });
   }
 
   function owns(id) {
     var sku = trim(id);
-    return Boolean(sku && readOwned().skus[sku]);
+    return Boolean(sku && cache.skus[sku]);
   }
 
   function ownedIds() {
-    return Object.keys(readOwned().skus);
+    return Object.keys(cache.skus);
   }
 
   function ownedCount() {
@@ -88,7 +159,57 @@
   }
 
   function receipt(id) {
-    return readOwned().skus[trim(id)] || null;
+    return cache.skus[trim(id)] || null;
+  }
+
+  function ownedModules() {
+    return ownedIds().map(function (id) {
+      var row = findRow(id) || {};
+      var rec = cache.skus[id] || {};
+      var fulfill = row.fulfillment || {};
+      return {
+        id: id,
+        name: row.avatar_upgrade_label || row.product || row.name || id,
+        price: row.price_usd,
+        kind: row.kind || "",
+        tier: row.tier || "",
+        avatar_knowledge: fulfill.avatar_knowledge || row.description || "",
+        download_href: downloadUrl(id),
+        receipt: rec
+      };
+    });
+  }
+
+  function avatarContext() {
+    var rows = ownedModules();
+    if (!rows.length) {
+      return {
+        userId: USER_ID,
+        powerups: [],
+        text: "Avatar power-ups: none yet. Van starts with an empty unlock list. Live modules he pays for stay on this account and are injected here before chat."
+      };
+    }
+    return {
+      userId: USER_ID,
+      powerups: rows,
+      text: "Avatar power-ups (persisted unlock list for " + IDENTITY.display_name + "): " +
+        rows.map(function (row) {
+          return row.name + " [" + row.id + "]" + (row.avatar_knowledge ? " — " + row.avatar_knowledge : "");
+        }).join(" | ")
+    };
+  }
+
+  function downloadUrl(id) {
+    var row = findRow(id);
+    var fulfill = (row && row.fulfillment) || {};
+    if (fulfill.download_href) {
+      return fulfill.download_href + (fulfill.download_href.indexOf("?") >= 0 ? "&" : "?") +
+        "userId=" + encodeURIComponent(USER_ID);
+    }
+    if (fulfill.receipt_href) {
+      return fulfill.receipt_href;
+    }
+    return "van-download.php?sku=" + encodeURIComponent(id) + "&userId=" + encodeURIComponent(USER_ID);
   }
 
   function markPending(id) {
@@ -96,7 +217,7 @@
     if (!isLiveSku(sku)) {
       return { ok: false, error: "Not a live module." };
     }
-    writeJson(PENDING_KEY, { sku: sku, at: Date.now() });
+    writeJson(PENDING_KEY, { sku: sku, at: Date.now(), userId: USER_ID });
     return { ok: true, sku: sku };
   }
 
@@ -142,23 +263,66 @@
     };
   }
 
+  function postUnlock(sku, meta) {
+    var body = {
+      userId: USER_ID,
+      email: IDENTITY.email,
+      moduleId: sku,
+      amount: (meta && meta.amount) || String(expectedAmount(sku)),
+      tx: (meta && meta.tx) || "",
+      paidAt: (meta && meta.paidAt) || Date.now()
+    };
+    return fetch(UNLOCK_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      cache: "no-store"
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        return { ok: res.ok && data && data.ok, data: data };
+      });
+    }).catch(function () {
+      return { ok: false, data: null };
+    });
+  }
+
+  function fetchRemote() {
+    var url = UNLOCK_API + "?userId=" + encodeURIComponent(USER_ID) +
+      "&email=" + encodeURIComponent(IDENTITY.email);
+    return fetch(url, { cache: "no-store" }).then(function (res) {
+      if (!res.ok) {
+        throw new Error("unlock store unavailable");
+      }
+      return res.json();
+    }).then(function (data) {
+      if (data && data.ok && data.modules) {
+        mergeSkus(data.modules);
+        persist();
+      }
+      return cache;
+    }).catch(function () {
+      return cache;
+    });
+  }
+
   function unlock(id, meta) {
     var sku = trim(id);
     if (!isLiveSku(sku)) {
       return { ok: false, error: "Not a live module." };
     }
     if (owns(sku)) {
-      return { ok: true, already: true, sku: sku, receipt: receipt(sku) };
+      return { ok: true, already: true, sku: sku, receipt: receipt(sku), userId: USER_ID };
     }
     var listed = expectedAmount(sku);
-    var store = readOwned();
-    store.skus[sku] = {
+    cache.skus[sku] = {
       amount: (meta && meta.amount) || String(Number.isFinite(listed) ? listed : 4.99),
       tx: (meta && meta.tx) || "",
-      paidAt: Date.now()
+      paidAt: Date.now(),
+      userId: USER_ID
     };
-    writeJson(OWNED_KEY, store);
-    return { ok: true, already: false, sku: sku, receipt: store.skus[sku] };
+    persist();
+    postUnlock(sku, cache.skus[sku]);
+    return { ok: true, already: false, sku: sku, receipt: cache.skus[sku], userId: USER_ID };
   }
 
   function claimFromSearch(search) {
@@ -206,16 +370,47 @@
     return page.href;
   }
 
+  function load() {
+    cache = migrateLegacy();
+    if (!cache.skus || typeof cache.skus !== "object") {
+      cache.skus = {};
+    }
+    persist();
+    loaded = true;
+    return fetchRemote().then(function () {
+      return {
+        userId: USER_ID,
+        moduleIds: ownedIds(),
+        modules: ownedModules()
+      };
+    });
+  }
+
+  function onChange(fn) {
+    if (typeof fn === "function") {
+      listeners.push(fn);
+    }
+  }
+
+  cache = migrateLegacy();
+
   global.VanOwned = {
+    userId: USER_ID,
+    identity: IDENTITY,
+    load: load,
     owns: owns,
     ownedIds: ownedIds,
     ownedCount: ownedCount,
+    ownedModules: ownedModules,
+    avatarContext: avatarContext,
     receipt: receipt,
+    downloadUrl: downloadUrl,
     markPending: markPending,
     unlock: unlock,
     claimFromSearch: claimFromSearch,
     returnUrl: returnUrl,
     cancelUrl: cancelUrl,
+    onChange: onChange,
     catalogCount: function () {
       return catalogRows().length;
     },

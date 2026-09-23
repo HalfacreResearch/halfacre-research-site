@@ -1,0 +1,22 @@
+{
+  "user_scoped": true,
+  "sku": "macro-indicators-research",
+  "name": "Macro indicators",
+  "price_usd": 4.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "macro-btc-fg-fred-live-slice",
+    "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+    "series": [
+      "btc-fred-cpi-inflation",
+      "btc-fred-federal-funds-rate",
+      "btc-fred-treasury-10-year-yield",
+      "btc-fred-treasury-2-year-yield"
+    ],
+    "avatar_knowledge": "FRED CPI, federal funds rate, 10-year and 2-year Treasury yields \u2014 the macro rates stack BTCTreasuryBot considers.",
+    "download_href": "van-download.php?sku=macro-indicators-research",
+    "receipt_href": "van-fulfillment/macro-indicators-research.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}

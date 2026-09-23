@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Pay — Halfacre Research</title>
-  <meta name="description" content="Universal pay page. BTCTreasuryBot is the live $149 assembled bot. Research $4.99. Packs $29.99. PayPal is Day-1. No Stripe.">
+  <meta name="description" content="Universal pay page. Live research $4.99 and packs $29.99 unlock a lasting avatar power-up plus download. BTCTreasuryBot $149. PayPal Day-1. No Stripe.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -130,11 +130,11 @@
     <div class="brand">HALFACRE RESEARCH · PAY</div>
     <div class="gate" id="gate">
       <strong>PAYPAL GATE.</strong>
-      Do not stamp “show Van” until a $149 PayPal NCP can take money for BTCTreasuryBot, or the working UI on van.html is used.
-      Only BTCTreasuryBot is live/clickable. Research/data $4.99. Theme packs $29.99. Assembled bots $149 (including TaxAttorneyBot). PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe.
+      Do not stamp “show Van” until PayPal can take money for a live SKU, or the BTCTreasuryBot working UI on van.html is used.
+      Live research/data $4.99 and theme packs $29.99: pay, then a lasting unlock is written to Van’s account and the download stays available. Assembled bots $149 (only BTCTreasuryBot is live). PayPal is Day-1. Square (Block) is next. No Stripe.
     </div>
     <h1>Pay for one live upgrade.</h1>
-    <p class="sub">Only BTCTreasuryBot is live ($149). Unlock only after that PayPal payment. Coming-soon bots stay on van.html and are not for sale here. Link params: product, sku, name, amount, description. PayPal first. Square stub below. Do not reuse historical Macro/ETF pack NCP links.</p>
+    <p class="sub">A successful PayPal writes that moduleId onto Van’s unlock list (charlie-van-halfacre) so the avatar stays powered up. Download remains a re-fetch. Coming soon / Not ready stays on van.html and is not for sale here. Link params: product, sku, name, amount, description. Do not reuse historical Macro/ETF pack NCP links.</p>
 
     <section class="card" id="line">
       <h2>LINE ITEM</h2>
@@ -155,8 +155,8 @@
     </section>
 
     <section class="card">
-      <h2>COMING SOON · NOT YET SELLING</h2>
-      <p id="soon-note" class="sub">Full intentions list lives on van.html. Those names are visible there and not clickable to buy.</p>
+      <h2>COMING SOON · NOT READY</h2>
+      <p id="soon-note" class="sub">Full list lives on van.html. Coming soon / Not ready means data or fulfillment is missing — not teaser fluff. Those names are not clickable here.</p>
     </section>
 
     <section class="card square-card" id="square">
@@ -169,7 +169,7 @@
     </section>
 
     <footer>
-      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Historical pack NCP IDs stay unused. Mint a $149 NCP for BTCTreasuryBot and set its success URL to <code>van.html?paid=btc-treasury-bot</code>. Card/guest is whatever PayPal Checkout shows. No Stripe. Van starts with none owned.</p>
+      <p>PayPal is Day-1. Success URL: <code>van.html?paid={SKU}</code> — that appends the module to Van’s unlock list and refreshes the avatar. Square stub only. Historical pack NCP IDs stay unused. No Stripe. Van starts with none owned.</p>
       <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
     </footer>
   </div>
@@ -240,7 +240,7 @@
           return;
         }
         if (!line.live) {
-          addDisabled("Coming soon — not yet selling");
+          addDisabled("Coming soon / Not ready");
           var soon = document.createElement("p");
           soon.style.cssText = "color:#c9a227;font-size:13px;margin:8px 0 0;width:100%;";
           soon.textContent = "This name is on the intentions list. It is not clickable to buy yet. See van.html.";
@@ -251,8 +251,15 @@
           var back = document.createElement("a");
           back.className = "go";
           back.href = "van.html";
-          back.textContent = "Already unlocked — back to Van’s page";
+          back.textContent = "Already on unlock list — back to avatar";
           actions.appendChild(back);
+          if (line.kind !== "bot") {
+            var again = document.createElement("a");
+            again.className = "go";
+            again.href = owned.downloadUrl(sku);
+            again.textContent = "Re-fetch download";
+            actions.appendChild(again);
+          }
           return;
         }
         var plan = pay.checkoutPlan(line);
@@ -322,12 +329,12 @@
           sqNote.textContent = sq.note;
         }
         soonNote.textContent = coming.length +
-          " names are on the intentions list (product-list briefing + systems roadmap). They are visible on van.html and not clickable to buy. Do not shrink that list to seven SKUs.";
+          " names are Coming soon / Not ready (data or fulfillment missing). They stay visible on van.html and are not clickable to buy.";
 
         if (!pay.anyPaypalLive()) {
-          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No minted $149 PayPal NCP for BTCTreasuryBot yet. The working UI is on van.html#btctreasury (sFOX / autotrades). Do not reuse historical Macro/ETF pack NCP links. Coming soon bots are not for sale. Square is coming next.";
+          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> Mint PayPal NCPs at $4.99 / $29.99 / $149 and point success at van.html?paid={SKU} so the unlock list persists. BTCTreasuryBot working UI is on van.html#btctreasury. Do not reuse historical Macro/ETF pack NCP links. Coming soon / Not ready is not for sale. Square is coming next.";
         } else {
-          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $149 PayPal path is configured for BTCTreasuryBot. Only that live SKU stays clickable. Square (Block) stays a stub. CoS still confirms a real digital payment before any “show Van” stamp.";
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A PayPal path is configured. Success writes the moduleId to Van’s unlock list and refreshes the avatar. Square (Block) stays a stub. CoS still confirms a real digital payment before any “show Van” stamp.";
         }
 
         var query = pay.fromQuery(window.location.search);
@@ -345,7 +352,7 @@
           document.getElementById("f-desc").textContent = line.forbidden
             ? "Blocked. $99 is not a Van price. Do not reuse historical Macro/ETF pack NCP links."
             : (!line.live && line.known
-              ? "Coming soon — not yet selling."
+              ? "Coming soon / Not ready — data or fulfillment is not built yet."
               : (line.description || "—"));
           document.getElementById("f-price").textContent = line.forbidden
             ? "Blocked pack price"

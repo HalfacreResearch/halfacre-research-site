@@ -20,7 +20,7 @@
     "research_usd": 4.99,
     "pack_usd": 29.99,
     "system_usd": 149,
-    "tax_usd": 149,
+    "tax_usd": 199,
     "basic_usd": 4.99,
     "advanced_usd": 149,
     "diy_series_approx": 89,
@@ -31,16 +31,36 @@
     "theme_packs": 8,
     "advanced_systems": 10,
     "tax_upgrades": 4,
-    "live_count": 1,
-    "coming_soon_count": 179,
-    "note": "BATCH 1 (Matthew 2026-09-23): display 18 assembled bots with exact names. ONLY BTCTreasuryBot is live/clickable (formerly Codex) at $149 — wires to the working autotrades/sFOX UI. Other 17 bots are vision-only. Research $4.99 and theme packs $29.99 stay on the intentions list, not clickable in this pass. TaxAttorneyBot is $149. Do not invent extra bots. PayPal only. No Stripe.",
-    "assembled_bots": 18
+    "live_count": 11,
+    "coming_soon_count": 169,
+    "note": "Matthew 2026-09-23 ~06:12\u201306:15 CT: research modules that exist in SoT are clickable \u2014 Van pays, downloads, and powers up his avatar. Unlocks persist on userId charlie-van-halfacre. Non-ready research is Coming soon / Not ready, not vision-only fluff. Only BTCTreasuryBot is live among the 18 assembled bots. Prices: research $4.99, packs $29.99, bots $149, tax immediate-outcome $199. PayPal only. No Stripe.",
+    "assembled_bots": 18,
+    "live_research_from_sot": [
+      "capital-flows-research",
+      "cross-asset-research",
+      "macro-indicators-research",
+      "market-breadth-research",
+      "market-liquidity-research",
+      "pack-bitcoin-macro",
+      "pack-etf-mf",
+      "public-positioning-research",
+      "rules-restrictions-research",
+      "social-sentiment-research"
+    ]
   },
   "account": {
     "viewer": "van_client",
     "owns_all_modules": false,
     "starting_owned": [],
-    "note": "Only BTCTreasuryBot is live. Van starts unlocked for none of the paid SKUs. Coming-soon bots are visible and not clickable."
+    "note": "Unlocks are user-scoped to charlie-van-halfacre. Starting owned is empty. PayPal success appends moduleId. Coming-soon items cannot unlock.",
+    "userId": "charlie-van-halfacre",
+    "identity": {
+      "display_name": "Charlie Van Halfacre",
+      "email": "cvhalfacre@msn.com",
+      "phone": "601-408-8342",
+      "hivemind_client_id": "charlie-van-halfacre",
+      "pay_identity": "cvhalfacre@msn.com"
+    }
   },
   "pay": {
     "rail": "paypal",
@@ -54,7 +74,8 @@
     "allowed_paid_usd": [
       4.99,
       29.99,
-      149
+      149,
+      199
     ],
     "forbidden_pack_usd": [
       99
@@ -65,7 +86,7 @@
       "macro_99": "https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE",
       "etf_149": "https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML"
     },
-    "mint_note": "Mint a $149 PayPal NCP for BTCTreasuryBot (live). Research $4.99 and packs $29.99 are not clickable in this pass. Do not reuse historical Macro/ETF pack NCP IDs.",
+    "mint_note": "Mint PayPal NCPs at $4.99 for live research, $29.99 for live theme packs, and $149 for BTCTreasuryBot. Set success URL to van.html?paid={SKU}. Do not reuse historical Macro $99 / ETF $149 pack NCP IDs.",
     "square": {
       "enabled": false,
       "status": "coming_next",
@@ -76,14 +97,14 @@
     "research_usd": 4.99,
     "pack_usd": 29.99,
     "system_usd": 149,
-    "tax_usd": 149
+    "tax_usd": 199
   },
   "founder_product": {
     "id": "btc-treasury-bot",
     "name": "BTCTreasuryBot",
     "tier": "advanced",
     "kind": "bot",
-    "description": "Formerly Codex. Live assembled bot on Van’s page: working autotrades UI + sFOX connect. $149 when PayPal exists. Research unlocks are the full Bitcoin/macro stack this bot considers — not candles-only.",
+    "description": "Formerly Codex. Live assembled bot on Van\u2019s page: working autotrades UI + sFOX connect. $149 when PayPal exists. Research unlocks are the full Bitcoin/macro stack this bot considers \u2014 not candles-only.",
     "price_usd": 149,
     "free": false,
     "live": true,
@@ -103,7 +124,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "The first Bitcoin module. BTC only. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "The first Bitcoin module. BTC only. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -121,7 +142,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "Bitcoin priced in dollars. Live research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Bitcoin priced in dollars. Live research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -139,7 +160,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "ETH priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETH priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -157,7 +178,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "ETH priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETH priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -175,7 +196,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "SOL priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "SOL priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -193,7 +214,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "SOL priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "SOL priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -211,7 +232,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "XRP priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "XRP priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -229,7 +250,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "XRP priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "XRP priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -247,7 +268,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "LINK priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "LINK priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -265,7 +286,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "LINK priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "LINK priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -283,7 +304,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "BNB priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "BNB priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -301,7 +322,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "BNB priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "BNB priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -319,7 +340,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "TRX priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "TRX priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -337,7 +358,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "TRX priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "TRX priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -355,7 +376,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "ADA priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ADA priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -373,7 +394,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "ADA priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ADA priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -391,7 +412,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "BCH priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "BCH priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -409,7 +430,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "BCH priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "BCH priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -427,7 +448,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "UNI priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "UNI priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -445,7 +466,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "UNI priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "UNI priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -463,7 +484,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "HBAR priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "HBAR priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -481,7 +502,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "HBAR priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "HBAR priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -499,7 +520,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "AVAX priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "AVAX priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -517,7 +538,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "AVAX priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "AVAX priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -535,7 +556,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "ATOM priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ATOM priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -553,7 +574,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "ATOM priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ATOM priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -571,7 +592,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "HYPE priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "HYPE priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -589,7 +610,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "NEAR priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "NEAR priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -607,7 +628,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "SUI priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "SUI priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -625,7 +646,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "KAS priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "KAS priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -643,7 +664,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "ARB priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ARB priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -661,7 +682,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "RENDER priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "RENDER priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -679,7 +700,7 @@
       "departments": [
         "crypto"
       ],
-      "description": "INJ priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "INJ priced in dollars. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -698,7 +719,7 @@
         "tech",
         "dividend"
       ],
-      "description": "Tech stock research (NVDA). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (NVDA). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -717,7 +738,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (AAPL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (AAPL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -736,7 +757,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (GOOG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (GOOG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -755,7 +776,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (MSFT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (MSFT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -774,7 +795,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (AMZN). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (AMZN). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -794,7 +815,7 @@
         "tech",
         "dividend"
       ],
-      "description": "Tech stock research (TSM). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (TSM). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -814,7 +835,7 @@
         "tech",
         "dividend"
       ],
-      "description": "Tech stock research (AVGO). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (AVGO). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -833,7 +854,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (META). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (META). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -852,7 +873,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (TSLA). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (TSLA). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -871,7 +892,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (005930.KS). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (005930.KS). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -891,7 +912,7 @@
         "tech",
         "dividend"
       ],
-      "description": "Tech stock research (MU). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (MU). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -911,7 +932,7 @@
         "tech",
         "dividend"
       ],
-      "description": "Tech stock research (000660.KS). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (000660.KS). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -930,7 +951,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (AMD). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (AMD). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -950,7 +971,7 @@
         "tech",
         "dividend"
       ],
-      "description": "Tech stock research (ASML). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (ASML). Research/data power-up for a DIY avatar. Also sits in the dividend department. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -969,7 +990,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (INTC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (INTC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -988,7 +1009,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (IONQ). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (IONQ). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1006,7 +1027,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (AVAV). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (AVAV). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1025,7 +1046,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (JOBY). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (JOBY). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1043,7 +1064,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (CRSP). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (CRSP). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1062,7 +1083,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (ENPH). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (ENPH). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1081,7 +1102,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (BEAM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (BEAM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1099,7 +1120,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (QUBT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (QUBT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1117,7 +1138,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (RXRX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (RXRX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1136,7 +1157,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (NTLA). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (NTLA). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1155,7 +1176,7 @@
       "departments": [
         "tech"
       ],
-      "description": "Tech stock research (RCAT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Tech stock research (RCAT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1174,7 +1195,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (FIX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (FIX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1193,7 +1214,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (DELL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (DELL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1212,7 +1233,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (STX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (STX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1231,7 +1252,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (LRCX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (LRCX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1250,7 +1271,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (KLAC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (KLAC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1269,7 +1290,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (PWR). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (PWR). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1288,7 +1309,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (MRVL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (MRVL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1307,7 +1328,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (LLY). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (LLY). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1326,7 +1347,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (AMAT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (AMAT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1345,7 +1366,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (TER). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (TER). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1364,7 +1385,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (MPWR). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (MPWR). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1383,7 +1404,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (HWM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (HWM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1402,7 +1423,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (JBL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (JBL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1421,7 +1442,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (VST). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (VST). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1440,7 +1461,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (TPL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (TPL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1459,7 +1480,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (EME). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (EME). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1478,7 +1499,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (NRG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (NRG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1497,7 +1518,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (WSM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (WSM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1516,7 +1537,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (MPC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (MPC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1535,7 +1556,7 @@
       "departments": [
         "dividend"
       ],
-      "description": "Dividend stock research (CAT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Dividend stock research (CAT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1554,7 +1575,7 @@
       "departments": [
         "metals"
       ],
-      "description": "Precious metals research — Gold (XAU). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Precious metals research \u2014 Gold (XAU). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1573,7 +1594,7 @@
       "departments": [
         "metals"
       ],
-      "description": "Precious metals research — Silver (XAG). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Precious metals research \u2014 Silver (XAG). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1592,7 +1613,7 @@
       "departments": [
         "metals"
       ],
-      "description": "Precious metals research — Platinum (XPT). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Precious metals research \u2014 Platinum (XPT). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1611,7 +1632,7 @@
       "departments": [
         "metals"
       ],
-      "description": "Precious metals research — Palladium (XPD). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Precious metals research \u2014 Palladium (XPD). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1630,7 +1651,7 @@
       "departments": [
         "metals"
       ],
-      "description": "Precious metals research — Rhodium (XRH). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Precious metals research \u2014 Rhodium (XRH). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1649,7 +1670,7 @@
       "departments": [
         "metals"
       ],
-      "description": "Precious metals research — Iridium (XIR). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Precious metals research \u2014 Iridium (XIR). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1668,7 +1689,7 @@
       "departments": [
         "metals"
       ],
-      "description": "Precious metals research — Ruthenium (XRU). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Precious metals research \u2014 Ruthenium (XRU). Physical metal, not the gold fund. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1687,7 +1708,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — WTI crude (CL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 WTI crude (CL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1706,7 +1727,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Brent (BZ). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Brent (BZ). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1725,7 +1746,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Natural gas (NG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Natural gas (NG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1744,7 +1765,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — ULS diesel (HO). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 ULS diesel (HO). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1763,7 +1784,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — RBOB (RB). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 RBOB (RB). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1782,7 +1803,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Corn (ZC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Corn (ZC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1801,7 +1822,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Soybeans (ZS). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Soybeans (ZS). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1820,7 +1841,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Soy meal (ZM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Soy meal (ZM). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1839,7 +1860,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Soy oil (ZL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Soy oil (ZL). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1858,7 +1879,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Chicago wheat (ZW). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Chicago wheat (ZW). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1877,7 +1898,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — KC wheat (KE). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 KC wheat (KE). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1896,7 +1917,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Copper (HG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Copper (HG). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1915,7 +1936,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Aluminum (ALI). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Aluminum (ALI). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1934,7 +1955,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Zinc (ZNC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Zinc (ZNC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1953,7 +1974,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Sugar (SB). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Sugar (SB). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1972,7 +1993,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Coffee (KC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Coffee (KC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -1991,7 +2012,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Cocoa (CC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Cocoa (CC). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2010,7 +2031,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Cotton (CT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Cotton (CT). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2029,7 +2050,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Live cattle (LE). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Live cattle (LE). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2048,7 +2069,7 @@
       "departments": [
         "commodities"
       ],
-      "description": "Commodity research — Lean hogs (HE). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Commodity research \u2014 Lean hogs (HE). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2067,7 +2088,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VOO). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VOO). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2085,7 +2106,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (IVV). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (IVV). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2103,7 +2124,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (SPY). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (SPY). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2121,7 +2142,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VTI). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VTI). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2139,7 +2160,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (QQQ). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (QQQ). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2157,7 +2178,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VEA). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VEA). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2175,7 +2196,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VUG). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VUG). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2193,7 +2214,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (IEFA). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (IEFA). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2211,7 +2232,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VTV). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VTV). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2229,7 +2250,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (SPYM). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (SPYM). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2247,7 +2268,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VXUS). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VXUS). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2265,7 +2286,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (IEMG). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (IEMG). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2283,7 +2304,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (BND). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (BND). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2301,7 +2322,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (GLD). Gold fund, not the physical metal. Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (GLD). Gold fund, not the physical metal. Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2319,7 +2340,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VGT). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VGT). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2337,7 +2358,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (AGG). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (AGG). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2355,7 +2376,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (VWO). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (VWO). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2373,7 +2394,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (IWF). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (IWF). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2391,7 +2412,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (IJH). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (IJH). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2409,7 +2430,7 @@
       "departments": [
         "etf"
       ],
-      "description": "ETF research (XLK). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "ETF research (XLK). Research/data power-up for a DIY avatar. Not the historical Soft HOLD ETF pack NCP. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2427,7 +2448,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (VTSAX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (VTSAX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2445,7 +2466,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (VFIAX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (VFIAX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2463,7 +2484,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (FXAIX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (FXAIX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2481,7 +2502,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (VTIAX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (VTIAX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2499,7 +2520,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (VBTLX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (VBTLX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2517,7 +2538,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (AGTHX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (AGTHX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2535,7 +2556,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (ABALX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (ABALX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2553,7 +2574,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (FCNTX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (FCNTX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2571,7 +2592,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (FCTDX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (FCTDX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2589,7 +2610,7 @@
       "departments": [
         "mutual_fund"
       ],
-      "description": "Mutual fund research (VWELX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mutual fund research (VWELX). Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2607,13 +2628,27 @@
       "departments": [
         "research"
       ],
-      "description": "Macro indicators research. Research/data power-up for a DIY avatar. Not the historical Soft HOLD Macro pack NCP. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. FRED CPI, federal funds, 10-year and 2-year Treasury yields from the Macro\u00d7BTC live slice. Pay $4.99, download the series, power up the avatar. Not the historical $99 Macro pack NCP.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Macro indicators",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fred-cpi-inflation",
+          "btc-fred-federal-funds-rate",
+          "btc-fred-treasury-10-year-yield",
+          "btc-fred-treasury-2-year-yield"
+        ],
+        "avatar_knowledge": "FRED CPI, federal funds rate, 10-year and 2-year Treasury yields \u2014 the macro rates stack BTCTreasuryBot considers.",
+        "download_href": "van-download.php?sku=macro-indicators-research",
+        "receipt_href": "van-fulfillment/macro-indicators-research.json"
+      }
     },
     {
       "id": "social-sentiment-research",
@@ -2625,13 +2660,24 @@
       "departments": [
         "research"
       ],
-      "description": "Social sentiment research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. Bitcoin Fear & Greed daily from the Macro\u00d7BTC live slice. Pay $4.99, download the series, power up the avatar.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Social sentiment",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fear-greed-daily"
+        ],
+        "avatar_knowledge": "Bitcoin Fear & Greed daily sentiment history.",
+        "download_href": "van-download.php?sku=social-sentiment-research",
+        "receipt_href": "van-fulfillment/social-sentiment-research.json"
+      }
     },
     {
       "id": "capital-flows-research",
@@ -2643,13 +2689,24 @@
       "departments": [
         "research"
       ],
-      "description": "Capital flows and ownership research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. U.S. spot Bitcoin ETF flow history from the built ETF Flow pack. Pay $4.99, download the series, power up the avatar. Not the historical $149 ETF NCP.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Capital flows and ownership",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-spot-etf-flow-history"
+        ],
+        "avatar_knowledge": "United States spot Bitcoin ETF flow history (IBIT / FBTC / GBTC totals).",
+        "download_href": "van-download.php?sku=capital-flows-research",
+        "receipt_href": "van-fulfillment/capital-flows-research.json"
+      }
     },
     {
       "id": "market-liquidity-research",
@@ -2661,13 +2718,24 @@
       "departments": [
         "research"
       ],
-      "description": "Market liquidity and infrastructure research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. iShares Bitcoin Trust (IBIT) daily volume from the built ETF Flow pack. Pay $4.99, download the series, power up the avatar.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Market liquidity and infrastructure",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-ibit-daily-volume-history"
+        ],
+        "avatar_knowledge": "IBIT daily close, share volume, and trading value.",
+        "download_href": "van-download.php?sku=market-liquidity-research",
+        "receipt_href": "van-fulfillment/market-liquidity-research.json"
+      }
     },
     {
       "id": "cross-asset-research",
@@ -2679,13 +2747,24 @@
       "departments": [
         "research"
       ],
-      "description": "Cross-asset relationships research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. FRED U.S. dollar index from the Macro\u00d7BTC live slice. Pay $4.99, download the series, power up the avatar. Gold futures are not in this slice.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Cross-asset relationships",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fred-us-dollar-index"
+        ],
+        "avatar_knowledge": "FRED U.S. dollar index versus the Bitcoin/macro stack.",
+        "download_href": "van-download.php?sku=cross-asset-research",
+        "receipt_href": "van-fulfillment/cross-asset-research.json"
+      }
     },
     {
       "id": "market-breadth-research",
@@ -2697,13 +2776,25 @@
       "departments": [
         "research"
       ],
-      "description": "Market breadth and index mechanics research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. FRED VIX and S&P 500 from the Macro\u00d7BTC live slice. Pay $4.99, download the series, power up the avatar.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Market breadth and index mechanics",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fred-vix-index",
+          "btc-fred-sp-500-index"
+        ],
+        "avatar_knowledge": "FRED VIX and S&P 500 index history for market breadth.",
+        "download_href": "van-download.php?sku=market-breadth-research",
+        "receipt_href": "van-fulfillment/market-breadth-research.json"
+      }
     },
     {
       "id": "event-timing-research",
@@ -2715,7 +2806,7 @@
       "departments": [
         "research"
       ],
-      "description": "Event timing research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Event timing research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2733,13 +2824,24 @@
       "departments": [
         "research"
       ],
-      "description": "Rules and restrictions research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. Bitcoin ETF SEC filing snapshot from the built ETF Flow pack. Pay $4.99, download the series, power up the avatar.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Rules and restrictions",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-sec-ibit-filing-history"
+        ],
+        "avatar_knowledge": "Bitcoin ETF SEC filing snapshot (issuer, form, latest filing).",
+        "download_href": "van-download.php?sku=rules-restrictions-research",
+        "receipt_href": "van-fulfillment/rules-restrictions-research.json"
+      }
     },
     {
       "id": "public-positioning-research",
@@ -2751,13 +2853,24 @@
       "departments": [
         "research"
       ],
-      "description": "Public positioning research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Ready now. Spot Bitcoin ETF holdings snapshot from the built ETF Flow pack. Pay $4.99, download the series, power up the avatar.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Public positioning",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-spot-etf-holdings-snapshot"
+        ],
+        "avatar_knowledge": "Spot Bitcoin ETF holdings snapshot (BTC, USD, supply percent).",
+        "download_href": "van-download.php?sku=public-positioning-research",
+        "receipt_href": "van-fulfillment/public-positioning-research.json"
+      }
     },
     {
       "id": "physical-disruption-research",
@@ -2769,7 +2882,7 @@
       "departments": [
         "research"
       ],
-      "description": "Physical disruption research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Physical disruption research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2787,7 +2900,7 @@
       "departments": [
         "research"
       ],
-      "description": "Forecasts and ratings research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Forecasts and ratings research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2805,7 +2918,7 @@
       "departments": [
         "research"
       ],
-      "description": "Bitcoin network / on-chain research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Bitcoin network / on-chain research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2823,7 +2936,7 @@
       "departments": [
         "research"
       ],
-      "description": "Mining research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Mining research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2841,7 +2954,7 @@
       "departments": [
         "research"
       ],
-      "description": "Lightning and payments research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Lightning and payments research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2859,7 +2972,7 @@
       "departments": [
         "research"
       ],
-      "description": "Bitcoin core and nodes research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Bitcoin core and nodes research. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2877,7 +2990,7 @@
       "departments": [
         "research"
       ],
-      "description": "Derivatives data research. Data. Not a trade. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Derivatives data research. Data. Not a trade. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2895,7 +3008,7 @@
       "departments": [
         "wrappers"
       ],
-      "description": "Traditional IRA wrapper research. Its own rules. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Traditional IRA wrapper research. Its own rules. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2913,7 +3026,7 @@
       "departments": [
         "wrappers"
       ],
-      "description": "Roth IRA wrapper research. Its own rules. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "Roth IRA wrapper research. Its own rules. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2931,7 +3044,7 @@
       "departments": [
         "wrappers"
       ],
-      "description": "SEP IRA wrapper research. Employer money on a regular SEP. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "SEP IRA wrapper research. Employer money on a regular SEP. Research/data power-up for a DIY avatar. Unlock is the full Bitcoin/macro stack Codex considers \u2014 not candles-only Coming soon / Not ready \u2014 data or fulfillment is not built yet.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2949,13 +3062,31 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of the related Bitcoin and macro series Codex considers. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling.",
+      "description": "Ready now. $29.99 theme pack of the Macro\u00d7BTC live slice already built (Fear & Greed + FRED CPI, fed funds, Treasuries, VIX, dollar, S&P 500). \u00c0 la carte of those series at $4.99 is more. Not the historical $99 Macro NCP. BTC/USD candles and gold futures are not in this slice.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
       "avatar_upgrade_label": "Bitcoin / macro stack pack",
-      "status": "coming_soon",
-      "live": false
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fear-greed-daily",
+          "btc-fred-cpi-inflation",
+          "btc-fred-federal-funds-rate",
+          "btc-fred-treasury-10-year-yield",
+          "btc-fred-treasury-2-year-yield",
+          "btc-fred-vix-index",
+          "btc-fred-us-dollar-index",
+          "btc-fred-sp-500-index"
+        ],
+        "avatar_knowledge": "Full Macro\u00d7BTC live slice: Fear & Greed plus FRED CPI, fed funds, Treasuries, VIX, dollar index, and S&P 500.",
+        "download_href": "van-download.php?sku=pack-bitcoin-macro",
+        "receipt_href": "van-fulfillment/pack-bitcoin-macro.json"
+      }
     },
     {
       "id": "pack-crypto",
@@ -2967,7 +3098,7 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of related crypto research series. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling.",
+      "description": "Theme pack of related crypto research series. \u00c0 la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon \u2014 not yet selling.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -2985,7 +3116,7 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of related tech research series. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling.",
+      "description": "Theme pack of related tech research series. \u00c0 la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon \u2014 not yet selling.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3003,7 +3134,7 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of related dividend research series. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling.",
+      "description": "Theme pack of related dividend research series. \u00c0 la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon \u2014 not yet selling.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3021,7 +3152,7 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of related metals research series. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling.",
+      "description": "Theme pack of related metals research series. \u00c0 la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon \u2014 not yet selling.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3039,7 +3170,7 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of related commodities research series. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling.",
+      "description": "Theme pack of related commodities research series. \u00c0 la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon \u2014 not yet selling.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3049,7 +3180,7 @@
     },
     {
       "id": "pack-etf-mf",
-      "name": "ETF / MF series pack",
+      "name": "BTC spot ETF flow pack",
       "tier": "pack",
       "kind": "pack",
       "pair": "",
@@ -3057,13 +3188,27 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of related ETF and mutual-fund research series. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling. Not the historical Soft HOLD ETF pack NCP.",
+      "description": "Ready now. $29.99 theme pack of the built BTC spot ETF Flow SoT (flow history, IBIT volume, holdings snapshot, SEC filing snapshot). Not the historical $149 ETF NCP. Mutual-fund names stay Coming soon / Not ready.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "ETF / MF series pack",
-      "status": "coming_soon",
-      "live": false
+      "avatar_upgrade_label": "BTC spot ETF flow pack",
+      "status": "live",
+      "live": true,
+      "fulfillment": {
+        "kind": "download",
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-spot-etf-flow-history",
+          "btc-ibit-daily-volume-history",
+          "btc-spot-etf-holdings-snapshot",
+          "btc-sec-ibit-filing-history"
+        ],
+        "avatar_knowledge": "BTC spot ETF flow pack: flows, IBIT volume, holdings, and SEC filings.",
+        "download_href": "van-download.php?sku=pack-etf-mf",
+        "receipt_href": "van-fulfillment/pack-etf-mf.json"
+      }
     },
     {
       "id": "pack-research-lanes",
@@ -3075,7 +3220,7 @@
       "departments": [
         "packs"
       ],
-      "description": "Theme pack of related macro / on-chain / research-lane series. À la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon — not yet selling.",
+      "description": "Theme pack of related macro / on-chain / research-lane series. \u00c0 la carte of ~89 series at $4.99 is about $444. A $29.99 theme pack is the deal. Coming soon \u2014 not yet selling.",
       "price_usd": 29.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3100,7 +3245,13 @@
       "avatar_upgrade_label": "BTCTreasuryBot",
       "status": "live",
       "live": true,
-      "ui_href": "#btctreasury"
+      "ui_href": "#btctreasury",
+      "fulfillment": {
+        "kind": "working_ui",
+        "ui_href": "#btctreasury",
+        "download_href": "",
+        "avatar_knowledge": "BTCTreasuryBot (formerly Codex): working autotrades / sFOX UI for BTC treasury / bigger-gains crypto."
+      }
     },
     {
       "id": "crypto-swing-bot",
@@ -3112,7 +3263,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3131,7 +3282,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3150,7 +3301,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3169,7 +3320,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3188,7 +3339,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3207,7 +3358,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3226,7 +3377,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3245,7 +3396,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3264,7 +3415,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3283,7 +3434,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3302,7 +3453,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3321,7 +3472,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3340,7 +3491,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3359,7 +3510,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3378,7 +3529,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot (same price as trading bots). Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3397,7 +3548,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
@@ -3416,7 +3567,7 @@
       "departments": [
         "bots"
       ],
-      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon until built \u2014 not ready to buy yet.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,

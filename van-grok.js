@@ -17,21 +17,36 @@
   var SECRET_WORDS_RE =
     /\b(password|passwd|passcode|pin\b|secret[_\s-]?key|private[_\s-]?key|seed[_\s-]?phrase|recovery[_\s-]?phrase|mnemonic|ssn|social security)\b/i;
 
-  var GREETING = [
-    "Hi Van. I’m Grok — the model on this page, not a fleet bot.",
-    "",
-    "I’m here the whole sitting. My job is to grow your net worth in plain English, learn what accounts and goals matter, and walk you through Halfacre’s products when they help.",
-    "",
-    "Matthew’s first assembled-bot list is on this page — 18 exact names. Only BTCTreasuryBot is live and clickable. That used to be called Codex. It opens the working autotrades / sFOX UI on this page and is $149 when PayPal is minted. The other 17 bots are coming soon and not clickable. Research/data is $4.99. Theme packs are $29.99. All highest-level bots are $149, including TaxAttorneyBot. More bot names are still coming; I will not invent extras.",
-    "",
-    "sFOX keys go in the BTCTreasuryBot box above, never here. After sFOX is linked, autotrades can follow later — not today.",
-    "",
-    "What do you want to work on first?"
-  ].join("\n");
+  function greeting() {
+    var ctx = (global.VanOwned && global.VanOwned.avatarContext)
+      ? global.VanOwned.avatarContext()
+      : { text: "Avatar power-ups: none yet.", powerups: [] };
+    var powered = (ctx.powerups || []).map(function (row) {
+      return row.name;
+    });
+    var powerLine = powered.length
+      ? "Your avatar already knows: " + powered.join(", ") + ". Those unlocks stay on your account and I load them before we talk."
+      : "Your avatar starts with no paid power-ups. A live module you pay for is downloaded and written to your unlock list so I remember it next visit.";
+    return [
+      "Hi Van. I’m Grok — the model on this page, not a fleet bot.",
+      "",
+      "I’m here the whole sitting. My job is to grow your net worth in plain English, learn what accounts and goals matter, and walk you through Halfacre’s products when they help.",
+      "",
+      powerLine,
+      "",
+      "Live research modules that already exist are clickable: pay $4.99 (or $29.99 for a theme pack), download the series, and power up this avatar. Grey cards are Coming soon / Not ready — data or fulfillment is not built yet, not teaser fluff.",
+      "",
+      "Matthew’s first assembled-bot list is on this page — 18 exact names. Only BTCTreasuryBot is live. That used to be called Codex. It opens the working autotrades / sFOX UI and is $149 when PayPal is minted. The other 17 bots are Coming soon until built. More bot names are still coming; I will not invent extras.",
+      "",
+      "sFOX keys go in the BTCTreasuryBot box above, never here. After sFOX is linked, autotrades can follow later — not today.",
+      "",
+      "What do you want to work on first?"
+    ].join("\n");
+  }
 
   var STARTERS = [
     { label: "Connect sFOX", send: "How do I connect sFOX?" },
-    { label: "What can I buy?", send: "What is live to buy on PayPal versus coming soon on the intentions list?" },
+    { label: "What can I buy?", send: "Which research modules can I pay for, download, and power up right now?" },
     { label: "Grow net worth", send: "Help me grow my net worth. What should you know about my situation?" },
     { label: "BTCTreasuryBot", send: "Walk me through BTCTreasuryBot and the sFOX connect box." }
   ];
@@ -72,7 +87,7 @@
     return {
       live: live,
       coming_soon: coming,
-      note: "Only live SKUs are for sale. Coming soon is visible on van.html and not clickable. Do not shrink the catalog to seven SKUs."
+      note: "Live research = pay, download, power up. Coming soon / Not ready means data or fulfillment is missing. Only BTCTreasuryBot is live among assembled bots. Unlock list is source of truth for avatar knowledge."
     };
   }
 
@@ -95,7 +110,7 @@
     return [
       "I’m Grok on this page. The live xAI path is waiting on Hostinger: set XAI_API_KEY or van-grok.secret.php for van-grok.php.",
       "",
-      "I still won’t take keys in chat. Use the sFOX box on BTCTreasuryBot. Only that bot is live ($149). The other 17 assembled bots are coming soon. Research $4.99 and packs $29.99 are visible, not clickable.",
+      "I still won’t take keys in chat. Use the sFOX box on BTCTreasuryBot. Live research modules are $4.99 to pay / download / power up. Grey cards are Coming soon / Not ready. Only BTCTreasuryBot is live among the 18 assembled bots ($149).",
       "",
       "Tell me a goal or pick a module and I’ll keep going."
     ].join("\n");
@@ -145,8 +160,12 @@
           messages: scrub(messages),
           catalog: catalogSnapshot(),
           owned: ownedIds(),
+          avatar: (global.VanOwned && global.VanOwned.avatarContext)
+            ? global.VanOwned.avatarContext()
+            : { userId: "charlie-van-halfacre", powerups: [] },
           sfox: sfoxConnected(),
-          client: FULL_NAME
+          client: FULL_NAME,
+          userId: "charlie-van-halfacre"
         })
       },
       45000
@@ -176,7 +195,8 @@
     firstName: FIRST_NAME,
     engine: "grok",
     model: MODEL,
-    greeting: GREETING,
+    greeting: greeting,
+    greetingText: greeting,
     starters: STARTERS,
     mode: nowMode,
     createMemory: createMemory,

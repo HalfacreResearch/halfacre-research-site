@@ -6,6 +6,7 @@
  *
  * PRICE LOCK: research/data $4.99; theme packs $29.99; assembled
  * trading systems $149; tax immediate-outcome upgrades $199.
+ * Live research = pay + download + lasting avatar unlock.
  * Codex Buy and Codex Sell are separate $149 systems. Never merge.
  * Research unlock = full Bitcoin/macro stack Codex considers.
  * Do not shrink the visible catalog to seven SKUs.
@@ -28,7 +29,7 @@
   var RESEARCH_USD = 4.99;
   var PACK_USD = 29.99;
   var SYSTEM_USD = 149;
-  var TAX_USD = 149;
+  var TAX_USD = 199;
   var BASIC_USD = RESEARCH_USD;
   var ADVANCED_USD = SYSTEM_USD;
   var ALLOWED = [RESEARCH_USD, PACK_USD, SYSTEM_USD, TAX_USD];
@@ -119,6 +120,14 @@
       avatar_upgrade_label: trim(row.avatar_upgrade_label) || trim(row.name),
       status: live ? "live" : (trim(row.status) || "coming_soon"),
       live: live,
+      fulfillment: row.fulfillment && typeof row.fulfillment === "object" ? row.fulfillment : null,
+      avatar_knowledge: row.fulfillment && row.fulfillment.avatar_knowledge
+        ? trim(row.fulfillment.avatar_knowledge)
+        : "",
+      download_href: row.fulfillment && row.fulfillment.download_href
+        ? trim(row.fulfillment.download_href)
+        : "",
+      ui_href: trim(row.ui_href) || (row.fulfillment && row.fulfillment.ui_href) || "",
       van_unlocked: false,
       free: false
     };
@@ -214,6 +223,10 @@
       paypal_link_or_button_id: (known && known.paypal_link_or_button_id) || "",
       paypal_confirms_usd: known ? known.paypal_confirms_usd : null,
       avatar_upgrade_label: (known && known.avatar_upgrade_label) || "",
+      fulfillment: (known && known.fulfillment) || null,
+      avatar_knowledge: (known && known.avatar_knowledge) || "",
+      download_href: (known && known.download_href) || "",
+      ui_href: (known && known.ui_href) || "",
       status: (known && known.status) || "",
       live: live,
       van_unlocked: false,
@@ -277,13 +290,13 @@
       return { ok: false, reason: "Codex is now BTCTreasuryBot — one $149 assembled bot." };
     }
     if (!line.live) {
-      return { ok: false, reason: "Coming soon — not yet selling. This SKU is on the intentions list only." };
+      return { ok: false, reason: "Coming soon / Not ready — data or fulfillment is not built yet. This SKU is not for sale." };
     }
     if (line.forbidden || isForbiddenAmount(line.amount)) {
       return { ok: false, reason: "Blocked: $99 is the historical Macro pack amount and is not a Van price. Allowed: $4.99 / $29.99 / $149 / $199." };
     }
     if (!isPaidAmount(line.amount)) {
-      return { ok: false, reason: "Van paid amounts are $4.99 (research), $29.99 (theme packs), or $149 (assembled bots, including TaxAttorneyBot). This amount cannot be charged here." };
+      return { ok: false, reason: "Van paid amounts are $4.99 (research), $29.99 (theme packs), $149 (assembled bots, including TaxAttorneyBot), or $199 (tax immediate-outcome). This amount cannot be charged here." };
     }
     if (business) {
       return {

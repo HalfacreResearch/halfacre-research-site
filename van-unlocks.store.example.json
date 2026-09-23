@@ -1,0 +1,12 @@
+{
+  "userId": "charlie-van-halfacre",
+  "identity": {
+    "display_name": "Charlie Van Halfacre",
+    "email": "cvhalfacre@msn.com",
+    "phone": "601-408-8342",
+    "hivemind_client_id": "charlie-van-halfacre",
+    "pay_identity": "cvhalfacre@msn.com"
+  },
+  "modules": {},
+  "note": "Copy to van-unlocks.store.json on Hostinger if you need a starter file. Runtime writes that gitignored file. Starting owned is empty."
+}
