@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin desk — Halfacre Research</title>
+  <style>
+    :root {
+      --dark: #0A0A0A;
+      --card: #161616;
+      --foot: #121212;
+      --orange: #F7931A;
+      --white: #FFFFFF;
+      --muted: #A8A8A8;
+      --neon: #39FF14;
+      --warn: #c9a227;
+      --bad: #f0b4b4;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--dark);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body { min-height: 100dvh; display: flex; flex-direction: column; }
+    header {
+      background: var(--foot);
+      border-bottom: 2px solid var(--orange);
+      padding: 16px 18px 14px;
+    }
+    .brand {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+      color: var(--orange);
+    }
+    h1 { margin: 8px 0 6px; font-size: clamp(26px, 7vw, 38px); line-height: 0.95; }
+    .sub { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.4; }
+    .note {
+      margin: 12px 0 0;
+      border: 2px solid var(--warn);
+      background: #1a1408;
+      color: #f3e2b0;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    main {
+      flex: 1;
+      padding: 14px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .panes {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 800px) {
+      .panes { grid-template-columns: 1fr 1fr; }
+    }
+    section.pane {
+      background: var(--card);
+      border-left: 4px solid var(--orange);
+      padding: 14px 14px 16px;
+      min-height: 220px;
+    }
+    section.pane h2 {
+      margin: 0 0 4px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--orange);
+    }
+    .ok {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--warn);
+      margin: 0 0 10px;
+    }
+    .ok.bad { color: var(--bad); }
+    .ok.good { color: var(--neon); }
+    p { margin: 0 0 10px; font-size: 14px; line-height: 1.4; color: #d7d7d7; }
+    .row {
+      background: #101010;
+      padding: 10px 10px 12px;
+      margin: 0 0 8px;
+    }
+    .row b { display: block; font-size: 15px; margin-bottom: 4px; }
+    .row small { color: var(--muted); font-size: 12px; }
+    a.go, a.ghost {
+      display: inline-block;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      margin: 8px 8px 0 0;
+      padding: 8px 10px;
+    }
+    a.go { background: var(--neon); color: var(--dark); }
+    a.ghost { background: transparent; color: var(--muted); border: 1px solid #333; }
+    footer {
+      background: var(--foot);
+      border-top: 2px solid var(--orange);
+      padding: 12px 18px 16px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: var(--neon); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">HALFACRE RESEARCH · MATTHEW ADMIN</div>
+    <h1>Company desk</h1>
+    <p class="sub">You watch the company. Staff bots run the four panes. This is not Dad’s page.</p>
+    <p class="note">
+      <strong>Practice copy.</strong>
+      Not on the live website. Hostinger stays off until you say publish.
+      Signup page comes after you look at this.
+    </p>
+  </header>
+
+  <main>
+    <div class="panes">
+      <section class="pane" id="clients">
+        <h2>1 · CLIENTS</h2>
+        <p class="ok bad">Does not match yet — client #1 page is not on the live site</p>
+        <p>People we serve. Van is first. Their coach pages live behind the door, not on this desk.</p>
+        <div class="row">
+          <b>Charlie Van Halfacre</b>
+          <small>Client #1 · page is practice only · not on the live site</small>
+          <div>
+            <a class="go" href="van.html">Open Van’s page</a>
+          </div>
+        </div>
+        <p>Next after you see this desk: how a second client gets added.</p>
+      </section>
+
+      <section class="pane" id="staff">
+        <h2>2 · STAFF / BOTS</h2>
+        <p class="ok bad">Does not match yet — weekly bot limit left CoS and CursorBot silent</p>
+        <p>Who is supposed to run the company with you. They belong on this desk. They are not the public site.</p>
+        <div class="row">
+          <b>Matthew</b>
+          <small>Owner. Yes on publish, money, new client, new bot.</small>
+        </div>
+        <div class="row">
+          <b>This Grok chat</b>
+          <small>Matthew-facing lane. Building this desk. No weekly bot cap.</small>
+        </div>
+        <div class="row">
+          <b>ChiefOfStaffBot + fleet</b>
+          <small>Inbox can take mail. Turns died when the weekly limit hit. Not managing panes until that lifts.</small>
+        </div>
+        <div class="row">
+          <b>Cursor + GitHub</b>
+          <small>Cursor owns normal code work. GitHub holds the draft of this desk and Van’s page.</small>
+        </div>
+      </section>
+
+      <section class="pane" id="workspace">
+        <h2>3 · WORKSPACE</h2>
+        <p class="ok">Match check: Google is connected to this Grok. The desk does not yet show live files, mail, or calendar inside the pane.</p>
+        <p>Company files, mail, and calendar. Doors into the real Google apps. Vault keeps logins.</p>
+        <div>
+          <a class="go" href="https://drive.google.com" target="_blank" rel="noopener">Drive</a>
+          <a class="go" href="https://mail.google.com" target="_blank" rel="noopener">Gmail</a>
+          <a class="go" href="https://calendar.google.com" target="_blank" rel="noopener">Calendar</a>
+        </div>
+      </section>
+
+      <section class="pane" id="site">
+        <h2>4 · SITE</h2>
+        <p class="ok bad">Does not match yet — live domain still has no admin desk and no Van page</p>
+        <p>What exists as a page, and whether the live website agrees with the draft.</p>
+        <div class="row">
+          <b>/admin.html</b>
+          <small>This desk. Practice copy. You are looking at it.</small>
+        </div>
+        <div class="row">
+          <b>/van.html</b>
+          <small>Client #1 coach page. Practice copy. Not the company front door.</small>
+        </div>
+        <div class="row">
+          <b>Live halfacreresearch.tech</b>
+          <small>Old public home is still the data-packs page. Van 404. This desk not published.</small>
+        </div>
+        <a class="ghost" href="pages.html">Old page list</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    Four equal panes. Okay = the stack matches. No secrets on this page.
+    ·
+    <a href="van.html">Van’s page</a>
+    ·
+    <a href="pages.html">Old pages</a>
+  </footer>
+</body>
+</html>
