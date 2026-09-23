@@ -47,8 +47,14 @@
       "rules-restrictions-research",
       "social-sentiment-research"
     ],
-    "codex_sot": "autotrades-engine",
-    "hostinger_db_export_blocker": false
+    "codex_sot": "autotrades-engine server/sfoxEngine.ts",
+    "hostinger_db_export_blocker": false,
+    "codex_engines": [
+      "sfoxEngine",
+      "dcaEngine",
+      "rotationEngine"
+    ],
+    "codex_operator": "admin tRPC on autotrades.codexyield.com"
   },
   "account": {
     "viewer": "van_client",
@@ -105,7 +111,7 @@
     "name": "Codex",
     "tier": "founder",
     "kind": "codex",
-    "description": "Free founder Codex module. Product SoT is autotrades-engine (old Codex on the autotrades page): connect sFOX, then trade. Not a greenfield engine. Hostinger DB export is not a Van blocker. sFOX connect is the unlock. Trade is follow-on \u2014 this page does not place a trade today. BTCTreasuryBot is the $149 assembled bot that uses this same path.",
+    "description": "Free founder Codex product surface. sFOX API connect is the unlock. Execution SoT is autotrades-engine server/sfoxEngine.ts; dcaEngine and rotationEngine exist; live operator path is admin tRPC on autotrades.codexyield.com. Do not invent a fake engine. Live autotrade is not firing until keys + that scheduler path are wired. BTCTreasuryBot is the $149 assembled bot on this same path.",
     "price_usd": 0,
     "free": true,
     "live": true,
@@ -125,7 +131,7 @@
       "departments": [
         "codex"
       ],
-      "description": "Free founder Codex module. Product SoT is autotrades-engine (old Codex on the autotrades page): connect sFOX, then trade. Not a greenfield engine. Hostinger DB export is not a Van blocker. sFOX connect is the unlock. Trade is follow-on \u2014 this page does not place a trade today. BTCTreasuryBot is the $149 assembled bot that uses this same path.",
+      "description": "Free founder Codex product surface. sFOX API connect is the unlock. Execution SoT is autotrades-engine server/sfoxEngine.ts; dcaEngine and rotationEngine exist; live operator path is admin tRPC on autotrades.codexyield.com. Do not invent a fake engine. Live autotrade is not firing until keys + that scheduler path are wired. BTCTreasuryBot is the $149 assembled bot on this same path.",
       "price_usd": 0,
       "free": true,
       "paypal_link_or_button_id": "",
@@ -138,7 +144,7 @@
         "kind": "working_ui",
         "ui_href": "#codex",
         "download_href": "",
-        "avatar_knowledge": "Free Codex / autotrades-engine: connect sFOX, then trade. Hostinger DB export is not required. Trade is follow-on, not firing from /van.html today."
+        "avatar_knowledge": "Free Codex founder surface. Unlock = sFOX API connect. Execution SoT: autotrades-engine server/sfoxEngine.ts, dcaEngine, rotationEngine. Operator: admin tRPC on autotrades.codexyield.com. Not firing from /van.html until keys + scheduler are wired."
       }
     },
     {

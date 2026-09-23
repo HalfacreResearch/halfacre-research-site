@@ -439,13 +439,13 @@
       <span class="pill">FREE · CODEX</span>
       <span class="pill wait" data-sfox-status>1 · Not connected</span>
       <h2>Codex</h2>
-      <p>Founder Codex module — the working autotrades surface. Product SoT is the existing <b>autotrades-engine</b> (old Codex on the autotrades page): connect sFOX, then trade. This is not a new engine and does not wait on a Hostinger DB export. sFOX connect is the unlock. This page does not place a trade today.</p>
+      <p>Founder Codex product surface. The sFOX API key in the box below is the unlock — not a new engine built on this page. Execution SoT is the existing autotrades-engine: <code>server/sfoxEngine.ts</code>, with <code>dcaEngine</code> and <code>rotationEngine</code>. Live operator path is admin tRPC on autotrades.codexyield.com. Keys plus that scheduler path are not wired from here yet, so this page does not claim a live autotrade is firing.</p>
       <ol class="codex-steps" data-sfox-steps>
         <li data-step="1"><b>1 · NOT CONNECTED</b> No sFOX key on this device yet.</li>
-        <li data-step="2"><b>2 · CONNECT sFOX</b> Paste the API key in the box. That is the Codex unlock.</li>
-        <li data-step="3"><b>3 · CONNECTED</b> Trading is follow-on on autotrades-engine. Not firing from this page today.</li>
+        <li data-step="2"><b>2 · CONNECT sFOX</b> Paste the API key. That is the Codex unlock.</li>
+        <li data-step="3"><b>3 · CONNECTED</b> Trading follow-on — not firing until keys + scheduler are wired.</li>
       </ol>
-      <p data-sfox-hint>Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Trade comes after, on the existing autotrades-engine path. Hostinger DB export is not required.</p>
+      <p data-sfox-hint>Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Trade later uses sfoxEngine / dcaEngine / rotationEngine on autotrades-engine, not a fake engine on this page.</p>
       <form class="sfox" data-sfox-form autocomplete="off">
         <label for="sfox-key">sFOX API KEY (this device only)</label>
         <input id="sfox-key" data-sfox-key type="password" name="sfox-local-only" autocomplete="off" spellcheck="false" placeholder="Paste here, never in chat">
@@ -505,7 +505,7 @@
   </main>
 
   <footer>
-    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. Free Codex is the autotrades-engine surface (connect → trade). sFOX keys stay in this browser. Unlocks persist on Van’s account and load into Grok before chat. Only BTCTreasuryBot is the live $149 assembled bot. Live research: pay / download / power up. Hostinger DB export is not a blocker. No Stripe. Not investment advice.</p>
+    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. Free Codex is the founder surface: sFOX API connect is the unlock. Execution SoT is autotrades-engine sfoxEngine / dcaEngine / rotationEngine (admin tRPC on autotrades.codexyield.com) — not a fake engine on this page, and not firing until that scheduler path is wired. Unlocks persist on Van’s account. Contacts: (601) 408-8342 · cvhalfacre@msn.com. No Stripe. Not investment advice.</p>
     <p>
       <a href="pay.html">Universal pay page</a>
       ·

@@ -93,8 +93,8 @@
       }
       if (hint) {
         hint.textContent = now.connected
-          ? "sFOX key saved on this device " + (now.hint ? "(" + now.hint + ")" : "") + ". Codex path is connect → trade via autotrades-engine. Trade is follow-on — this page does not place a trade today."
-          : "Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Trade comes after, on the existing autotrades-engine path. Hostinger DB export is not required.";
+          ? "sFOX key saved on this device " + (now.hint ? "(" + now.hint + ")" : "") + ". Connected — trading follow-on. Live autotrade is not firing until keys + the autotrades-engine scheduler (sfoxEngine / dcaEngine / rotationEngine, admin tRPC on autotrades.codexyield.com) are wired."
+          : "Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Execution SoT is autotrades-engine server/sfoxEngine.ts — not a new engine on this page.";
       }
       var steps = root.querySelector("[data-sfox-steps]");
       if (steps) {

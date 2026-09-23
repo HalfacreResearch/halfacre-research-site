@@ -36,7 +36,7 @@
       "",
       "Live research modules that already exist are clickable: pay $4.99 (or $29.99 for a theme pack), download the series, and power up this avatar. Grey cards are Coming soon / Not ready — data or fulfillment is not built yet, not teaser fluff.",
       "",
-      "Free Codex is on this page. Its product SoT is the existing autotrades-engine (old Codex) — connect sFOX, then trade. That is not a new engine. Hostinger DB export is not required. sFOX connect is the Codex unlock. Trade is follow-on; this page does not place a trade today.",
+      "Free Codex is the founder product surface on this page. The sFOX API key box is the unlock. Execution SoT is autotrades-engine server/sfoxEngine.ts (dcaEngine and rotationEngine exist; live operator path is admin tRPC on autotrades.codexyield.com). I will not invent a trading engine. Live autotrade is not firing until keys plus that scheduler path are wired.",
       "",
       "Matthew’s first assembled-bot list is on this page — 18 exact names. Only BTCTreasuryBot is the live $149 assembled bot; it uses that same Codex / autotrades path. The other 17 bots are Coming soon until built. More bot names are still coming; I will not invent extras.",
       "",
