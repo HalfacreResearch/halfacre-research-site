@@ -20,7 +20,7 @@
     "research_usd": 4.99,
     "pack_usd": 29.99,
     "system_usd": 149,
-    "tax_usd": 199,
+    "tax_usd": 149,
     "basic_usd": 4.99,
     "advanced_usd": 149,
     "diy_series_approx": 89,
@@ -33,7 +33,7 @@
     "tax_upgrades": 4,
     "live_count": 11,
     "coming_soon_count": 169,
-    "note": "Matthew 2026-09-23 ~06:12\u201306:15 CT: research modules that exist in SoT are clickable \u2014 Van pays, downloads, and powers up his avatar. Unlocks persist on userId charlie-van-halfacre. Non-ready research is Coming soon / Not ready, not vision-only fluff. Only BTCTreasuryBot is live among the 18 assembled bots. Prices: research $4.99, packs $29.99, bots $149, tax immediate-outcome $199. PayPal only. No Stripe.",
+    "note": "Matthew 2026-09-23 ~06:12\u201306:15 CT: research modules that exist in SoT are clickable \u2014 Van pays, downloads, and powers up his avatar. Unlocks persist on userId charlie-van-halfacre. Non-ready research is Coming soon / Not ready, not vision-only fluff. Only BTCTreasuryBot is live among the 18 assembled bots. Prices: research $4.99, packs $29.99, bots $149, PayPal only. No Stripe.",
     "assembled_bots": 18,
     "live_research_from_sot": [
       "capital-flows-research",
@@ -74,8 +74,7 @@
     "allowed_paid_usd": [
       4.99,
       29.99,
-      149,
-      199
+      149
     ],
     "forbidden_pack_usd": [
       99
@@ -97,7 +96,7 @@
     "research_usd": 4.99,
     "pack_usd": 29.99,
     "system_usd": 149,
-    "tax_usd": 199
+    "tax_usd": 149
   },
   "founder_product": {
     "id": "btc-treasury-bot",

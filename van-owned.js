@@ -23,7 +23,7 @@
   var PENDING_KEY = "halfacre.van.pending.v1";
   var PENDING_MS = 6 * 60 * 60 * 1000;
   var UNLOCK_API = "van-unlocks.php";
-  var ALLOWED = [4.99, 29.99, 149, 199];
+  var ALLOWED = [4.99, 29.99, 149];
   var IDENTITY = {
     userId: USER_ID,
     display_name: "Charlie Van Halfacre",
@@ -340,7 +340,7 @@
       return { ok: false, error: "That return is not a live paid module." };
     }
     if (!amountOk(query.get("amt") || query.get("mc_gross") || query.get("amount"), sku)) {
-      return { ok: false, error: "Return amount did not match that module’s $4.99 / $29.99 / $149 / $199 price." };
+      return { ok: false, error: "Return amount did not match that module’s $4.99 / $29.99 / $149 price." };
     }
     var evidence = paypalEvidence(query, sku);
     var pending = takePending(sku);

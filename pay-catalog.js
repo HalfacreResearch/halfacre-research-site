@@ -5,7 +5,7 @@
  * (already selling). Only live SKUs are clickable to PayPal.
  *
  * PRICE LOCK: research/data $4.99; theme packs $29.99; assembled
- * trading systems $149; tax immediate-outcome upgrades $199.
+ * trading systems $149 (including TaxAttorneyBot).
  * Live research = pay + download + lasting avatar unlock.
  * Codex Buy and Codex Sell are separate $149 systems. Never merge.
  * Research unlock = full Bitcoin/macro stack Codex considers.
@@ -17,7 +17,7 @@
  *
  * PayPal is Day-1. Card/guest is native PayPal Checkout.
  * Square (Block) is an approved second rail — config stub only until SDK.
- * Live path: NCP at the listed $4.99 / $29.99 / $149 / $199 + matching
+ * Live path: NCP at the listed $4.99 / $29.99 / $149 + matching
  * paypal_confirms_usd, or dynamic _xclick when paypal_business is set.
  * No Stripe.
  */
@@ -29,7 +29,7 @@
   var RESEARCH_USD = 4.99;
   var PACK_USD = 29.99;
   var SYSTEM_USD = 149;
-  var TAX_USD = 199;
+  var TAX_USD = 149;
   var BASIC_USD = RESEARCH_USD;
   var ADVANCED_USD = SYSTEM_USD;
   var ALLOWED = [RESEARCH_USD, PACK_USD, SYSTEM_USD, TAX_USD];
@@ -293,10 +293,10 @@
       return { ok: false, reason: "Coming soon / Not ready — data or fulfillment is not built yet. This SKU is not for sale." };
     }
     if (line.forbidden || isForbiddenAmount(line.amount)) {
-      return { ok: false, reason: "Blocked: $99 is the historical Macro pack amount and is not a Van price. Allowed: $4.99 / $29.99 / $149 / $199." };
+      return { ok: false, reason: "Blocked: $99 is the historical Macro pack amount and is not a Van price. Allowed: $4.99 / $29.99 / $149." };
     }
     if (!isPaidAmount(line.amount)) {
-      return { ok: false, reason: "Van paid amounts are $4.99 (research), $29.99 (theme packs), $149 (assembled bots, including TaxAttorneyBot), or $199 (tax immediate-outcome). This amount cannot be charged here." };
+      return { ok: false, reason: "Van paid amounts are $4.99 (research), $29.99 (theme packs), or $149 (assembled bots, including TaxAttorneyBot). This amount cannot be charged here." };
     }
     if (business) {
       return {
@@ -313,7 +313,7 @@
     if (kind.kind === "pack-ncp") {
       return {
         ok: false,
-        reason: "Blocked: that PayPal NCP link is the historical Macro $99 or ETF pack SoT. Mint a new NCP at $4.99, $29.99, $149, or $199. Do not reuse those pack IDs."
+        reason: "Blocked: that PayPal NCP link is the historical Macro $99 or ETF pack SoT. Mint a new NCP at $4.99, $29.99, or $149. Do not reuse those pack IDs."
       };
     }
     if (kind.kind !== "empty" && line.paypal_confirms_usd === price) {
@@ -322,12 +322,12 @@
     if (kind.kind !== "empty") {
       return {
         ok: false,
-        reason: "A PayPal link is set, but paypal_confirms_usd does not match the listed $4.99 / $29.99 / $149 / $199 price. Mint a matching NCP link. Do not reuse the historical Macro/ETF pack NCP IDs."
+        reason: "A PayPal link is set, but paypal_confirms_usd does not match the listed $4.99 / $29.99 / $149 price. Mint a matching NCP link. Do not reuse the historical Macro/ETF pack NCP IDs."
       };
     }
     return {
       ok: false,
-      reason: "PayPal not live yet. Mint a PayPal NCP link per live SKU at $4.99, $29.99, $149, or $199, set paypal_confirms_usd to that price, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic _xclick at the listed price."
+      reason: "PayPal not live yet. Mint a PayPal NCP link per live SKU at $4.99, $29.99, or $149, set paypal_confirms_usd to that price, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic _xclick at the listed price."
     };
   }
 
