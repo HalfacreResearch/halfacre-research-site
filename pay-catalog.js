@@ -299,6 +299,7 @@
         cache = {
           client: json.client || {},
           account: json.account || {},
+          catalog: json.catalog || { open_ended: true },
           founder: null,
           paid: (json.modules || json.paid_modules || []).map(normalizePaid),
           pay: json.pay || {},
@@ -306,6 +307,7 @@
         };
         global.HalfacrePay.products = cache.paid;
         global.HalfacrePay.account = cache.account;
+        global.HalfacrePay.catalog = cache.catalog;
         global.HalfacrePay.founder = cache.founder;
         global.HalfacrePay.client = cache.client;
         global.HalfacrePay.pay = cache.pay;
@@ -323,6 +325,7 @@
     square: { enabled: false, live: false, status: "coming_next" },
     products: [],
     account: {},
+    catalog: { open_ended: true },
     founder: null,
     client: null,
     pay: {},

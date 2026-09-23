@@ -2,7 +2,7 @@
  * sFOX connect UI for Van’s Codex.
  *
  * Local / client-side only, pending a Vault. No live sFOX trading calls.
- * Never log the key. Never send it to chat, analytics, or VAN_AI_ENDPOINT.
+ * Never log the key. Never send it to chat, analytics, or Grok.
  */
 (function (global) {
   "use strict";

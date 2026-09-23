@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Charlie Van Halfacre — Halfacre Research</title>
-  <meta name="description" content="Private page for Charlie Van Halfacre. Seven modules locked until each $1.99 PayPal payment. Codex Buy and Codex Sell are separate. sFOX connect stays local. No Stripe.">
+  <meta name="description" content="Private page for Charlie Van Halfacre. On-page Grok (xAI), not a fleet bot. Open catalog; starter Codex modules $1.99 locked until PayPal. sFOX stays local. No Stripe.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -197,6 +197,12 @@
       margin-bottom: 6px;
     }
     .mod.unlocked .owned { color: var(--neon); }
+    .mod.more {
+      border-left-color: #555;
+      border-style: dashed;
+      border-left-style: solid;
+    }
+    .mod.more .owned { color: var(--muted); }
     .coach-bar {
       display: flex;
       align-items: center;
@@ -306,7 +312,7 @@
     </div>
     <div class="gate" id="gate">
       <strong>NOT SHOW-VAN.</strong>
-      Van pays $1.99 for each of seven locked modules on PayPal. Nothing is gifted. Do not stamp “show Van” and do not instruct Hostinger to “show Dad” until a $1.99 PayPal path can take money. Not Macro $99 / ETF $149.
+      Van pays $1.99 per listed module on PayPal. Nothing is gifted. Catalog is open — starter Codex set is listed; more modules coming. Do not stamp “show Van” and do not instruct Hostinger to “show Dad” until a $1.99 PayPal path can take money. Not Macro $99 / ETF $149.
     </div>
     <h1>Charlie Van Halfacre</h1>
     <div class="contact">
@@ -332,8 +338,8 @@
     </section>
 
     <section class="inventory">
-      <h2 id="inventory-title">YOUR PRODUCTS · 0 OF 7 UNLOCKED</h2>
-      <p>Five pair research modules plus Codex Buy and Codex Sell as separate $1.99 products. Each stays locked until that PayPal payment returns. Matthew cashes you back off this page.</p>
+      <h2 id="inventory-title">SHOP · OPEN CATALOG</h2>
+      <p>Open-ended shop. Starter Codex set is $1.99 each and locked until that PayPal payment. Matthew will name more modules. Codex Buy and Codex Sell stay separate. Matthew cashes you back off this page.</p>
       <p id="just-paid" hidden></p>
       <div class="modules" id="modules"></div>
     </section>
@@ -346,21 +352,21 @@
         </svg>
       </div>
       <div>
-        <b>Halfacre coach</b>
-        <small>sFOX box first. Modules stay locked until each $1.99 PayPal pay.</small>
+        <b>Grok</b>
+        <small>xAI on this page · not a fleet bot · full-time chat</small>
       </div>
     </div>
     <div id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
     <div class="chips" id="chips"></div>
     <form class="composer" id="form">
       <label class="visually-hidden" for="line" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Message</label>
-      <input id="line" name="line" type="text" autocomplete="off" enterkeyhint="send" placeholder="Talk to the coach — no keys here">
+      <input id="line" name="line" type="text" autocomplete="off" enterkeyhint="send" placeholder="Talk to Grok — no keys here">
       <button class="send" type="submit">Send</button>
     </form>
   </main>
 
   <footer>
-    <p class="hint">sFOX keys stay in this browser (pending vault). They are not sent to chat, analytics, or a live trade. Each module is $1.99 on PayPal and starts locked. Square (Block) is next. No Stripe. Not investment advice.</p>
+    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. sFOX keys stay in this browser (pending vault). They are not sent to Grok, analytics, or a live trade. Listed modules are $1.99 on PayPal and start locked. Square (Block) is next. No Stripe. Not investment advice.</p>
     <p>
       <a href="pay.html">Universal pay page</a>
       ·
@@ -373,7 +379,7 @@
   <script src="pay-catalog.js"></script>
   <script src="van-owned.js"></script>
   <script src="van-sfox.js"></script>
-  <script src="van-ai.js"></script>
+  <script src="van-grok.js"></script>
   <script>
     (function () {
       var log = document.getElementById("log");
@@ -383,16 +389,17 @@
       var modeEl = document.getElementById("mode");
       var gate = document.getElementById("gate");
       var sendBtn = form.querySelector(".send");
-      var memory = window.VanCoach.createMemory();
-      var history = [{ role: "assistant", content: window.VanCoach.greeting }];
+      var grok = window.HalfacreGrok;
+      var memory = grok.createMemory();
+      var history = [{ role: "assistant", content: grok.greeting }];
 
       window.VanSfox.bind(document.getElementById("codex"));
 
       function setMode(payLive) {
-        var coach = window.VanCoach.mode() === "live" ? "live model" : "on-page demo";
+        var coach = "Grok";
         if (payLive) {
           modeEl.textContent = "PAYPAL PRESENT · " + coach;
-          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $1.99 PayPal target is configured. Modules stay locked until each payment returns. CoS confirms a real digital payment before any “show Van” stamp. Do not instruct Hostinger to “show Dad” until that confirm.";
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $1.99 PayPal target is configured. Listed modules stay locked until each payment returns. Catalog is open. CoS confirms a real digital payment before any “show Van” stamp. Do not instruct Hostinger to “show Dad” until that confirm.";
         } else {
           modeEl.textContent = "NOT SHOW-VAN · " + coach;
         }
@@ -440,7 +447,7 @@
         var owned = window.VanOwned;
         var total = window.HalfacrePay.products.length;
         box.replaceChildren();
-        title.textContent = "YOUR PRODUCTS · " + owned.ownedCount() + " OF " + total + " UNLOCKED";
+        title.textContent = "SHOP · " + owned.ownedCount() + " UNLOCKED OF " + total + " LISTED · MORE COMING";
         if (justPaid && justPaid.ok && justPaid.sku) {
           paidNote.hidden = false;
           paidNote.textContent = (justPaid.already ? "Already unlocked: " : "Unlocked after PayPal: ") + justPaid.sku;
@@ -461,11 +468,18 @@
             (unlocked ? "paid on PayPal · " : "PayPal checkout · ") + item.id;
           box.appendChild(card);
         });
+        var more = document.createElement("article");
+        more.className = "mod more";
+        more.innerHTML = "<div class=\"owned\"></div><b></b><small></small>";
+        more.querySelector(".owned").textContent = "OPEN CATALOG";
+        more.querySelector("b").textContent = "More modules";
+        more.querySelector("small").textContent = "Matthew names the next SKUs. Add rows in van-products.json — this shop is not only the starter seven.";
+        box.appendChild(more);
       }
 
       function renderChips() {
         chips.replaceChildren();
-        window.VanCoach.starters.forEach(function (item) {
+        grok.starters.forEach(function (item) {
           var b = document.createElement("button");
           b.type = "button";
           b.className = "chip";
@@ -495,7 +509,7 @@
         setMode(false);
       });
 
-      addMsg("assistant", window.VanCoach.greeting);
+      addMsg("assistant", grok.greeting);
       renderChips();
       setMode(false);
 
@@ -505,21 +519,21 @@
         if (!text) {
           return;
         }
-        if (window.VanCoach.looksLikeSecret(text)) {
+        if (grok.looksLikeSecret(text)) {
           addMsg("user", "[key or secret not kept in the chat]");
         } else {
           addMsg("user", text);
         }
         history.push({
           role: "user",
-          content: window.VanCoach.looksLikeSecret(text)
+          content: grok.looksLikeSecret(text)
             ? "[redacted — key or secret was not kept]"
             : text
         });
         line.value = "";
-        var pending = addMsg("assistant", "One moment…", true);
+        var pending = addMsg("assistant", "Grok is thinking…", true);
         lock(true);
-        window.VanCoach.reply(text, memory, history).then(function (reply) {
+        grok.reply(text, memory, history).then(function (reply) {
           pending.classList.remove("pending");
           pending.replaceChildren(linkify(reply));
           history.push({ role: "assistant", content: reply });

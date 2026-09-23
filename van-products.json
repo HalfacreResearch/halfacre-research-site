@@ -5,19 +5,25 @@
     "phone_tel": "+16014088342",
     "email": "cvhalfacre@msn.com"
   },
+  "catalog": {
+    "open_ended": true,
+    "starter": true,
+    "more_coming": true,
+    "note": "Open shop. Starter seven are billable $1.99 Codex-related modules. Matthew will name more. Do not claim the catalog is only seven."
+  },
   "account": {
     "viewer": "van_client",
     "owns_all_modules": false,
     "starting_owned": [],
-    "note": "Van pays $1.99 per module on PayPal like any client. Starting state: none owned. Unlock only the SKU that just paid. Matthew cashes him back privately off-app. Do not gift or pre-unlock. Do not merge Codex Buy + Codex Sell."
+    "note": "Van pays $1.99 per listed module on PayPal like any client. Starting state: none owned. Unlock only the SKU that just paid. Matthew cashes him back privately off-app. Do not gift or pre-unlock. Do not merge Codex Buy + Codex Sell."
   },
   "pay": {
     "rail": "paypal",
     "rails": ["paypal", "square"],
     "stripe": false,
     "default_paid_usd": 1.99,
-    "client_set_count": 7,
-    "client_set_usd": 13.93,
+    "starter_count": 7,
+    "starter_usd": 13.93,
     "forbidden_pack_usd": [99, 149],
     "paypal_business": "",
     "ncp_pattern": "https://www.paypal.com/ncp/payment/{NCP_ID}",

@@ -1,5 +1,5 @@
 /**
- * Per-SKU unlock for Van’s seven modules.
+ * Per-SKU unlock for listed Van modules (open catalog).
  *
  * Starting state: none owned. Never gift or pre-unlock.
  * Unlock only after a $1.99 PayPal return for that SKU.
