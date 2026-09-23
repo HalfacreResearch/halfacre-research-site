@@ -1,7 +1,9 @@
 /**
  * Loads van-products.json — the one file Matthew/staff edit.
  *
- * Paid Van modules are $1.99. Codex is free and is never charged.
+ * Seven separate SKUs at $1.99 each. Locked until that SKU is paid.
+ * Five pair research modules + Codex Buy + Codex Sell. Never merge Buy+Sell.
+ * Do not pre-unlock or gift modules. Matthew reimburses Van off-app.
  * Macro $99 / ETF $149 pack prices are forbidden on this pay path.
  *
  * PayPal is Day-1. Card/guest is native PayPal Checkout.
@@ -52,10 +54,13 @@
       amount: String(price),
       price_usd: price,
       currency: "USD",
+      kind: trim(row.kind) || "research",
+      pair: trim(row.pair),
       paypal_link_or_button_id: trim(row.paypal_link_or_button_id),
       paypal_confirms_usd: row.paypal_confirms_usd == null ? null : asNumber(row.paypal_confirms_usd),
       avatar_upgrade_label: trim(row.avatar_upgrade_label) || trim(row.name),
-      status: trim(row.status) || "draft",
+      status: trim(row.status) || "listed",
+      van_unlocked: false,
       free: false
     };
   }
@@ -112,20 +117,22 @@
 
   function resolve(partial) {
     var id = trim(partial && (partial.id || partial.sku));
-    var founder = cache && cache.founder;
-    if (founder && id && id.toLowerCase() === String(founder.id || "codex").toLowerCase()) {
+    if (id && id.toLowerCase() === "codex") {
       return {
-        id: founder.id,
-        sku: founder.id,
-        product: founder.name,
-        amount: "0",
+        id: "codex",
+        sku: "codex",
+        product: "Codex is two products",
+        amount: String(PAID_USD),
         currency: "USD",
-        description: founder.description || "",
+        description: "Do not merge. Buy Codex Buy and Codex Sell as separate $1.99 products.",
+        kind: "protocol",
+        pair: "",
         paypal_link_or_button_id: "",
         paypal_confirms_usd: null,
-        avatar_upgrade_label: founder.avatar_upgrade_label || "",
-        status: "free",
-        free: true,
+        avatar_upgrade_label: "Codex Buy + Codex Sell",
+        status: "split",
+        free: false,
+        split: true,
         forbidden: false,
         known: true
       };
@@ -146,11 +153,15 @@
       amount: forbidden ? "" : amount,
       currency: "USD",
       description: trim(partial && partial.description) || (known && known.description) || "",
+      kind: (known && known.kind) || "",
+      pair: (known && known.pair) || "",
       paypal_link_or_button_id: (known && known.paypal_link_or_button_id) || "",
       paypal_confirms_usd: known ? known.paypal_confirms_usd : null,
       avatar_upgrade_label: (known && known.avatar_upgrade_label) || "",
       status: (known && known.status) || "",
+      van_unlocked: false,
       free: false,
+      split: false,
       forbidden: forbidden,
       known: Boolean(known)
     };
@@ -197,7 +208,10 @@
     var pay = (cache && cache.pay) || {};
     var business = trim(pay.paypal_business);
     if (!line || line.free) {
-      return { ok: false, reason: "Codex is free. No PayPal on this page." };
+      return { ok: false, reason: "No PayPal on a free line." };
+    }
+    if (line.split) {
+      return { ok: false, reason: "Codex is two products. Charge Codex Buy and Codex Sell separately at $1.99 each." };
     }
     if (line.forbidden || isForbiddenAmount(line.amount)) {
       return { ok: false, reason: "Blocked: Macro $99 / ETF $149 pack prices are not allowed on Van’s pay page." };
@@ -212,7 +226,8 @@
         business: business,
         amount: "1.99",
         item_name: line.product || line.sku || "Halfacre research module",
-        item_number: line.sku || line.id
+        item_number: line.sku || line.id,
+        custom: line.sku || line.id
       };
     }
     var kind = paypalKind(line.paypal_link_or_button_id);
@@ -233,7 +248,7 @@
     }
     return {
       ok: false,
-      reason: "PayPal not live yet. Mint a $1.99 PayPal NCP link and set paypal_confirms_usd to 1.99, or set pay.paypal_business for a dynamic $1.99 _xclick. Catalog names still wait on Matthew."
+      reason: "PayPal not live yet. Mint a $1.99 PayPal NCP link per SKU, set paypal_confirms_usd to 1.99, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic $1.99 _xclick."
     };
   }
 
@@ -283,12 +298,14 @@
       .then(function (json) {
         cache = {
           client: json.client || {},
-          founder: json.founder_product || null,
-          paid: (json.paid_modules || []).map(normalizePaid),
+          account: json.account || {},
+          founder: null,
+          paid: (json.modules || json.paid_modules || []).map(normalizePaid),
           pay: json.pay || {},
           raw: json
         };
         global.HalfacrePay.products = cache.paid;
+        global.HalfacrePay.account = cache.account;
         global.HalfacrePay.founder = cache.founder;
         global.HalfacrePay.client = cache.client;
         global.HalfacrePay.pay = cache.pay;
@@ -305,6 +322,7 @@
     stripe: false,
     square: { enabled: false, live: false, status: "coming_next" },
     products: [],
+    account: {},
     founder: null,
     client: null,
     pay: {},

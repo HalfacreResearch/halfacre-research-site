@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Pay — Halfacre Research</title>
-  <meta name="description" content="Universal pay page for any paid Van avatar module. PayPal is Day-1. Square (Block) coming next. No Stripe. Codex is free and is not sold here.">
+  <meta name="description" content="Universal pay page for Van’s seven $1.99 modules. PayPal is Day-1. Square coming next. No Stripe. Codex Buy and Codex Sell are separate. Locked until paid.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -129,11 +129,11 @@
     <div class="brand">HALFACRE RESEARCH · PAY</div>
     <div class="gate" id="gate">
       <strong>PAYPAL GATE.</strong>
-      Do not stamp “show Van” until CoS clears a real payable catalog and a $1.99 PayPal NCP can take money.
-      Founder Codex is free and is not sold on this page. PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe.
+      Do not stamp “show Van” until a $1.99 PayPal NCP can take money for a single locked module.
+      Seven SKUs. Each starts locked. PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe. Never bundle Codex Buy + Codex Sell.
     </div>
     <h1>Pay $1.99 for one upgrade.</h1>
-    <p class="sub">Early paid research/data modules are $1.99. Link params: product, sku, name, amount, description. Codex is free. PayPal first. Square stub below. Macro $99 and ETF $149 pack NCP links are not used here.</p>
+    <p class="sub">Each of the seven modules is $1.99 and unlocks only after that PayPal payment. Link params: product, sku, name, amount, description. Codex Buy and Codex Sell are separate. PayPal first. Square stub below. Macro $99 and ETF $149 pack NCP links are not used here.</p>
 
     <section class="card" id="line">
       <h2>LINE ITEM</h2>
@@ -163,14 +163,16 @@
     </section>
 
     <footer>
-      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Pack SoT NCP pattern is <code>paypal.com/ncp/payment/PLB-…</code> (Macro $99 / ETF $149 links exist in history and stay unused here). Mint new $1.99 NCP links. Card/guest is whatever PayPal Checkout shows. No Stripe. Codex stays free on <a href="van.html">van.html</a>.</p>
+      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Pack SoT NCP pattern is <code>paypal.com/ncp/payment/PLB-…</code> (Macro $99 / ETF $149 links exist in history and stay unused here). Mint a $1.99 NCP per SKU and set its success URL to <code>van.html?paid={SKU}</code>. Card/guest is whatever PayPal Checkout shows. No Stripe. Van starts with none owned.</p>
       <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
     </footer>
   </div>
   <script src="pay-catalog.js"></script>
+  <script src="van-owned.js"></script>
   <script>
     (function () {
       var pay = window.HalfacrePay;
+      var owned = window.VanOwned;
       var actions = document.getElementById("pay-actions");
       var empty = document.getElementById("empty");
       var filled = document.getElementById("filled");
@@ -185,18 +187,56 @@
         actions.appendChild(b);
       }
 
+      function addPayPalFields(form, sku) {
+        var ret = document.createElement("input");
+        ret.type = "hidden";
+        ret.name = "return";
+        ret.value = owned.returnUrl(sku);
+        form.appendChild(ret);
+        var cancel = document.createElement("input");
+        cancel.type = "hidden";
+        cancel.name = "cancel_return";
+        cancel.value = owned.cancelUrl(sku);
+        form.appendChild(cancel);
+        var rm = document.createElement("input");
+        rm.type = "hidden";
+        rm.name = "rm";
+        rm.value = "1";
+        form.appendChild(rm);
+        var ship = document.createElement("input");
+        ship.type = "hidden";
+        ship.name = "no_shipping";
+        ship.value = "1";
+        form.appendChild(ship);
+        form.addEventListener("submit", function () {
+          owned.markPending(sku);
+        });
+      }
+
       function renderPay(line) {
         actions.replaceChildren();
-        if (line.free) {
-          var back = document.createElement("a");
-          back.className = "go";
-          back.href = "van.html";
-          back.textContent = "Codex is free — back to Van’s page";
-          actions.appendChild(back);
+        var sku = line.sku || line.id;
+        if (line.split) {
+          addDisabled("Not sold as one Codex");
+          ["codex-buy", "codex-sell"].forEach(function (id) {
+            var a = document.createElement("a");
+            a.className = "go";
+            a.href = pay.buildUrl({ id: id, sku: id });
+            a.textContent = id === "codex-buy" ? "Pay Codex Buy $1.99" : "Pay Codex Sell $1.99";
+            actions.appendChild(a);
+          });
           return;
         }
         if (line.forbidden) {
           addDisabled("PayPal blocked — pack $99/$149 not allowed");
+          return;
+        }
+        if (sku && owned.owns(sku)) {
+          var back = document.createElement("a");
+          back.className = "go";
+          back.href = "van.html";
+          back.textContent = "Already unlocked — back to Van’s page";
+          actions.appendChild(back);
           return;
         }
         var plan = pay.checkoutPlan(line);
@@ -210,12 +250,15 @@
             '<input type="hidden" name="business" value="">' +
             '<input type="hidden" name="item_name" value="">' +
             '<input type="hidden" name="item_number" value="">' +
+            '<input type="hidden" name="custom" value="">' +
             '<input type="hidden" name="amount" value="1.99">' +
             '<input type="hidden" name="currency_code" value="USD">' +
             '<button class="paypal" type="submit">Pay $1.99 with PayPal</button>';
           dyn.querySelector("[name=business]").value = plan.business;
           dyn.querySelector("[name=item_name]").value = plan.item_name;
           dyn.querySelector("[name=item_number]").value = plan.item_number;
+          dyn.querySelector("[name=custom]").value = plan.custom || sku;
+          addPayPalFields(dyn, sku);
           actions.appendChild(dyn);
         } else if (plan.ok && (plan.kind === "url" || plan.kind === "ncp")) {
           var a = document.createElement("a");
@@ -223,6 +266,9 @@
           a.href = plan.value;
           a.rel = "noopener noreferrer";
           a.textContent = "Pay $1.99 with PayPal";
+          a.addEventListener("click", function () {
+            owned.markPending(sku);
+          });
           actions.appendChild(a);
         } else if (plan.ok && plan.kind === "button") {
           var form = document.createElement("form");
@@ -234,6 +280,7 @@
             '<input type="hidden" name="hosted_button_id" value="">' +
             '<button class="paypal" type="submit">Pay $1.99 with PayPal</button>';
           form.querySelector("[name=hosted_button_id]").value = plan.value;
+          addPayPalFields(form, sku);
           actions.appendChild(form);
         } else {
           addDisabled("PayPal — $1.99 path not live");
@@ -256,25 +303,27 @@
         if (!pay.anyPaypalLive()) {
           gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No payable $1.99 catalog yet. Mint a PayPal NCP link at $1.99 (same pattern as the old pack links) and set <code>paypal_confirms_usd</code> to 1.99. Do not reuse Macro $99 / ETF $149 NCP links. Square is coming next — do not wait on it. Do not instruct Hostinger to “show Dad.”";
         } else {
-          gate.innerHTML = "<strong>PAYPAL $1.99 PRESENT.</strong> A $1.99 PayPal path is configured. Square (Block) stays a stub until application_id is set. CoS still confirms a real digital payment before any “show Van” stamp. Codex stays free.";
+          gate.innerHTML = "<strong>PAYPAL $1.99 PRESENT.</strong> A $1.99 PayPal path is configured. Each module stays locked until that payment returns. Square (Block) stays a stub until application_id is set. CoS still confirms a real digital payment before any “show Van” stamp.";
         }
 
         var query = pay.fromQuery(window.location.search);
         var line = pay.resolve(query);
-        var hasLine = Boolean(line.product || line.sku || line.id || line.amount || line.description || line.free || line.forbidden);
+        var hasLine = Boolean(line.product || line.sku || line.id || line.amount || line.description || line.split || line.forbidden);
 
         if (hasLine) {
           empty.hidden = true;
           filled.hidden = false;
           document.getElementById("f-product").textContent = line.product || "(no name)";
           document.getElementById("f-sku").textContent = line.sku || line.id || "(no sku)";
-          document.getElementById("f-label").textContent = line.free ? "Founder Codex — free" : (line.avatar_upgrade_label || "—");
+          document.getElementById("f-label").textContent = line.split
+            ? "Split — buy Codex Buy and Codex Sell separately"
+            : (line.avatar_upgrade_label || "—");
           document.getElementById("f-desc").textContent = line.forbidden
             ? "Blocked. Van’s pay page does not sell the Macro $99 or ETF $149 packs."
             : (line.description || "—");
           document.getElementById("f-price").textContent = line.forbidden
             ? "Blocked pack price"
-            : pay.formatMoney(line.free ? 0 : (line.amount || "1.99"));
+            : pay.formatMoney(line.amount || "1.99");
           renderPay(line);
         } else {
           addDisabled("PayPal — pick a module");
@@ -286,7 +335,9 @@
           a.innerHTML = "<b></b><small></small>";
           a.querySelector("b").textContent = item.product + " · " + item.id;
           a.querySelector("small").textContent =
-            pay.formatMoney(item.amount) + " · " + (item.status || "listed") + " · " + item.description;
+            pay.formatMoney(item.amount) + " · " +
+            (owned.owns(item.id) ? "unlocked" : "locked") + " · " +
+            item.description;
           known.appendChild(a);
         });
       }).catch(function () {

@@ -5,11 +5,19 @@
     "phone_tel": "+16014088342",
     "email": "cvhalfacre@msn.com"
   },
+  "account": {
+    "viewer": "van_client",
+    "owns_all_modules": false,
+    "starting_owned": [],
+    "note": "Van pays $1.99 per module on PayPal like any client. Starting state: none owned. Unlock only the SKU that just paid. Matthew cashes him back privately off-app. Do not gift or pre-unlock. Do not merge Codex Buy + Codex Sell."
+  },
   "pay": {
     "rail": "paypal",
     "rails": ["paypal", "square"],
     "stripe": false,
     "default_paid_usd": 1.99,
+    "client_set_count": 7,
+    "client_set_usd": 13.93,
     "forbidden_pack_usd": [99, 149],
     "paypal_business": "",
     "ncp_pattern": "https://www.paypal.com/ncp/payment/{NCP_ID}",
@@ -17,7 +25,7 @@
       "macro_99": "https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE",
       "etf_149": "https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML"
     },
-    "mint_note": "SoT pack pattern is PayPal NCP (paypal.com/ncp/payment/PLB-…). Those two links are $99/$149 packs on Soft HOLD — do not use them for Van. Mint new NCP links at $1.99 per module and set paypal_confirms_usd to 1.99. Card/guest checkout is whatever PayPal Checkout shows natively.",
+    "mint_note": "SoT pack pattern is PayPal NCP (paypal.com/ncp/payment/PLB-…). Those two links are $99/$149 packs on Soft HOLD — do not use them for Van. Mint a new $1.99 NCP per SKU, set paypal_confirms_usd to 1.99, and set that NCP success URL to van.html?paid={SKU}. Card/guest checkout is whatever PayPal Checkout shows natively. Matthew reimburses Van off-app.",
     "square": {
       "enabled": false,
       "status": "coming_next",
@@ -26,46 +34,91 @@
       "note": "Matthew approved Square (Block) as a second rail. Day-1 checkout is PayPal. Flip enabled only after a Square application_id exists. Do not block this PR on a Square SDK."
     }
   },
-  "founder_product": {
-    "id": "codex",
-    "name": "Bitcoin Treasury Codex",
-    "description": "Van’s first product. Free for the founder. After sFOX is linked on this page, Codex can autotrade. Live autotrade wiring is a follow-on.",
-    "price_usd": 0,
-    "free": true,
-    "paypal_link_or_button_id": "",
-    "paypal_confirms_usd": null,
-    "avatar_upgrade_label": "Founder Codex"
-  },
-  "paid_modules": [
+  "pair_order_sot": ["BTC/USD", "ETH/BTC", "SOL/BTC", "XRP/BTC", "LINK/BTC"],
+  "modules": [
     {
-      "id": "draft-module-a",
-      "name": "DRAFT module A (name pending CoS)",
-      "description": "Placeholder $1.99 research/data upgrade. Real name waits on CoS catalog Q&A with Matthew.",
+      "id": "btc-usd-research",
+      "name": "BTC/USD Research",
+      "kind": "research",
+      "pair": "BTC/USD",
+      "description": "Research/data module for the BTC/USD pair (Codex autotrades Dashboard pairOrder + BTC/USD DCA).",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "DRAFT A",
-      "status": "draft"
+      "avatar_upgrade_label": "BTC/USD Research",
+      "status": "listed"
     },
     {
-      "id": "draft-module-b",
-      "name": "DRAFT module B (name pending CoS)",
-      "description": "Placeholder $1.99 research/data upgrade. Real name waits on CoS catalog Q&A with Matthew.",
+      "id": "eth-btc-research",
+      "name": "ETH/BTC Research",
+      "kind": "research",
+      "pair": "ETH/BTC",
+      "description": "Research/data module for the ETH/BTC pair from Codex autotrades Dashboard pairOrder.",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "DRAFT B",
-      "status": "draft"
+      "avatar_upgrade_label": "ETH/BTC Research",
+      "status": "listed"
     },
     {
-      "id": "draft-module-c",
-      "name": "DRAFT module C (name pending CoS)",
-      "description": "Placeholder $1.99 research/data upgrade. Real name waits on CoS catalog Q&A with Matthew.",
+      "id": "sol-btc-research",
+      "name": "SOL/BTC Research",
+      "kind": "research",
+      "pair": "SOL/BTC",
+      "description": "Research/data module for the SOL/BTC pair from Codex autotrades Dashboard pairOrder.",
       "price_usd": 1.99,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "DRAFT C",
-      "status": "draft"
+      "avatar_upgrade_label": "SOL/BTC Research",
+      "status": "listed"
+    },
+    {
+      "id": "xrp-btc-research",
+      "name": "XRP/BTC Research",
+      "kind": "research",
+      "pair": "XRP/BTC",
+      "description": "Research/data module for the XRP/BTC pair from Codex autotrades Dashboard pairOrder.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "XRP/BTC Research",
+      "status": "listed"
+    },
+    {
+      "id": "link-btc-research",
+      "name": "LINK/BTC Research",
+      "kind": "research",
+      "pair": "LINK/BTC",
+      "description": "Research/data module for the LINK/BTC pair from Codex autotrades Dashboard pairOrder.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "LINK/BTC Research",
+      "status": "listed"
+    },
+    {
+      "id": "codex-buy",
+      "name": "Codex Buy",
+      "kind": "protocol",
+      "pair": "",
+      "description": "Buying protocol. Separate $1.99 product from Codex Sell. Locked until this SKU is paid on PayPal.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Codex Buy",
+      "status": "listed"
+    },
+    {
+      "id": "codex-sell",
+      "name": "Codex Sell",
+      "kind": "protocol",
+      "pair": "",
+      "description": "Selling protocol. Separate $1.99 product from Codex Buy. Locked until this SKU is paid on PayPal.",
+      "price_usd": 1.99,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "Codex Sell",
+      "status": "listed"
     }
   ]
 }

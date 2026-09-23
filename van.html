@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Charlie Van Halfacre — Halfacre Research</title>
-  <meta name="description" content="Private page for Charlie Van Halfacre. Founder Codex is free. sFOX connect stays local. Paid upgrades use one PayPal page (Square coming next). Not show-Van until PayPal can take a real payment.">
+  <meta name="description" content="Private page for Charlie Van Halfacre. Seven modules locked until each $1.99 PayPal payment. Codex Buy and Codex Sell are separate. sFOX connect stays local. No Stripe.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -159,6 +159,15 @@
       border: 1px solid #333;
       padding: 10px 14px;
     }
+    .inventory h2 {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--orange);
+      margin: 4px 0 8px;
+    }
+    .inventory p { margin: 0 0 10px; font-size: 13px; color: #d7d7d7; line-height: 1.4; }
+    #just-paid { color: var(--neon); font-family: "Courier New", monospace; font-size: 12px; }
     .modules {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -168,13 +177,26 @@
     .mod {
       display: block;
       background: var(--card);
-      border-left: 4px solid var(--orange);
+      border-left: 4px solid var(--warn);
       padding: 10px 10px 12px;
       color: var(--white);
       text-decoration: none;
     }
+    .mod.unlocked { border-left-color: var(--neon); }
+    .mod.protocol { border-left-color: var(--orange); }
+    .mod.protocol.unlocked { border-left-color: var(--neon); }
     .mod b { display: block; font-size: 14px; margin-bottom: 4px; }
     .mod small { color: var(--muted); font-size: 12px; }
+    .owned {
+      display: inline-block;
+      font-family: "Courier New", monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--warn);
+      margin-bottom: 6px;
+    }
+    .mod.unlocked .owned { color: var(--neon); }
     .coach-bar {
       display: flex;
       align-items: center;
@@ -284,7 +306,7 @@
     </div>
     <div class="gate" id="gate">
       <strong>NOT SHOW-VAN.</strong>
-      Founder Codex is free and can sit on this page. Do not stamp “show Van” and do not instruct Hostinger to “show Dad” until a paid $1.99 upgrade can take a real PayPal payment. Not Macro $99 / ETF $149.
+      Van pays $1.99 for each of seven locked modules on PayPal. Nothing is gifted. Do not stamp “show Van” and do not instruct Hostinger to “show Dad” until a $1.99 PayPal path can take money. Not Macro $99 / ETF $149.
     </div>
     <h1>Charlie Van Halfacre</h1>
     <div class="contact">
@@ -295,10 +317,10 @@
 
   <main class="chat-shell">
     <section class="codex" id="codex" data-sfox>
-      <span class="pill">FIRST PRODUCT · FREE FOR VAN</span>
+      <span class="pill">sFOX · AUTO TRADE LINK</span>
       <span class="pill wait" data-sfox-status>sFOX not connected</span>
-      <h2>Bitcoin Treasury Codex</h2>
-      <p>Already yours. No charge. After sFOX is linked in this box, Codex can autotrade. Live autotrade is a follow-on — this page will not place a trade today.</p>
+      <h2>Connect sFOX</h2>
+      <p>Not a product. This box links the exchange so Codex Buy and Codex Sell can autotrade later. Live autotrade is a follow-on — this page will not place a trade today.</p>
       <p data-sfox-hint>Use this box — not the chat — for the sFOX API key. It stays on this device until a vault exists.</p>
       <form class="sfox" data-sfox-form autocomplete="off">
         <label for="sfox-key">sFOX API KEY (this device only)</label>
@@ -309,7 +331,12 @@
       <button class="ghost" type="button" data-sfox-disconnect hidden>Disconnect sFOX</button>
     </section>
 
-    <div class="modules" id="modules"></div>
+    <section class="inventory">
+      <h2 id="inventory-title">YOUR PRODUCTS · 0 OF 7 UNLOCKED</h2>
+      <p>Five pair research modules plus Codex Buy and Codex Sell as separate $1.99 products. Each stays locked until that PayPal payment returns. Matthew cashes you back off this page.</p>
+      <p id="just-paid" hidden></p>
+      <div class="modules" id="modules"></div>
+    </section>
 
     <div class="coach-bar">
       <div class="avatar" aria-hidden="true">
@@ -320,7 +347,7 @@
       </div>
       <div>
         <b>Halfacre coach</b>
-        <small>First job: sFOX box, not chat. Codex is free.</small>
+        <small>sFOX box first. Modules stay locked until each $1.99 PayPal pay.</small>
       </div>
     </div>
     <div id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
@@ -333,7 +360,7 @@
   </main>
 
   <footer>
-    <p class="hint">sFOX keys stay in this browser (pending vault). They are not sent to chat, analytics, or a live trade. Paid upgrades use one PayPal page first. Square (Block) is next. No Stripe. Not investment advice.</p>
+    <p class="hint">sFOX keys stay in this browser (pending vault). They are not sent to chat, analytics, or a live trade. Each module is $1.99 on PayPal and starts locked. Square (Block) is next. No Stripe. Not investment advice.</p>
     <p>
       <a href="pay.html">Universal pay page</a>
       ·
@@ -344,6 +371,7 @@
   </footer>
 
   <script src="pay-catalog.js"></script>
+  <script src="van-owned.js"></script>
   <script src="van-sfox.js"></script>
   <script src="van-ai.js"></script>
   <script>
@@ -364,7 +392,7 @@
         var coach = window.VanCoach.mode() === "live" ? "live model" : "on-page demo";
         if (payLive) {
           modeEl.textContent = "PAYPAL PRESENT · " + coach;
-          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A paid module has a PayPal target. CoS still confirms a real digital payment before any “show Van” stamp. Codex stays free. Do not instruct Hostinger to “show Dad” until that confirm.";
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $1.99 PayPal target is configured. Modules stay locked until each payment returns. CoS confirms a real digital payment before any “show Van” stamp. Do not instruct Hostinger to “show Dad” until that confirm.";
         } else {
           modeEl.textContent = "NOT SHOW-VAN · " + coach;
         }
@@ -405,18 +433,33 @@
         return el;
       }
 
-      function renderModules() {
+      function renderModules(justPaid) {
         var box = document.getElementById("modules");
+        var title = document.getElementById("inventory-title");
+        var paidNote = document.getElementById("just-paid");
+        var owned = window.VanOwned;
+        var total = window.HalfacrePay.products.length;
         box.replaceChildren();
+        title.textContent = "YOUR PRODUCTS · " + owned.ownedCount() + " OF " + total + " UNLOCKED";
+        if (justPaid && justPaid.ok && justPaid.sku) {
+          paidNote.hidden = false;
+          paidNote.textContent = (justPaid.already ? "Already unlocked: " : "Unlocked after PayPal: ") + justPaid.sku;
+        }
         window.HalfacrePay.products.forEach(function (item) {
-          var a = document.createElement("a");
-          a.className = "mod";
-          a.href = window.HalfacrePay.buildUrl(item);
-          a.innerHTML = "<b></b><small></small>";
-          a.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
-          a.querySelector("small").textContent =
-            window.HalfacrePay.formatMoney(item.amount) + " · " + (item.status || "listed") + " · PayPal page · " + item.id;
-          box.appendChild(a);
+          var unlocked = owned.owns(item.id);
+          var card = document.createElement(unlocked ? "article" : "a");
+          card.className = "mod" + (item.kind === "protocol" ? " protocol" : "") + (unlocked ? " unlocked" : " locked");
+          card.setAttribute("data-sku", item.id);
+          if (!unlocked) {
+            card.href = window.HalfacrePay.buildUrl(item);
+          }
+          card.innerHTML = "<div class=\"owned\"></div><b></b><small></small>";
+          card.querySelector(".owned").textContent = unlocked ? "UNLOCKED · PAID $1.99" : "LOCKED · PAY $1.99";
+          card.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
+          card.querySelector("small").textContent =
+            (item.kind === "protocol" ? "Protocol · " : "Research · " + (item.pair || "") + " · ") +
+            (unlocked ? "paid on PayPal · " : "PayPal checkout · ") + item.id;
+          box.appendChild(card);
         });
       }
 
@@ -442,7 +485,11 @@
       }
 
       window.HalfacrePay.load().then(function () {
-        renderModules();
+        var claimed = window.VanOwned.claimFromSearch(window.location.search);
+        if (claimed && claimed.ok && window.history && window.history.replaceState) {
+          window.history.replaceState({}, "", "van.html");
+        }
+        renderModules(claimed);
         setMode(window.HalfacrePay.anyPaypalLive());
       }).catch(function () {
         setMode(false);

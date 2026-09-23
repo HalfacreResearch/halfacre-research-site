@@ -2,7 +2,7 @@
  * Charlie Van Halfacre — on-page coach.
  *
  * Priority 1: get Van to connect sFOX in the dedicated field (not chat).
- * Codex is free for the founder. Paid upgrades go to pay.html.
+ * Seven modules start locked. Each is $1.99 on pay.html. Never gift unlocks.
  * Never log keys. Never send keys to VAN_AI_ENDPOINT.
  */
 (function (global) {
@@ -29,6 +29,10 @@
     return "pay.html?id=" + encodeURIComponent(id);
   }
 
+  function moduleOwned(id) {
+    return global.VanOwned && typeof global.VanOwned.owns === "function" && global.VanOwned.owns(id);
+  }
+
   function moduleLines() {
     var rows = paidList();
     if (!rows.length) {
@@ -36,27 +40,26 @@
     }
     return rows.map(function (row, i) {
       var price = global.HalfacrePay.formatMoney(row.amount);
-      return (i + 1) + ". " + row.product + " — " + price + " — " + payHref(row.id);
+      var state = moduleOwned(row.id) ? "unlocked" : "locked";
+      return (i + 1) + ". " + row.product + " — " + price + " — " + state + " — " + payHref(row.id);
     }).join("\n");
   }
 
   var GREETING = [
     "Hi Van. I’m your Halfacre coach.",
     "",
-    "Your first product is already on this page: Bitcoin Treasury Codex. It is free for you. Matthew is not charging you for Codex.",
+    "You have seven products on this page, and they all start locked. Five research modules — BTC/USD, ETH/BTC, SOL/BTC, XRP/BTC, LINK/BTC — plus Codex Buy and Codex Sell as two separate products. Each one is $1.99 on the PayPal page. Paying one unlocks only that one. Matthew will cash you back privately, off this page.",
     "",
-    "The most useful next step is to connect sFOX in the box above — not in this chat. That box is a special key field. The key stays on this device until Matthew has a vault. After sFOX is linked, Codex can autotrade. We will not place live trades from this page today.",
+    "The most useful next step is still to connect sFOX in the box above — not in this chat. After sFOX is linked, Codex Buy and Codex Sell can autotrade later. We will not place live trades from this page today.",
     "",
-    "When you want more later, other research modules can power up this page. Those paid upgrades all go to one PayPal page.",
-    "",
-    "Want to connect sFOX first?"
+    "Want to connect sFOX first, or pick a $1.99 module?"
   ].join("\n");
 
   var STARTERS = [
     { label: "Connect sFOX", send: "How do I connect sFOX?" },
-    { label: "What is Codex?", send: "Tell me about Codex." },
-    { label: "After sFOX", send: "What happens after sFOX is linked?" },
-    { label: "Other power-ups", send: "What other research can help me?" }
+    { label: "Pay for a module", send: "What modules can I buy?" },
+    { label: "Codex Buy vs Sell", send: "What is the difference between Codex Buy and Codex Sell?" },
+    { label: "After sFOX", send: "What happens after sFOX is linked?" }
   ];
 
   var PASTED_KEY_RE = /(?:^|\s)[A-Za-z0-9_\-]{24,}(?:\s|$)/;
@@ -120,6 +123,12 @@
     if (has(n, ["after sfox", "autotrade", "auto trade", "once it is linked", "once its linked"])) {
       return "autotrade";
     }
+    if (has(n, ["codex buy", "buying protocol", "buy protocol"])) {
+      return "codex-buy";
+    }
+    if (has(n, ["codex sell", "selling protocol", "sell protocol"])) {
+      return "codex-sell";
+    }
     if (has(n, ["codex"])) {
       return "codex";
     }
@@ -177,7 +186,7 @@
           "",
           "After it is linked, Codex can autotrade. Live autotrade is a follow-on — this page will not place a trade today.",
           "",
-          "If you want, we can look at other research power-ups next. Those paid upgrades use one PayPal page."
+          "If you want, we can look at the seven $1.99 modules next. Each one unlocks only after its own PayPal payment."
         ].join("\n");
       }
       return [
@@ -204,27 +213,52 @@
       ].join("\n");
     }
 
+    if (topic === "codex-buy") {
+      memory.lastTopic = "codex-buy";
+      return [
+        "Codex Buy is the buying protocol. It is its own $1.99 product, not bundled with Codex Sell.",
+        "",
+        moduleOwned("codex-buy")
+          ? "This one is already unlocked from a PayPal payment."
+          : "It starts locked. Pay $1.99 here: " + payHref("codex-buy"),
+        "",
+        "After sFOX is linked, this protocol can autotrade later. We will not fire live trades from this sitting."
+      ].join("\n");
+    }
+
+    if (topic === "codex-sell") {
+      memory.lastTopic = "codex-sell";
+      return [
+        "Codex Sell is the selling protocol. It is its own $1.99 product, not bundled with Codex Buy.",
+        "",
+        moduleOwned("codex-sell")
+          ? "This one is already unlocked from a PayPal payment."
+          : "It starts locked. Pay $1.99 here: " + payHref("codex-sell"),
+        "",
+        "After sFOX is linked, this protocol can autotrade later. We will not fire live trades from this sitting."
+      ].join("\n");
+    }
+
     if (topic === "codex") {
       memory.lastTopic = "codex";
       return [
-        "Bitcoin Treasury Codex is already on this page. It is your first product, and it is free for you as the founder. There is no Codex charge and no Codex PayPal button.",
+        "Codex is two products, not one. Codex Buy is the buying protocol. Codex Sell is the selling protocol. Each is $1.99 and unlocks on its own after PayPal.",
         "",
-        "To make Codex useful, connect sFOX in the box — not in this chat. After sFOX is linked, Codex can autotrade. We will not fire live trades from this sitting.",
+        "Codex Buy — " + (moduleOwned("codex-buy") ? "unlocked" : "locked") + " — " + payHref("codex-buy"),
+        "Codex Sell — " + (moduleOwned("codex-sell") ? "unlocked" : "locked") + " — " + payHref("codex-sell"),
         "",
-        sfoxConnected()
-          ? "sFOX already shows connected."
-          : "Want help with that sFOX box?"
+        "To make them useful later, connect sFOX in the box — not in this chat. We will not fire live trades from this sitting."
       ].join("\n");
     }
 
     if (topic === "purchase" || topic === "modules") {
       memory.lastTopic = "modules";
       return [
-        "After Codex, other research modules can power up this page. The list is custom — staff edit van-products.json. Early paid upgrades are $1.99 each. They use the same PayPal page first. Square is approved as a second rail and is coming next. Card or guest pay is whatever PayPal shows. Not the Macro $99 or ETF $149 packs. No Stripe. Codex is not on that page.",
+        "Seven separate modules. Each is $1.99. Locked until that PayPal payment comes back. Paying one does not unlock the others. Card or guest pay is whatever PayPal shows. Not the Macro $99 or ETF $149 packs. No Stripe. Square is coming next.",
         "",
         moduleLines(),
         "",
-        "PayPal has to work for a paid upgrade before this is ready to show as a finished client visit. Connecting sFOX is still the first job."
+        "Matthew cashes you back off this page. Connecting sFOX is still the first job for later autotrade."
       ].join("\n");
     }
 
@@ -238,9 +272,9 @@
       return [
         "I’m the coach on " + FULL_NAME + "’s page.",
         "",
-        "First job: help you connect sFOX in the box on this page, so Codex — already yours, free — can autotrade later.",
+        "First job: help you connect sFOX in the box on this page, so Codex Buy and Codex Sell can autotrade later after you unlock them.",
         "Second: talk in ordinary words about accounts and goals. No keys in chat.",
-        "Third: if you want more, paid research power-ups go to one PayPal page.",
+        "Third: each of the seven modules is $1.99 on one PayPal page and stays locked until that payment.",
         "",
         "I will not move money or place a live trade today."
       ].join("\n");
@@ -251,7 +285,7 @@
       return [
         "Matthew built this so the two of you can sit together.",
         "",
-        "Codex is already yours, free. He wants sFOX connected in the box on this page. Paid upgrades, when you’re ready, use one PayPal page he can fill in from van-products.json.",
+        "He wants sFOX connected in the box on this page. The seven modules are real $1.99 PayPal checkouts — nothing is gifted here. He cashes you back privately.",
         "",
         "Want to do the sFOX box first?"
       ].join("\n");
@@ -286,7 +320,7 @@
       return [
         "Goals can stay simple: sleep better about cash, grow something, help family.",
         "",
-        "Codex is already here, free, to help that picture get more active later. Connecting sFOX is the first practical step. Other research power-ups can wait on the PayPal page."
+        "Connecting sFOX is the first practical step. The seven research and Codex modules stay locked until each $1.99 PayPal payment."
       ].join("\n");
     }
 
@@ -299,7 +333,7 @@
       return [
         "That’s fine. Nothing has to be decided this minute.",
         "",
-        "When you’re ready, the useful box is sFOX on this page. Codex is already yours."
+        "When you’re ready, the useful box is sFOX on this page. Modules stay locked until each $1.99 PayPal pay."
       ].join("\n");
     }
 
@@ -309,7 +343,7 @@
       "",
       "I won’t turn that into a login. If it was a key, use the sFOX box instead of chat.",
       "",
-      "Easiest next step: connect sFOX so Codex can autotrade later. After that, we can look at paid research power-ups."
+      "Easiest next step: connect sFOX so Codex Buy and Codex Sell can autotrade later. After that, we can pick a locked $1.99 module."
     ].join("\n");
   }
 
