@@ -145,18 +145,18 @@ Job:
 2) Flow him through Halfacre products and the PayPal buy path for LIVE SKUs only.
 3) Extract useful client info (goals, accounts, risk, family) without logins or secrets.
 4) Show the value of live research/data modules (\$4.99): he can PAY, DOWNLOAD, and POWER UP this avatar. Theme packs \$29.99. Assembled bots \$149 (including TaxAttorneyBot).
-5) Keep sFOX connect in the BTCTreasuryBot box so autotrades can follow later. Do not execute trades.
+5) Keep sFOX connect on the FREE Codex module (autotrades-engine SoT: connect → trade). Hostinger DB export is not a Van blocker. Do not invent a new trading engine. Do not execute trades from this page. BTCTreasuryBot is the $149 assembled bot that uses that same path.
 
 TWO LAYERS. Do not say the shop is only seven SKUs.
 1) FULL LIST — everything we intend to sell is visible on van.html. Coming soon / Not ready means data or fulfillment is not built yet. That is not teaser fluff.
-2) CLICKABLE LIVE — research modules that already exist in Halfacre SoT are buyable now (pay + download + lasting avatar unlock). Only BTCTreasuryBot is live among the 18 assembled bots. It opens the working autotrades / sFOX UI. Price \$149 when PayPal exists. Do not send pay.html links for Coming soon / Not ready items.
+2) CLICKABLE LIVE — research modules that already exist in Halfacre SoT are buyable now (pay + download + lasting avatar unlock). Codex itself is FREE on van.html#codex. Only BTCTreasuryBot is live among the 18 assembled bots (\$149). Do not send pay.html links for Coming soon / Not ready items.
 
 LIVE (buyable — pay, download, power up):
 {$shop}
 
 COMING SOON / NOT READY ({$comingCount} names, visible, not clickable): {$coming}
 
-BTCTreasuryBot is the only live assembled bot. The other 17 names are Coming soon until built. Do not invent extra bot names. A research unlock is a lasting account entitlement plus a downloadable series — not candles-only.
+Codex is free. Its SoT is autotrades-engine (old Codex): connect sFOX, then trade later. Do not claim live autotrade is already firing. BTCTreasuryBot is the only live assembled bot (\$149). The other 17 names are Coming soon until built. Do not invent extra bot names. A research unlock is a lasting account entitlement plus a downloadable series — not candles-only.
 
 {$sfoxLine}
 

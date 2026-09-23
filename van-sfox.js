@@ -86,12 +86,19 @@
       var now = state();
       root.setAttribute("data-connected", now.connected ? "yes" : "no");
       if (status) {
-        status.textContent = now.connected ? "sFOX connected" : "sFOX not connected";
+        status.textContent = now.connected
+          ? "3 · Connected — trading follow-on"
+          : "1 · Not connected";
+        status.classList.toggle("wait", !now.connected);
       }
       if (hint) {
         hint.textContent = now.connected
-          ? "Saved on this device " + (now.hint ? "(" + now.hint + ")" : "") + ". Vault comes later. No live trades from this page."
-          : "Use this box — not the chat — for the sFOX API key. It stays on this device until a vault exists.";
+          ? "sFOX key saved on this device " + (now.hint ? "(" + now.hint + ")" : "") + ". Codex path is connect → trade via autotrades-engine. Trade is follow-on — this page does not place a trade today."
+          : "Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Trade comes after, on the existing autotrades-engine path. Hostinger DB export is not required.";
+      }
+      var steps = root.querySelector("[data-sfox-steps]");
+      if (steps) {
+        steps.setAttribute("data-state", now.connected ? "connected" : "open");
       }
       if (form) {
         form.hidden = now.connected;

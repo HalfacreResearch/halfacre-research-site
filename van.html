@@ -262,8 +262,43 @@
     .bot-card .owned { margin-bottom: 6px; }
     .bot-card b { display: block; font-size: 16px; margin-bottom: 4px; word-break: break-word; }
     .bot-card small { color: var(--muted); font-size: 12px; }
-    #btctreasury { scroll-margin-top: 12px; }
+    #codex, #btctreasury { scroll-margin-top: 12px; }
     .btct-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .codex-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+    }
+    .codex-steps li {
+      background: var(--dark);
+      border: 1px solid #333;
+      padding: 8px 8px 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .codex-steps li b {
+      display: block;
+      font-family: "Courier New", monospace;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+    .codex-free[data-connected="no"] .codex-steps li[data-step="1"],
+    .codex-free[data-connected="no"] .codex-steps li[data-step="2"] {
+      border-color: var(--warn);
+      color: #f3e2b0;
+    }
+    .codex-free[data-connected="yes"] .codex-steps li[data-step="3"] {
+      border-color: var(--neon);
+      color: var(--white);
+    }
+    @media (max-width: 560px) {
+      .codex-steps { grid-template-columns: 1fr; }
+    }
     .powerups {
       background: #102010;
       border-left: 4px solid var(--neon);
@@ -390,7 +425,7 @@
     </div>
     <div class="gate" id="gate">
       <strong>NOT SHOW-VAN.</strong>
-      Live research modules that already exist: pay $4.99, download, and power up this avatar — unlocks persist on Van’s account. Grey research cards are Coming soon / Not ready (data or fulfillment missing), not teaser fluff. Only BTCTreasuryBot is live among the 18 assembled bots ($149). Theme packs $29.99. Nothing is gifted. No Stripe.
+      Free Codex module is on this page (autotrades-engine SoT: connect → trade). sFOX connect is the Codex unlock. Hostinger DB export is not a blocker. Live research: pay $4.99, download, power up. Only BTCTreasuryBot is the live $149 assembled bot. Grey cards are Coming soon / Not ready. Nothing is gifted. No Stripe.
     </div>
     <h1>Charlie Van Halfacre</h1>
     <div class="contact">
@@ -400,12 +435,17 @@
   </header>
 
   <main class="chat-shell">
-    <section class="codex-free" id="btctreasury" data-sfox>
-      <span class="pill">LIVE · $149</span>
-      <span class="pill wait" data-sfox-status>sFOX not connected</span>
-      <h2>BTCTreasuryBot</h2>
-      <p>Formerly Codex. This is the working assembled-bot UI — BTC treasury / bigger-gains crypto. Connect sFOX here so autotrades can follow later. This page will not place a trade today. A research unlock is the full Bitcoin/macro stack this bot considers — not candles-only.</p>
-      <p data-sfox-hint>Use this box — not the chat — for the sFOX API key. It stays on this device until a vault exists.</p>
+    <section class="codex-free" id="codex" data-sfox>
+      <span class="pill">FREE · CODEX</span>
+      <span class="pill wait" data-sfox-status>1 · Not connected</span>
+      <h2>Codex</h2>
+      <p>Founder Codex module — the working autotrades surface. Product SoT is the existing <b>autotrades-engine</b> (old Codex on the autotrades page): connect sFOX, then trade. This is not a new engine and does not wait on a Hostinger DB export. sFOX connect is the unlock. This page does not place a trade today.</p>
+      <ol class="codex-steps" data-sfox-steps>
+        <li data-step="1"><b>1 · NOT CONNECTED</b> No sFOX key on this device yet.</li>
+        <li data-step="2"><b>2 · CONNECT sFOX</b> Paste the API key in the box. That is the Codex unlock.</li>
+        <li data-step="3"><b>3 · CONNECTED</b> Trading is follow-on on autotrades-engine. Not firing from this page today.</li>
+      </ol>
+      <p data-sfox-hint>Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Trade comes after, on the existing autotrades-engine path. Hostinger DB export is not required.</p>
       <form class="sfox" data-sfox-form autocomplete="off">
         <label for="sfox-key">sFOX API KEY (this device only)</label>
         <input id="sfox-key" data-sfox-key type="password" name="sfox-local-only" autocomplete="off" spellcheck="false" placeholder="Paste here, never in chat">
@@ -413,8 +453,8 @@
         <button class="go" type="submit">Connect sFOX</button>
       </form>
       <button class="ghost" type="button" data-sfox-disconnect hidden>Disconnect sFOX</button>
-      <div class="btct-actions">
-        <a class="go" id="btct-pay" href="pay.html?id=btc-treasury-bot&amp;sku=btc-treasury-bot&amp;product=BTCTreasuryBot&amp;amount=149">Pay $149 with PayPal</a>
+      <div class="btct-actions" id="btctreasury">
+        <a class="go" id="btct-pay" href="pay.html?id=btc-treasury-bot&amp;sku=btc-treasury-bot&amp;product=BTCTreasuryBot&amp;amount=149">BTCTreasuryBot · Pay $149</a>
       </div>
     </section>
 
@@ -427,7 +467,7 @@
 
     <section class="inventory" id="bot-vision">
       <h2 id="bot-title">ASSEMBLED BOTS · $149</h2>
-      <p>Matthew’s batch 1 — exact names. Only BTCTreasuryBot is live (working autotrades / sFOX UI). The other 17 are Coming soon until built and are not clickable. More bot names are still coming; nothing extra was invented.</p>
+      <p>Matthew’s batch 1 — exact names. Free Codex (autotrades-engine) is the working connect → trade UI above. Only BTCTreasuryBot is the live $149 assembled bot on that same path. The other 17 are Coming soon until built. More bot names are still coming; nothing extra was invented.</p>
       <div class="bot-grid" id="bot-grid"></div>
     </section>
 
@@ -465,7 +505,7 @@
   </main>
 
   <footer>
-    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. Unlocks persist on Van’s account (charlie-van-halfacre) and load into Grok before chat. sFOX keys stay in this browser (pending vault). Only BTCTreasuryBot is live among the 18 bots. Live research: pay / download / power up. Square (Block) is next. No Stripe. Not investment advice.</p>
+    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. Free Codex is the autotrades-engine surface (connect → trade). sFOX keys stay in this browser. Unlocks persist on Van’s account and load into Grok before chat. Only BTCTreasuryBot is the live $149 assembled bot. Live research: pay / download / power up. Hostinger DB export is not a blocker. No Stripe. Not investment advice.</p>
     <p>
       <a href="pay.html">Universal pay page</a>
       ·
@@ -492,7 +532,7 @@
       var memory = grok.createMemory();
       var history = [];
 
-      window.VanSfox.bind(document.getElementById("btctreasury"));
+      window.VanSfox.bind(document.getElementById("codex"));
 
       function setMode(payLive) {
         var coach = "Grok";
@@ -587,7 +627,7 @@
         var paidNote = document.getElementById("just-paid");
         var owned = window.VanOwned;
         var live = (window.HalfacrePay.liveProducts || []).filter(function (item) {
-          return item.kind !== "bot" && item.department !== "bots";
+          return item.kind !== "bot" && item.kind !== "codex" && !item.free && item.department !== "bots";
         });
         box.replaceChildren();
         title.textContent = "LIVE · " + live.length + " READY · PAY / DOWNLOAD / POWER UP";

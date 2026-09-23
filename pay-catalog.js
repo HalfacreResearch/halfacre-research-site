@@ -129,7 +129,7 @@
         : "",
       ui_href: trim(row.ui_href) || (row.fulfillment && row.fulfillment.ui_href) || "",
       van_unlocked: false,
-      free: false
+      free: Boolean(row.free) || asNumber(price) === 0
     };
   }
 
@@ -185,7 +185,7 @@
 
   function resolve(partial) {
     var id = trim(partial && (partial.id || partial.sku));
-    if (id && /^(codex|codex-buy|codex-sell)$/i.test(id)) {
+    if (id && /^(codex-buy|codex-sell)$/i.test(id)) {
       id = "btc-treasury-bot";
       if (partial) {
         partial = {
@@ -205,6 +205,9 @@
     }
     if (!amount) {
       amount = known ? String(known.price_usd) : String(RESEARCH_USD);
+    }
+    if (known && known.free) {
+      amount = "0";
     }
     var forbidden = isForbiddenAmount(amount);
     var live = known ? known.live : false;
@@ -230,7 +233,7 @@
       status: (known && known.status) || "",
       live: live,
       van_unlocked: false,
-      free: false,
+      free: Boolean(known && known.free),
       split: false,
       forbidden: forbidden,
       known: Boolean(known)

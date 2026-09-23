@@ -227,6 +227,16 @@
         actions.replaceChildren();
         var sku = line.sku || line.id;
         var label = money(line);
+        if (line.free) {
+          var freeGo = document.createElement("a");
+          freeGo.className = "go";
+          freeGo.href = (line.ui_href && line.ui_href.charAt(0) === "#")
+            ? "van.html" + line.ui_href
+            : "van.html#codex";
+          freeGo.textContent = "Codex is free — open the working UI";
+          actions.appendChild(freeGo);
+          return;
+        }
         if (line.split) {
           var split = document.createElement("a");
           split.className = "go";
@@ -351,9 +361,11 @@
             : (line.avatar_upgrade_label || "—");
           document.getElementById("f-desc").textContent = line.forbidden
             ? "Blocked. $99 is not a Van price. Do not reuse historical Macro/ETF pack NCP links."
-            : (!line.live && line.known
+            : (line.free
+              ? "Free Codex — open the autotrades-engine UI on van.html#codex. sFOX connect is the unlock. No PayPal."
+              : (!line.live && line.known
               ? "Coming soon / Not ready — data or fulfillment is not built yet."
-              : (line.description || "—"));
+              : (line.description || "—")));
           document.getElementById("f-price").textContent = line.forbidden
             ? "Blocked pack price"
             : (!line.live && line.known ? "Not for sale yet" : money(line));
@@ -364,12 +376,12 @@
 
         live.forEach(function (item) {
           var a = document.createElement("a");
-          a.href = pay.buildUrl(item);
+          a.href = item.free ? "van.html#codex" : pay.buildUrl(item);
           a.innerHTML = "<b></b><small></small>";
           a.querySelector("b").textContent = item.product + " · " + item.id;
           a.querySelector("small").textContent =
-            money(item) + " · " +
-            (owned.owns(item.id) ? "unlocked" : "locked · live") + " · " +
+            (item.free ? "FREE · Codex working UI" : money(item) + " · " +
+            (owned.owns(item.id) ? "unlocked" : "locked · live")) + " · " +
             item.description;
           known.appendChild(a);
         });

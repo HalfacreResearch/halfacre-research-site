@@ -36,9 +36,11 @@
       "",
       "Live research modules that already exist are clickable: pay $4.99 (or $29.99 for a theme pack), download the series, and power up this avatar. Grey cards are Coming soon / Not ready — data or fulfillment is not built yet, not teaser fluff.",
       "",
-      "Matthew’s first assembled-bot list is on this page — 18 exact names. Only BTCTreasuryBot is live. That used to be called Codex. It opens the working autotrades / sFOX UI and is $149 when PayPal is minted. The other 17 bots are Coming soon until built. More bot names are still coming; I will not invent extras.",
+      "Free Codex is on this page. Its product SoT is the existing autotrades-engine (old Codex) — connect sFOX, then trade. That is not a new engine. Hostinger DB export is not required. sFOX connect is the Codex unlock. Trade is follow-on; this page does not place a trade today.",
       "",
-      "sFOX keys go in the BTCTreasuryBot box above, never here. After sFOX is linked, autotrades can follow later — not today.",
+      "Matthew’s first assembled-bot list is on this page — 18 exact names. Only BTCTreasuryBot is the live $149 assembled bot; it uses that same Codex / autotrades path. The other 17 bots are Coming soon until built. More bot names are still coming; I will not invent extras.",
+      "",
+      "sFOX keys go in the Codex box above, never here.",
       "",
       "What do you want to work on first?"
     ].join("\n");
@@ -48,7 +50,7 @@
     { label: "Connect sFOX", send: "How do I connect sFOX?" },
     { label: "What can I buy?", send: "Which research modules can I pay for, download, and power up right now?" },
     { label: "Grow net worth", send: "Help me grow my net worth. What should you know about my situation?" },
-    { label: "BTCTreasuryBot", send: "Walk me through BTCTreasuryBot and the sFOX connect box." }
+    { label: "Codex + sFOX", send: "Walk me through the free Codex module and the sFOX connect → trade path." }
   ];
 
   function looksLikePastedSecret(text) {
@@ -110,7 +112,7 @@
     return [
       "I’m Grok on this page. The live xAI path is waiting on Hostinger: set XAI_API_KEY or van-grok.secret.php for van-grok.php.",
       "",
-      "I still won’t take keys in chat. Use the sFOX box on BTCTreasuryBot. Live research modules are $4.99 to pay / download / power up. Grey cards are Coming soon / Not ready. Only BTCTreasuryBot is live among the 18 assembled bots ($149).",
+      "I still won’t take keys in chat. Use the sFOX box on the free Codex module. Codex SoT is autotrades-engine (connect → trade). Hostinger DB export is not a blocker. Live research is $4.99. Only BTCTreasuryBot is the live $149 assembled bot.",
       "",
       "Tell me a goal or pick a module and I’ll keep going."
     ].join("\n");

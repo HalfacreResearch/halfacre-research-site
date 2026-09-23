@@ -64,7 +64,7 @@
 
   function findRow(id) {
     var want = trim(id).toLowerCase();
-    if (want === "codex" || want === "codex-buy" || want === "codex-sell") {
+    if (want === "codex-buy" || want === "codex-sell") {
       want = "btc-treasury-bot";
     }
     var rows = catalogRows();
