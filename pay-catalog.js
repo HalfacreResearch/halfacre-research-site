@@ -4,29 +4,35 @@
  * TWO LAYERS: full intentions (everything we intend to sell) + live
  * (already selling). Only live SKUs are clickable to PayPal.
  *
- * TWO TIERS: BASIC research/data @ $1.99. ADVANCED assembled systems
- * @ $49.99. Codex Buy and Codex Sell are separate $49.99 products.
- * Never merge Buy+Sell. Do not shrink the visible catalog to seven SKUs.
+ * PRICE LOCK: research/data $4.99; theme packs $29.99; assembled
+ * trading systems $149; tax immediate-outcome upgrades $199.
+ * Codex Buy and Codex Sell are separate $149 systems. Never merge.
+ * Research unlock = full Bitcoin/macro stack Codex considers.
+ * Do not shrink the visible catalog to seven SKUs.
  *
  * Do not pre-unlock or gift modules. Matthew reimburses Van off-app.
- * Macro $99 / ETF $149 pack prices are forbidden on this pay path.
+ * Historical Macro $99 / ETF pack NCP links are forbidden. $149 is a
+ * valid assembled-system price — never charge it with the old ETF NCP.
  *
  * PayPal is Day-1. Card/guest is native PayPal Checkout.
  * Square (Block) is an approved second rail — config stub only until SDK.
- * SoT pack NCP pattern: https://www.paypal.com/ncp/payment/PLB-…
- * Those pack links are $99/$149 — never used as Van checkout.
- * Live path: new $1.99 or $49.99 NCP + matching paypal_confirms_usd,
- * or dynamic _xclick when paypal_business is set. No Stripe.
+ * Live path: NCP at the listed $4.99 / $29.99 / $149 / $199 + matching
+ * paypal_confirms_usd, or dynamic _xclick when paypal_business is set.
+ * No Stripe.
  */
 (function (global) {
   "use strict";
 
   var PAGE = "pay.html";
   var SRC = "van-products.json";
-  var BASIC_USD = 1.99;
-  var ADVANCED_USD = 49.99;
-  var ALLOWED = [BASIC_USD, ADVANCED_USD];
-  var FORBIDDEN = [99, 149];
+  var RESEARCH_USD = 4.99;
+  var PACK_USD = 29.99;
+  var SYSTEM_USD = 149;
+  var TAX_USD = 199;
+  var BASIC_USD = RESEARCH_USD;
+  var ADVANCED_USD = SYSTEM_USD;
+  var ALLOWED = [RESEARCH_USD, PACK_USD, SYSTEM_USD, TAX_USD];
+  var FORBIDDEN = [99];
   var cache = null;
 
   function trim(value) {
@@ -68,10 +74,18 @@
   }
 
   function defaultPrice(row) {
-    if (trim(row.tier) === "advanced" || trim(row.kind) === "protocol" || trim(row.kind) === "system") {
-      return ADVANCED_USD;
+    var kind = trim(row.kind);
+    var tier = trim(row.tier);
+    if (kind === "tax" || tier === "tax") {
+      return TAX_USD;
     }
-    return BASIC_USD;
+    if (kind === "pack" || tier === "pack") {
+      return PACK_USD;
+    }
+    if (tier === "advanced" || kind === "protocol" || kind === "system") {
+      return SYSTEM_USD;
+    }
+    return RESEARCH_USD;
   }
 
   function normalizePaid(row) {
@@ -94,7 +108,7 @@
       amount: String(price),
       price_usd: price,
       currency: "USD",
-      tier: trim(row.tier) || (asNumber(price) === ADVANCED_USD ? "advanced" : "basic"),
+      tier: trim(row.tier) || (asNumber(price) === SYSTEM_USD ? "advanced" : (asNumber(price) === TAX_USD ? "tax" : (asNumber(price) === PACK_USD ? "pack" : "basic"))),
       kind: trim(row.kind) || "research",
       pair: trim(row.pair),
       department: department,
@@ -169,7 +183,7 @@
         product: "Codex is two products",
         amount: String(ADVANCED_USD),
         currency: "USD",
-        description: "Do not merge. Buy Codex Buy and Codex Sell as separate $49.99 products. The founder Codex module on van.html is free and is not this checkout.",
+        description: "Do not merge. Buy Codex Buy and Codex Sell as separate $149 assembled trading systems. The founder Codex explainer on van.html is free and is not this checkout.",
         tier: "advanced",
         kind: "protocol",
         pair: "",
@@ -192,7 +206,7 @@
       amount = known.amount;
     }
     if (!amount) {
-      amount = known && known.tier === "advanced" ? String(ADVANCED_USD) : String(BASIC_USD);
+      amount = known ? String(known.price_usd) : String(RESEARCH_USD);
     }
     var forbidden = isForbiddenAmount(amount);
     var live = known ? known.live : false;
@@ -271,16 +285,16 @@
       return { ok: false, reason: "No PayPal on a free line." };
     }
     if (line.split) {
-      return { ok: false, reason: "Codex is two products. Charge Codex Buy and Codex Sell separately at $49.99 each." };
+      return { ok: false, reason: "Codex is two products. Charge Codex Buy and Codex Sell separately at $149 each." };
     }
     if (!line.live) {
       return { ok: false, reason: "Coming soon — not yet selling. This SKU is on the intentions list only." };
     }
     if (line.forbidden || isForbiddenAmount(line.amount)) {
-      return { ok: false, reason: "Blocked: Macro $99 / ETF $149 pack prices are not allowed on Van’s pay page." };
+      return { ok: false, reason: "Blocked: $99 is the historical Macro pack amount and is not a Van price. Allowed: $4.99 / $29.99 / $149 / $199." };
     }
     if (!isPaidAmount(line.amount)) {
-      return { ok: false, reason: "Van paid modules are $1.99 (research) or $49.99 (assembled systems). This amount cannot be charged here." };
+      return { ok: false, reason: "Van paid amounts are $4.99 (research), $29.99 (theme packs), $149 (assembled systems), or $199 (tax upgrades). This amount cannot be charged here." };
     }
     if (business) {
       return {
@@ -297,7 +311,7 @@
     if (kind.kind === "pack-ncp") {
       return {
         ok: false,
-        reason: "Blocked: that PayPal NCP link is a Macro $99 or ETF $149 pack. Mint a new $1.99 or $49.99 NCP link. Do not reuse pack SoT."
+        reason: "Blocked: that PayPal NCP link is the historical Macro $99 or ETF pack SoT. Mint a new NCP at $4.99, $29.99, $149, or $199. Do not reuse those pack IDs."
       };
     }
     if (kind.kind !== "empty" && line.paypal_confirms_usd === price) {
@@ -306,12 +320,12 @@
     if (kind.kind !== "empty") {
       return {
         ok: false,
-        reason: "A PayPal link is set, but paypal_confirms_usd does not match the listed $1.99 or $49.99 price. Mint a matching NCP link (same paypal.com/ncp/payment/PLB- pattern as the packs). Do not reuse the $99/$149 pack links."
+        reason: "A PayPal link is set, but paypal_confirms_usd does not match the listed $4.99 / $29.99 / $149 / $199 price. Mint a matching NCP link. Do not reuse the historical Macro/ETF pack NCP IDs."
       };
     }
     return {
       ok: false,
-      reason: "PayPal not live yet. Mint a $1.99 or $49.99 PayPal NCP link per live SKU, set paypal_confirms_usd to that price, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic _xclick at the listed price."
+      reason: "PayPal not live yet. Mint a PayPal NCP link per live SKU at $4.99, $29.99, $149, or $199, set paypal_confirms_usd to that price, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic _xclick at the listed price."
     };
   }
 
@@ -334,7 +348,7 @@
       free: false,
       live: true,
       forbidden: false,
-      amount: "1.99",
+      amount: "4.99",
       product: "draft",
       sku: "draft",
       paypal_link_or_button_id: "",
@@ -398,9 +412,13 @@
     page: PAGE,
     src: SRC,
     rail: "paypal-day1",
-    paidUsd: BASIC_USD,
-    basicUsd: BASIC_USD,
-    advancedUsd: ADVANCED_USD,
+    paidUsd: RESEARCH_USD,
+    researchUsd: RESEARCH_USD,
+    packUsd: PACK_USD,
+    systemUsd: SYSTEM_USD,
+    taxUsd: TAX_USD,
+    basicUsd: RESEARCH_USD,
+    advancedUsd: SYSTEM_USD,
     stripe: false,
     square: { enabled: false, live: false, status: "coming_next" },
     products: [],

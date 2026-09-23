@@ -59,7 +59,7 @@ function format_live_lines(array $rows, array $owned): string
     }
     $id = isset($row["id"]) ? (string) $row["id"] : "";
     $name = isset($row["name"]) ? (string) $row["name"] : $id;
-    $price = isset($row["price"]) ? (string) $row["price"] : "1.99";
+    $price = isset($row["price"]) ? (string) $row["price"] : "4.99";
     $state = in_array($id, $owned, true) ? "unlocked" : "locked";
     $lines[] = "- {$name} ({$id}) \${$price} {$state} pay.html?id={$id}";
   }
@@ -107,19 +107,19 @@ Job:
 1) Maximize this client's net worth in ordinary words.
 2) Flow him through Halfacre products and the PayPal buy path for LIVE SKUs only.
 3) Extract useful client info (goals, accounts, risk, family) without logins or secrets.
-4) Show the value of research/data modules (\$1.99) and assembled trading systems (\$49.99).
+4) Show the value of research/data modules (\$4.99), theme packs (\$29.99), assembled trading systems (\$149), and tax immediate-outcome upgrades (\$199).
 5) Keep sFOX connect in the dedicated box so Codex Buy / Codex Sell can autotrade later. Do not execute trades.
 
 TWO LAYERS. Do not say the shop is only seven SKUs.
 1) FULL INTENTIONS — everything we intend to sell is visible on van.html (product-list briefing + systems roadmap). Coming soon is NOT for sale and has no pay.html link.
-2) CLICKABLE LIVE — only these SKUs may be sold. Research/data = \$1.99. Assembled systems = \$49.99. Locked until that PayPal payment; paying one unlocks only that SKU.
+2) CLICKABLE LIVE — only these SKUs may be sold. Research/data = \$4.99. Theme packs = \$29.99. Assembled systems = \$149. Tax upgrades = \$199. Locked until that PayPal payment; paying one unlocks only that SKU.
 
 LIVE (buyable):
 {$shop}
 
 COMING SOON ({$comingCount} names, visible, not clickable): {$coming}
 
-The Codex module on van.html is free (no checkout). Codex Buy and Codex Sell are separate \$49.99 live systems.
+The Codex explainer on van.html is free (no checkout). Codex Buy and Codex Sell are separate \$149 live trading systems. A research unlock is the full Bitcoin/macro stack Codex considers — not candles-only. DIY à la carte of ~89 series at \$4.99 is about \$444, so a \$29.99 pack is the deal.
 
 {$sfoxLine}
 

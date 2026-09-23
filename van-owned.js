@@ -2,7 +2,7 @@
  * Per-SKU unlock for live Van modules.
  *
  * Starting state: none owned. Never gift or pre-unlock.
- * Unlock only after a $1.99 or $49.99 PayPal return for that live SKU.
+ * Unlock only after a $4.99 / $29.99 / $149 / $199 PayPal return for that live SKU.
  * Coming-soon intentions cannot unlock. Matthew cashes Van back privately.
  */
 (function (global) {
@@ -11,7 +11,7 @@
   var OWNED_KEY = "halfacre.van.owned.v1";
   var PENDING_KEY = "halfacre.van.pending.v1";
   var PENDING_MS = 6 * 60 * 60 * 1000;
-  var ALLOWED = [1.99, 49.99];
+  var ALLOWED = [4.99, 29.99, 149, 199];
 
   function trim(value) {
     return String(value == null ? "" : value).trim();
@@ -134,7 +134,7 @@
       ok: (txOk || stOk) && amountOk(amt, sku),
       tx: tx,
       amount: amountOk(amt, sku)
-        ? String(Number.isFinite(listed) ? listed : 1.99)
+        ? String(Number.isFinite(listed) ? listed : 4.99)
         : ""
     };
   }
@@ -150,7 +150,7 @@
     var listed = expectedAmount(sku);
     var store = readOwned();
     store.skus[sku] = {
-      amount: (meta && meta.amount) || String(Number.isFinite(listed) ? listed : 1.99),
+      amount: (meta && meta.amount) || String(Number.isFinite(listed) ? listed : 4.99),
       tx: (meta && meta.tx) || "",
       paidAt: Date.now()
     };
@@ -173,7 +173,7 @@
       return { ok: false, error: "That return is not a live paid module." };
     }
     if (!amountOk(query.get("amt") || query.get("mc_gross") || query.get("amount"), sku)) {
-      return { ok: false, error: "Return amount did not match that module’s $1.99 or $49.99 price." };
+      return { ok: false, error: "Return amount did not match that module’s $4.99 / $29.99 / $149 / $199 price." };
     }
     var evidence = paypalEvidence(query, sku);
     var pending = takePending(sku);

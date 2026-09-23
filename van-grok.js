@@ -22,7 +22,7 @@
     "",
     "I’m here the whole sitting. My job is to grow your net worth in plain English, learn what accounts and goals matter, and walk you through Halfacre’s research and Codex products when they help.",
     "",
-    "The shop has two layers. The full intentions list shows everything we intend to sell — the product-list briefing (~157 $1.99 research modules) plus assembled systems. Only live SKUs are clickable to PayPal. Live research/data is $1.99. Live assembled systems are $49.99. Codex Buy and Codex Sell are separate $49.99 products. The Codex module on this page is free. Paying one live SKU unlocks only that one. Matthew cashes you back off this page.",
+    "The shop has two layers. The full intentions list shows everything we intend to sell. Only live SKUs are clickable to PayPal. Research/data is $4.99 — a research unlock is the full Bitcoin/macro stack Codex considers, not candles-only. Theme packs are $29.99 (DIY à la carte of ~89 series at $4.99 is about $444, so the pack is the deal). Assembled trading systems are $149. Tax immediate-outcome upgrades are $199. Codex Buy and Codex Sell are separate $149 systems. The Codex explainer on this page is free. Paying one live SKU unlocks only that one. Matthew cashes you back off this page.",
     "",
     "sFOX keys go in the box above, never here. After sFOX is linked, Codex Buy and Codex Sell can autotrade later — not today.",
     "",
@@ -95,7 +95,7 @@
     return [
       "I’m Grok on this page. The live xAI path is waiting on Hostinger: set XAI_API_KEY or van-grok.secret.php for van-grok.php.",
       "",
-      "I still won’t take keys in chat. Use the sFOX box. Live research is $1.99 and live assembled systems are $49.99 on pay.html — locked until that PayPal payment. Coming soon is visible and not for sale.",
+      "I still won’t take keys in chat. Use the sFOX box. Live prices on pay.html: $4.99 research, $29.99 packs, $149 systems, $199 tax — locked until that PayPal payment. Coming soon is visible and not for sale.",
       "",
       "Tell me a goal or pick a module and I’ll keep going."
     ].join("\n");

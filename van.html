@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Charlie Van Halfacre — Halfacre Research</title>
-  <meta name="description" content="Private page for Charlie Van Halfacre. On-page Grok (xAI), not a fleet bot. Full intentions catalog plus live PayPal buys ($1.99 research / $49.99 systems). sFOX stays local. No Stripe.">
+  <meta name="description" content="Private page for Charlie Van Halfacre. On-page Grok (xAI), not a fleet bot. Full intentions catalog plus live PayPal buys ($4.99 research / $29.99 packs / $149 systems / $199 tax). sFOX stays local. No Stripe.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -348,7 +348,7 @@
     </div>
     <div class="gate" id="gate">
       <strong>NOT SHOW-VAN.</strong>
-      Two layers: the full intentions list is visible; only live SKUs are clickable to PayPal. Research/data is $1.99. Assembled trading systems are $49.99. Nothing is gifted. Do not stamp “show Van” and do not instruct Hostinger to “show Dad” until a real $1.99 / $49.99 PayPal path can take money. Not Macro $99 / ETF $149.
+      Two layers: the full intentions list is visible; only live SKUs are clickable to PayPal. Research/data $4.99. Theme packs $29.99. Assembled trading systems $149. Tax immediate-outcome upgrades $199. Nothing is gifted. Do not stamp “show Van” until a real PayPal path at those amounts can take money. Do not reuse historical Macro $99 / ETF pack NCP links.
     </div>
     <h1>Charlie Van Halfacre</h1>
     <div class="contact">
@@ -361,7 +361,7 @@
     <section class="codex-free" id="founder-codex">
       <span class="pill">FREE MODULE</span>
       <h2>Codex</h2>
-      <p>BTC long / bigger-gains crypto, explained on this page. This founder module is free — no checkout. Codex Buy and Codex Sell are separate $49.99 assembled systems in the live shop. Live autotrade is a follow-on after sFOX is linked.</p>
+      <p>BTC long / bigger-gains crypto, explained on this page. This founder explainer is free — no checkout. Codex Buy and Codex Sell are separate $149 assembled trading systems. A research unlock is the full Bitcoin/macro stack Codex considers — not candles-only. Live autotrade is a follow-on after sFOX is linked.</p>
     </section>
 
     <section class="codex" id="codex" data-sfox>
@@ -381,14 +381,14 @@
 
     <section class="inventory" id="live-shop">
       <h2 id="inventory-title">LIVE · CLICKABLE</h2>
-      <p>Only modules we are already selling. Research/data is $1.99. Assembled trading systems are $49.99. Locked until that PayPal payment. Codex Buy and Codex Sell stay separate. Matthew cashes you back off this page.</p>
+      <p>Only modules we are already selling. Research/data $4.99. Theme packs $29.99. Assembled systems $149 (Codex is $149). Tax upgrades $199. Locked until that PayPal payment. Codex Buy and Codex Sell stay separate. Matthew cashes you back off this page.</p>
       <p id="just-paid" hidden></p>
       <div class="modules" id="modules"></div>
     </section>
 
     <section class="inventory intentions" id="intentions">
       <h2 id="intentions-title">FULL INTENTIONS</h2>
-      <p>Everything we intend to sell — the depth of the idea. Names from the Halfacre product-list briefing (~157 $1.99 research modules) plus the assembled-systems roadmap. Coming soon items are visible and not clickable to buy.</p>
+      <p>Everything we intend to sell — the depth of the idea. Research series at $4.99 (DIY à la carte of ~89 series ≈ $444, so a $29.99 theme pack is the deal). Assembled systems $149. Tax immediate-outcome upgrades $199. Coming soon items are visible and not clickable to buy.</p>
       <div id="intentions-list"></div>
     </section>
 
@@ -414,7 +414,7 @@
   </main>
 
   <footer>
-    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. sFOX keys stay in this browser (pending vault). They are not sent to Grok, analytics, or a live trade. Live research is $1.99; live assembled systems are $49.99. Coming soon is visible and not for sale. Square (Block) is next. No Stripe. Not investment advice.</p>
+    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. sFOX keys stay in this browser (pending vault). They are not sent to Grok, analytics, or a live trade. Live prices: $4.99 research, $29.99 packs, $149 systems, $199 tax. Coming soon is visible and not for sale. Square (Block) is next. No Stripe. Not investment advice.</p>
     <p>
       <a href="pay.html">Universal pay page</a>
       ·
@@ -447,7 +447,7 @@
         var coach = "Grok";
         if (payLive) {
           modeEl.textContent = "PAYPAL PRESENT · " + coach;
-          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $1.99 / $49.99 PayPal target is configured. Only live SKUs are clickable. They stay locked until each payment returns. The full intentions list stays visible. CoS confirms a real digital payment before any “show Van” stamp. Do not instruct Hostinger to “show Dad” until that confirm.";
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $4.99 / $29.99 / $149 / $199 PayPal target is configured. Only live SKUs are clickable. They stay locked until each payment returns. The full intentions list stays visible. CoS confirms a real digital payment before any “show Van” stamp. Do not instruct Hostinger to “show Dad” until that confirm.";
         } else {
           modeEl.textContent = "NOT SHOW-VAN · " + coach;
         }
@@ -493,7 +493,7 @@
       }
 
       function isAdvanced(item) {
-        return item.tier === "advanced" || item.kind === "protocol" || item.kind === "system";
+        return item.tier === "advanced" || item.tier === "tax" || item.kind === "protocol" || item.kind === "system" || item.kind === "tax";
       }
 
       function renderModules(justPaid) {
@@ -527,7 +527,9 @@
             : "LOCKED · PAY " + priceLabel(item);
           card.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
           card.querySelector("small").textContent =
-            (isAdvanced(item) ? "Assembled system · " : "Research/data · " + (item.pair || "") + " · ") +
+            (item.kind === "pack" ? "Theme pack · " :
+              item.kind === "tax" ? "Tax upgrade · " :
+              isAdvanced(item) ? "Assembled system · " : "Research/data · " + (item.pair || "") + " · ") +
             (unlocked ? "paid on PayPal · " : "PayPal checkout · ") + item.id;
           box.appendChild(card);
         });
@@ -541,16 +543,18 @@
         var all = window.HalfacrePay.products || [];
         var coming = all.filter(function (item) { return !item.live; }).length;
         var groups = [
-          { key: "crypto", label: "CRYPTO · $1.99 RESEARCH" },
-          { key: "tech", label: "TECH · $1.99 RESEARCH" },
-          { key: "dividend", label: "DIVIDEND · $1.99 RESEARCH" },
-          { key: "metals", label: "PRECIOUS METALS · $1.99 RESEARCH" },
-          { key: "commodities", label: "COMMODITIES · $1.99 RESEARCH" },
-          { key: "etf", label: "ETFS · $1.99 RESEARCH" },
-          { key: "mutual_fund", label: "MUTUAL FUNDS · $1.99 RESEARCH" },
-          { key: "research", label: "RESEARCH / MACRO / ON-CHAIN · $1.99" },
-          { key: "wrappers", label: "IRA WRAPPERS · $1.99" },
-          { key: "systems", label: "ASSEMBLED TRADING SYSTEMS · $49.99" }
+          { key: "crypto", label: "CRYPTO · $4.99 RESEARCH" },
+          { key: "tech", label: "TECH · $4.99 RESEARCH" },
+          { key: "dividend", label: "DIVIDEND · $4.99 RESEARCH" },
+          { key: "metals", label: "PRECIOUS METALS · $4.99 RESEARCH" },
+          { key: "commodities", label: "COMMODITIES · $4.99 RESEARCH" },
+          { key: "etf", label: "ETFS · $4.99 RESEARCH" },
+          { key: "mutual_fund", label: "MUTUAL FUNDS · $4.99 RESEARCH" },
+          { key: "research", label: "RESEARCH / MACRO / ON-CHAIN · $4.99" },
+          { key: "wrappers", label: "IRA WRAPPERS · $4.99" },
+          { key: "packs", label: "THEME PACKS · $29.99" },
+          { key: "systems", label: "ASSEMBLED TRADING SYSTEMS · $149" },
+          { key: "tax", label: "TAX IMMEDIATE-OUTCOME · $199" }
         ];
         host.replaceChildren();
         title.textContent = "FULL INTENTIONS · " + all.length + " NAMED · " + coming + " COMING SOON / NOT YET SELLING";
