@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Charlie Van Halfacre — Halfacre Research</title>
-  <meta name="description" content="Private page for Charlie Van Halfacre. On-page Grok (xAI), not a fleet bot. Full intentions catalog plus live PayPal buys ($4.99 research / $29.99 packs / $149 systems / $199 tax). sFOX stays local. No Stripe.">
+  <meta name="description" content="Private page for Charlie Van Halfacre. On-page Grok (xAI). 18 assembled bots; only BTCTreasuryBot is live. Research $4.99, packs $29.99, bots $149. sFOX stays local. No Stripe.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -239,6 +239,31 @@
       margin-top: 2px;
       font-family: "Courier New", monospace;
     }
+    .bot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 0 0 12px;
+    }
+    .bot-card {
+      display: block;
+      background: var(--card);
+      border-left: 4px solid #444;
+      padding: 12px 12px 14px;
+      color: #9a9a9a;
+      text-decoration: none;
+    }
+    .bot-card.soon { pointer-events: none; cursor: default; opacity: 0.72; }
+    .bot-card.live {
+      border-left-color: var(--neon);
+      color: var(--white);
+      outline: 1px solid #1a3a16;
+    }
+    .bot-card .owned { margin-bottom: 6px; }
+    .bot-card b { display: block; font-size: 16px; margin-bottom: 4px; word-break: break-word; }
+    .bot-card small { color: var(--muted); font-size: 12px; }
+    #btctreasury { scroll-margin-top: 12px; }
+    .btct-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .coach-bar {
       display: flex;
       align-items: center;
@@ -331,7 +356,7 @@
     footer a { color: var(--neon); text-decoration: none; }
     .hint { margin: 0 0 6px; }
     @media (max-width: 560px) {
-      .modules { grid-template-columns: 1fr; }
+      .modules, .bot-grid { grid-template-columns: 1fr; }
     }
     @media (min-width: 720px) {
       .top { padding: 20px 28px 16px; }
@@ -348,7 +373,7 @@
     </div>
     <div class="gate" id="gate">
       <strong>NOT SHOW-VAN.</strong>
-      Two layers: the full intentions list is visible; only live SKUs are clickable to PayPal. Research/data $4.99. Theme packs $29.99. Assembled trading systems $149. Tax immediate-outcome upgrades $199. Nothing is gifted. Do not stamp “show Van” until a real PayPal path at those amounts can take money. Do not reuse historical Macro $99 / ETF pack NCP links.
+      Two layers: the full bot vision is visible; only BTCTreasuryBot is clickable. Research/data $4.99. Theme packs $29.99. Assembled bots $149 (including TaxAttorneyBot). Nothing is gifted. BTCTreasuryBot opens the working autotrades / sFOX UI. PayPal $149 when minted. No Stripe.
     </div>
     <h1>Charlie Van Halfacre</h1>
     <div class="contact">
@@ -358,17 +383,11 @@
   </header>
 
   <main class="chat-shell">
-    <section class="codex-free" id="founder-codex">
-      <span class="pill">FREE MODULE</span>
-      <h2>Codex</h2>
-      <p>BTC long / bigger-gains crypto, explained on this page. This founder explainer is free — no checkout. Codex Buy and Codex Sell are separate $149 assembled trading systems. A research unlock is the full Bitcoin/macro stack Codex considers — not candles-only. Live autotrade is a follow-on after sFOX is linked.</p>
-    </section>
-
-    <section class="codex" id="codex" data-sfox>
-      <span class="pill">sFOX · AUTO TRADE LINK</span>
+    <section class="codex-free" id="btctreasury" data-sfox>
+      <span class="pill">LIVE · $149</span>
       <span class="pill wait" data-sfox-status>sFOX not connected</span>
-      <h2>Connect sFOX</h2>
-      <p>Not a product. This box links the exchange so Codex Buy and Codex Sell can autotrade later. Live autotrade is a follow-on — this page will not place a trade today.</p>
+      <h2>BTCTreasuryBot</h2>
+      <p>Formerly Codex. This is the working assembled-bot UI — BTC treasury / bigger-gains crypto. Connect sFOX here so autotrades can follow later. This page will not place a trade today. A research unlock is the full Bitcoin/macro stack this bot considers — not candles-only.</p>
       <p data-sfox-hint>Use this box — not the chat — for the sFOX API key. It stays on this device until a vault exists.</p>
       <form class="sfox" data-sfox-form autocomplete="off">
         <label for="sfox-key">sFOX API KEY (this device only)</label>
@@ -377,18 +396,27 @@
         <button class="go" type="submit">Connect sFOX</button>
       </form>
       <button class="ghost" type="button" data-sfox-disconnect hidden>Disconnect sFOX</button>
+      <div class="btct-actions">
+        <a class="go" id="btct-pay" href="pay.html?id=btc-treasury-bot&amp;sku=btc-treasury-bot&amp;product=BTCTreasuryBot&amp;amount=149">Pay $149 with PayPal</a>
+      </div>
     </section>
 
     <section class="inventory" id="live-shop">
       <h2 id="inventory-title">LIVE · CLICKABLE</h2>
-      <p>Only modules we are already selling. Research/data $4.99. Theme packs $29.99. Assembled systems $149 (Codex is $149). Tax upgrades $199. Locked until that PayPal payment. Codex Buy and Codex Sell stay separate. Matthew cashes you back off this page.</p>
+      <p>Only BTCTreasuryBot is live. The card opens the working autotrades / sFOX UI above. $149 on PayPal when that button is minted — the path is still clickable now. The other 17 assembled bots are vision-only below.</p>
       <p id="just-paid" hidden></p>
       <div class="modules" id="modules"></div>
     </section>
 
+    <section class="inventory" id="bot-vision">
+      <h2 id="bot-title">ASSEMBLED BOTS · $149</h2>
+      <p>Matthew’s batch 1 — exact names. Depth of the idea. Grey cards are coming soon and are not clickable. More bot names are still coming; nothing extra was invented.</p>
+      <div class="bot-grid" id="bot-grid"></div>
+    </section>
+
     <section class="inventory intentions" id="intentions">
-      <h2 id="intentions-title">FULL INTENTIONS</h2>
-      <p>Everything we intend to sell — the depth of the idea. Research series at $4.99 (DIY à la carte of ~89 series ≈ $444, so a $29.99 theme pack is the deal). Assembled systems $149. Tax immediate-outcome upgrades $199. Coming soon items are visible and not clickable to buy.</p>
+      <h2 id="intentions-title">RESEARCH + PACKS</h2>
+      <p>Research/data $4.99 (DIY à la carte of ~89 series ≈ $444). Theme packs $29.99 are the deal. Visible here; not clickable in this pass. Assembled bots are the $149 grid above.</p>
       <div id="intentions-list"></div>
     </section>
 
@@ -414,7 +442,7 @@
   </main>
 
   <footer>
-    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. sFOX keys stay in this browser (pending vault). They are not sent to Grok, analytics, or a live trade. Live prices: $4.99 research, $29.99 packs, $149 systems, $199 tax. Coming soon is visible and not for sale. Square (Block) is next. No Stripe. Not investment advice.</p>
+    <p class="hint">On-page chat is Grok (xAI), not a fleet bot. sFOX keys stay in this browser (pending vault). They are not sent to Grok, analytics, or a live trade. Only BTCTreasuryBot is live ($149). Research $4.99 and packs $29.99 stay visible, not clickable. Square (Block) is next. No Stripe. Not investment advice.</p>
     <p>
       <a href="pay.html">Universal pay page</a>
       ·
@@ -441,13 +469,13 @@
       var memory = grok.createMemory();
       var history = [{ role: "assistant", content: grok.greeting }];
 
-      window.VanSfox.bind(document.getElementById("codex"));
+      window.VanSfox.bind(document.getElementById("btctreasury"));
 
       function setMode(payLive) {
         var coach = "Grok";
         if (payLive) {
           modeEl.textContent = "PAYPAL PRESENT · " + coach;
-          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $4.99 / $29.99 / $149 / $199 PayPal target is configured. Only live SKUs are clickable. They stay locked until each payment returns. The full intentions list stays visible. CoS confirms a real digital payment before any “show Van” stamp. Do not instruct Hostinger to “show Dad” until that confirm.";
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $149 PayPal target is configured for BTCTreasuryBot. Only that bot is clickable. The other 17 assembled bots stay visible and not for sale. CoS confirms a real digital payment before any “show Van” stamp.";
         } else {
           modeEl.textContent = "NOT SHOW-VAN · " + coach;
         }
@@ -493,7 +521,13 @@
       }
 
       function isAdvanced(item) {
-        return item.tier === "advanced" || item.tier === "tax" || item.kind === "protocol" || item.kind === "system" || item.kind === "tax";
+        return item.tier === "advanced" || item.kind === "bot" || item.kind === "protocol" || item.kind === "system";
+      }
+
+      function bots() {
+        return (window.HalfacrePay.products || []).filter(function (item) {
+          return item.kind === "bot" || item.department === "bots";
+        });
       }
 
       function renderModules(justPaid) {
@@ -504,36 +538,56 @@
         var live = window.HalfacrePay.liveProducts || window.HalfacrePay.products.filter(function (item) {
           return item.live;
         });
-        var all = window.HalfacrePay.products;
         box.replaceChildren();
-        title.textContent = "LIVE · " + owned.ownedCount() + " UNLOCKED OF " + live.length + " SELLING · " + all.length + " ON THE INTENTIONS LIST";
+        title.textContent = "LIVE · BTCTREASURYBOT";
         if (justPaid && justPaid.ok && justPaid.sku) {
           paidNote.hidden = false;
           paidNote.textContent = (justPaid.already ? "Already unlocked: " : "Unlocked after PayPal: ") + justPaid.sku;
         }
         live.forEach(function (item) {
           var unlocked = owned.owns(item.id);
-          var card = document.createElement(unlocked ? "article" : "a");
-          card.className = "mod" +
-            (isAdvanced(item) ? " protocol advanced" : "") +
-            (unlocked ? " unlocked" : " locked");
+          var card = document.createElement("a");
+          card.className = "mod protocol advanced" + (unlocked ? " unlocked" : " locked");
           card.setAttribute("data-sku", item.id);
-          if (!unlocked) {
-            card.href = window.HalfacrePay.buildUrl(item);
-          }
+          card.href = "#btctreasury";
           card.innerHTML = "<div class=\"owned\"></div><b></b><small></small>";
           card.querySelector(".owned").textContent = unlocked
-            ? "UNLOCKED · PAID " + priceLabel(item)
-            : "LOCKED · PAY " + priceLabel(item);
-          card.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
-          card.querySelector("small").textContent =
-            (item.kind === "pack" ? "Theme pack · " :
-              item.kind === "tax" ? "Tax upgrade · " :
-              isAdvanced(item) ? "Assembled system · " : "Research/data · " + (item.pair || "") + " · ") +
-            (unlocked ? "paid on PayPal · " : "PayPal checkout · ") + item.id;
+            ? "UNLOCKED · WORKING UI"
+            : "CLICKABLE · WORKING UI · $149";
+          card.querySelector("b").textContent = item.avatar_upgrade_label || item.product || "BTCTreasuryBot";
+          card.querySelector("small").textContent = "Opens the BTCTreasuryBot autotrades / sFOX path on this page. PayPal $149 when minted.";
           box.appendChild(card);
         });
+        renderBots();
         renderIntentions();
+      }
+
+      function renderBots() {
+        var grid = document.getElementById("bot-grid");
+        var title = document.getElementById("bot-title");
+        var owned = window.VanOwned;
+        var rows = bots();
+        grid.replaceChildren();
+        title.textContent = "ASSEMBLED BOTS · " + rows.length + " NAMED · $149 · ONLY BTCTREASURYBOT LIVE";
+        rows.forEach(function (item) {
+          var live = Boolean(item.live);
+          var unlocked = owned.owns(item.id);
+          var el = document.createElement(live ? "a" : "article");
+          el.className = "bot-card " + (live ? "live" : "soon");
+          el.setAttribute("data-sku", item.id);
+          if (live) {
+            el.href = "#btctreasury";
+          }
+          el.innerHTML = "<div class=\"owned\"></div><b></b><small></small>";
+          el.querySelector(".owned").textContent = live
+            ? (unlocked ? "LIVE · UNLOCKED" : "LIVE · CLICKABLE")
+            : "COMING SOON · NOT YET SELLING";
+          el.querySelector("b").textContent = item.avatar_upgrade_label || item.product;
+          el.querySelector("small").textContent = live
+            ? "Working autotrades / sFOX UI · $149"
+            : "$149 · vision only";
+          grid.appendChild(el);
+        });
       }
 
       function renderIntentions() {
@@ -552,12 +606,10 @@
           { key: "mutual_fund", label: "MUTUAL FUNDS · $4.99 RESEARCH" },
           { key: "research", label: "RESEARCH / MACRO / ON-CHAIN · $4.99" },
           { key: "wrappers", label: "IRA WRAPPERS · $4.99" },
-          { key: "packs", label: "THEME PACKS · $29.99" },
-          { key: "systems", label: "ASSEMBLED TRADING SYSTEMS · $149" },
-          { key: "tax", label: "TAX IMMEDIATE-OUTCOME · $199" }
+          { key: "packs", label: "THEME PACKS · $29.99" }
         ];
         host.replaceChildren();
-        title.textContent = "FULL INTENTIONS · " + all.length + " NAMED · " + coming + " COMING SOON / NOT YET SELLING";
+        title.textContent = "RESEARCH + PACKS · VISIBLE · NOT CLICKABLE";
         groups.forEach(function (dept) {
           var rows = all.filter(function (item) {
             return (item.departments || [item.department]).indexOf(dept.key) !== -1;

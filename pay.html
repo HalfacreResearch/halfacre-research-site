@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Pay — Halfacre Research</title>
-  <meta name="description" content="Universal pay page for Van’s live modules. Research $4.99. Packs $29.99. Systems $149. Tax $199. PayPal is Day-1. Square coming next. No Stripe. Coming soon is not for sale.">
+  <meta name="description" content="Universal pay page. BTCTreasuryBot is the live $149 assembled bot. Research $4.99. Packs $29.99. PayPal is Day-1. No Stripe.">
   <style>
     :root {
       --dark: #0A0A0A;
@@ -130,11 +130,11 @@
     <div class="brand">HALFACRE RESEARCH · PAY</div>
     <div class="gate" id="gate">
       <strong>PAYPAL GATE.</strong>
-      Do not stamp “show Van” until a $4.99 / $29.99 / $149 / $199 PayPal NCP can take money for a live locked module.
-      Only live SKUs are clickable. Research/data $4.99. Theme packs $29.99. Assembled trading systems $149. Tax immediate-outcome upgrades $199. PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe. Never bundle Codex Buy + Codex Sell.
+      Do not stamp “show Van” until a $149 PayPal NCP can take money for BTCTreasuryBot, or the working UI on van.html is used.
+      Only BTCTreasuryBot is live/clickable. Research/data $4.99. Theme packs $29.99. Assembled bots $149 (including TaxAttorneyBot). PayPal is Day-1. Square (Block) is the approved second rail — coming next. Card/guest is native PayPal Checkout. No Stripe.
     </div>
     <h1>Pay for one live upgrade.</h1>
-    <p class="sub">Live research/data is $4.99. Theme packs $29.99. Assembled systems $149. Tax upgrades $199. Unlock only after that PayPal payment. Coming soon stays on van.html and is not for sale here. Link params: product, sku, name, amount, description. Codex Buy and Codex Sell are separate $149 systems. PayPal first. Square stub below. Do not reuse historical Macro $99 / ETF pack NCP links.</p>
+    <p class="sub">Only BTCTreasuryBot is live ($149). Unlock only after that PayPal payment. Coming-soon bots stay on van.html and are not for sale here. Link params: product, sku, name, amount, description. PayPal first. Square stub below. Do not reuse historical Macro/ETF pack NCP links.</p>
 
     <section class="card" id="line">
       <h2>LINE ITEM</h2>
@@ -169,7 +169,7 @@
     </section>
 
     <footer>
-      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Historical pack NCP IDs stay unused. Mint an NCP per live SKU at $4.99, $29.99, $149, or $199 and set its success URL to <code>van.html?paid={SKU}</code>. Card/guest is whatever PayPal Checkout shows. No Stripe. Van starts with none owned.</p>
+      <p>PayPal is Day-1. Square (Block) is approved next — stub only, no SDK in this PR. Historical pack NCP IDs stay unused. Mint a $149 NCP for BTCTreasuryBot and set its success URL to <code>van.html?paid=btc-treasury-bot</code>. Card/guest is whatever PayPal Checkout shows. No Stripe. Van starts with none owned.</p>
       <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
     </footer>
   </div>
@@ -228,14 +228,11 @@
         var sku = line.sku || line.id;
         var label = money(line);
         if (line.split) {
-          addDisabled("Not sold as one Codex");
-          ["codex-buy", "codex-sell"].forEach(function (id) {
-            var a = document.createElement("a");
-            a.className = "go";
-            a.href = pay.buildUrl({ id: id, sku: id });
-            a.textContent = id === "codex-buy" ? "Pay Codex Buy $149" : "Pay Codex Sell $149";
-            actions.appendChild(a);
-          });
+          var split = document.createElement("a");
+          split.className = "go";
+          split.href = pay.buildUrl({ id: "btc-treasury-bot", sku: "btc-treasury-bot" });
+          split.textContent = "Open BTCTreasuryBot $149";
+          actions.appendChild(split);
           return;
         }
         if (line.forbidden) {
@@ -328,9 +325,9 @@
           " names are on the intentions list (product-list briefing + systems roadmap). They are visible on van.html and not clickable to buy. Do not shrink that list to seven SKUs.";
 
         if (!pay.anyPaypalLive()) {
-          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No payable $4.99 / $29.99 / $149 / $199 catalog yet. Mint a PayPal NCP link at the listed price and set <code>paypal_confirms_usd</code> to that amount. Do not reuse historical Macro $99 / ETF pack NCP links. $149 is a valid Codex/system price on a new NCP. Coming soon is not for sale. Square is coming next — do not wait on it. Do not instruct Hostinger to “show Dad.”";
+          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No minted $149 PayPal NCP for BTCTreasuryBot yet. The working UI is on van.html#btctreasury (sFOX / autotrades). Do not reuse historical Macro/ETF pack NCP links. Coming soon bots are not for sale. Square is coming next.";
         } else {
-          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $4.99 / $29.99 / $149 / $199 PayPal path is configured. Only live SKUs stay clickable. Each stays locked until that payment returns. Square (Block) stays a stub until application_id is set. CoS still confirms a real digital payment before any “show Van” stamp.";
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A $149 PayPal path is configured for BTCTreasuryBot. Only that live SKU stays clickable. Square (Block) stays a stub. CoS still confirms a real digital payment before any “show Van” stamp.";
         }
 
         var query = pay.fromQuery(window.location.search);
@@ -343,7 +340,7 @@
           document.getElementById("f-product").textContent = line.product || "(no name)";
           document.getElementById("f-sku").textContent = line.sku || line.id || "(no sku)";
           document.getElementById("f-label").textContent = line.split
-            ? "Split — buy Codex Buy and Codex Sell separately at $149"
+            ? "Codex is now BTCTreasuryBot at $149"
             : (line.avatar_upgrade_label || "—");
           document.getElementById("f-desc").textContent = line.forbidden
             ? "Blocked. $99 is not a Van price. Do not reuse historical Macro/ETF pack NCP links."

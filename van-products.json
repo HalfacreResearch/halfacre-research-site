@@ -20,7 +20,7 @@
     "research_usd": 4.99,
     "pack_usd": 29.99,
     "system_usd": 149,
-    "tax_usd": 199,
+    "tax_usd": 149,
     "basic_usd": 4.99,
     "advanced_usd": 149,
     "diy_series_approx": 89,
@@ -31,15 +31,16 @@
     "theme_packs": 8,
     "advanced_systems": 10,
     "tax_upgrades": 4,
-    "live_count": 7,
-    "coming_soon_count": 169,
-    "note": "HARD PRICE LOCK: research/data $4.99; theme packs $29.99; assembled trading systems $149; tax immediate-outcome upgrades $199. TWO LAYERS: full intentions visible; only live SKUs clickable to PayPal. Research unlock = full Bitcoin/macro stack Codex considers (not candles-only). DIY à la carte of ~89 series at $4.99 ≈ $444, so a $29.99 pack is the deal. Codex = $149 trading system. Do not shrink the visible catalog to seven SKUs. Do not reuse historical Macro $99 / ETF pack NCP links. PayPal buttons must match these amounts. No Stripe."
+    "live_count": 1,
+    "coming_soon_count": 179,
+    "note": "BATCH 1 (Matthew 2026-09-23): display 18 assembled bots with exact names. ONLY BTCTreasuryBot is live/clickable (formerly Codex) at $149 — wires to the working autotrades/sFOX UI. Other 17 bots are vision-only. Research $4.99 and theme packs $29.99 stay on the intentions list, not clickable in this pass. TaxAttorneyBot is $149. Do not invent extra bots. PayPal only. No Stripe.",
+    "assembled_bots": 18
   },
   "account": {
     "viewer": "van_client",
     "owns_all_modules": false,
     "starting_owned": [],
-    "note": "Paid live rows start locked. Unlock only the SKU that just paid. Coming-soon rows are visible and not buyable. Founder Codex explainer on /van.html is free (price 0, no checkout). Codex Buy and Codex Sell are separate $149 assembled trading systems."
+    "note": "Only BTCTreasuryBot is live. Van starts unlocked for none of the paid SKUs. Coming-soon bots are visible and not clickable."
   },
   "pay": {
     "rail": "paypal",
@@ -53,8 +54,7 @@
     "allowed_paid_usd": [
       4.99,
       29.99,
-      149,
-      199
+      149
     ],
     "forbidden_pack_usd": [
       99
@@ -65,7 +65,7 @@
       "macro_99": "https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE",
       "etf_149": "https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML"
     },
-    "mint_note": "Mint new PayPal NCP links at the listed live price: $4.99 research, $29.99 packs, $149 systems, $199 tax upgrades. Set paypal_confirms_usd to that exact amount and success URL to van.html?paid={SKU}. Do not reuse PLB-NGZRXTQA93RE (historical Macro $99) or PLB-DN2KVZRLCUML (historical ETF pack). $149 is a valid assembled-system price — never charge it with the old ETF pack NCP. Coming-soon rows must stay without a buy button.",
+    "mint_note": "Mint a $149 PayPal NCP for BTCTreasuryBot (live). Research $4.99 and packs $29.99 are not clickable in this pass. Do not reuse historical Macro/ETF pack NCP IDs.",
     "square": {
       "enabled": false,
       "status": "coming_next",
@@ -76,20 +76,21 @@
     "research_usd": 4.99,
     "pack_usd": 29.99,
     "system_usd": 149,
-    "tax_usd": 199
+    "tax_usd": 149
   },
   "founder_product": {
-    "id": "codex",
-    "name": "Codex",
+    "id": "btc-treasury-bot",
+    "name": "BTCTreasuryBot",
     "tier": "advanced",
-    "kind": "system",
-    "description": "Free Codex explainer on Van’s page: BTC long / bigger-gains crypto. Live autotrade is not required for sit-down. Codex Buy and Codex Sell are separate $149 assembled trading systems — not included in this free explainer. Research unlocks are the full Bitcoin/macro stack Codex considers, not candles-only.",
-    "price_usd": 0,
-    "free": true,
+    "kind": "bot",
+    "description": "Formerly Codex. Live assembled bot on Van’s page: working autotrades UI + sFOX connect. $149 when PayPal exists. Research unlocks are the full Bitcoin/macro stack this bot considers — not candles-only.",
+    "price_usd": 149,
+    "free": false,
     "live": true,
     "paypal_link_or_button_id": "",
-    "paypal_confirms_usd": null,
-    "avatar_upgrade_label": "Codex (free module)"
+    "paypal_confirms_usd": 149,
+    "avatar_upgrade_label": "BTCTreasuryBot",
+    "ui_href": "#btctreasury"
   },
   "modules": [
     {
@@ -123,10 +124,10 @@
       "description": "Bitcoin priced in dollars. Live research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
-      "paypal_confirms_usd": 4.99,
+      "paypal_confirms_usd": null,
       "avatar_upgrade_label": "BTC/USD Research",
-      "status": "live",
-      "live": true
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "eth-btc-research",
@@ -141,10 +142,10 @@
       "description": "ETH priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
-      "paypal_confirms_usd": 4.99,
+      "paypal_confirms_usd": null,
       "avatar_upgrade_label": "ETH/BTC Research",
-      "status": "live",
-      "live": true
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "eth-usd-research",
@@ -177,10 +178,10 @@
       "description": "SOL priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
-      "paypal_confirms_usd": 4.99,
+      "paypal_confirms_usd": null,
       "avatar_upgrade_label": "SOL/BTC Research",
-      "status": "live",
-      "live": true
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "sol-usd-research",
@@ -213,10 +214,10 @@
       "description": "XRP priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
-      "paypal_confirms_usd": 4.99,
+      "paypal_confirms_usd": null,
       "avatar_upgrade_label": "XRP/BTC Research",
-      "status": "live",
-      "live": true
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "xrp-usd-research",
@@ -249,10 +250,10 @@
       "description": "LINK priced in Bitcoin. Research/data power-up for a DIY avatar. Not a trading system. Unlock is the full Bitcoin/macro stack Codex considers — not candles-only.",
       "price_usd": 4.99,
       "paypal_link_or_button_id": "",
-      "paypal_confirms_usd": 4.99,
+      "paypal_confirms_usd": null,
       "avatar_upgrade_label": "LINK/BTC Research",
-      "status": "live",
-      "live": true
+      "status": "coming_soon",
+      "live": false
     },
     {
       "id": "link-usd-research",
@@ -3083,256 +3084,346 @@
       "live": false
     },
     {
-      "id": "codex-buy",
-      "name": "Codex Buy",
+      "id": "btc-treasury-bot",
+      "name": "BTCTreasuryBot",
       "tier": "advanced",
-      "kind": "protocol",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled Codex buying protocol (BTC long / bigger-gains crypto). Separate $149 product from Codex Sell. Not the free founder Codex module. Codex is a $149 assembled trading system. Research unlocks feed the full Bitcoin/macro stack Codex considers — not candles-only.",
+      "description": "LIVE. Formerly Codex. Assembled $149 bot. Working autotrades UI + sFOX connect on /van.html. PayPal $149 when the NCP exists.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": 149,
-      "avatar_upgrade_label": "Codex Buy",
+      "avatar_upgrade_label": "BTCTreasuryBot",
       "status": "live",
-      "live": true
+      "live": true,
+      "ui_href": "#btctreasury"
     },
     {
-      "id": "codex-sell",
-      "name": "Codex Sell",
+      "id": "crypto-swing-bot",
+      "name": "CryptoSwingBot",
       "tier": "advanced",
-      "kind": "protocol",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled Codex selling protocol. Separate $149 product from Codex Buy. Not the free founder Codex module. Codex is a $149 assembled trading system. Research unlocks feed the full Bitcoin/macro stack Codex considers — not candles-only.",
-      "price_usd": 149,
-      "paypal_link_or_button_id": "",
-      "paypal_confirms_usd": 149,
-      "avatar_upgrade_label": "Codex Sell",
-      "status": "live",
-      "live": true
-    },
-    {
-      "id": "tech-long-hold",
-      "name": "Tech long-hold",
-      "tier": "advanced",
-      "kind": "system",
-      "pair": "",
-      "department": "systems",
-      "departments": [
-        "systems"
-      ],
-      "description": "Assembled tech long-hold trading system. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Tech long-hold",
+      "avatar_upgrade_label": "CryptoSwingBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "tech-swing",
-      "name": "Tech swing",
+      "id": "crypto-long-bot",
+      "name": "CryptoLongBot",
       "tier": "advanced",
-      "kind": "system",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled tech swing trading system. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Tech swing",
+      "avatar_upgrade_label": "CryptoLongBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "dividend-long",
-      "name": "Dividend long",
+      "id": "mag10-long-bot",
+      "name": "Mag10LongBot",
       "tier": "advanced",
-      "kind": "system",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled dividend long trading system. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Dividend long",
+      "avatar_upgrade_label": "Mag10LongBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "precious-metals-long",
-      "name": "Precious metals long",
+      "id": "mag10-swing-bot",
+      "name": "Mag10SwingBot",
       "tier": "advanced",
-      "kind": "system",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled precious metals long trading system. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Precious metals long",
+      "avatar_upgrade_label": "Mag10SwingBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "etf-mf-long",
-      "name": "ETF / MF long",
+      "id": "tech-sm-med-long-bot",
+      "name": "TechSm&MedLongBot",
       "tier": "advanced",
-      "kind": "system",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled ETF/mutual-fund long trading system. Coming soon — not yet selling. Not the historical Soft HOLD ETF pack NCP.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "ETF / MF long",
+      "avatar_upgrade_label": "TechSm&MedLongBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "commodities-long",
-      "name": "Commodities long",
+      "id": "sp500-bot",
+      "name": "S&P500Bot",
       "tier": "advanced",
-      "kind": "system",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled commodities long trading system. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Commodities long",
+      "avatar_upgrade_label": "S&P500Bot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "macro-lane",
-      "name": "Macro lane",
+      "id": "dividends-long-bot",
+      "name": "DividendsLongBot",
       "tier": "advanced",
-      "kind": "system",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled macro-lane trading system. Coming soon — not yet selling. Not the historical Soft HOLD Macro pack NCP.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Macro lane",
+      "avatar_upgrade_label": "DividendsLongBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "onchain-lane",
-      "name": "On-chain lane",
+      "id": "commodities-long-bot",
+      "name": "CommoditiesLongBot",
       "tier": "advanced",
-      "kind": "system",
+      "kind": "bot",
       "pair": "",
-      "department": "systems",
+      "department": "bots",
       "departments": [
-        "systems"
+        "bots"
       ],
-      "description": "Assembled on-chain trading system. Coming soon — not yet selling.",
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
       "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "On-chain lane",
+      "avatar_upgrade_label": "CommoditiesLongBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "tax-immediate",
-      "name": "Tax immediate-outcome",
-      "tier": "tax",
-      "kind": "tax",
+      "id": "gold-long-bot",
+      "name": "GoldLongBot",
+      "tier": "advanced",
+      "kind": "bot",
       "pair": "",
-      "department": "tax",
+      "department": "bots",
       "departments": [
-        "tax"
+        "bots"
       ],
-      "description": "Tax immediate-outcome upgrade. $199. Coming soon — not yet selling.",
-      "price_usd": 199,
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Tax immediate-outcome",
+      "avatar_upgrade_label": "GoldLongBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "tax-traditional-outcome",
-      "name": "Traditional tax outcome",
-      "tier": "tax",
-      "kind": "tax",
+      "id": "silver-long-boy",
+      "name": "SilverLongBoy",
+      "tier": "advanced",
+      "kind": "bot",
       "pair": "",
-      "department": "tax",
+      "department": "bots",
       "departments": [
-        "tax"
+        "bots"
       ],
-      "description": "Traditional wrapper immediate-outcome tax upgrade. $199. Coming soon — not yet selling.",
-      "price_usd": 199,
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Traditional tax outcome",
+      "avatar_upgrade_label": "SilverLongBoy",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "tax-roth-outcome",
-      "name": "Roth tax outcome",
-      "tier": "tax",
-      "kind": "tax",
+      "id": "precious-metals-bot",
+      "name": "PreciousMetalsBot",
+      "tier": "advanced",
+      "kind": "bot",
       "pair": "",
-      "department": "tax",
+      "department": "bots",
       "departments": [
-        "tax"
+        "bots"
       ],
-      "description": "Roth wrapper immediate-outcome tax upgrade. $199. Coming soon — not yet selling.",
-      "price_usd": 199,
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "Roth tax outcome",
+      "avatar_upgrade_label": "PreciousMetalsBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
     },
     {
-      "id": "tax-sep-outcome",
-      "name": "SEP tax outcome",
-      "tier": "tax",
-      "kind": "tax",
+      "id": "oil-bot",
+      "name": "OilBot",
+      "tier": "advanced",
+      "kind": "bot",
       "pair": "",
-      "department": "tax",
+      "department": "bots",
       "departments": [
-        "tax"
+        "bots"
       ],
-      "description": "SEP wrapper immediate-outcome tax upgrade. $199. Coming soon — not yet selling.",
-      "price_usd": 199,
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
       "paypal_link_or_button_id": "",
       "paypal_confirms_usd": null,
-      "avatar_upgrade_label": "SEP tax outcome",
+      "avatar_upgrade_label": "OilBot",
       "status": "coming_soon",
-      "live": false
+      "live": false,
+      "ui_href": ""
+    },
+    {
+      "id": "tax-reduction-bot",
+      "name": "TaxReductionBot",
+      "tier": "advanced",
+      "kind": "bot",
+      "pair": "",
+      "department": "bots",
+      "departments": [
+        "bots"
+      ],
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TaxReductionBot",
+      "status": "coming_soon",
+      "live": false,
+      "ui_href": ""
+    },
+    {
+      "id": "offshore-bot",
+      "name": "OffshoreBot",
+      "tier": "advanced",
+      "kind": "bot",
+      "pair": "",
+      "department": "bots",
+      "departments": [
+        "bots"
+      ],
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "OffshoreBot",
+      "status": "coming_soon",
+      "live": false,
+      "ui_href": ""
+    },
+    {
+      "id": "tax-attorney-bot",
+      "name": "TaxAttorneyBot",
+      "tier": "advanced",
+      "kind": "bot",
+      "pair": "",
+      "department": "bots",
+      "departments": [
+        "bots"
+      ],
+      "description": "Assembled $149 bot (same price as trading bots). Coming soon — not yet selling.",
+      "price_usd": 149,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "TaxAttorneyBot",
+      "status": "coming_soon",
+      "live": false,
+      "ui_href": ""
+    },
+    {
+      "id": "ma-bot",
+      "name": "M&ABot",
+      "tier": "advanced",
+      "kind": "bot",
+      "pair": "",
+      "department": "bots",
+      "departments": [
+        "bots"
+      ],
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "M&ABot",
+      "status": "coming_soon",
+      "live": false,
+      "ui_href": ""
+    },
+    {
+      "id": "vc-bot",
+      "name": "VCBot",
+      "tier": "advanced",
+      "kind": "bot",
+      "pair": "",
+      "department": "bots",
+      "departments": [
+        "bots"
+      ],
+      "description": "Assembled $149 bot. Coming soon — not yet selling.",
+      "price_usd": 149,
+      "paypal_link_or_button_id": "",
+      "paypal_confirms_usd": null,
+      "avatar_upgrade_label": "VCBot",
+      "status": "coming_soon",
+      "live": false,
+      "ui_href": ""
     }
   ]
 }

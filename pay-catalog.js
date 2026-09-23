@@ -28,7 +28,7 @@
   var RESEARCH_USD = 4.99;
   var PACK_USD = 29.99;
   var SYSTEM_USD = 149;
-  var TAX_USD = 199;
+  var TAX_USD = 149;
   var BASIC_USD = RESEARCH_USD;
   var ADVANCED_USD = SYSTEM_USD;
   var ALLOWED = [RESEARCH_USD, PACK_USD, SYSTEM_USD, TAX_USD];
@@ -176,29 +176,18 @@
 
   function resolve(partial) {
     var id = trim(partial && (partial.id || partial.sku));
-    if (id && id.toLowerCase() === "codex") {
-      return {
-        id: "codex",
-        sku: "codex",
-        product: "Codex is two products",
-        amount: String(ADVANCED_USD),
-        currency: "USD",
-        description: "Do not merge. Buy Codex Buy and Codex Sell as separate $149 assembled trading systems. The founder Codex explainer on van.html is free and is not this checkout.",
-        tier: "advanced",
-        kind: "protocol",
-        pair: "",
-        department: "systems",
-        departments: ["systems"],
-        paypal_link_or_button_id: "",
-        paypal_confirms_usd: null,
-        avatar_upgrade_label: "Codex Buy + Codex Sell",
-        status: "split",
-        live: false,
-        free: false,
-        split: true,
-        forbidden: false,
-        known: true
-      };
+    if (id && /^(codex|codex-buy|codex-sell)$/i.test(id)) {
+      id = "btc-treasury-bot";
+      if (partial) {
+        partial = {
+          id: "btc-treasury-bot",
+          sku: "btc-treasury-bot",
+          product: partial.product || "BTCTreasuryBot",
+          name: partial.name || "BTCTreasuryBot",
+          amount: partial.amount || String(SYSTEM_USD),
+          description: partial.description || ""
+        };
+      }
     }
     var known = findPaid(id);
     var amount = trim(partial && partial.amount);
@@ -285,7 +274,7 @@
       return { ok: false, reason: "No PayPal on a free line." };
     }
     if (line.split) {
-      return { ok: false, reason: "Codex is two products. Charge Codex Buy and Codex Sell separately at $149 each." };
+      return { ok: false, reason: "Codex is now BTCTreasuryBot — one $149 assembled bot." };
     }
     if (!line.live) {
       return { ok: false, reason: "Coming soon — not yet selling. This SKU is on the intentions list only." };
@@ -294,7 +283,7 @@
       return { ok: false, reason: "Blocked: $99 is the historical Macro pack amount and is not a Van price. Allowed: $4.99 / $29.99 / $149 / $199." };
     }
     if (!isPaidAmount(line.amount)) {
-      return { ok: false, reason: "Van paid amounts are $4.99 (research), $29.99 (theme packs), $149 (assembled systems), or $199 (tax upgrades). This amount cannot be charged here." };
+      return { ok: false, reason: "Van paid amounts are $4.99 (research), $29.99 (theme packs), or $149 (assembled bots, including TaxAttorneyBot). This amount cannot be charged here." };
     }
     if (business) {
       return {

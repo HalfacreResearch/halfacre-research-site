@@ -11,7 +11,7 @@
   var OWNED_KEY = "halfacre.van.owned.v1";
   var PENDING_KEY = "halfacre.van.pending.v1";
   var PENDING_MS = 6 * 60 * 60 * 1000;
-  var ALLOWED = [4.99, 29.99, 149, 199];
+  var ALLOWED = [4.99, 29.99, 149];
 
   function trim(value) {
     return String(value == null ? "" : value).trim();
@@ -40,6 +40,9 @@
 
   function findRow(id) {
     var want = trim(id).toLowerCase();
+    if (want === "codex" || want === "codex-buy" || want === "codex-sell") {
+      want = "btc-treasury-bot";
+    }
     var rows = catalogRows();
     var i;
     for (i = 0; i < rows.length; i += 1) {
@@ -52,7 +55,7 @@
 
   function isLiveSku(id) {
     var row = findRow(id);
-    return Boolean(row && row.live && trim(id).toLowerCase() !== "codex");
+    return Boolean(row && row.live);
   }
 
   function expectedAmount(id) {

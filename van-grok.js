@@ -20,11 +20,11 @@
   var GREETING = [
     "Hi Van. I’m Grok — the model on this page, not a fleet bot.",
     "",
-    "I’m here the whole sitting. My job is to grow your net worth in plain English, learn what accounts and goals matter, and walk you through Halfacre’s research and Codex products when they help.",
+    "I’m here the whole sitting. My job is to grow your net worth in plain English, learn what accounts and goals matter, and walk you through Halfacre’s products when they help.",
     "",
-    "The shop has two layers. The full intentions list shows everything we intend to sell. Only live SKUs are clickable to PayPal. Research/data is $4.99 — a research unlock is the full Bitcoin/macro stack Codex considers, not candles-only. Theme packs are $29.99 (DIY à la carte of ~89 series at $4.99 is about $444, so the pack is the deal). Assembled trading systems are $149. Tax immediate-outcome upgrades are $199. Codex Buy and Codex Sell are separate $149 systems. The Codex explainer on this page is free. Paying one live SKU unlocks only that one. Matthew cashes you back off this page.",
+    "Matthew’s first assembled-bot list is on this page — 18 exact names. Only BTCTreasuryBot is live and clickable. That used to be called Codex. It opens the working autotrades / sFOX UI on this page and is $149 when PayPal is minted. The other 17 bots are coming soon and not clickable. Research/data is $4.99. Theme packs are $29.99. All highest-level bots are $149, including TaxAttorneyBot. More bot names are still coming; I will not invent extras.",
     "",
-    "sFOX keys go in the box above, never here. After sFOX is linked, Codex Buy and Codex Sell can autotrade later — not today.",
+    "sFOX keys go in the BTCTreasuryBot box above, never here. After sFOX is linked, autotrades can follow later — not today.",
     "",
     "What do you want to work on first?"
   ].join("\n");
@@ -33,7 +33,7 @@
     { label: "Connect sFOX", send: "How do I connect sFOX?" },
     { label: "What can I buy?", send: "What is live to buy on PayPal versus coming soon on the intentions list?" },
     { label: "Grow net worth", send: "Help me grow my net worth. What should you know about my situation?" },
-    { label: "Codex Buy vs Sell", send: "What is the difference between Codex Buy and Codex Sell?" }
+    { label: "BTCTreasuryBot", send: "Walk me through BTCTreasuryBot and the sFOX connect box." }
   ];
 
   function looksLikePastedSecret(text) {
@@ -95,7 +95,7 @@
     return [
       "I’m Grok on this page. The live xAI path is waiting on Hostinger: set XAI_API_KEY or van-grok.secret.php for van-grok.php.",
       "",
-      "I still won’t take keys in chat. Use the sFOX box. Live prices on pay.html: $4.99 research, $29.99 packs, $149 systems, $199 tax — locked until that PayPal payment. Coming soon is visible and not for sale.",
+      "I still won’t take keys in chat. Use the sFOX box on BTCTreasuryBot. Only that bot is live ($149). The other 17 assembled bots are coming soon. Research $4.99 and packs $29.99 are visible, not clickable.",
       "",
       "Tell me a goal or pick a module and I’ll keep going."
     ].join("\n");
