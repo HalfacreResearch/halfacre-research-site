@@ -120,8 +120,8 @@
     <div class="brand">HALFACRE RESEARCH · PAY</div>
     <div class="gate" id="gate">
       <strong>PAYPAL GATE.</strong>
-      Do not stamp “show Van” until a paid module here can take a real PayPal payment.
-      Founder Codex is free and is not sold on this page. Square is a stub. No Stripe.
+      Do not stamp “show Van” until CoS clears a real payable catalog and a $1.99 PayPal NCP can take money.
+      Founder Codex is free and is not sold on this page. PayPal only. Card/guest is native PayPal Checkout. No Stripe.
     </div>
     <h1>Pay $1.99 for one upgrade.</h1>
     <p class="sub">Early paid research/data modules are $1.99. Codex is free and is not sold here. Macro $99 and ETF $149 pack buttons are not used on this page.</p>
@@ -145,7 +145,7 @@
     </section>
 
     <footer>
-      <p>PayPal Day-1: dynamic $1.99 when <code>pay.paypal_business</code> is set, or a per-SKU $1.99 link with <code>paypal_confirms_usd: 1.99</code>. TechStack must mint new $1.99 PayPal buttons — do not reuse Macro $99 / ETF $149. Square stub. No Stripe. Codex stays free on <a href="van.html">van.html</a>.</p>
+      <p>PayPal only. Pack SoT NCP pattern is <code>paypal.com/ncp/payment/PLB-…</code> (Macro $99 / ETF $149 links exist in history and stay unused here). Mint new $1.99 NCP links. Card/guest is whatever PayPal Checkout shows. No Stripe. Codex stays free on <a href="van.html">van.html</a>.</p>
       <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
     </footer>
   </div>
@@ -179,7 +179,6 @@
         }
         if (line.forbidden) {
           addDisabled("PayPal blocked — pack $99/$149 not allowed");
-          addDisabled("Square — stub");
           return;
         }
         var plan = pay.checkoutPlan(line);
@@ -200,7 +199,7 @@
           dyn.querySelector("[name=item_name]").value = plan.item_name;
           dyn.querySelector("[name=item_number]").value = plan.item_number;
           actions.appendChild(dyn);
-        } else if (plan.ok && plan.kind === "url") {
+        } else if (plan.ok && (plan.kind === "url" || plan.kind === "ncp")) {
           var a = document.createElement("a");
           a.className = "paypal";
           a.href = plan.value;
@@ -225,12 +224,11 @@
           note.textContent = plan.reason;
           actions.appendChild(note);
         }
-        addDisabled("Square — stub");
       }
 
       pay.load().then(function () {
         if (!pay.anyPaypalLive()) {
-          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> $1.99 PayPal is not live yet. Set <code>pay.paypal_business</code> for a dynamic $1.99 charge, or mint a $1.99 button and set <code>paypal_confirms_usd</code> to 1.99. Do not reuse Macro $99 / ETF $149 buttons. Do not instruct Hostinger to “show Dad.”";
+          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> No payable $1.99 catalog yet. Mint a PayPal NCP link at $1.99 (same pattern as the old pack links) and set <code>paypal_confirms_usd</code> to 1.99. Do not reuse Macro $99 / ETF $149 NCP links. Do not instruct Hostinger to “show Dad.”";
         } else {
           gate.innerHTML = "<strong>PAYPAL $1.99 PRESENT.</strong> A $1.99 PayPal path is configured. CoS still confirms a real digital payment before any “show Van” stamp. Codex stays free.";
         }
@@ -254,7 +252,6 @@
           renderPay(line);
         } else {
           addDisabled("PayPal — pick a module");
-          addDisabled("Square — stub");
         }
 
         pay.products.forEach(function (item) {

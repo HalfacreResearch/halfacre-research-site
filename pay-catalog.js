@@ -4,9 +4,11 @@
  * Paid Van modules are $1.99. Codex is free and is never charged.
  * Macro $99 / ETF $149 pack prices are forbidden on this pay path.
  *
- * PayPal Day-1: dynamic _xclick (amount from the SKU) when paypal_business
- * is set, or a per-SKU link/button only if paypal_confirms_usd is 1.99.
- * Square stub. No Stripe.
+ * PayPal only. Card/guest is native PayPal Checkout.
+ * SoT pack NCP pattern: https://www.paypal.com/ncp/payment/PLB-…
+ * Those pack links are $99/$149 — never used as Van checkout.
+ * Van live path: new $1.99 NCP link + paypal_confirms_usd 1.99,
+ * or dynamic _xclick when paypal_business is set. No Stripe.
  */
 (function (global) {
   "use strict";
@@ -59,8 +61,16 @@
 
   function paypalKind(value) {
     var v = trim(value);
+    var ncp;
     if (!v) {
       return { kind: "empty", value: "" };
+    }
+    if (/paypal\.com\/ncp\/payment\/PLB-/i.test(v) || /^PLB-[A-Z0-9]+$/i.test(v)) {
+      ncp = v.indexOf("http") === 0 ? v : "https://www.paypal.com/ncp/payment/" + v;
+      if (/PLB-NGZRXTQA93RE|PLB-DN2KVZRLCUML/i.test(ncp)) {
+        return { kind: "pack-ncp", value: ncp };
+      }
+      return { kind: "ncp", value: ncp };
     }
     if (/^https?:\/\//i.test(v)) {
       return { kind: "url", value: v };
@@ -90,7 +100,8 @@
     var q = new URLSearchParams(typeof search === "string" ? search : global.location.search);
     return {
       id: trim(q.get("id") || q.get("sku")),
-      product: trim(q.get("product")),
+      product: trim(q.get("product") || q.get("name")),
+      name: trim(q.get("name") || q.get("product")),
       sku: trim(q.get("sku") || q.get("id")),
       amount: trim(q.get("amount")),
       currency: trim(q.get("currency")) || "USD",
@@ -130,7 +141,7 @@
     return {
       id: id || (known && known.id) || "",
       sku: trim(partial && partial.sku) || (known && known.sku) || id,
-      product: trim(partial && partial.product) || (known && known.product) || "",
+      product: trim(partial && (partial.product || partial.name)) || (known && known.product) || "",
       amount: forbidden ? "" : amount,
       currency: "USD",
       description: trim(partial && partial.description) || (known && known.description) || "",
@@ -152,6 +163,7 @@
     }
     if (line.product) {
       q.set("product", line.product);
+      q.set("name", line.product);
     }
     if (line.sku) {
       q.set("sku", line.sku);
@@ -203,18 +215,24 @@
       };
     }
     var kind = paypalKind(line.paypal_link_or_button_id);
+    if (kind.kind === "pack-ncp") {
+      return {
+        ok: false,
+        reason: "Blocked: that PayPal NCP link is a Macro $99 or ETF $149 pack. Mint a new $1.99 NCP link. Do not reuse pack SoT."
+      };
+    }
     if (kind.kind !== "empty" && line.paypal_confirms_usd === PAID_USD) {
       return { ok: true, kind: kind.kind, value: kind.value, amount: "1.99" };
     }
     if (kind.kind !== "empty") {
       return {
         ok: false,
-        reason: "A PayPal link/button is set, but paypal_confirms_usd is not 1.99. Mint a $1.99 button. Do not reuse Macro $99 / ETF $149 buttons."
+        reason: "A PayPal link is set, but paypal_confirms_usd is not 1.99. Mint a $1.99 NCP link (same paypal.com/ncp/payment/PLB- pattern as the packs). Do not reuse the $99/$149 pack links."
       };
     }
     return {
       ok: false,
-      reason: "PayPal not live yet. Set pay.paypal_business for a $1.99 dynamic charge, or mint a $1.99 per-SKU link and set paypal_confirms_usd to 1.99."
+      reason: "PayPal not live yet. Mint a $1.99 PayPal NCP link and set paypal_confirms_usd to 1.99, or set pay.paypal_business for a dynamic $1.99 _xclick. Catalog names still wait on Matthew."
     };
   }
 

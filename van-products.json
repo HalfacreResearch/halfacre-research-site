@@ -7,12 +7,16 @@
   },
   "pay": {
     "rail": "paypal",
-    "square": "stub",
     "stripe": false,
     "default_paid_usd": 1.99,
     "forbidden_pack_usd": [99, 149],
     "paypal_business": "",
-    "mint_note": "Mint new PayPal $1.99 links or hosted buttons per SKU (TechStack / PayPal). Do not reuse Macro $99 or ETF $149 buttons. A hosted button is live only when paypal_confirms_usd is 1.99."
+    "ncp_pattern": "https://www.paypal.com/ncp/payment/{NCP_ID}",
+    "pack_ncp_do_not_use_for_van": {
+      "macro_99": "https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE",
+      "etf_149": "https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML"
+    },
+    "mint_note": "SoT pack pattern is PayPal NCP (paypal.com/ncp/payment/PLB-…). Those two links are $99/$149 packs on Soft HOLD — do not use them for Van. Mint new NCP links at $1.99 per module and set paypal_confirms_usd to 1.99. Card/guest checkout is whatever PayPal Checkout shows natively."
   },
   "founder_product": {
     "id": "codex",

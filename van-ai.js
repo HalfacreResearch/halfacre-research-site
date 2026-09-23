@@ -220,7 +220,7 @@
     if (topic === "purchase" || topic === "modules") {
       memory.lastTopic = "modules";
       return [
-        "After Codex, other research modules can power up this page. The list is custom — staff edit van-products.json. Early paid upgrades are $1.99 each. They use the same PayPal page. Not the Macro $99 or ETF $149 packs. Square is only a stub. No Stripe. Codex is not on that page.",
+        "After Codex, other research modules can power up this page. The list is custom — staff edit van-products.json. Early paid upgrades are $1.99 each. They use the same PayPal page. Card or guest pay is whatever PayPal shows. Not the Macro $99 or ETF $149 packs. No Stripe. Codex is not on that page.",
         "",
         moduleLines(),
         "",
