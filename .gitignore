@@ -1,5 +1,6 @@
 van-grok.secret.php
 van-unlocks.store.json
 clients.store.json
+client-memory.store.json
 .env
 .env.local

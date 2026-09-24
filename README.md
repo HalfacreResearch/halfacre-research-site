@@ -2,9 +2,11 @@
 
 Public static website for Halfacre Research.
 
-The public homepage is signup at `/` (same page as `/signup.html`). Name, email, and phone. After create, the client lands on their own page at `/page.html?c=…`, same layout as Dad’s page (`/van.html`). Grok is the coach. Each account has its own page. Google sign-in is off.
+The public homepage is signup at `/` (same page as `/signup.html`). Name, email, and phone. After create, the client lands on their own page at `/page.html?c=…`, same layout as Charley’s page (`/van.html`). Grok is the coach. Each account has its own page. Google sign-in is off.
 
-`van-grok.secret.php` and `clients.store.json` stay on Hostinger only. Do not commit them.
+Client pages have a nav and sidebar: **Uploaded** (files already given) and **Purchased** (Avatar upgrades). Those lists persist in `client-memory.store.json` on Hostinger.
+
+`van-grok.secret.php`, `clients.store.json`, `van-unlocks.store.json`, and `client-memory.store.json` stay on Hostinger only. Do not commit them.
 
 Practice work is on `cursor/van-product-page-70af`. Do not merge to `main` until Matthew approves the pages.
 
