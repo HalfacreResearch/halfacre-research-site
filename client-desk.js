@@ -8,6 +8,7 @@
   var API = "client-memory.php";
   var state = { uploads: [], purchases: [] };
   var client = { id: "", name: "" };
+  var view = "talk";
 
   function trim(value) {
     return String(value == null ? "" : value).trim();
@@ -31,7 +32,8 @@
       brokerage: "Brokerage",
       retirement: "Retirement",
       file: "File",
-      module: "Avatar upgrade"
+      module: "Avatar upgrade",
+      sfox: "Exchange"
     };
     return map[kind] || "File";
   }
@@ -63,9 +65,66 @@
     box.appendChild(ul);
   }
 
+  function sfoxMeta() {
+    var snap = global.VanSfox && global.VanSfox.snapshot ? global.VanSfox.snapshot() : null;
+    if (!snap) return "Exchange";
+    if (snap.error) return "Could not load";
+    if (!snap.connected) return "Not saved yet";
+    if (!snap.holdings.length) return "Connected · no balances";
+    return snap.holdings.length + " holding" + (snap.holdings.length === 1 ? "" : "s");
+  }
+
+  function paintSfox() {
+    var box = document.getElementById("deskSfox");
+    if (!box) return;
+    box.innerHTML = "";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "side-link" + (view === "sfox" ? " active" : "");
+    btn.setAttribute("data-desk", "sfox");
+    var title = document.createElement("span");
+    title.textContent = "sFOX";
+    var meta = document.createElement("span");
+    meta.className = "kind";
+    meta.id = "deskSfoxMeta";
+    meta.textContent = sfoxMeta();
+    btn.appendChild(title);
+    btn.appendChild(meta);
+    btn.addEventListener("click", function () {
+      showView("sfox");
+    });
+    box.appendChild(btn);
+  }
+
+  function showView(name) {
+    view = name === "sfox" ? "sfox" : "talk";
+    var app = document.querySelector(".app");
+    if (app) app.setAttribute("data-view", view);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-view-panel]"), function (panel) {
+      panel.hidden = panel.getAttribute("data-view-panel") !== view;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".nav a"), function (link) {
+      link.classList.toggle("active", link.getAttribute("data-desk") === view);
+    });
+    paintSfox();
+    if (view === "sfox") {
+      app.classList.add("show-side");
+      if (global.VanSfox && global.VanSfox.load) {
+        global.VanSfox.load(client.id || "charley-van-halfacre").then(paintSfox);
+      } else if (global.VanSfox && global.VanSfox.paint) {
+        global.VanSfox.paint();
+      }
+    }
+    if (view === "talk") {
+      var line = document.getElementById("line");
+      if (line) line.focus();
+    }
+  }
+
   function paint() {
     listEl("deskUploads", state.uploads, "Nothing uploaded yet.", "name");
     listEl("deskBuys", state.purchases, "No Avatar upgrades purchased yet.", "name");
+    paintSfox();
     var upCount = document.getElementById("navUploadsCount");
     var buyCount = document.getElementById("navBuysCount");
     if (upCount) upCount.textContent = String(state.uploads.length);
@@ -158,10 +217,16 @@
           document.querySelector(".app").classList.add("show-side");
           var target = document.getElementById(where === "uploaded" ? "sideUploads" : "sideBuys");
           if (target && target.scrollIntoView) target.scrollIntoView({ block: "start" });
+          return;
+        }
+        if (where === "sfox") {
+          e.preventDefault();
+          showView("sfox");
+          return;
         }
         if (where === "talk") {
-          var line = document.getElementById("line");
-          if (line) line.focus();
+          e.preventDefault();
+          showView("talk");
         }
       });
     });
@@ -177,6 +242,7 @@
     if (global.VanOwned && typeof global.VanOwned.onChange === "function") {
       global.VanOwned.onChange(function () { pullOwned(); paint(); });
     }
+    showView("talk");
     return load();
   }
 
@@ -186,6 +252,8 @@
     refresh: load,
     recordUpload: recordUpload,
     kindFromName: kindFromName,
+    showView: showView,
+    paintSfox: paintSfox,
     state: function () { return state; }
   };
 })(window);

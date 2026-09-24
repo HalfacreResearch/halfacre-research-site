@@ -135,6 +135,28 @@ html, body {
   margin: 0 0 8px;
 }
 
+.side-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--white);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.side-link.active,
+.side-link:hover {
+  border-color: var(--orange);
+}
+
+.view[hidden] { display: none; }
+
 .main { padding: 16px; max-width: 720px; }
 
 .card {

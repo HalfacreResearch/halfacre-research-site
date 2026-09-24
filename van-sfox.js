@@ -17,13 +17,13 @@
 
   function money(n) {
     var v = Number(n);
-    if (!isFinite(v)) return "\u2014";
+    if (!isFinite(v)) return "—";
     return v.toLocaleString(undefined, { style: "currency", currency: "USD" });
   }
 
   function amount(n, currency) {
     var v = Number(n);
-    if (!isFinite(v)) return "\u2014";
+    if (!isFinite(v)) return "—";
     var digits = /USD|USDC|USDT|DAI|PYUSD/i.test(currency || "") ? 2 : (Math.abs(v) >= 1 ? 6 : 8);
     return v.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: digits });
   }
@@ -66,12 +66,16 @@
         "<td>" + (row.currency || "") + "</td>" +
         "<td>" + amount(row.balance, row.currency) + "</td>" +
         "<td>" + amount(row.available, row.currency) + "</td>" +
-        "<td>" + (row.usd != null ? money(row.usd) : "\u2014") + "</td>";
+        "<td>" + (row.usd != null ? money(row.usd) : "—") + "</td>";
       tb.appendChild(tr);
     });
     table.appendChild(tb);
     body.innerHTML = "";
     body.appendChild(table);
+    var meta = document.getElementById("deskSfoxMeta");
+    if (meta) {
+      meta.textContent = snap.holdings.length + " holding" + (snap.holdings.length === 1 ? "" : "s");
+    }
   }
 
   function load(clientId) {
