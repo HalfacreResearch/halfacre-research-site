@@ -11,7 +11,7 @@
 (function (global) {
   "use strict";
 
-  var FULL_NAME = "Charlie Van Halfacre";
+  var FULL_NAME = "Charley Van Halfacre";
   var FIRST_NAME = "Van";
   var PROXY = "van-grok.php";
   var MODEL = "grok-4.6";
@@ -31,7 +31,7 @@
       ? "I already have these unlocks on your account: " + powered.join(", ") + ". They stay loaded."
       : "No paid unlocks on this account yet. That is fine. We start from what you upload.";
     return [
-      "Hey Van. I’m Grok — the model on this page, not a fleet bot.",
+      "Hey Van. I’m Grok — the coach on this page. I am not Dad, and I am not a fleet bot.",
       "",
       "Two poles. One is zero net worth. The other is an Elon-level financial structure: the most complete retirement portfolio we can build, aimed at a trillionaire path, without a stack of advisors and tax attorneys in the middle. You stay 100% in charge. This page sells research and data. It is not licensed advice.",
       "",
@@ -165,10 +165,10 @@
           owned: ownedIds(),
           avatar: (global.VanOwned && global.VanOwned.avatarContext)
             ? global.VanOwned.avatarContext()
-            : { userId: "charlie-van-halfacre", powerups: [] },
+            : { userId: "charley-van-halfacre", powerups: [] },
           sfox: sfoxConnected(),
           client: FULL_NAME,
-          userId: "charlie-van-halfacre"
+          userId: "charley-van-halfacre"
         })
       },
       45000
@@ -208,9 +208,15 @@
       if (looksLikePastedSecret(userText)) {
         return Promise.resolve(secretBlock());
       }
-      return askGrok(history || []).catch(function () {
-        return offlineNote();
+      return askGrok(history || []).catch(function (err) {
+        var note = offlineNote();
+        var error = new Error((err && err.message) || "offline grok");
+        error.offlineNote = note;
+        throw error;
       });
+    },
+    isOfflineNote: function (text) {
+      return String(text || "").indexOf("The live xAI path is waiting on a key") !== -1;
     }
   };
 })(window);
