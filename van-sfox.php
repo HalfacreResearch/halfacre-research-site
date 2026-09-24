@@ -219,10 +219,14 @@ usort($holdings, function ($a, $b) {
   return $b["balance"] <=> $a["balance"];
 });
 
+$wantPrices = !empty($_GET["prices"]);
 $priced = 0;
 $totalUsd = 0.0;
-$haveTotal = true;
+$haveTotal = $wantPrices;
 foreach ($holdings as $i => $row) {
+  if (!$wantPrices) {
+    continue;
+  }
   if (is_usdish($row["currency"])) {
     $holdings[$i]["usd"] = $row["balance"];
     $totalUsd += $row["balance"];
