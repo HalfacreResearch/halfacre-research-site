@@ -2,7 +2,7 @@
 
 Public static website for Halfacre Research.
 
-The public homepage is signup / login at `/` (same page as `/signup.html`). Continue with Google or the name / email / phone form. After create, the client lands on `/van.html`, where Grok is the coach.
+The public homepage is signup at `/` (same page as `/signup.html`). Name, email, and phone. After create, the client lands on `/van.html`, where Grok is the coach. Google sign-in is off.
 
 `van-grok.secret.php` and `clients.store.json` stay on Hostinger only. Do not commit them.
 
