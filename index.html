@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Create your account</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -42,25 +41,6 @@
       padding: 24px 22px 20px;
       box-shadow: 0 1px 2px rgba(0,0,0,.04);
     }
-    #googleBtn {
-      display: flex;
-      justify-content: center;
-      min-height: 44px;
-    }
-    .or {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 18px 0;
-      color: #888;
-      font-size: 12px;
-    }
-    .or:before, .or:after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: #e5e5e5;
-    }
     label {
       display: block;
       margin: 0 0 6px;
@@ -96,7 +76,7 @@
       cursor: pointer;
     }
     .create:hover { background: #000; }
-    .create:disabled, .busy { opacity: 0.55; cursor: wait; }
+    .create:disabled { opacity: 0.55; cursor: wait; }
     .err {
       min-height: 18px;
       margin: 0 0 8px;
@@ -127,10 +107,6 @@
     </div>
 
     <div class="card">
-      <div id="googleBtn"></div>
-
-      <div class="or">or</div>
-
       <form id="form">
         <label for="name">Full name</label>
         <input id="name" name="name" autocomplete="name" required>
@@ -146,20 +122,17 @@
       </form>
     </div>
 
-    <p class="fine">Free to create. After you finish, Grok meets you on your page. Google is optional — the form works if you do not use it.</p>
+    <p class="fine">Free to create. After you finish, Grok meets you on your page.</p>
     <a class="back" href="admin.html">Back to desk</a>
   </div>
 
   <script>
     (function () {
-      // Existing Web client already authorizes www. Apex is not on that client
-      // and Cloud Console cannot add it without a signed-in session.
       if (location.hostname === "halfacreresearch.tech") {
         location.replace("https://www.halfacreresearch.tech" + location.pathname + location.search + location.hash);
         return;
       }
 
-      var CLIENT_ID = "3260604131-hsdpbu9kmn06e449e193kqkuo9e8o9b8.apps.googleusercontent.com";
       var KEY = "halfacre.clients";
       var err = document.getElementById("err");
       var createBtn = document.getElementById("create");
@@ -216,46 +189,6 @@
             showError(e.message || "Could not create the account.");
             createBtn.disabled = false;
           });
-      }
-
-      function handleGoogle(response) {
-        if (!response || !response.credential) {
-          showError("Google did not return a sign-in.");
-          return;
-        }
-        createAccount({ google_id_token: response.credential });
-      }
-
-      function startGoogle() {
-        if (!window.google || !google.accounts || !google.accounts.id) {
-          return false;
-        }
-        google.accounts.id.initialize({
-          client_id: CLIENT_ID,
-          callback: handleGoogle,
-          ux_mode: "popup",
-          auto_select: false,
-          cancel_on_tap_outside: true
-        });
-        google.accounts.id.renderButton(document.getElementById("googleBtn"), {
-          type: "standard",
-          theme: "outline",
-          size: "large",
-          text: "continue_with",
-          shape: "rectangular",
-          logo_alignment: "left",
-          width: 360
-        });
-        return true;
-      }
-
-      if (!startGoogle()) {
-        window.addEventListener("load", startGoogle);
-        var tries = 0;
-        var timer = setInterval(function () {
-          tries += 1;
-          if (startGoogle() || tries > 40) clearInterval(timer);
-        }, 250);
       }
 
       document.getElementById("form").addEventListener("submit", function (e) {
