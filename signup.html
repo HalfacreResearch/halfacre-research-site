@@ -181,7 +181,12 @@
       }
       function go(client) {
         localStorage.setItem("halfacre.session", JSON.stringify(client));
-        window.location.href = "van.html";
+        var next = "van.html";
+        if (location.hostname === "htmlpreview.github.io") {
+          var raw = location.search.replace(/^\?/, "");
+          next = "https://htmlpreview.github.io/?" + raw.replace(/signup\.html$/, "van.html");
+        }
+        window.location.href = next;
       }
       document.getElementById("google").onclick = function () {
         document.getElementById("err").textContent =
