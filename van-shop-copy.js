@@ -1,0 +1,240 @@
+/**
+ * One-line sales copy for every shop item.
+ * Internal fulfillment notes in van-products.json stay off the client page.
+ */
+(function (global) {
+  "use strict";
+
+  var GROUP = {
+    crypto: "Crypto",
+    tech: "Tech",
+    dividend: "Dividend stocks",
+    metals: "Precious metals",
+    commodities: "Commodities",
+    etf: "ETFs",
+    mutual_fund: "Mutual funds",
+    research: "Research lanes",
+    wrappers: "IRA wrappers",
+    packs: "Packs",
+    bots: "Trading bots"
+  };
+
+  var SALES = {
+    "btc-research": "The first Bitcoin module — research that powers your avatar’s core BTC read.",
+    "btc-usd-research": "Bitcoin priced in dollars — research that powers your avatar’s BTC/USD read.",
+    "eth-btc-research": "ETH priced in Bitcoin — research that powers your avatar’s ETH/BTC read.",
+    "eth-usd-research": "ETH priced in dollars — research that powers your avatar’s ETH/USD read.",
+    "sol-btc-research": "SOL priced in Bitcoin — research that powers your avatar’s SOL/BTC read.",
+    "sol-usd-research": "SOL priced in dollars — research that powers your avatar’s SOL/USD read.",
+    "xrp-btc-research": "XRP priced in Bitcoin — research that powers your avatar’s XRP/BTC read.",
+    "xrp-usd-research": "XRP priced in dollars — research that powers your avatar’s XRP/USD read.",
+    "link-btc-research": "LINK priced in Bitcoin — research that powers your avatar’s LINK/BTC read.",
+    "link-usd-research": "LINK priced in dollars — research that powers your avatar’s LINK/USD read.",
+    "bnb-btc-research": "BNB priced in Bitcoin — research that powers your avatar’s BNB/BTC read.",
+    "bnb-usd-research": "BNB priced in dollars — research that powers your avatar’s BNB/USD read.",
+    "trx-btc-research": "TRX priced in Bitcoin — research that powers your avatar’s TRX/BTC read.",
+    "trx-usd-research": "TRX priced in dollars — research that powers your avatar’s TRX/USD read.",
+    "ada-btc-research": "ADA priced in Bitcoin — research that powers your avatar’s ADA/BTC read.",
+    "ada-usd-research": "ADA priced in dollars — research that powers your avatar’s ADA/USD read.",
+    "bch-btc-research": "BCH priced in Bitcoin — research that powers your avatar’s BCH/BTC read.",
+    "bch-usd-research": "BCH priced in dollars — research that powers your avatar’s BCH/USD read.",
+    "uni-btc-research": "UNI priced in Bitcoin — research that powers your avatar’s UNI/BTC read.",
+    "uni-usd-research": "UNI priced in dollars — research that powers your avatar’s UNI/USD read.",
+    "hbar-btc-research": "HBAR priced in Bitcoin — research that powers your avatar’s HBAR/BTC read.",
+    "hbar-usd-research": "HBAR priced in dollars — research that powers your avatar’s HBAR/USD read.",
+    "avax-btc-research": "AVAX priced in Bitcoin — research that powers your avatar’s AVAX/BTC read.",
+    "avax-usd-research": "AVAX priced in dollars — research that powers your avatar’s AVAX/USD read.",
+    "atom-btc-research": "ATOM priced in Bitcoin — research that powers your avatar’s ATOM/BTC read.",
+    "atom-usd-research": "ATOM priced in dollars — research that powers your avatar’s ATOM/USD read.",
+    "hype-usd-research": "HYPE priced in dollars — research that powers your avatar’s HYPE/USD read.",
+    "near-usd-research": "NEAR priced in dollars — research that powers your avatar’s NEAR/USD read.",
+    "sui-usd-research": "SUI priced in dollars — research that powers your avatar’s SUI/USD read.",
+    "kas-usd-research": "KAS priced in dollars — research that powers your avatar’s KAS/USD read.",
+    "arb-usd-research": "ARB priced in dollars — research that powers your avatar’s ARB/USD read.",
+    "render-usd-research": "RENDER priced in dollars — research that powers your avatar’s RENDER/USD read.",
+    "inj-usd-research": "INJ priced in dollars — research that powers your avatar’s INJ/USD read.",
+    "nvda-research": "Nvidia research that powers your avatar’s view of the chip trade.",
+    "aapl-research": "Apple research that powers your avatar’s view of the consumer-tech giant.",
+    "goog-research": "Alphabet research that powers your avatar’s view of Google and the ad machine.",
+    "msft-research": "Microsoft research that powers your avatar’s view of cloud and enterprise software.",
+    "amzn-research": "Amazon research that powers your avatar’s view of retail and AWS.",
+    "tsm-research": "TSMC research that powers your avatar’s view of the foundry that makes the chips.",
+    "avgo-research": "Broadcom research that powers your avatar’s view of networking and custom silicon.",
+    "meta-research": "Meta research that powers your avatar’s view of social ads and the feed.",
+    "tsla-research": "Tesla research that powers your avatar’s view of EV, energy, and the tape.",
+    "samsung-research": "Samsung research that powers your avatar’s view of memory, phones, and Korea tech.",
+    "mu-research": "Micron research that powers your avatar’s view of memory cycles.",
+    "sk-hynix-research": "SK Hynix research that powers your avatar’s view of high-bandwidth memory.",
+    "amd-research": "AMD research that powers your avatar’s view of CPUs, GPUs, and the Intel fight.",
+    "asml-research": "ASML research that powers your avatar’s view of the machines that print chips.",
+    "intc-research": "Intel research that powers your avatar’s view of the foundry turnaround.",
+    "ionq-research": "IonQ research that powers your avatar’s view of trapped-ion quantum.",
+    "avav-research": "AeroVironment research that powers your avatar’s view of drones and defense tech.",
+    "joby-research": "Joby research that powers your avatar’s view of electric air taxi.",
+    "crsp-research": "CRISPR Therapeutics research that powers your avatar’s view of gene editing.",
+    "enph-research": "Enphase research that powers your avatar’s view of solar inverters and home power.",
+    "beam-research": "Beam research that powers your avatar’s view of base-editing biotech.",
+    "qubt-research": "Quantum Computing Inc research that powers your avatar’s view of that name.",
+    "rxrx-research": "Recursion research that powers your avatar’s view of AI drug discovery.",
+    "ntla-research": "Intellia research that powers your avatar’s view of in-vivo CRISPR.",
+    "rcat-research": "Red Cat research that powers your avatar’s view of small military drones.",
+    "fix-research": "Comfort Systems research that powers your avatar’s view of this dividend name.",
+    "dell-research": "Dell research that powers your avatar’s view of PCs, servers, and the cash return.",
+    "stx-research": "Seagate research that powers your avatar’s view of storage and the dividend.",
+    "lrcx-research": "Lam Research research that powers your avatar’s view of chip equipment.",
+    "klac-research": "KLA research that powers your avatar’s view of chip inspection and yield.",
+    "pwr-research": "Quanta Services research that powers your avatar’s view of grid and infrastructure.",
+    "mrvl-research": "Marvell research that powers your avatar’s view of data-center silicon.",
+    "lly-research": "Eli Lilly research that powers your avatar’s view of GLP-1 and big pharma.",
+    "amat-research": "Applied Materials research that powers your avatar’s view of wafer-fab tools.",
+    "ter-research": "Teradyne research that powers your avatar’s view of chip test and robotics.",
+    "mpwr-research": "Monolithic Power research that powers your avatar’s view of analog power chips.",
+    "hwm-research": "Howmet research that powers your avatar’s view of aerospace metals.",
+    "jbl-research": "Jabil research that powers your avatar’s view of electronics manufacturing.",
+    "vst-research": "Vistra research that powers your avatar’s view of power generation and the dividend.",
+    "tpl-research": "Texas Pacific Land research that powers your avatar’s view of royalties and land.",
+    "eme-research": "EMCOR research that powers your avatar’s view of electrical and mechanical work.",
+    "nrg-research": "NRG research that powers your avatar’s view of retail power and generation.",
+    "wsm-research": "Williams-Sonoma research that powers your avatar’s view of home retail cash flow.",
+    "mpc-research": "Marathon Petroleum research that powers your avatar’s view of refining.",
+    "cat-research": "Caterpillar research that powers your avatar’s view of heavy equipment and the cycle.",
+    "xau-research": "Gold research that powers your avatar’s view of the monetary metal.",
+    "xag-research": "Silver research that powers your avatar’s view of the metal that trades with gold and industry.",
+    "xpt-research": "Platinum research that powers your avatar’s view of that metal.",
+    "xpd-research": "Palladium research that powers your avatar’s view of that metal.",
+    "xrh-research": "Rhodium research that powers your avatar’s view of that metal.",
+    "xir-research": "Iridium research that powers your avatar’s view of that metal.",
+    "xru-research": "Ruthenium research that powers your avatar’s view of that metal.",
+    "cl-research": "WTI crude research that powers your avatar’s view of US oil.",
+    "bz-research": "Brent crude research that powers your avatar’s view of the global oil benchmark.",
+    "ng-research": "Natural gas research that powers your avatar’s view of Henry Hub.",
+    "ho-research": "Heating oil research that powers your avatar’s view of that distillate.",
+    "rb-research": "RBOB gasoline research that powers your avatar’s view of the pump barrel.",
+    "zc-research": "Corn research that powers your avatar’s view of the grain.",
+    "zs-research": "Soybean research that powers your avatar’s view of the oilseed.",
+    "zm-research": "Soy meal research that powers your avatar’s view of that crush product.",
+    "zl-research": "Soy oil research that powers your avatar’s view of that crush product.",
+    "zw-research": "Wheat research that powers your avatar’s view of Chicago wheat.",
+    "ke-research": "KC wheat research that powers your avatar’s view of hard-red winter wheat.",
+    "hg-research": "Copper research that powers your avatar’s view of the industrial metal.",
+    "ali-research": "Aluminum research that powers your avatar’s view of that industrial metal.",
+    "znc-research": "Zinc research that powers your avatar’s view of that industrial metal.",
+    "sb-research": "Sugar research that powers your avatar’s view of that soft.",
+    "kc-coffee-research": "Coffee research that powers your avatar’s view of that soft.",
+    "cc-research": "Cocoa research that powers your avatar’s view of that soft.",
+    "ct-research": "Cotton research that powers your avatar’s view of that soft.",
+    "le-research": "Live cattle research that powers your avatar’s view of that livestock contract.",
+    "he-research": "Lean hogs research that powers your avatar’s view of that livestock contract.",
+    "voo-research": "Vanguard S&P 500 ETF research that powers your avatar’s view of VOO.",
+    "ivv-research": "iShares S&P 500 ETF research that powers your avatar’s view of IVV.",
+    "spy-research": "SPDR S&P 500 ETF research that powers your avatar’s view of SPY.",
+    "vti-research": "Vanguard Total Stock Market research that powers your avatar’s view of VTI.",
+    "qqq-research": "Nasdaq-100 ETF research that powers your avatar’s view of QQQ.",
+    "vea-research": "Vanguard developed-markets ETF research that powers your avatar’s view of VEA.",
+    "vug-research": "Vanguard growth ETF research that powers your avatar’s view of VUG.",
+    "iefa-research": "iShares developed-ex-US ETF research that powers your avatar’s view of IEFA.",
+    "vtv-research": "Vanguard value ETF research that powers your avatar’s view of VTV.",
+    "spym-research": "S&P 500 mini / SPYM research that powers your avatar’s view of that share class.",
+    "vxus-research": "Vanguard total international ETF research that powers your avatar’s view of VXUS.",
+    "iemg-research": "iShares emerging-markets ETF research that powers your avatar’s view of IEMG.",
+    "bnd-research": "Vanguard total bond ETF research that powers your avatar’s view of BND.",
+    "gld-research": "SPDR gold ETF research that powers your avatar’s view of GLD.",
+    "vgt-research": "Vanguard information-technology ETF research that powers your avatar’s view of VGT.",
+    "agg-research": "iShares core US aggregate bond research that powers your avatar’s view of AGG.",
+    "vwo-research": "Vanguard emerging-markets ETF research that powers your avatar’s view of VWO.",
+    "iwf-research": "iShares Russell 1000 Growth research that powers your avatar’s view of IWF.",
+    "ijh-research": "iShares S&P mid-cap research that powers your avatar’s view of IJH.",
+    "xlk-research": "Technology Select Sector SPDR research that powers your avatar’s view of XLK.",
+    "vtsax-research": "Vanguard Total Stock Market Admiral research that powers your avatar’s view of VTSAX.",
+    "vfiax-research": "Vanguard 500 Index Admiral research that powers your avatar’s view of VFIAX.",
+    "fxaix-research": "Fidelity 500 Index research that powers your avatar’s view of FXAIX.",
+    "vtiax-research": "Vanguard Total International Admiral research that powers your avatar’s view of VTIAX.",
+    "vbtlx-research": "Vanguard Total Bond Admiral research that powers your avatar’s view of VBTLX.",
+    "agthx-research": "American Funds Growth Fund of America research that powers your avatar’s view of AGTHX.",
+    "abalx-research": "American Funds American Balanced research that powers your avatar’s view of ABALX.",
+    "fcntx-research": "Fidelity Contrafund research that powers your avatar’s view of FCNTX.",
+    "fctdx-research": "Fidelity Strategic Advisers Fidelity US research that powers your avatar’s view of FCTDX.",
+    "vwelx-research": "Vanguard Wellington research that powers your avatar’s view of VWELX.",
+    "macro-indicators-research": "Rates, inflation, jobs, and the other macro prints your avatar needs to read the tape.",
+    "social-sentiment-research": "What the public is saying and crowding — research that powers your avatar’s sentiment read.",
+    "capital-flows-research": "Who owns what and where the money is moving — research that powers your avatar’s flow read.",
+    "market-liquidity-research": "Depth, plumbing, and how easily size gets done — research that powers your avatar’s liquidity read.",
+    "cross-asset-research": "How stocks, bonds, dollar, and crypto move together — research that powers your avatar’s cross-asset read.",
+    "market-breadth-research": "How many names are actually participating — research that powers your avatar’s breadth read.",
+    "event-timing-research": "When the calendar matters — FOMC, earnings, rolls — research that powers your avatar’s timing read.",
+    "rules-restrictions-research": "What they can and cannot do in that account — research that powers your avatar’s rules read.",
+    "public-positioning-research": "How the crowd is positioned — research that powers your avatar’s positioning read.",
+    "physical-disruption-research": "War, weather, shipping, and outages — research that powers your avatar’s disruption read.",
+    "forecasts-ratings-research": "Street forecasts and ratings — research that powers your avatar’s consensus read.",
+    "bitcoin-network-research": "Hash, fees, and the chain itself — research that powers your avatar’s Bitcoin-network read.",
+    "lightning-payments-research": "Lightning and Bitcoin payments — research that powers your avatar’s payments read.",
+    "bitcoin-core-nodes-research": "Nodes and Bitcoin Core — research that powers your avatar’s infrastructure read.",
+    "derivatives-data-research": "Futures, options, and open interest — research that powers your avatar’s derivatives read.",
+    "ira-traditional-research": "How a Traditional IRA wrapper changes tax and what your avatar can hold inside it.",
+    "ira-roth-research": "How a Roth IRA wrapper changes tax and what your avatar can hold inside it.",
+    "ira-sep-research": "How a SEP IRA wrapper works for self-employed money and what your avatar can hold inside it.",
+    "pack-bitcoin-macro": "The Bitcoin and macro stack in one unlock — the sleeve your avatar uses to read BTC and the tape around it.",
+    "pack-crypto": "The crypto series in one pack so your avatar covers the coins, not one ticker at a time.",
+    "pack-tech": "The tech series in one pack — Mag-7 and growth names your avatar can talk as a sleeve.",
+    "pack-dividend": "The dividend series in one pack — income names your avatar can talk as a sleeve.",
+    "pack-metals": "The precious-metals series in one pack — gold, silver, and the rest of the complex.",
+    "pack-commodities": "The commodities series in one pack — oil, grains, and softs your avatar can talk as a sleeve.",
+    "pack-etf-mf": "Spot Bitcoin ETF flow research — who is buying, who is selling, and what that does to BTC.",
+    "pack-research-lanes": "The cross-cutting research lanes in one pack — liquidity, breadth, sentiment, flows, and rules.",
+    "btc-treasury-bot": "Assembled Bitcoin treasury bot that can trade the BTC book you already have on sFOX.",
+    "crypto-swing-bot": "Assembled swing bot for the crypto book — entries and exits, not a set-and-forget drip.",
+    "crypto-long-bot": "Assembled long-only crypto bot for a hold-and-add crypto sleeve.",
+    "mag10-long-bot": "Assembled long-only bot for the Magnificent-10 names.",
+    "mag10-swing-bot": "Assembled swing bot for the Magnificent-10 names.",
+    "tech-sm-med-long-bot": "Assembled long-only bot for small and mid tech — not the Mag-10.",
+    "sp500-bot": "Assembled S&P 500 bot for the index sleeve.",
+    "dividends-long-bot": "Assembled long-only bot for the dividend sleeve.",
+    "commodities-long-bot": "Assembled long-only bot for the commodities sleeve.",
+    "gold-long-bot": "Assembled long-only gold bot for the metals sleeve.",
+    "silver-long-boy": "Assembled long-only silver bot for the metals sleeve.",
+    "precious-metals-bot": "Assembled bot for the precious-metals complex, not one metal.",
+    "oil-bot": "Assembled oil bot for the energy sleeve.",
+    "tax-reduction-bot": "Assembled tax-reduction bot that looks for cuts that free more money for the eight sleeves.",
+    "offshore-bot": "Assembled offshore-structure bot — only when that path actually fits.",
+    "tax-attorney-bot": "Assembled tax-attorney bot for the hard questions after the returns are in.",
+    "ma-bot": "Assembled M&A bot — only if they own a business or might sell one.",
+    "vc-bot": "Assembled venture-capital bot — only if they already write checks or run startups."
+  };
+
+  var BODY = {
+    research: "A research module. Pay once. The download stays on your page, and this knowledge stays on your avatar.",
+    pack: "A theme pack. One price unlocks the whole sleeve so you do not buy each module one at a time. Pay once. It stays on your avatar.",
+    bot: "An assembled trading system — not a research PDF. When it is live you can run it on the book it is built for."
+  };
+
+  function trim(value) {
+    return String(value == null ? "" : value).trim();
+  }
+
+  function sentence(row) {
+    if (!row) return "";
+    var id = trim(row.id);
+    if (SALES[id]) return SALES[id];
+    var name = trim(row.name || row.product || id);
+    if (!name) return "A Halfacre unlock for your avatar.";
+    return name + " — research that powers your avatar’s read of this market.";
+  }
+
+  function body(row) {
+    var kind = trim(row && row.kind);
+    if (kind === "pack") return BODY.pack;
+    if (kind === "bot") return BODY.bot;
+    return BODY.research;
+  }
+
+  function groupLabel(key) {
+    return GROUP[trim(key)] || trim(key) || "Other";
+  }
+
+  global.VanShopCopy = {
+    sentence: sentence,
+    body: body,
+    groupLabel: groupLabel,
+    sales: SALES
+  };
+})(window);
