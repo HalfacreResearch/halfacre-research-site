@@ -154,9 +154,61 @@
     }
   }
 
+  function shopKindFromPage() {
+    var path = (global.location.pathname || "").toLowerCase();
+    if (path.indexOf("product.html") !== -1) {
+      var id = new URLSearchParams(global.location.search).get("id") || "";
+      if (global.VanShop && global.VanShop.sectionOf && global.HalfacrePay && global.HalfacrePay.findPaid) {
+        var row = global.HalfacrePay.findPaid(id);
+        if (row && global.VanShop.sectionOf) return global.VanShop.sectionOf(row);
+      }
+      return "";
+    }
+    if (path.indexOf("shop.html") === -1) return "";
+    var kind = String(new URLSearchParams(global.location.search).get("kind") || "research").toLowerCase();
+    if (kind === "pack") kind = "packs";
+    if (kind === "bot") kind = "bots";
+    if (kind === "module" || kind === "modules") kind = "research";
+    return kind;
+  }
+
+  function paintShopNav() {
+    var side = document.getElementById("sidebar");
+    if (!side) return;
+    var box = document.getElementById("deskShop");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "deskShop";
+      side.appendChild(box);
+    }
+    var active = shopKindFromPage();
+    var sections = [
+      { id: "research", label: "Research Modules" },
+      { id: "packs", label: "Research Packs" },
+      { id: "bots", label: "Trading Bots" }
+    ];
+    box.innerHTML = "";
+    sections.forEach(function (row) {
+      var h = document.createElement("h2");
+      h.id = "sideShop-" + row.id;
+      var a = document.createElement("a");
+      a.className = "side-section" + (active === row.id ? " active" : "");
+      a.href = (global.HalfacreSession && global.HalfacreSession.shopUrl)
+        ? global.HalfacreSession.shopUrl(row.id)
+        : "shop.html?kind=" + encodeURIComponent(row.id);
+      a.textContent = row.label;
+      h.appendChild(a);
+      box.appendChild(h);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-shop]"), function (link) {
+      link.classList.toggle("active", link.getAttribute("data-shop") === active);
+    });
+  }
+
   function paint() {
     paintUploads();
     listEl("deskBuys", state.purchases, "No Avatar upgrades purchased yet.", "name");
+    paintShopNav();
     var upCount = document.getElementById("navUploadsCount");
     var buyCount = document.getElementById("navBuysCount");
     if (upCount) upCount.textContent = String(state.uploads.length + (sfoxOn() ? 1 : 0));
@@ -274,7 +326,11 @@
     if (global.VanOwned && typeof global.VanOwned.onChange === "function") {
       global.VanOwned.onChange(function () { pullOwned(); paint(); });
     }
-    showView("talk");
+    if (opts.view === "shop" || opts.view === "product") {
+      paint();
+    } else {
+      showView("talk");
+    }
     return load();
   }
 
