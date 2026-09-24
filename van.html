@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Charlie Van Halfacre</title>
+  <title>Charley Van Halfacre</title>
   <style>
     :root {
       --bg: #0A0A0A;
@@ -109,31 +109,31 @@
 <body>
   <header>
     <p>Client 1</p>
-    <h1>Charlie Van Halfacre</h1>
-    <p class="sub">Dad’s page · not the company desk</p>
+    <h1>Charley Van Halfacre</h1>
+    <p class="sub">Grok is the coach on this page · not Dad</p>
   </header>
 
   <div class="wrap">
     <section class="card">
-      <h2>Dad</h2>
+      <h2>Grok</h2>
       <div id="log"></div>
       <div class="chips" id="chips"></div>
       <form id="form">
-        <input id="line" type="text" autocomplete="off" placeholder="Talk to Dad">
+        <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
         <button class="send" type="submit">Send</button>
       </form>
     </section>
 
     <section class="card">
       <h2>Upload</h2>
-      <p class="sub" style="margin:0 0 12px">Bank, brokerage, or tax form. Dad reads it and places you on the line.</p>
+      <p class="sub" style="margin:0 0 12px">Bank, brokerage, or tax form. Grok reads it and places you on the line.</p>
       <label class="btn file">
         Add a statement
         <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
       </label>
     </section>
 
-    <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
+      <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
   </div>
 
   <script src="van-grok.js"></script>
@@ -156,28 +156,34 @@
         el.scrollIntoView({ block: "end" });
       }
 
-      function talk(text) {
+      function talk(text, silent) {
         if (!text) return;
-        bubble(text, true);
+        if (!silent) bubble(text, true);
         history.push({ role: "user", content: text });
         sendBtn.disabled = true;
         var work = grok && grok.reply
           ? grok.reply(text, null, history)
-          : Promise.resolve("Dad is built. This preview host cannot reach the Grok key yet, so I cannot answer live here.");
+          : Promise.resolve("");
         Promise.resolve(work).then(function (reply) {
           var out = String(reply || "").trim();
+          if (!out || (grok && grok.isOfflineNote && grok.isOfflineNote(out))) {
+            throw new Error("offline");
+          }
           bubble(out, false);
           history.push({ role: "assistant", content: out });
+        }).catch(function () {
+          var fallback = grok && grok.greeting
+            ? grok.greeting()
+            : "Hey Van. I’m Grok, the coach on this page. Live replies are not connected yet.";
+          bubble(fallback, false);
+          history.push({ role: "assistant", content: fallback });
         }).finally(function () {
           sendBtn.disabled = false;
         });
       }
 
-      if (grok && grok.greeting) {
-        var hello = grok.greeting();
-        bubble(hello, false);
-        history.push({ role: "assistant", content: hello });
-        (grok.starters || []).forEach(function (row) {
+      if (grok && grok.starters) {
+        grok.starters.forEach(function (row) {
           var b = document.createElement("button");
           b.type = "button";
           b.className = "chip";
@@ -185,9 +191,9 @@
           b.onclick = function () { talk(row.send); };
           chips.appendChild(b);
         });
-      } else {
-        bubble("Hey Van. Two poles: zero net worth, and the full retirement structure. Upload a statement.", false);
       }
+
+      talk("Hello. I'm on my page. Greet me, say you are Grok the coach — not Dad — and ask what I can upload first.", true);
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();

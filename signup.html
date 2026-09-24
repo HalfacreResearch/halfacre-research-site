@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Create your account</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -41,24 +42,11 @@
       padding: 24px 22px 20px;
       box-shadow: 0 1px 2px rgba(0,0,0,.04);
     }
-    .google {
+    #googleBtn {
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 10px;
-      width: 100%;
-      height: 44px;
-      background: #fff;
-      color: #1f1f1f;
-      border: 1px solid #747775;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      cursor: pointer;
+      min-height: 44px;
     }
-    .google:hover { background: #f7f8f8; }
-    .google svg { width: 18px; height: 18px; flex: 0 0 18px; }
     .or {
       display: flex;
       align-items: center;
@@ -108,6 +96,7 @@
       cursor: pointer;
     }
     .create:hover { background: #000; }
+    .create:disabled, .busy { opacity: 0.55; cursor: wait; }
     .err {
       min-height: 18px;
       margin: 0 0 8px;
@@ -138,15 +127,7 @@
     </div>
 
     <div class="card">
-      <button class="google" type="button" id="google">
-        <svg viewBox="0 0 18 18" aria-hidden="true">
-          <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-          <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-          <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
-          <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z"/>
-        </svg>
-        Continue with Google
-      </button>
+      <div id="googleBtn"></div>
 
       <div class="or">or</div>
 
@@ -161,53 +142,122 @@
         <input id="phone" name="phone" type="tel" autocomplete="tel" required>
 
         <p class="err" id="err"></p>
-        <button class="create" type="submit">Create account</button>
+        <button class="create" type="submit" id="create">Create account</button>
       </form>
     </div>
 
-    <p class="fine">Free to create. If you don’t use Google, we’ll email you a sign-in button after this.</p>
+    <p class="fine">Free to create. After you finish, Grok meets you on your page. Google is optional — the form works if you do not use it.</p>
     <a class="back" href="admin.html">Back to desk</a>
   </div>
 
   <script>
     (function () {
+      var CLIENT_ID = "3260604131-hsdpbu9kmn06e449e193kqkuo9e8o9b8.apps.googleusercontent.com";
       var KEY = "halfacre.clients";
+      var err = document.getElementById("err");
+      var createBtn = document.getElementById("create");
+
+      function showError(text) {
+        err.textContent = text;
+      }
+
       function load() {
         try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
         catch (e) { return []; }
       }
-      function save(rows) {
+
+      function saveLocal(client) {
+        var rows = load();
+        var found = false;
+        rows = rows.map(function (row) {
+          if (row && row.email === client.email) {
+            found = true;
+            return client;
+          }
+          return row;
+        });
+        if (!found) rows.push(client);
         localStorage.setItem(KEY, JSON.stringify(rows));
-      }
-      function go(client) {
         localStorage.setItem("halfacre.session", JSON.stringify(client));
-        var next = "van.html";
-        if (location.hostname === "htmlpreview.github.io") {
-          var raw = location.search.replace(/^\?/, "");
-          next = "https://htmlpreview.github.io/?" + raw.replace(/signup\.html$/, "van.html");
-        }
-        window.location.href = next;
       }
-      document.getElementById("google").onclick = function () {
-        document.getElementById("err").textContent =
-          "Google sign-in turns on when this is on the live site. Use the form below for this practice.";
-      };
-      document.getElementById("form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        var client = {
-          name: document.getElementById("name").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          phone: document.getElementById("phone").value.trim(),
-          created: new Date().toISOString()
-        };
-        if (!client.name || !client.email || !client.phone) {
-          document.getElementById("err").textContent = "Name, email, and phone are required.";
+
+      function go() {
+        window.location.href = "van.html";
+      }
+
+      function createAccount(body) {
+        showError("");
+        createBtn.disabled = true;
+        return fetch("signup.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(function (res) {
+            return res.json().then(function (data) {
+              return { ok: res.ok, data: data };
+            });
+          })
+          .then(function (pack) {
+            if (!pack.ok || !pack.data || !pack.data.client) {
+              throw new Error((pack.data && pack.data.error) || "Could not create the account.");
+            }
+            saveLocal(pack.data.client);
+            go();
+          })
+          .catch(function (e) {
+            showError(e.message || "Could not create the account.");
+            createBtn.disabled = false;
+          });
+      }
+
+      function handleGoogle(response) {
+        if (!response || !response.credential) {
+          showError("Google did not return a sign-in.");
           return;
         }
-        var rows = load();
-        rows.push(client);
-        save(rows);
-        go(client);
+        createAccount({ google_id_token: response.credential });
+      }
+
+      function startGoogle() {
+        if (!window.google || !google.accounts || !google.accounts.id) {
+          return false;
+        }
+        google.accounts.id.initialize({
+          client_id: CLIENT_ID,
+          callback: handleGoogle,
+          ux_mode: "popup",
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+        google.accounts.id.renderButton(document.getElementById("googleBtn"), {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          shape: "rectangular",
+          logo_alignment: "left",
+          width: 360
+        });
+        return true;
+      }
+
+      if (!startGoogle()) {
+        window.addEventListener("load", startGoogle);
+        var tries = 0;
+        var timer = setInterval(function () {
+          tries += 1;
+          if (startGoogle() || tries > 40) clearInterval(timer);
+        }, 250);
+      }
+
+      document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        createAccount({
+          name: document.getElementById("name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          phone: document.getElementById("phone").value.trim()
+        });
       });
     })();
   </script>
