@@ -1,147 +1,124 @@
 /**
- * sFOX connect UI for Van’s Codex.
- *
- * Local / client-side only, pending a Vault. No live sFOX trading calls.
- * Never log the key. Never send it to chat, analytics, or Grok.
+ * Live sFOX holdings on a client page.
+ * Talks to van-sfox.php. The API key never ships in this file.
  */
 (function (global) {
   "use strict";
 
-  var STORAGE_KEY = "halfacre.van.sfox.v1";
+  var API = "van-sfox.php";
+  var snap = {
+    connected: false,
+    hint: "",
+    holdings: [],
+    totalUsd: null,
+    asOf: 0,
+    error: ""
+  };
 
-  function readStore() {
-    try {
-      var raw = global.localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        return { connected: false };
-      }
-      var data = JSON.parse(raw);
-      if (!data || typeof data !== "object") {
-        return { connected: false };
-      }
-      return data;
-    } catch (err) {
-      return { connected: false };
+  function money(n) {
+    var v = Number(n);
+    if (!isFinite(v)) return "\u2014";
+    return v.toLocaleString(undefined, { style: "currency", currency: "USD" });
+  }
+
+  function amount(n, currency) {
+    var v = Number(n);
+    if (!isFinite(v)) return "\u2014";
+    var digits = /USD|USDC|USDT|DAI|PYUSD/i.test(currency || "") ? 2 : (Math.abs(v) >= 1 ? 6 : 8);
+    return v.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: digits });
+  }
+
+  function paint() {
+    var status = document.getElementById("sfoxStatus");
+    var body = document.getElementById("sfoxBody");
+    var count = document.getElementById("navSfoxCount");
+    if (count) count.textContent = String(snap.holdings.length);
+    if (!status || !body) return;
+
+    if (snap.error) {
+      status.textContent = snap.error;
+      body.innerHTML = "";
+      return;
     }
-  }
-
-  function writeStore(data) {
-    global.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }
-
-  function clearStore() {
-    global.localStorage.removeItem(STORAGE_KEY);
-  }
-
-  function hintFrom(key) {
-    var clean = String(key || "").replace(/\s+/g, "");
-    if (clean.length < 4) {
-      return "••••";
+    if (!snap.connected) {
+      status.textContent = "No sFOX account saved yet.";
+      body.innerHTML = "<p class=\"side-empty\">Matthew saves the key on the desk. Balances show here.</p>";
+      return;
     }
-    return "••••" + clean.slice(-4);
-  }
-
-  function state() {
-    var data = readStore();
-    var connected = Boolean(data.connected && data.hasKey);
-    return {
-      connected: connected,
-      hint: connected ? String(data.hint || "••••") : "",
-      savedAt: data.savedAt || 0
-    };
-  }
-
-  function connect(apiKey) {
-    var key = String(apiKey || "").replace(/\s+/g, "");
-    if (key.length < 8) {
-      return { ok: false, error: "That key looks too short. Use the sFOX API key from your sFOX account." };
+    if (!snap.holdings.length) {
+      status.textContent = "Connected. No balances right now.";
+      body.innerHTML = "";
+      return;
     }
-    writeStore({
-      connected: true,
-      hasKey: true,
-      hint: hintFrom(key),
-      savedAt: Date.now(),
-      key: key
+
+    var head = snap.totalUsd != null
+      ? "About " + money(snap.totalUsd) + " across " + snap.holdings.length + " holding" + (snap.holdings.length === 1 ? "" : "s")
+      : snap.holdings.length + " holding" + (snap.holdings.length === 1 ? "" : "s");
+    status.textContent = head;
+
+    var table = document.createElement("table");
+    table.className = "sfox-table";
+    table.innerHTML = "<thead><tr><th>Asset</th><th>Balance</th><th>Available</th><th>USD</th></tr></thead>";
+    var tb = document.createElement("tbody");
+    snap.holdings.forEach(function (row) {
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (row.currency || "") + "</td>" +
+        "<td>" + amount(row.balance, row.currency) + "</td>" +
+        "<td>" + amount(row.available, row.currency) + "</td>" +
+        "<td>" + (row.usd != null ? money(row.usd) : "\u2014") + "</td>";
+      tb.appendChild(tr);
     });
-    return { ok: true, state: state() };
+    table.appendChild(tb);
+    body.innerHTML = "";
+    body.appendChild(table);
   }
 
-  function disconnect() {
-    clearStore();
-    return { ok: true, state: state() };
+  function load(clientId) {
+    var id = String(clientId || (global.HalfacreClient && global.HalfacreClient.id) || "charley-van-halfacre");
+    return fetch(API + "?c=" + encodeURIComponent(id), { cache: "no-store" })
+      .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+      .then(function (pack) {
+        var data = pack.data || {};
+        snap = {
+          connected: !!data.connected,
+          hint: String(data.hint || ""),
+          holdings: Array.isArray(data.holdings) ? data.holdings : [],
+          totalUsd: data.totalUsd == null ? null : Number(data.totalUsd),
+          asOf: Number(data.asOf || 0),
+          error: pack.ok ? "" : String(data.error || "Could not load sFOX.")
+        };
+        paint();
+        return snap;
+      })
+      .catch(function () {
+        snap = { connected: false, hint: "", holdings: [], totalUsd: null, asOf: 0, error: "Could not load sFOX." };
+        paint();
+        return snap;
+      });
   }
 
-  /**
-   * Render the dedicated key field. The value is never copied into chat.
-   */
-  function bind(root) {
-    var status = root.querySelector("[data-sfox-status]");
-    var hint = root.querySelector("[data-sfox-hint]");
-    var form = root.querySelector("[data-sfox-form]");
-    var input = root.querySelector("[data-sfox-key]");
-    var err = root.querySelector("[data-sfox-error]");
-    var disconnectBtn = root.querySelector("[data-sfox-disconnect]");
-
-    function paint() {
-      var now = state();
-      root.setAttribute("data-connected", now.connected ? "yes" : "no");
-      if (status) {
-        status.textContent = now.connected
-          ? "3 · Connected — trading follow-on"
-          : "1 · Not connected";
-        status.classList.toggle("wait", !now.connected);
-      }
-      if (hint) {
-        hint.textContent = now.connected
-          ? "sFOX key saved on this device " + (now.hint ? "(" + now.hint + ")" : "") + ". Connected — trading follow-on. Live autotrade is not firing until keys + the autotrades-engine scheduler (sfoxEngine / dcaEngine / rotationEngine, admin tRPC on autotrades.codexyield.com) are wired."
-          : "Step 2: paste the sFOX API key here — not in chat. That connect is the Codex unlock. Execution SoT is autotrades-engine server/sfoxEngine.ts — not a new engine on this page.";
-      }
-      var steps = root.querySelector("[data-sfox-steps]");
-      if (steps) {
-        steps.setAttribute("data-state", now.connected ? "connected" : "open");
-      }
-      if (form) {
-        form.hidden = now.connected;
-      }
-      if (disconnectBtn) {
-        disconnectBtn.hidden = !now.connected;
-      }
-      if (err) {
-        err.textContent = "";
-      }
-      if (input) {
-        input.value = "";
-      }
-      root.dispatchEvent(new CustomEvent("sfox-change", { detail: now, bubbles: true }));
+  function snapshotText() {
+    if (snap.error) return "sFOX error: " + snap.error;
+    if (!snap.connected) return "sFOX is not connected.";
+    if (!snap.holdings.length) return "sFOX is connected. No balances.";
+    var lines = snap.holdings.map(function (row) {
+      var usd = row.usd != null ? " (~" + money(row.usd) + ")" : "";
+      return "- " + row.currency + " " + amount(row.balance, row.currency) + usd;
+    });
+    if (snap.totalUsd != null) {
+      lines.unshift("About " + money(snap.totalUsd) + " total.");
     }
-
-    if (form) {
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        var result = connect(input ? input.value : "");
-        if (!result.ok) {
-          if (err) {
-            err.textContent = result.error;
-          }
-          return;
-        }
-        paint();
-      });
-    }
-    if (disconnectBtn) {
-      disconnectBtn.addEventListener("click", function () {
-        disconnect();
-        paint();
-      });
-    }
-    paint();
-    return { state: state, paint: paint };
+    return lines.join("\n");
   }
 
   global.VanSfox = {
-    state: state,
-    connect: connect,
-    disconnect: disconnect,
-    bind: bind
+    load: load,
+    paint: paint,
+    state: function () {
+      return { connected: snap.connected && !snap.error, hint: snap.hint };
+    },
+    snapshot: function () { return snap; },
+    snapshotText: snapshotText
   };
 })(window);
