@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pay — Halfacre Research</title>
+  <meta name="description" content="Universal pay page. Live research $4.99 and packs $29.99 unlock a lasting avatar power-up plus download. BTCTreasuryBot $149. PayPal Day-1. No Stripe.">
+  <style>
+    :root {
+      --dark: #0A0A0A;
+      --card: #161616;
+      --foot: #121212;
+      --orange: #F7931A;
+      --white: #FFFFFF;
+      --muted: #A8A8A8;
+      --neon: #39FF14;
+      --warn: #c9a227;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--dark);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+    .brand {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+    .gate {
+      border: 2px solid var(--warn);
+      background: #1a1408;
+      color: #f3e2b0;
+      padding: 12px 14px;
+      margin: 0 0 18px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 7vw, 36px); line-height: 0.95; }
+    .sub { color: var(--muted); font-size: 15px; margin: 0 0 20px; }
+    .card {
+      background: var(--card);
+      border-left: 6px solid var(--orange);
+      padding: 16px 16px 18px;
+      margin: 0 0 16px;
+    }
+    .card h2 {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--orange);
+      margin: 0 0 10px;
+    }
+    .fact {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 8px;
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+    .fact span {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      color: var(--orange);
+      letter-spacing: 0.04em;
+      padding-top: 3px;
+    }
+    .price { font-size: 28px; font-weight: 700; color: var(--orange); margin: 8px 0 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+    .square-card { border-left-color: #888; }
+    .square-card p { color: var(--muted); font-size: 14px; line-height: 1.45; margin: 0 0 10px; }
+    .flag {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--warn);
+      margin: 0 0 8px;
+    }
+    button, .go, .paypal {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      border: 0;
+      cursor: pointer;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .go, .paypal { background: var(--neon); color: var(--dark); }
+    button[disabled], a[aria-disabled="true"] {
+      background: #3a3a3a;
+      color: #888;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .list a, .list .soon-row {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 10px 0;
+    }
+    .list a:hover { color: var(--orange); }
+    .list .soon-row { color: #9a9a9a; cursor: default; }
+    .list small { display: block; color: var(--muted); font-size: 13px; }
+    footer {
+      margin-top: 28px;
+      padding-top: 14px;
+      border-top: 2px solid var(--orange);
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: var(--neon); text-decoration: none; }
+    @media (max-width: 560px) {
+      .fact { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">HALFACRE RESEARCH · PAY</div>
+    <div class="gate" id="gate">
+      <strong>PAYPAL GATE.</strong>
+      Do not stamp “show Van” until PayPal can take money for a live SKU, or the BTCTreasuryBot working UI on van.html is used.
+      Live research/data $4.99 and theme packs $29.99: pay, then a lasting unlock is written to Van’s account and the download stays available. Assembled bots $149 (only BTCTreasuryBot is live). PayPal is Day-1. Square (Block) is next. No Stripe.
+    </div>
+    <h1>Pay for one live upgrade.</h1>
+    <p class="sub">A successful PayPal writes that moduleId onto Van’s unlock list (charlie-van-halfacre) so the avatar stays powered up. Download remains a re-fetch. Coming soon / Not ready stays on van.html and is not for sale here. Link params: product, sku, name, amount, description. Do not reuse historical Macro/ETF pack NCP links.</p>
+
+    <section class="card" id="line">
+      <h2>LINE ITEM</h2>
+      <p id="empty">No product in the link yet. Pick a live module below.</p>
+      <div id="filled" hidden>
+        <div class="fact"><span>PRODUCT</span><b id="f-product"></b></div>
+        <div class="fact"><span>SKU</span><b id="f-sku"></b></div>
+        <div class="fact"><span>UPGRADE</span><b id="f-label"></b></div>
+        <div class="fact"><span>DESCRIPTION</span><b id="f-desc"></b></div>
+        <p class="price" id="f-price"></p>
+      </div>
+      <div class="actions" id="pay-actions"></div>
+    </section>
+
+    <section class="card">
+      <h2>LIVE · CLICKABLE</h2>
+      <div class="list" id="known"></div>
+    </section>
+
+    <section class="card">
+      <h2>COMING SOON · NOT READY</h2>
+      <p id="soon-note" class="sub">Full list lives on van.html. Coming soon / Not ready means data or fulfillment is missing — not teaser fluff. Those names are not clickable here.</p>
+    </section>
+
+    <section class="card square-card" id="square">
+      <h2>SQUARE (BLOCK) · SECOND RAIL</h2>
+      <p class="flag" id="square-flag">pay.square.enabled = false · coming next</p>
+      <p id="square-note">Matthew likes Square as a second rail. This PR does not wait on a Square SDK. Day-1 money path is PayPal above. Flip <code>pay.square.enabled</code> and add <code>application_id</code> / <code>location_id</code> in van-products.json when Square is ready.</p>
+      <div class="actions">
+        <button type="button" disabled>Square — coming next</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>PayPal is Day-1. Success URL: <code>van.html?paid={SKU}</code> — that appends the module to Van’s unlock list and refreshes the avatar. Square stub only. Historical pack NCP IDs stay unused. No Stripe. Van starts with none owned.</p>
+      <p><a href="van.html">Back to Van’s page</a> · <a href="pages.html">All pages</a></p>
+    </footer>
+  </div>
+  <script src="pay-catalog.js"></script>
+  <script src="van-owned.js"></script>
+  <script>
+    (function () {
+      var pay = window.HalfacrePay;
+      var owned = window.VanOwned;
+      var actions = document.getElementById("pay-actions");
+      var empty = document.getElementById("empty");
+      var filled = document.getElementById("filled");
+      var known = document.getElementById("known");
+      var gate = document.getElementById("gate");
+
+      function money(line) {
+        return pay.formatMoney((line && (line.amount || line.price_usd)) || "");
+      }
+
+      function addDisabled(label) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.disabled = true;
+        b.textContent = label;
+        actions.appendChild(b);
+      }
+
+      function addPayPalFields(form, sku) {
+        var ret = document.createElement("input");
+        ret.type = "hidden";
+        ret.name = "return";
+        ret.value = owned.returnUrl(sku);
+        form.appendChild(ret);
+        var cancel = document.createElement("input");
+        cancel.type = "hidden";
+        cancel.name = "cancel_return";
+        cancel.value = owned.cancelUrl(sku);
+        form.appendChild(cancel);
+        var rm = document.createElement("input");
+        rm.type = "hidden";
+        rm.name = "rm";
+        rm.value = "1";
+        form.appendChild(rm);
+        var ship = document.createElement("input");
+        ship.type = "hidden";
+        ship.name = "no_shipping";
+        ship.value = "1";
+        form.appendChild(ship);
+        form.addEventListener("submit", function () {
+          owned.markPending(sku);
+        });
+      }
+
+      function renderPay(line) {
+        actions.replaceChildren();
+        var sku = line.sku || line.id;
+        var label = money(line);
+        if (line.free) {
+          var freeGo = document.createElement("a");
+          freeGo.className = "go";
+          freeGo.href = (line.ui_href && line.ui_href.charAt(0) === "#")
+            ? "van.html" + line.ui_href
+            : "van.html#codex";
+          freeGo.textContent = "Codex is free — open the working UI";
+          actions.appendChild(freeGo);
+          return;
+        }
+        if (line.split) {
+          var split = document.createElement("a");
+          split.className = "go";
+          split.href = pay.buildUrl({ id: "btc-treasury-bot", sku: "btc-treasury-bot" });
+          split.textContent = "Open BTCTreasuryBot $149";
+          actions.appendChild(split);
+          return;
+        }
+        if (line.forbidden) {
+          addDisabled("PayPal blocked — $99 is not a Van price");
+          return;
+        }
+        if (!line.live) {
+          addDisabled("Coming soon / Not ready");
+          var soon = document.createElement("p");
+          soon.style.cssText = "color:#c9a227;font-size:13px;margin:8px 0 0;width:100%;";
+          soon.textContent = "This name is on the intentions list. It is not clickable to buy yet. See van.html.";
+          actions.appendChild(soon);
+          return;
+        }
+        if (sku && owned.owns(sku)) {
+          var back = document.createElement("a");
+          back.className = "go";
+          back.href = "van.html";
+          back.textContent = "Already on unlock list — back to avatar";
+          actions.appendChild(back);
+          if (line.kind !== "bot") {
+            var again = document.createElement("a");
+            again.className = "go";
+            again.href = owned.downloadUrl(sku);
+            again.textContent = "Re-fetch download";
+            actions.appendChild(again);
+          }
+          return;
+        }
+        var plan = pay.checkoutPlan(line);
+        if (plan.ok && plan.kind === "dynamic") {
+          var dyn = document.createElement("form");
+          dyn.action = "https://www.paypal.com/cgi-bin/webscr";
+          dyn.method = "post";
+          dyn.target = "_top";
+          dyn.innerHTML =
+            '<input type="hidden" name="cmd" value="_xclick">' +
+            '<input type="hidden" name="business" value="">' +
+            '<input type="hidden" name="item_name" value="">' +
+            '<input type="hidden" name="item_number" value="">' +
+            '<input type="hidden" name="custom" value="">' +
+            '<input type="hidden" name="amount" value="">' +
+            '<input type="hidden" name="currency_code" value="USD">' +
+            '<button class="paypal" type="submit"></button>';
+          dyn.querySelector("[name=business]").value = plan.business;
+          dyn.querySelector("[name=item_name]").value = plan.item_name;
+          dyn.querySelector("[name=item_number]").value = plan.item_number;
+          dyn.querySelector("[name=custom]").value = plan.custom || sku;
+          dyn.querySelector("[name=amount]").value = plan.amount;
+          dyn.querySelector("button").textContent = "Pay " + label + " with PayPal";
+          addPayPalFields(dyn, sku);
+          actions.appendChild(dyn);
+        } else if (plan.ok && (plan.kind === "url" || plan.kind === "ncp")) {
+          var a = document.createElement("a");
+          a.className = "paypal";
+          a.href = plan.value;
+          a.rel = "noopener noreferrer";
+          a.textContent = "Pay " + label + " with PayPal";
+          a.addEventListener("click", function () {
+            owned.markPending(sku);
+          });
+          actions.appendChild(a);
+        } else if (plan.ok && plan.kind === "button") {
+          var form = document.createElement("form");
+          form.action = "https://www.paypal.com/cgi-bin/webscr";
+          form.method = "post";
+          form.target = "_top";
+          form.innerHTML =
+            '<input type="hidden" name="cmd" value="_s-xclick">' +
+            '<input type="hidden" name="hosted_button_id" value="">' +
+            '<button class="paypal" type="submit"></button>';
+          form.querySelector("[name=hosted_button_id]").value = plan.value;
+          form.querySelector("button").textContent = "Pay " + label + " with PayPal";
+          addPayPalFields(form, sku);
+          actions.appendChild(form);
+        } else {
+          addDisabled("PayPal — " + label + " path not live");
+          var note = document.createElement("p");
+          note.style.cssText = "color:#c9a227;font-size:13px;margin:8px 0 0;width:100%;";
+          note.textContent = plan.reason;
+          actions.appendChild(note);
+        }
+      }
+
+      pay.load().then(function () {
+        var sq = pay.squareStatus();
+        var flag = document.getElementById("square-flag");
+        var sqNote = document.getElementById("square-note");
+        var soonNote = document.getElementById("soon-note");
+        var live = pay.liveProducts || [];
+        var coming = pay.comingSoonProducts || [];
+        flag.textContent = "pay.square.enabled = " + String(sq.enabled) + " · " + sq.status;
+        if (sq.note) {
+          sqNote.textContent = sq.note;
+        }
+        soonNote.textContent = coming.length +
+          " names are Coming soon / Not ready (data or fulfillment missing). They stay visible on van.html and are not clickable to buy.";
+
+        if (!pay.anyPaypalLive()) {
+          gate.innerHTML = "<strong>NOT SHOW-VAN.</strong> Mint PayPal NCPs at $4.99 / $29.99 / $149 and point success at van.html?paid={SKU} so the unlock list persists. BTCTreasuryBot working UI is on van.html#btctreasury. Do not reuse historical Macro/ETF pack NCP links. Coming soon / Not ready is not for sale. Square is coming next.";
+        } else {
+          gate.innerHTML = "<strong>PAYPAL PRESENT.</strong> A PayPal path is configured. Success writes the moduleId to Van’s unlock list and refreshes the avatar. Square (Block) stays a stub. CoS still confirms a real digital payment before any “show Van” stamp.";
+        }
+
+        var query = pay.fromQuery(window.location.search);
+        var line = pay.resolve(query);
+        var hasLine = Boolean(line.product || line.sku || line.id || line.amount || line.description || line.split || line.forbidden);
+
+        if (hasLine) {
+          empty.hidden = true;
+          filled.hidden = false;
+          document.getElementById("f-product").textContent = line.product || "(no name)";
+          document.getElementById("f-sku").textContent = line.sku || line.id || "(no sku)";
+          document.getElementById("f-label").textContent = line.split
+            ? "Codex is now BTCTreasuryBot at $149"
+            : (line.avatar_upgrade_label || "—");
+          document.getElementById("f-desc").textContent = line.forbidden
+            ? "Blocked. $99 is not a Van price. Do not reuse historical Macro/ETF pack NCP links."
+            : (line.free
+              ? "Free Codex — open the autotrades-engine UI on van.html#codex. sFOX connect is the unlock. No PayPal."
+              : (!line.live && line.known
+              ? "Coming soon / Not ready — data or fulfillment is not built yet."
+              : (line.description || "—")));
+          document.getElementById("f-price").textContent = line.forbidden
+            ? "Blocked pack price"
+            : (!line.live && line.known ? "Not for sale yet" : money(line));
+          renderPay(line);
+        } else {
+          addDisabled("PayPal — pick a live module");
+        }
+
+        live.forEach(function (item) {
+          var a = document.createElement("a");
+          a.href = item.free ? "van.html#codex" : pay.buildUrl(item);
+          a.innerHTML = "<b></b><small></small>";
+          a.querySelector("b").textContent = item.product + " · " + item.id;
+          a.querySelector("small").textContent =
+            (item.free ? "FREE · Codex working UI" : money(item) + " · " +
+            (owned.owns(item.id) ? "unlocked" : "locked · live")) + " · " +
+            item.description;
+          known.appendChild(a);
+        });
+      }).catch(function () {
+        empty.textContent = "Could not load van-products.json.";
+      });
+    })();
+  </script>
+</body>
+</html>

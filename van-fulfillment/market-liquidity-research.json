@@ -1,0 +1,19 @@
+{
+  "user_scoped": true,
+  "sku": "market-liquidity-research",
+  "name": "Market liquidity and infrastructure",
+  "price_usd": 4.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "etf-flow-v2026-09-09",
+    "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+    "series": [
+      "btc-ibit-daily-volume-history"
+    ],
+    "avatar_knowledge": "IBIT daily close, share volume, and trading value.",
+    "download_href": "van-download.php?sku=market-liquidity-research",
+    "receipt_href": "van-fulfillment/market-liquidity-research.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}

@@ -1,0 +1,22 @@
+{
+  "user_scoped": true,
+  "sku": "pack-etf-mf",
+  "name": "BTC spot ETF flow pack",
+  "price_usd": 29.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "etf-flow-v2026-09-09",
+    "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+    "series": [
+      "btc-spot-etf-flow-history",
+      "btc-ibit-daily-volume-history",
+      "btc-spot-etf-holdings-snapshot",
+      "btc-sec-ibit-filing-history"
+    ],
+    "avatar_knowledge": "BTC spot ETF flow pack: flows, IBIT volume, holdings, and SEC filings.",
+    "download_href": "van-download.php?sku=pack-etf-mf",
+    "receipt_href": "van-fulfillment/pack-etf-mf.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}

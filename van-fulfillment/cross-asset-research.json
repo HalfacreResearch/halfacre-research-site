@@ -1,0 +1,19 @@
+{
+  "user_scoped": true,
+  "sku": "cross-asset-research",
+  "name": "Cross-asset relationships",
+  "price_usd": 4.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "macro-btc-fg-fred-live-slice",
+    "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+    "series": [
+      "btc-fred-us-dollar-index"
+    ],
+    "avatar_knowledge": "FRED U.S. dollar index versus the Bitcoin/macro stack.",
+    "download_href": "van-download.php?sku=cross-asset-research",
+    "receipt_href": "van-fulfillment/cross-asset-research.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}

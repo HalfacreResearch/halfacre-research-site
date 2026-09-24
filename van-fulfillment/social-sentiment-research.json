@@ -1,0 +1,19 @@
+{
+  "user_scoped": true,
+  "sku": "social-sentiment-research",
+  "name": "Social sentiment",
+  "price_usd": 4.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "macro-btc-fg-fred-live-slice",
+    "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+    "series": [
+      "btc-fear-greed-daily"
+    ],
+    "avatar_knowledge": "Bitcoin Fear & Greed daily sentiment history.",
+    "download_href": "van-download.php?sku=social-sentiment-research",
+    "receipt_href": "van-fulfillment/social-sentiment-research.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}
