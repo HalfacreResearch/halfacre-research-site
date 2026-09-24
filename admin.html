@@ -82,9 +82,10 @@
   <div class="grid">
     <section class="card">
       <h2>Clients</h2>
-      <p class="who">Charley Van Halfacre</p>
-      <p class="meta">Client 1 · not live yet</p>
+      <p class="who" id="clientName">Charley Van Halfacre</p>
+      <p class="meta" id="clientMeta">Client 1 \u00b7 not live yet</p>
       <a class="btn" href="van.html">Open his page</a>
+      <a class="btn ghost" href="signup.html">Create account</a>
     </section>
 
     <section class="card">
@@ -110,5 +111,18 @@
       <a class="btn ghost" href="pages.html">Old pages</a>
     </section>
   </div>
+  <script>
+    (function () {
+      try {
+        var rows = JSON.parse(localStorage.getItem("halfacre.clients") || "[]");
+        var last = rows[rows.length - 1];
+        if (last && last.name) {
+          document.getElementById("clientName").textContent = last.name;
+          document.getElementById("clientMeta").textContent =
+            (last.email || "") + " \u00b7 " + (last.phone || "") + " \u00b7 practice";
+        }
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>
