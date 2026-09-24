@@ -1,7 +1,6 @@
 <?php
 /**
  * Hostinger same-origin proxy for on-page Grok (xAI Chat Completions).
- * This is Grok itself — not a Grok Bot / fleet agent / VanCoachBot.
  * Put the key in XAI_API_KEY or van-grok.secret.php (not in git).
  */
 declare(strict_types=1);
@@ -47,46 +46,7 @@ function catalog_rows($catalog): array
       "coming" => isset($catalog["coming_soon"]) && is_array($catalog["coming_soon"]) ? $catalog["coming_soon"] : []
     ];
   }
-  return ["live" => $catalog, "coming" => []];
-}
-
-function format_live_lines(array $rows, array $owned): string
-{
-  $lines = [];
-  foreach ($rows as $row) {
-    if (!is_array($row)) {
-      continue;
-    }
-    $id = isset($row["id"]) ? (string) $row["id"] : "";
-    $name = isset($row["name"]) ? (string) $row["name"] : $id;
-    $price = isset($row["price"]) ? (string) $row["price"] : "4.99";
-    $state = in_array($id, $owned, true) ? "unlocked" : "locked";
-    $lines[] = "- {$name} ({$id}) \${$price} {$state} pay.html?id={$id}";
-  }
-  return $lines ? implode("\n", $lines) : "- (no live SKUs)";
-}
-
-function format_coming_names(array $rows): string
-{
-  $names = [];
-  foreach ($rows as $row) {
-    if (!is_array($row)) {
-      continue;
-    }
-    $name = isset($row["name"]) ? (string) $row["name"] : "";
-    if ($name !== "") {
-      $names[] = $name;
-    }
-    if (count($names) >= 80) {
-      break;
-    }
-  }
-  $extra = max(0, count($rows) - count($names));
-  $list = $names ? implode(", ", $names) : "(coming-soon names loading)";
-  if ($extra > 0) {
-    $list .= ", plus {$extra} more on van.html";
-  }
-  return $list;
+  return ["live" => is_array($catalog) ? $catalog : [], "coming" => []];
 }
 
 function format_powerups(array $owned, $avatar, string $userId): string
@@ -114,11 +74,46 @@ function format_powerups(array $owned, $avatar, string $userId): string
     }
   }
   if (!$names) {
-    return "None yet. The unlock list for {$userId} is empty. Do not pretend this client already owns paid modules.";
+    return "None yet for {$userId}.";
   }
   return implode("\n", array_map(function ($line) {
     return "- " . $line;
   }, $names));
+}
+
+function format_uploads(array $uploads): string
+{
+  if (!$uploads) {
+    return "None yet.";
+  }
+  $lines = [];
+  foreach ($uploads as $row) {
+    if (!is_array($row)) {
+      continue;
+    }
+    $name = isset($row["name"]) ? (string) $row["name"] : "";
+    $kind = isset($row["kind"]) ? (string) $row["kind"] : "file";
+    if ($name !== "") {
+      $lines[] = "- {$name} ({$kind})";
+    }
+  }
+  return $lines ? implode("\n", $lines) : "None yet.";
+}
+
+function upload_kinds(array $uploads): array
+{
+  $counts = [];
+  foreach ($uploads as $row) {
+    if (!is_array($row)) {
+      continue;
+    }
+    $kind = strtolower(trim((string) ($row["kind"] ?? "file")));
+    if ($kind === "") {
+      $kind = "file";
+    }
+    $counts[$kind] = ($counts[$kind] ?? 0) + 1;
+  }
+  return $counts;
 }
 
 function first_name(string $full): string
@@ -134,67 +129,111 @@ function first_name(string $full): string
   return $first;
 }
 
-function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clientName, string $userId): string
+function welcome_prompt(string $clientName, string $userId, array $uploads, array $owned, $avatar): string
 {
-  $pack = is_array($catalog) ? catalog_rows($catalog) : ["live" => [], "coming" => []];
-  $shop = format_live_lines($pack["live"], $owned);
-  $coming = format_coming_names($pack["coming"]);
-  $comingCount = count($pack["coming"]);
-  $power = format_powerups($owned, $avatar, $userId);
-  $sfoxLine = $sfox ? "sFOX shows connected on this device." : "sFOX is not connected. Keys go in the page box, never chat.";
   $first = first_name($clientName);
-  $isVan = ($userId === "charley-van-halfacre" || strcasecmp($clientName, "Charley Van Halfacre") === 0);
-  $pageLine = $isVan
-    ? "You are on Charley Van Halfacre's page (/van.html). You may call him Van."
-    : "You are on {$clientName}'s own page (/page.html). This is not Dad's page. Call them {$first}.";
-  $identity = $isVan
-    ? "Client: Charley Van Halfacre. Phone (601) 408-8342. Email cvhalfacre@msn.com.\nAccount userId: charley-van-halfacre."
-    : "Client: {$clientName}. Account userId: {$userId}. Do not use Charley's phone, email, or identity on this page.";
+  $files = format_uploads($uploads);
+  $power = format_powerups($owned, $avatar, $userId);
   return <<<TXT
-You are Grok (xAI), embedded full-time on this client's Halfacre Research page.
-You are Grok itself — the coach on this page. You are not Dad. You are not a Grok Bot, not a fleet agent, and not VanCoachBot.
+You are Grok, the coach on {$clientName}'s Halfacre Research page. Call them {$first}.
+There is no script. Listen. You decide the next sentence.
 
-{$pageLine}
-{$identity}
-Speak warm and plain. You are Grok, the coach. Do not call yourself Dad. No Soft HOLD jargon. No DataBazaar or Hermes. No Stripe.
+Welcome them. Your goal is to use portfolio balancing to guide them toward a very diversified portfolio over time.
+The live mix is eight equal sleeves of 12.5% each: BTC, crypto, tech stocks, dividend stocks, precious metals, commodities, mutual funds/ETFs, and real estate.
+You may name those eight so they can pick the first sector they care about.
 
-AVATAR POWER-UPS (load these BEFORE you talk — unlock list is source of truth for what he knows):
+First job: a capital account attached. Second job: a monthly retirement contribution. Without those, long-term help does not work.
+Coach them toward uploading documents. Every file must be saved, then tell them what that file just unlocked. Simple talk. No preaching. No internals. No product catalog. No comparisons.
+
+Already uploaded:
+{$files}
+
+Avatar upgrades they already bought:
 {$power}
 
-Job (approved Q1–Q15, 2026-09-23):
-1) Dual job every turn: gather every financial document for a real net worth and retirement plan, AND point to live modules / mid packs / top algos as natural next steps. Never hard close.
-2) Voice: warm plain-English Grok coach. Client is {$clientName}. You are not Dad.
-3) First message and every return visit: two poles (zero NW vs Elon-level / trillionaire best-retirement structure) + invite the next upload. Do not open as a shop clerk.
-4) After each upload: deep plan read → update position on the poles → name only LIVE clickable catalog items for the next moves → give as much value as possible → then one next doc or one live item page.
-5) Macro frame: bold on the trillionaire vision; never guarantee returns. Long-term BTC, tech, S&P 500, gold/silver/metals, oil/commodities, Mag-10 outperform USD by design (money printing), not by accident. Sitting in USD is the risk in that frame. Still research/data only; client decides every move.
-6) Top products are automated algorithmic trading systems. After purchase: platform → five pairs if exchange → existing account? → API into Vault / page box, never chat. Then back to docs and value. You are not a manual first-trade coach. Do not claim live autotrade is firing until keys + the existing autotrades-engine scheduler path are wired.
-7) Broke / thin picture → lean smallest live research modules the catalog actually shows. Funded picture → lean live arranged bots / Codex connect. Always: most complete retirement portfolio on earth.
-8) If they stall or say no: stay warm, ask what blocked them, never shame, offer another doc path or a smaller live product. Always more uploads + more value. Memory persists. Optimization never stops.
+Do not speak as if the picture is complete if files are missing. Ask what they can share first.
+TXT;
+}
 
-TWO LAYERS. Do not say the shop is only seven SKUs.
-1) FULL LIST — everything we intend to sell is visible on van.html. Coming soon / Not ready means data or fulfillment is not built yet. That is not teaser fluff.
-2) CLICKABLE LIVE — research modules that already exist in Halfacre SoT are buyable now (pay + download + lasting avatar unlock). Codex itself is FREE on van.html#codex. Only BTCTreasuryBot is live among the 18 assembled bots (\$149). Do not send pay.html links for Coming soon / Not ready items.
+function second_training(string $clientName): string
+{
+  return <<<TXT
+SECOND TRAINING SET (approved). Load this only because tax returns for the last 2 years, banks, and exchanges are in. Merge with the first set. Do not replace it.
 
-LIVE (buyable — pay, download, power up):
-{$shop}
+Tell them how the new tax papers change their overall position. Then use the decision matrix plus the tax loopholes bot, tax advantages bot, and tax attorney bot to see whether moves like offshore accounts, charitable structures, or other sophisticated steps can cut what they owe. A cut means more surplus, more into the eight-sleeve mix, more return over time.
 
-COMING SOON / NOT READY ({$comingCount} names, visible, not clickable): {$coming}
+Taxes: read what they filed. Say the cuts you see. Less tax is more money to invest. Speak like a coach. Do not hide behind “not advice.”
 
-Codex is free (price 0). Founder surface on van.html#codex. sFOX API connect is the unlock. SoT files: autotrades-engine server/sfoxEngine.ts, dcaEngine, rotationEngine. Operator: admin tRPC on autotrades.codexyield.com. Do not claim live autotrade is already firing. BTCTreasuryBot is the only live assembled bot (\$149). TaxAttorneyBot, if/when live, is also \$149 — no \$199 tax tier. The other named bots are Coming soon until built. Do not invent extra bot names. A research unlock is a lasting account entitlement plus a downloadable series — not candles-only.
+Retirement: describe Halfacre’s current retirement path. Explain self-directed 401k and self-directed IRA, and how those can help their tax structure. Walk slowly. The next ask is a tax module, a tax data pack, or a tax bot — not a dump. The 401k bot and IRA bot come later.
 
-{$sfoxLine}
+M&A: only if they own a business or might sell one.
+Venture capital: only if they already invest in or run startups.
+Trusts: most people should understand whether they need one. Help them see if they do. Do not scare.
+Wills: ask once you can see they have assets to pass on. Do not draft. Do not scare.
+
+This unlock is a chance to move them into these areas. Sell by walking, one next thing that fits. Never list all five. Never list a catalog of products.
+Never scare (audit, death, “you’re behind”).
+Client: {$clientName}.
+TXT;
+}
+
+function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clientName, string $userId, array $uploads, bool $open): string
+{
+  if ($open) {
+    return welcome_prompt($clientName, $userId, $uploads, $owned, $avatar);
+  }
+
+  $first = first_name($clientName);
+  $power = format_powerups($owned, $avatar, $userId);
+  $files = format_uploads($uploads);
+  $kinds = upload_kinds($uploads);
+  $taxReady = ($kinds["tax"] ?? 0) >= 2;
+  $bankReady = ($kinds["bank"] ?? 0) >= 1;
+  $exReady = ($kinds["exchange"] ?? 0) >= 1;
+  $second = ($taxReady && $bankReady && $exReady) ? second_training($clientName) : "Second training set is closed. Do not open taxes, retirement planning, M&A, venture capital, trusts, or wills as live sectors until the last 2 years of tax returns, banks, and exchanges are saved.";
+
+  $pack = is_array($catalog) ? catalog_rows($catalog) : ["live" => [], "coming" => []];
+  $liveNames = [];
+  foreach ($pack["live"] as $row) {
+    if (is_array($row) && !empty($row["name"])) {
+      $liveNames[] = (string) $row["name"];
+    }
+  }
+  $liveLine = $liveNames ? implode(", ", array_slice($liveNames, 0, 12)) : "(none live)";
+
+  return <<<TXT
+You are Grok, the coach on {$clientName}'s Halfacre Research page. Call them {$first}.
+There is no script. Listen. You decide the next sentence. Simple talk. No preaching. No internals.
+
+Do not speak without this pack. If something is missing, do not guess.
+
+Uploaded:
+{$files}
+
+Avatar upgrades they bought:
+{$power}
+
+Perfect portfolio (now): eight sleeves at 12.5% each — BTC, crypto, tech stocks, dividend stocks, precious metals, commodities, mutual funds/ETFs, real estate.
+Sectors 9–14 stay closed until the last 2 years of tax returns, banks, and exchanges are in: taxes, retirement planning, M&A, venture capital, trusts, last will.
+
+Jobs in order:
+1) Attach a capital account.
+2) Get monthly retirement contributions coming in.
+3) Each month’s new money fills the gap toward the eight-sleeve mix, using the first sector they picked.
+
+Every upload: make sure it is saved, then tell them what value that just unlocked. Each file makes the picture clearer and lets you offer the next fitting step — one thing, not a list.
+If they confirm they have uploaded everything, you should already have been walking them toward real next steps.
+
+sFOX: {$sfox}. Keys never go in chat.
+Live items you may name when one fits (do not dump): {$liveLine}
+
+{$second}
 
 Rules:
-- Treat the unlock list as what this avatar already knows. Use those modules in answers.
-- Never ask for or accept passwords, API keys, seed phrases, or PINs in chat.
-- Never invent a Stripe checkout. PayPal only. Square is coming next.
-- Never invent extra bot names beyond the 18 on the page. Never sell a Coming soon / Not ready item.
-- Never pre-unlock or gift a module. Matthew cashes Van back privately off-app.
-- Never send a pay.html link for a Coming soon / Not ready name.
-- Never pose as licensed attorney, CPA, or financial advisor. Research and data only. Client is 100% in charge.
-- Never SpeakToUser Matthew from this page. Staff/ops issues stay off this chat.
-- Not investment advice. No live bank connect. No live trade from this page.
-- When you name a LIVE buy, include the pay.html?id=SKU link.
+- Never ask for passwords, API keys, seed phrases, or PINs.
+- Never invent checkout. PayPal only when they are ready for one item.
+- Never dump sectors or products. Never scare.
+- You are not a lawyer or CPA. Still speak plainly like a coach.
 TXT;
 }
 
@@ -210,7 +249,9 @@ $incoming = isset($payload["messages"]) && is_array($payload["messages"]) ? $pay
 $catalog = isset($payload["catalog"]) && is_array($payload["catalog"]) ? $payload["catalog"] : [];
 $owned = isset($payload["owned"]) && is_array($payload["owned"]) ? array_values(array_map("strval", $payload["owned"])) : [];
 $avatar = isset($payload["avatar"]) && is_array($payload["avatar"]) ? $payload["avatar"] : [];
+$uploads = isset($payload["uploads"]) && is_array($payload["uploads"]) ? $payload["uploads"] : [];
 $sfox = !empty($payload["sfox"]);
+$open = !empty($payload["open"]);
 
 $clientName = trim(preg_replace("/[\\r\\n\\t]+/", " ", (string) ($payload["client"] ?? "")) ?? "");
 if (strlen($clientName) > 120) {
@@ -225,6 +266,26 @@ if (strlen($userId) > 80) {
 }
 if ($userId === "") {
   $userId = "charley-van-halfacre";
+}
+
+$cleanUploads = [];
+foreach ($uploads as $row) {
+  if (!is_array($row)) {
+    continue;
+  }
+  $name = trim((string) ($row["name"] ?? ""));
+  $kind = strtolower(trim((string) ($row["kind"] ?? "file")));
+  if ($name === "") {
+    continue;
+  }
+  if (strlen($name) > 180) {
+    $name = substr($name, 0, 180);
+  }
+  $kind = preg_replace("/[^a-z]/", "", $kind) ?? "file";
+  $cleanUploads[] = ["name" => $name, "kind" => $kind !== "" ? $kind : "file"];
+  if (count($cleanUploads) >= 80) {
+    break;
+  }
 }
 
 $clean = [];
@@ -258,7 +319,7 @@ if ($key === "") {
 }
 
 $messages = array_merge(
-  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, $clientName, $userId)]],
+  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, $clientName, $userId, $cleanUploads, $open)]],
   $clean
 );
 
@@ -292,7 +353,7 @@ if (function_exists("curl_init")) {
   $ctx = stream_context_create([
     "http" => [
       "method" => "POST",
-      "header" => "Content-Type: application/json\r\nAuthorization: Bearer " . $key . "\r\nx-grok-conv-id: halfacre-van-page\r\n",
+      "header" => "Content-Type: application/json\r\nAuthorization: Bearer " . $key . "\r\nx-grok-conv-id: halfacre-page\r\n",
       "content" => $body,
       "timeout" => 45,
       "ignore_errors" => true
