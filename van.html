@@ -71,9 +71,9 @@
 
   <script src="pay-catalog.js?v=1"></script>
   <script src="van-owned.js?v=1"></script>
-  <script src="van-sfox.js?v=3"></script>
-  <script src="van-grok.js?v=5"></script>
-  <script src="client-desk.js?v=3"></script>
+  <script src="van-sfox.js?v=4"></script>
+  <script src="van-grok.js?v=6"></script>
+  <script src="client-desk.js?v=4"></script>
   <script>
     (function () {
       window.HalfacreClient = {
@@ -130,6 +130,7 @@
         if (!silent) bubble(text, true);
         history.push({ role: "user", content: text });
         sendBtn.disabled = true;
+        waitNote();
         var work = grok && grok.reply
           ? grok.reply(text, null, history)
           : Promise.resolve("");
@@ -138,10 +139,12 @@
           if (!out || (grok && grok.isOfflineNote && grok.isOfflineNote(out))) {
             throw new Error("offline");
           }
+          clearWait();
           bubble(out, false);
           history.push({ role: "assistant", content: out });
         }).catch(function () {
-          bubble("Grok is not connected on this page right now.", false);
+          clearWait();
+          bubble("Grok did not answer just now. Send that again.", false);
         }).finally(function () {
           sendBtn.disabled = false;
         });
@@ -158,28 +161,50 @@
         });
       }
 
+      function waitNote() {
+        var el = document.createElement("div");
+        el.className = "msg wait";
+        el.id = "grokWait";
+        el.textContent = "Grok is thinking…";
+        log.appendChild(el);
+        el.scrollIntoView({ block: "end" });
+      }
+
+      function clearWait() {
+        var el = document.getElementById("grokWait");
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      }
+
       function openGrok() {
         sendBtn.disabled = true;
+        waitNote();
         var work = grok && grok.open
           ? grok.open()
           : Promise.reject(new Error("offline"));
         Promise.resolve(work).then(function (reply) {
           var out = String(reply || "").trim();
           if (!out) throw new Error("offline");
+          clearWait();
           bubble(out, false);
           history.push({ role: "assistant", content: out });
         }).catch(function () {
-          bubble("Grok is not connected on this page right now.", false);
+          clearWait();
+          bubble("Grok did not answer just now. Send a line and it will try again.", false);
         }).finally(function () {
           sendBtn.disabled = false;
         });
       }
 
-      Promise.all([deskReady, sfoxReady]).finally(function () {
+      Promise.resolve(deskReady).finally(function () {
         if (window.HalfacreDesk && window.HalfacreDesk.paintSfox) {
           window.HalfacreDesk.paintSfox();
         }
         openGrok();
+      });
+      Promise.resolve(sfoxReady).then(function () {
+        if (window.HalfacreDesk && window.HalfacreDesk.paintSfox) {
+          window.HalfacreDesk.paintSfox();
+        }
       });
 
       form.addEventListener("submit", function (e) {
