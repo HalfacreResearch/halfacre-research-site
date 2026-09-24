@@ -269,6 +269,127 @@ button.send:disabled { opacity: 0.45; }
   text-align: right;
 }
 
+.sidebar h2 a.side-section {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar h2 a.side-section:hover,
+.sidebar h2 a.side-section.active {
+  color: var(--orange);
+}
+
+.shop-blurb,
+.shop-count {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 0 0 12px;
+}
+
+.product-group {
+  margin: 18px 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.product-row {
+  display: block;
+  background: #101010;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.product-row:hover {
+  border-color: var(--orange);
+}
+
+.product-row-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.product-name { font-size: 16px; }
+
+.product-price {
+  color: var(--orange);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.product-sales,
+.product-sales-lead {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.product-status {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.product-status.live { color: var(--btn); }
+.product-status.soon { color: #c9a227; }
+
+.product-kicker {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.product-title {
+  margin: 0 0 10px;
+  font-size: 32px;
+  line-height: 1.05;
+}
+
+.product-facts {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  margin: 0 0 12px;
+}
+
+.product-facts .price {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+.product-body,
+.product-owned,
+.product-soon {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0 0 14px;
+}
+
+.product-back { margin: 18px 0 0; }
+
 @media (max-width: 860px) {
   .top {
     flex-wrap: wrap;
