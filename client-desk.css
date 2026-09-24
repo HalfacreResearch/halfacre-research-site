@@ -175,6 +175,7 @@ html, body {
 }
 
 .msg.me { border-left: 3px solid var(--btn); }
+.msg.wait { color: var(--muted); }
 
 .btn, .file {
   display: inline-block;

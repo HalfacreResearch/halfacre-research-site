@@ -36,7 +36,7 @@
     /\b(password|passwd|passcode|pin\b|secret[_\s-]?key|private[_\s-]?key|seed[_\s-]?phrase|recovery[_\s-]?phrase|mnemonic|ssn|social security)\b/i;
 
   function greeting() {
-    return "Grok is not connected on this page right now.";
+    return "Grok did not answer just now. Send that again.";
   }
 
   var STARTERS = [
@@ -137,7 +137,7 @@
   }
 
   function offlineNote() {
-    return "Grok is not connected on this page right now.";
+    return "Grok did not answer just now. Send that again.";
   }
 
   function endpoint() {
@@ -170,7 +170,7 @@
     });
   }
 
-  function askGrok(messages, opts) {
+  function askGrokOnce(messages, opts) {
     opts = opts || {};
     var opening = !!opts.open;
     return fetchWithTimeout(
@@ -191,7 +191,7 @@
           userId: who().userId || who().fullName
         })
       },
-      45000
+      60000
     )
       .then(function (res) {
         return res.json().then(function (data) {
@@ -204,6 +204,12 @@
         }
         throw new Error((pack.data && pack.data.error) || "empty grok reply");
       });
+  }
+
+  function askGrok(messages, opts) {
+    return askGrokOnce(messages, opts).catch(function () {
+      return askGrokOnce(messages, opts);
+    });
   }
 
   global.HalfacreGrok = {
@@ -231,7 +237,8 @@
       });
     },
     isOfflineNote: function (text) {
-      return String(text || "").indexOf("Grok is not connected on this page right now") !== -1;
+      return String(text || "").indexOf("Grok did not answer just now") !== -1
+        || String(text || "").indexOf("Grok is not connected on this page right now") !== -1;
     }
   };
 })(window);

@@ -78,9 +78,14 @@
     }
   }
 
-  function load(clientId) {
+  function load(clientId, opts) {
     var id = String(clientId || (global.HalfacreClient && global.HalfacreClient.id) || "charley-van-halfacre");
-    return fetch(API + "?c=" + encodeURIComponent(id), { cache: "no-store" })
+    opts = opts || {};
+    var query = API + "?c=" + encodeURIComponent(id);
+    if (opts && opts.prices) {
+      query += "&prices=1";
+    }
+    return fetch(query, { cache: "no-store" })
       .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
       .then(function (pack) {
         var data = pack.data || {};
