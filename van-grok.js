@@ -1,12 +1,11 @@
 /**
- * On-page Grok (xAI) for /van.html and /page.html.
+ * On-page Grok (xAI) for /van.html.
  *
  * This is Grok itself, embedded full-time. Not a Grok Bot, not a fleet
  * agent, not VanCoachBot. Browser talks to van-grok.php on Hostinger;
  * the xAI key never ships in this file.
  *
- * Greeting + starters stamped from approved Van page AI brief Q1–Q15
- * (Matthew 2026-09-23). Upload-first. Two poles. Not a shop clerk open.
+ * On open, Grok speaks for itself. No scripted briefing.
  */
 (function (global) {
   "use strict";
@@ -42,36 +41,14 @@
     /\b(password|passwd|passcode|pin\b|secret[_\s-]?key|private[_\s-]?key|seed[_\s-]?phrase|recovery[_\s-]?phrase|mnemonic|ssn|social security)\b/i;
 
   function greeting() {
-    var ctx = (global.VanOwned && global.VanOwned.avatarContext)
-      ? global.VanOwned.avatarContext()
-      : { text: "Avatar power-ups: none yet.", powerups: [] };
-    var powered = (ctx.powerups || []).map(function (row) {
-      return row.name;
-    });
-    var powerLine = powered.length
-      ? "I already have these unlocks on your account: " + powered.join(", ") + ". They stay loaded."
-      : "No paid unlocks on this account yet. That is fine. We start from what you upload.";
-    var me = who();
-    return [
-      "Hey " + me.firstName + ". I’m Grok — the coach on this page. I am not Dad, and I am not a fleet bot.",
-      "",
-      "Two poles. One is zero net worth. The other is an Elon-level financial structure: the most complete retirement portfolio we can build, aimed at a trillionaire path, without a stack of advisors and tax attorneys in the middle. You stay 100% in charge. This page sells research and data. It is not licensed advice.",
-      "",
-      "My job this sitting is both: learn every financial document you will share so we can place you between those two poles, and point you at live tools on this page when they actually move the plan.",
-      "",
-      powerLine,
-      "",
-      "Start with whatever you have in hand. Bank statements, brokerage, crypto exchanges, retirement accounts, debts, income, tax returns, real estate, metals, company papers — anything that is yours. Do not type passwords, PINs, or API keys here. Documents and the secure boxes on this page only.",
-      "",
-      "What can you upload first?"
-    ].join("\n");
+    return "Grok is not connected on this page right now.";
   }
 
   var STARTERS = [
-    { label: "Upload a statement", send: "I have a financial document ready to upload. Tell me what you need first and what you will do with it." },
-    { label: "Banks + brokerage", send: "Help me start with bank and brokerage statements." },
-    { label: "Crypto + retirement", send: "Help me start with crypto exchanges and retirement accounts." },
-    { label: "Show live tools", send: "After you explain the two poles, show only live clickable items that fit a first step. Do not invent products." }
+    { label: "Upload a statement", send: "I have a statement I can upload." },
+    { label: "Bank and brokerage", send: "I want to start with bank and brokerage." },
+    { label: "Retirement", send: "I want to start with retirement accounts." },
+    { label: "Just talk", send: "I want to talk first before I upload anything." }
   ];
 
   function looksLikePastedSecret(text) {
@@ -130,15 +107,7 @@
   }
 
   function offlineNote() {
-    return [
-      "Hey " + who().firstName + ". I’m Grok on this page. The live xAI path is waiting on a key for van-grok.php — we can still work the plan.",
-      "",
-      "Two poles: zero net worth, and an Elon-level / trillionaire retirement structure. You stay 100% in charge. Research and data only.",
-      "",
-      "I still won’t take keys in chat. Use the sFOX box on free Codex. Live research on this page is $4.99. Packs $29.99. Top assembled bots $149 including TaxAttorneyBot. Only BTCTreasuryBot is live among the 18 named bots. Codex is free.",
-      "",
-      "What financial document can you share first?"
-    ].join("\n");
+    return "Grok is not connected on this page right now.";
   }
 
   function endpoint() {
@@ -175,7 +144,9 @@
     });
   }
 
-  function askGrok(messages) {
+  function askGrok(messages, opts) {
+    opts = opts || {};
+    var opening = !!opts.open;
     return fetchWithTimeout(
       endpoint(),
       {
@@ -183,12 +154,15 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: scrub(messages),
-          catalog: catalogSnapshot(),
-          owned: ownedIds(),
-          avatar: (global.VanOwned && global.VanOwned.avatarContext)
-            ? global.VanOwned.avatarContext()
-            : { userId: who().userId || who().fullName, powerups: [] },
-          sfox: sfoxConnected(),
+          catalog: opening ? { live: [], coming_soon: [] } : catalogSnapshot(),
+          owned: opening ? [] : ownedIds(),
+          avatar: opening
+            ? { userId: who().userId || who().fullName, powerups: [] }
+            : ((global.VanOwned && global.VanOwned.avatarContext)
+              ? global.VanOwned.avatarContext()
+              : { userId: who().userId || who().fullName, powerups: [] }),
+          sfox: opening ? false : sfoxConnected(),
+          open: opening,
           client: who().fullName,
           userId: who().userId || who().fullName
         })
@@ -222,6 +196,9 @@
     model: MODEL,
     greeting: greeting,
     greetingText: greeting,
+    open: function () {
+      return askGrok([{ role: "user", content: "Hello." }], { open: true });
+    },
     starters: STARTERS,
     mode: nowMode,
     createMemory: createMemory,
@@ -238,7 +215,7 @@
       });
     },
     isOfflineNote: function (text) {
-      return String(text || "").indexOf("The live xAI path is waiting on a key") !== -1;
+      return String(text || "").indexOf("Grok is not connected on this page right now") !== -1;
     }
   };
 })(window);
