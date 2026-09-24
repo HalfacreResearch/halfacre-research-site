@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Your page</title>
+  <style>
+    :root {
+      --bg: #0A0A0A;
+      --card: #161616;
+      --line: #2a2a2a;
+      --orange: #F7931A;
+      --white: #FFFFFF;
+      --muted: #9a9a9a;
+      --btn: #39FF14;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    header { padding: 22px 18px 8px; }
+    header p {
+      margin: 0;
+      color: var(--orange);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 8px 0 4px; font-size: 30px; }
+    .sub { margin: 0; color: var(--muted); font-size: 14px; }
+    .wrap { padding: 16px; max-width: 560px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 0 0 12px;
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .msg {
+      background: #101010;
+      border-radius: 12px;
+      padding: 12px 14px;
+      line-height: 1.45;
+      font-size: 15px;
+      margin: 0 0 12px;
+      white-space: pre-wrap;
+    }
+    .msg.me { border-left: 3px solid var(--btn); }
+    .btn, .file {
+      display: inline-block;
+      background: var(--btn);
+      color: #111;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 0;
+      margin: 0 8px 8px 0;
+    }
+    .file { cursor: pointer; }
+    .ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid #444;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .chip {
+      background: #101010;
+      color: var(--white);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    form { display: flex; gap: 8px; margin: 0; }
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+      background: #101010;
+      color: var(--white);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px;
+    }
+    button.send {
+      background: var(--btn);
+      color: #111;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 700;
+      padding: 0 16px;
+    }
+    button.send:disabled { opacity: 0.45; }
+    .empty { color: var(--muted); padding: 16px; }
+  </style>
+</head>
+<body>
+  <header>
+    <p id="who">Your page</p>
+    <h1 id="name">Loading…</h1>
+    <p class="sub">Grok is the coach on this page · not Dad</p>
+  </header>
+
+  <div class="wrap" id="app" hidden>
+    <section class="card">
+      <h2>Grok</h2>
+      <div id="log"></div>
+      <div class="chips" id="chips"></div>
+      <form id="form">
+        <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
+        <button class="send" type="submit">Send</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Upload</h2>
+      <p class="sub" style="margin:0 0 12px">Bank, brokerage, or tax form. Grok reads it and places you on the line.</p>
+      <label class="btn file">
+        Add a statement
+        <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
+      </label>
+    </section>
+
+      <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
+  </div>
+  <p class="empty" id="wait">Opening your page…</p>
+
+  <script src="van-grok.js"></script>
+  <script>
+    (function () {
+      if (location.hostname === "halfacreresearch.tech") {
+        location.replace("https://www.halfacreresearch.tech" + location.pathname + location.search + location.hash);
+        return;
+      }
+
+      var wait = document.getElementById("wait");
+      var app = document.getElementById("app");
+
+      function sessionClient() {
+        try { return JSON.parse(localStorage.getItem("halfacre.session") || "null"); }
+        catch (e) { return null; }
+      }
+
+      function apply(client) {
+        if (!client || !client.name) {
+          wait.textContent = "We could not open that page. Create your account first.";
+          return;
+        }
+        window.HalfacreClient = client;
+        document.title = client.name;
+        document.getElementById("who").textContent = client.number
+          ? "Client " + client.number
+          : "Your page";
+        document.getElementById("name").textContent = client.name;
+        wait.hidden = true;
+        app.hidden = false;
+        startChat(client);
+      }
+
+      function startChat(client) {
+        var grok = window.HalfacreGrok;
+        var log = document.getElementById("log");
+        var form = document.getElementById("form");
+        var line = document.getElementById("line");
+        var chips = document.getElementById("chips");
+        var file = document.getElementById("file");
+        var sendBtn = form.querySelector(".send");
+        var history = [];
+        var first = String(client.name || "").trim().split(/\s+/)[0] || "there";
+
+        function bubble(text, mine) {
+          var el = document.createElement("div");
+          el.className = mine ? "msg me" : "msg";
+          el.textContent = text;
+          log.appendChild(el);
+          el.scrollIntoView({ block: "end" });
+        }
+
+        function talk(text, silent) {
+          if (!text) return;
+          if (!silent) bubble(text, true);
+          history.push({ role: "user", content: text });
+          sendBtn.disabled = true;
+          var work = grok && grok.reply
+            ? grok.reply(text, null, history)
+            : Promise.resolve("");
+          Promise.resolve(work).then(function (reply) {
+            var out = String(reply || "").trim();
+            if (!out || (grok && grok.isOfflineNote && grok.isOfflineNote(out))) {
+              throw new Error("offline");
+            }
+            bubble(out, false);
+            history.push({ role: "assistant", content: out });
+          }).catch(function () {
+            var fallback = grok && grok.greeting
+              ? grok.greeting()
+              : "Hey " + first + ". I’m Grok, the coach on this page. Live replies are not connected yet.";
+            bubble(fallback, false);
+            history.push({ role: "assistant", content: fallback });
+          }).finally(function () {
+            sendBtn.disabled = false;
+          });
+        }
+
+        if (grok && grok.starters) {
+          grok.starters.forEach(function (row) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "chip";
+            b.textContent = row.label;
+            b.onclick = function () { talk(row.send); };
+            chips.appendChild(b);
+          });
+        }
+
+        talk("Hello. I'm " + client.name + " on my own page, not Dad's page. Greet me by my first name, say you are Grok the coach — not Dad — and ask what I can upload first.", true);
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var text = line.value.trim();
+          line.value = "";
+          talk(text);
+        });
+
+        file.addEventListener("change", function () {
+          var picked = file.files && file.files[0];
+          if (!picked) return;
+          var reader = new FileReader();
+          reader.onload = function () {
+            var raw = String(reader.result || "");
+            var clip = raw.length > 12000 ? raw.slice(0, 12000) + "\n[truncated]" : raw;
+            talk("I uploaded " + picked.name + ". Read it and place me between the two poles.\n\n" + clip);
+          };
+          if (/\.pdf$/i.test(picked.name)) {
+            talk("I uploaded a PDF named " + picked.name + ". Read what you can and tell me what to upload next. I did not type any passwords.");
+          } else {
+            reader.readAsText(picked);
+          }
+          file.value = "";
+        });
+      }
+
+      var id = new URLSearchParams(location.search).get("c") || "";
+      var local = sessionClient();
+
+      if (!id && local && local.id) {
+        location.replace("page.html?c=" + encodeURIComponent(local.id));
+        return;
+      }
+      if (!id) {
+        location.replace("signup.html");
+        return;
+      }
+
+      fetch("client.php?c=" + encodeURIComponent(id))
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok, data: data };
+          });
+        })
+        .then(function (pack) {
+          if (pack.ok && pack.data && pack.data.client && pack.data.client.name) {
+            apply(pack.data.client);
+            return;
+          }
+          if (local && local.id === id && local.name) {
+            apply(local);
+            return;
+          }
+          wait.textContent = (pack.data && pack.data.error) || "No page for that account.";
+        })
+        .catch(function () {
+          if (local && local.id === id && local.name) {
+            apply(local);
+            return;
+          }
+          wait.textContent = "Could not open your page. Try creating the account again.";
+        });
+    })();
+  </script>
+</body>
+</html>
