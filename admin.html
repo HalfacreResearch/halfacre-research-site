@@ -46,6 +46,10 @@
       padding: 18px 16px 16px;
       min-height: 150px;
     }
+    .vault { min-height: 0; }
+    @media (min-width: 720px) {
+      .vault { grid-column: 1 / -1; }
+    }
     .card h2 {
       margin: 0 0 10px;
       font-size: 13px;
@@ -65,11 +69,49 @@
       padding: 10px 14px;
       border-radius: 10px;
       margin: 0 8px 8px 0;
+      border: 0;
+      cursor: pointer;
+      font-family: inherit;
     }
     .btn.ghost {
       background: transparent;
       color: var(--white);
       border: 1px solid #444;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+    label {
+      display: block;
+      margin: 0 0 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    input[type="password"] {
+      width: 100%;
+      max-width: 520px;
+      display: block;
+      background: #0A0A0A;
+      color: var(--white);
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 16px;
+      margin: 0 0 12px;
+    }
+    input[type="password"]:focus {
+      outline: 2px solid var(--orange);
+      border-color: var(--orange);
+    }
+    #vaultErr {
+      min-height: 1.2em;
+      margin: 0;
+      color: #ff8a8a;
+      font-size: 14px;
+    }
+    #vaultStatus[data-saved="yes"] {
+      color: var(--btn);
     }
   </style>
 </head>
@@ -80,6 +122,27 @@
   </header>
 
   <div class="grid">
+    <section class="card vault">
+      <h2>Charley’s sFOX key</h2>
+      <p class="who">Paste it in this box</p>
+      <p class="meta">It stores forever with his data on the server. Do not put it in chat, on his page, or in Grok.</p>
+      <p id="vaultStatus" class="meta">Checking…</p>
+      <form id="vaultForm" autocomplete="off">
+        <label for="vaultKey">sFOX API key</label>
+        <input
+          type="password"
+          id="vaultKey"
+          name="sfox_key"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          placeholder="Paste the key, then save"
+        >
+        <button type="submit" class="btn" id="vaultSave">Save with his data</button>
+      </form>
+      <p id="vaultErr"></p>
+    </section>
+
     <section class="card">
       <h2>Clients</h2>
       <p class="who">Charley Van Halfacre</p>
@@ -131,6 +194,74 @@
           }
         }
       } catch (e) {}
+
+      var statusEl = document.getElementById("vaultStatus");
+      var errEl = document.getElementById("vaultErr");
+      var form = document.getElementById("vaultForm");
+      var input = document.getElementById("vaultKey");
+      var saveBtn = document.getElementById("vaultSave");
+      var client = "charley-van-halfacre";
+
+      function paint(data) {
+        if (!data || !data.ok) {
+          statusEl.textContent = "Vault is not ready yet.";
+          statusEl.setAttribute("data-saved", "no");
+          return;
+        }
+        if (data.saved) {
+          statusEl.textContent = "Saved with his data " + (data.hint || "\u2022\u2022\u2022\u2022");
+          statusEl.setAttribute("data-saved", "yes");
+          saveBtn.textContent = "Replace key";
+        } else {
+          statusEl.textContent = "Not saved yet. Paste the key below.";
+          statusEl.setAttribute("data-saved", "no");
+          saveBtn.textContent = "Save with his data";
+        }
+      }
+
+      function loadStatus() {
+        fetch("client-secrets.php?c=" + encodeURIComponent(client), { cache: "no-store" })
+          .then(function (res) { return res.json(); })
+          .then(paint)
+          .catch(function () {
+            statusEl.textContent = "Could not reach the vault. Refresh this page.";
+            statusEl.setAttribute("data-saved", "no");
+          });
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        errEl.textContent = "";
+        var key = String(input.value || "").replace(/\s+/g, "");
+        if (key.length < 12) {
+          errEl.textContent = "That key looks too short.";
+          return;
+        }
+        saveBtn.disabled = true;
+        fetch("client-secrets.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          cache: "no-store",
+          body: JSON.stringify({ c: client, key: key })
+        })
+          .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+          .then(function (result) {
+            input.value = "";
+            if (!result.ok || !result.data || !result.data.ok) {
+              errEl.textContent = (result.data && result.data.error) || "Could not save. Try again.";
+              return;
+            }
+            paint(result.data);
+          })
+          .catch(function () {
+            errEl.textContent = "Could not save. Try again.";
+          })
+          .then(function () {
+            saveBtn.disabled = false;
+          });
+      });
+
+      loadStatus();
     })();
   </script>
 </body>
