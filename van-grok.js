@@ -1,11 +1,6 @@
 /**
- * On-page Grok (xAI) for /van.html.
- *
- * This is Grok itself, embedded full-time. Not a Grok Bot, not a fleet
- * agent, not VanCoachBot. Browser talks to van-grok.php on Hostinger;
- * the xAI key never ships in this file.
- *
- * On open, Grok speaks for itself. No scripted briefing.
+ * On-page Grok (xAI) for client pages.
+ * Browser talks to van-grok.php. The xAI key never ships in this file.
  */
 (function (global) {
   "use strict";
@@ -84,25 +79,53 @@
         });
       }
     });
-    return {
-      live: live,
-      coming_soon: coming,
-      note: "Live research = pay, download, power up. Coming soon / Not ready means data or fulfillment is missing. Only BTCTreasuryBot is live among assembled bots. Unlock list is source of truth for avatar knowledge."
-    };
+    return { live: live, coming_soon: coming };
   }
 
   function ownedIds() {
     if (global.VanOwned && typeof global.VanOwned.ownedIds === "function") {
       return global.VanOwned.ownedIds();
     }
+    var desk = global.HalfacreDesk && global.HalfacreDesk.state
+      ? global.HalfacreDesk.state()
+      : null;
+    if (desk && Array.isArray(desk.purchases)) {
+      return desk.purchases.map(function (row) { return row.id || row.name; }).filter(Boolean);
+    }
     return [];
+  }
+
+  function uploadsNow() {
+    var desk = global.HalfacreDesk && global.HalfacreDesk.state
+      ? global.HalfacreDesk.state()
+      : null;
+    if (!desk || !Array.isArray(desk.uploads)) {
+      return [];
+    }
+    return desk.uploads.map(function (row) {
+      return { name: row.name || "", kind: row.kind || "file" };
+    });
+  }
+
+  function avatarNow() {
+    if (global.VanOwned && global.VanOwned.avatarContext) {
+      return global.VanOwned.avatarContext();
+    }
+    var desk = global.HalfacreDesk && global.HalfacreDesk.state
+      ? global.HalfacreDesk.state()
+      : null;
+    var powerups = desk && Array.isArray(desk.purchases) ? desk.purchases : [];
+    return {
+      userId: who().userId || who().fullName,
+      powerups: powerups
+    };
   }
 
   function secretBlock() {
     return [
       "Don’t type a key, password, or PIN in this chat.",
       "",
-      "sFOX has its own box on this page. Paste the API key there. I never need to see it."
+      "If you have an API box on this page, paste the key there. I never need to see it."
     ].join("\n");
   }
 
@@ -115,10 +138,6 @@
       return global.HALFACRE_GROK_ENDPOINT.trim();
     }
     return PROXY;
-  }
-
-  function nowMode() {
-    return "grok";
   }
 
   function fetchWithTimeout(url, options, ms) {
@@ -154,14 +173,11 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: scrub(messages),
-          catalog: opening ? { live: [], coming_soon: [] } : catalogSnapshot(),
-          owned: opening ? [] : ownedIds(),
-          avatar: opening
-            ? { userId: who().userId || who().fullName, powerups: [] }
-            : ((global.VanOwned && global.VanOwned.avatarContext)
-              ? global.VanOwned.avatarContext()
-              : { userId: who().userId || who().fullName, powerups: [] }),
-          sfox: opening ? false : sfoxConnected(),
+          catalog: catalogSnapshot(),
+          owned: ownedIds(),
+          avatar: avatarNow(),
+          uploads: uploadsNow(),
+          sfox: sfoxConnected(),
           open: opening,
           client: who().fullName,
           userId: who().userId || who().fullName
@@ -182,13 +198,6 @@
       });
   }
 
-  function createMemory() {
-    return {
-      engine: "grok",
-      notes: []
-    };
-  }
-
   global.HalfacreGrok = {
     get fullName() { return who().fullName; },
     get firstName() { return who().firstName; },
@@ -200,8 +209,7 @@
       return askGrok([{ role: "user", content: "Hello." }], { open: true });
     },
     starters: STARTERS,
-    mode: nowMode,
-    createMemory: createMemory,
+    mode: function () { return "grok"; },
     looksLikeSecret: looksLikePastedSecret,
     reply: function (userText, _memory, history) {
       if (looksLikePastedSecret(userText)) {
