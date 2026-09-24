@@ -38,6 +38,11 @@
     return map[kind] || "File";
   }
 
+  function sfoxOn() {
+    var snap = global.VanSfox && global.VanSfox.snapshot ? global.VanSfox.snapshot() : null;
+    return !!(snap && snap.connected && !snap.error);
+  }
+
   function listEl(id, rows, emptyText, nameKey) {
     var box = document.getElementById(id);
     if (!box) return;
@@ -75,25 +80,53 @@
   }
 
   function paintSfox() {
-    var box = document.getElementById("deskSfox");
+    var extra = document.getElementById("deskSfox");
+    if (extra) extra.innerHTML = "";
+    paintUploads();
+  }
+
+  function paintUploads() {
+    var box = document.getElementById("deskUploads");
     if (!box) return;
     box.innerHTML = "";
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "side-link" + (view === "sfox" ? " active" : "");
-    btn.setAttribute("data-desk", "sfox");
-    var title = document.createElement("span");
-    title.textContent = "sFOX";
-    var meta = document.createElement("span");
-    meta.className = "kind";
-    meta.id = "deskSfoxMeta";
-    meta.textContent = sfoxMeta();
-    btn.appendChild(title);
-    btn.appendChild(meta);
-    btn.addEventListener("click", function () {
-      showView("sfox");
+    var hasSfox = sfoxOn();
+    if (!state.uploads.length && !hasSfox) {
+      var p = document.createElement("p");
+      p.className = "side-empty";
+      p.textContent = "Nothing uploaded yet.";
+      box.appendChild(p);
+      return;
+    }
+    var ul = document.createElement("ul");
+    ul.className = "side-list";
+    if (hasSfox) {
+      var sfoxItem = document.createElement("li");
+      sfoxItem.className = "side-click" + (view === "sfox" ? " active" : "");
+      var sfoxTitle = document.createElement("span");
+      sfoxTitle.textContent = "sFOX";
+      var sfoxKind = document.createElement("span");
+      sfoxKind.className = "kind";
+      sfoxKind.id = "deskSfoxMeta";
+      sfoxKind.textContent = sfoxMeta();
+      sfoxItem.appendChild(sfoxTitle);
+      sfoxItem.appendChild(sfoxKind);
+      sfoxItem.addEventListener("click", function () {
+        showView("sfox");
+      });
+      ul.appendChild(sfoxItem);
+    }
+    state.uploads.forEach(function (row) {
+      var li = document.createElement("li");
+      var title = document.createElement("span");
+      title.textContent = row.name || row.id || "Item";
+      var meta = document.createElement("span");
+      meta.className = "kind";
+      meta.textContent = kindLabel(row.kind || "file");
+      li.appendChild(title);
+      li.appendChild(meta);
+      ul.appendChild(li);
     });
-    box.appendChild(btn);
+    box.appendChild(ul);
   }
 
   function showView(name) {
@@ -122,12 +155,11 @@
   }
 
   function paint() {
-    listEl("deskUploads", state.uploads, "Nothing uploaded yet.", "name");
+    paintUploads();
     listEl("deskBuys", state.purchases, "No Avatar upgrades purchased yet.", "name");
-    paintSfox();
     var upCount = document.getElementById("navUploadsCount");
     var buyCount = document.getElementById("navBuysCount");
-    if (upCount) upCount.textContent = String(state.uploads.length);
+    if (upCount) upCount.textContent = String(state.uploads.length + (sfoxOn() ? 1 : 0));
     if (buyCount) buyCount.textContent = String(state.purchases.length);
   }
 

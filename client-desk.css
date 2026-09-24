@@ -135,23 +135,12 @@ html, body {
   margin: 0 0 8px;
 }
 
-.side-link {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin: 0 0 8px;
-  font-size: 14px;
-  color: var(--white);
-  font-family: inherit;
+.side-list li.side-click {
   cursor: pointer;
 }
 
-.side-link.active,
-.side-link:hover {
+.side-list li.side-click.active,
+.side-list li.side-click:hover {
   border-color: var(--orange);
 }
 
