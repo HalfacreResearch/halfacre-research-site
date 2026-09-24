@@ -167,6 +167,7 @@
     "physical-disruption-research": "War, weather, shipping, and outages — research that powers your avatar’s disruption read.",
     "forecasts-ratings-research": "Street forecasts and ratings — research that powers your avatar’s consensus read.",
     "bitcoin-network-research": "Hash, fees, and the chain itself — research that powers your avatar’s Bitcoin-network read.",
+    "mining-research": "Miners, hashprice, and the power bill — research that powers your avatar’s mining read.",
     "lightning-payments-research": "Lightning and Bitcoin payments — research that powers your avatar’s payments read.",
     "bitcoin-core-nodes-research": "Nodes and Bitcoin Core — research that powers your avatar’s infrastructure read.",
     "derivatives-data-research": "Futures, options, and open interest — research that powers your avatar’s derivatives read.",
