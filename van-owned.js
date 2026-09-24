@@ -1,52 +1,67 @@
 /**
- * User-scoped unlock list for Charlie Van Halfacre.
- *
- * userId: charlie-van-halfacre (hivemind client slot + pay identity
- * cvhalfacre@msn.com). Unlock list is source of truth for what the
- * avatar knows. Downloads are a re-fetch.
- *
- * Storage:
- *  1) van-unlocks.php → van-unlocks.store.json on Hostinger (durable)
- *  2) localStorage halfacre.entitlements.v1.charlie-van-halfacre
- *  3) mirrors moduleUnlocks onto hivemind.client.charlie-van-halfacre
- *
- * Starting owned is empty. PayPal success appends moduleId.
- * Coming-soon / not-ready SKUs cannot unlock.
+ * Per-client unlock list. Van is charlie-van-halfacre.
+ * Other clients use their page id so purchases do not mix.
  */
 (function (global) {
   "use strict";
 
-  var USER_ID = "charlie-van-halfacre";
-  var HIVEMIND_KEY = "hivemind.client.charlie-van-halfacre";
-  var OWNED_KEY = "halfacre.entitlements.v1." + USER_ID;
+  var VAN_ID = "charlie-van-halfacre";
+  var VAN_PAGE = "charley-van-halfacre";
   var LEGACY_KEY = "halfacre.van.owned.v1";
-  var PENDING_KEY = "halfacre.van.pending.v1";
   var PENDING_MS = 6 * 60 * 60 * 1000;
   var UNLOCK_API = "van-unlocks.php";
   var ALLOWED = [4.99, 29.99, 149];
-  var IDENTITY = {
-    userId: USER_ID,
-    display_name: "Charlie Van Halfacre",
-    email: "cvhalfacre@msn.com",
-    phone: "601-408-8342",
-    hivemind_client_id: USER_ID,
-    pay_identity: "cvhalfacre@msn.com"
-  };
 
   var cache = { skus: {} };
-  var loaded = false;
   var listeners = [];
 
   function trim(value) {
     return String(value == null ? "" : value).trim();
   }
 
+  function identity() {
+    var c = global.HalfacreClient;
+    if (c && c.id && c.id !== VAN_PAGE && c.id !== VAN_ID) {
+      var id = trim(c.userId || c.id);
+      return {
+        userId: id,
+        display_name: trim(c.name) || "Client",
+        email: trim(c.email),
+        phone: "",
+        hivemind_client_id: id,
+        pay_identity: trim(c.email) || id
+      };
+    }
+    return {
+      userId: VAN_ID,
+      display_name: "Charlie Van Halfacre",
+      email: "cvhalfacre@msn.com",
+      phone: "601-408-8342",
+      hivemind_client_id: VAN_ID,
+      pay_identity: "cvhalfacre@msn.com"
+    };
+  }
+
+  function userId() {
+    return identity().userId;
+  }
+
+  function ownedKey() {
+    return "halfacre.entitlements.v1." + userId();
+  }
+
+  function pendingKey() {
+    return "halfacre.pending.v1." + userId();
+  }
+
+  function hivemindKey() {
+    return "hivemind.client." + userId();
+  }
+
   function readJson(key, fallback) {
     try {
       var raw = global.localStorage.getItem(key);
-      if (!raw) {
-        return fallback;
-      }
+      if (!raw) return fallback;
       var data = JSON.parse(raw);
       return data && typeof data === "object" ? data : fallback;
     } catch (err) {
@@ -64,15 +79,11 @@
 
   function findRow(id) {
     var want = trim(id).toLowerCase();
-    if (want === "codex-buy" || want === "codex-sell") {
-      want = "btc-treasury-bot";
-    }
+    if (want === "codex-buy" || want === "codex-sell") want = "btc-treasury-bot";
     var rows = catalogRows();
     var i;
     for (i = 0; i < rows.length; i += 1) {
-      if (trim(rows[i].id).toLowerCase() === want) {
-        return rows[i];
-      }
+      if (trim(rows[i].id).toLowerCase() === want) return rows[i];
     }
     return null;
   }
@@ -84,64 +95,45 @@
 
   function expectedAmount(id) {
     var row = findRow(id);
-    if (!row) {
-      return NaN;
-    }
-    return Number(row.price_usd);
+    return row ? Number(row.price_usd) : NaN;
   }
 
   function migrateLegacy() {
-    var current = readJson(OWNED_KEY, null);
-    if (current && current.skus && typeof current.skus === "object") {
-      return current;
+    var current = readJson(ownedKey(), null);
+    if (current && current.skus && typeof current.skus === "object") return current;
+    if (userId() === VAN_ID) {
+      var legacy = readJson(LEGACY_KEY, null);
+      if (legacy && legacy.skus && typeof legacy.skus === "object") {
+        var moved = { userId: VAN_ID, identity: identity(), skus: legacy.skus };
+        writeJson(ownedKey(), moved);
+        return moved;
+      }
     }
-    var legacy = readJson(LEGACY_KEY, null);
-    if (legacy && legacy.skus && typeof legacy.skus === "object") {
-      var moved = {
-        userId: USER_ID,
-        identity: IDENTITY,
-        skus: legacy.skus
-      };
-      writeJson(OWNED_KEY, moved);
-      return moved;
-    }
-    return { userId: USER_ID, identity: IDENTITY, skus: {} };
+    return { userId: userId(), identity: identity(), skus: {} };
   }
 
   function persist() {
-    cache.userId = USER_ID;
-    cache.identity = IDENTITY;
-    writeJson(OWNED_KEY, cache);
+    var who = identity();
+    cache.userId = who.userId;
+    cache.identity = who;
+    writeJson(ownedKey(), cache);
     try {
-      var rec = readJson(HIVEMIND_KEY, {});
-      if (!rec || typeof rec !== "object") {
-        rec = {};
-      }
-      rec.name = rec.name || IDENTITY.display_name;
-      rec.email = rec.email || IDENTITY.email;
-      rec.phone = rec.phone || IDENTITY.phone;
+      var rec = readJson(hivemindKey(), {});
+      if (!rec || typeof rec !== "object") rec = {};
+      rec.name = rec.name || who.display_name;
+      rec.email = rec.email || who.email;
       rec.moduleUnlocks = ownedIds();
-      writeJson(HIVEMIND_KEY, rec);
-    } catch (err) {
-      /* hivemind mirror is best-effort */
-    }
+      writeJson(hivemindKey(), rec);
+    } catch (err) {}
     listeners.forEach(function (fn) {
-      try {
-        fn(ownedModules());
-      } catch (ignored) {
-        /* listener errors must not break unlock */
-      }
+      try { fn(ownedModules()); } catch (ignored) {}
     });
   }
 
   function mergeSkus(incoming) {
-    if (!incoming || typeof incoming !== "object") {
-      return;
-    }
+    if (!incoming || typeof incoming !== "object") return;
     Object.keys(incoming).forEach(function (sku) {
-      if (!cache.skus[sku] && incoming[sku]) {
-        cache.skus[sku] = incoming[sku];
-      }
+      if (!cache.skus[sku] && incoming[sku]) cache.skus[sku] = incoming[sku];
     });
   }
 
@@ -152,14 +144,6 @@
 
   function ownedIds() {
     return Object.keys(cache.skus);
-  }
-
-  function ownedCount() {
-    return ownedIds().length;
-  }
-
-  function receipt(id) {
-    return cache.skus[trim(id)] || null;
   }
 
   function ownedModules() {
@@ -181,18 +165,19 @@
   }
 
   function avatarContext() {
+    var who = identity();
     var rows = ownedModules();
     if (!rows.length) {
       return {
-        userId: USER_ID,
+        userId: who.userId,
         powerups: [],
-        text: "Avatar power-ups: none yet. Van starts with an empty unlock list. Live modules he pays for stay on this account and are injected here before chat."
+        text: "Avatar power-ups: none yet. " + who.display_name + " starts with an empty unlock list."
       };
     }
     return {
-      userId: USER_ID,
+      userId: who.userId,
       powerups: rows,
-      text: "Avatar power-ups (persisted unlock list for " + IDENTITY.display_name + "): " +
+      text: "Avatar power-ups for " + who.display_name + ": " +
         rows.map(function (row) {
           return row.name + " [" + row.id + "]" + (row.avatar_knowledge ? " — " + row.avatar_knowledge : "");
         }).join(" | ")
@@ -204,46 +189,35 @@
     var fulfill = (row && row.fulfillment) || {};
     if (fulfill.download_href) {
       return fulfill.download_href + (fulfill.download_href.indexOf("?") >= 0 ? "&" : "?") +
-        "userId=" + encodeURIComponent(USER_ID);
+        "userId=" + encodeURIComponent(userId());
     }
-    if (fulfill.receipt_href) {
-      return fulfill.receipt_href;
-    }
-    return "van-download.php?sku=" + encodeURIComponent(id) + "&userId=" + encodeURIComponent(USER_ID);
+    return "van-download.php?sku=" + encodeURIComponent(id) + "&userId=" + encodeURIComponent(userId());
   }
 
   function markPending(id) {
     var sku = trim(id);
-    if (!isLiveSku(sku)) {
-      return { ok: false, error: "Not a live module." };
-    }
-    writeJson(PENDING_KEY, { sku: sku, at: Date.now(), userId: USER_ID });
+    if (!isLiveSku(sku)) return { ok: false, error: "Not a live module." };
+    writeJson(pendingKey(), { sku: sku, at: Date.now(), userId: userId() });
     return { ok: true, sku: sku };
   }
 
   function takePending(id) {
     var sku = trim(id);
-    var pending = readJson(PENDING_KEY, null);
-    if (!pending || trim(pending.sku) !== sku) {
-      return false;
-    }
+    var pending = readJson(pendingKey(), null);
+    if (!pending || trim(pending.sku) !== sku) return false;
     if (!pending.at || Date.now() - Number(pending.at) > PENDING_MS) {
-      global.localStorage.removeItem(PENDING_KEY);
+      global.localStorage.removeItem(pendingKey());
       return false;
     }
-    global.localStorage.removeItem(PENDING_KEY);
+    global.localStorage.removeItem(pendingKey());
     return true;
   }
 
   function amountOk(value, sku) {
-    if (value == null || value === "") {
-      return true;
-    }
+    if (value == null || value === "") return true;
     var n = Number(value);
     var expected = expectedAmount(sku);
-    if (Number.isFinite(expected)) {
-      return n === expected;
-    }
+    if (Number.isFinite(expected)) return n === expected;
     return ALLOWED.indexOf(n) !== -1;
   }
 
@@ -251,31 +225,27 @@
     var tx = trim(query.get("tx") || query.get("txn_id"));
     var st = trim(query.get("st") || query.get("payment_status"));
     var amt = query.get("amt") || query.get("mc_gross") || query.get("amount");
-    var txOk = tx.length >= 8;
-    var stOk = /^completed$/i.test(st);
     var listed = expectedAmount(sku);
     return {
-      ok: (txOk || stOk) && amountOk(amt, sku),
+      ok: (tx.length >= 8 || /^completed$/i.test(st)) && amountOk(amt, sku),
       tx: tx,
-      amount: amountOk(amt, sku)
-        ? String(Number.isFinite(listed) ? listed : 4.99)
-        : ""
+      amount: amountOk(amt, sku) ? String(Number.isFinite(listed) ? listed : 4.99) : ""
     };
   }
 
   function postUnlock(sku, meta) {
-    var body = {
-      userId: USER_ID,
-      email: IDENTITY.email,
-      moduleId: sku,
-      amount: (meta && meta.amount) || String(expectedAmount(sku)),
-      tx: (meta && meta.tx) || "",
-      paidAt: (meta && meta.paidAt) || Date.now()
-    };
+    var who = identity();
     return fetch(UNLOCK_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        userId: who.userId,
+        email: who.email,
+        moduleId: sku,
+        amount: (meta && meta.amount) || String(expectedAmount(sku)),
+        tx: (meta && meta.tx) || "",
+        paidAt: (meta && meta.paidAt) || Date.now()
+      }),
       cache: "no-store"
     }).then(function (res) {
       return res.json().then(function (data) {
@@ -287,12 +257,11 @@
   }
 
   function fetchRemote() {
-    var url = UNLOCK_API + "?userId=" + encodeURIComponent(USER_ID) +
-      "&email=" + encodeURIComponent(IDENTITY.email);
+    var who = identity();
+    var url = UNLOCK_API + "?userId=" + encodeURIComponent(who.userId) +
+      "&email=" + encodeURIComponent(who.email);
     return fetch(url, { cache: "no-store" }).then(function (res) {
-      if (!res.ok) {
-        throw new Error("unlock store unavailable");
-      }
+      if (!res.ok) throw new Error("unlock store unavailable");
       return res.json();
     }).then(function (data) {
       if (data && data.ok && data.modules) {
@@ -305,58 +274,46 @@
     });
   }
 
+  function receipt(id) {
+    return cache.skus[trim(id)] || null;
+  }
+
   function unlock(id, meta) {
     var sku = trim(id);
-    if (!isLiveSku(sku)) {
-      return { ok: false, error: "Not a live module." };
-    }
-    if (owns(sku)) {
-      return { ok: true, already: true, sku: sku, receipt: receipt(sku), userId: USER_ID };
-    }
+    if (!isLiveSku(sku)) return { ok: false, error: "Not a live module." };
+    if (owns(sku)) return { ok: true, already: true, sku: sku, receipt: receipt(sku), userId: userId() };
     var listed = expectedAmount(sku);
     cache.skus[sku] = {
       amount: (meta && meta.amount) || String(Number.isFinite(listed) ? listed : 4.99),
       tx: (meta && meta.tx) || "",
       paidAt: Date.now(),
-      userId: USER_ID
+      userId: userId()
     };
     persist();
     postUnlock(sku, cache.skus[sku]);
-    return { ok: true, already: false, sku: sku, receipt: cache.skus[sku], userId: USER_ID };
+    return { ok: true, already: false, sku: sku, receipt: cache.skus[sku], userId: userId() };
   }
 
   function claimFromSearch(search) {
     var query = new URLSearchParams(typeof search === "string" ? search : global.location.search);
-    var sku = trim(
-      query.get("paid") ||
-      query.get("item_number") ||
-      query.get("cm") ||
-      query.get("custom")
-    );
-    if (!sku) {
-      return { ok: false, skipped: true };
-    }
-    if (!isLiveSku(sku)) {
-      return { ok: false, error: "That return is not a live paid module." };
-    }
+    var sku = trim(query.get("paid") || query.get("item_number") || query.get("cm") || query.get("custom"));
+    if (!sku) return { ok: false, skipped: true };
+    if (!isLiveSku(sku)) return { ok: false, error: "That return is not a live paid module." };
     if (!amountOk(query.get("amt") || query.get("mc_gross") || query.get("amount"), sku)) {
-      return { ok: false, error: "Return amount did not match that module’s $4.99 / $29.99 / $149 price." };
+      return { ok: false, error: "Return amount did not match that module’s price." };
     }
     var evidence = paypalEvidence(query, sku);
-    var pending = takePending(sku);
-    if (!evidence.ok && !pending) {
+    if (!evidence.ok && !takePending(sku)) {
       return { ok: false, error: "No PayPal return for that module." };
     }
-    return unlock(sku, {
-      tx: evidence.tx,
-      amount: evidence.amount || String(expectedAmount(sku))
-    });
+    return unlock(sku, { tx: evidence.tx, amount: evidence.amount || String(expectedAmount(sku)) });
   }
 
   function returnUrl(sku) {
-    var page = new URL("van.html", global.location.href);
-    page.search = "";
-    page.hash = "";
+    var talk = (global.HalfacreSession && global.HalfacreSession.talkUrl)
+      ? global.HalfacreSession.talkUrl()
+      : "van.html";
+    var page = new URL(talk, global.location.href);
     page.searchParams.set("paid", sku);
     return page.href;
   }
@@ -364,43 +321,36 @@
   function cancelUrl(sku) {
     var page = new URL("pay.html", global.location.href);
     page.search = "";
-    page.hash = "";
     page.searchParams.set("sku", sku);
     page.searchParams.set("id", sku);
+    if (global.HalfacreClient && global.HalfacreClient.id) {
+      page.searchParams.set("c", global.HalfacreClient.id);
+    }
     return page.href;
   }
 
   function load() {
     cache = migrateLegacy();
-    if (!cache.skus || typeof cache.skus !== "object") {
-      cache.skus = {};
-    }
+    if (!cache.skus || typeof cache.skus !== "object") cache.skus = {};
     persist();
-    loaded = true;
     return fetchRemote().then(function () {
-      return {
-        userId: USER_ID,
-        moduleIds: ownedIds(),
-        modules: ownedModules()
-      };
+      return { userId: userId(), moduleIds: ownedIds(), modules: ownedModules() };
     });
   }
 
   function onChange(fn) {
-    if (typeof fn === "function") {
-      listeners.push(fn);
-    }
+    if (typeof fn === "function") listeners.push(fn);
   }
 
-  cache = migrateLegacy();
+  cache = { skus: {} };
 
   global.VanOwned = {
-    userId: USER_ID,
-    identity: IDENTITY,
+    get userId() { return userId(); },
+    get identity() { return identity(); },
     load: load,
     owns: owns,
     ownedIds: ownedIds,
-    ownedCount: ownedCount,
+    ownedCount: function () { return ownedIds().length; },
     ownedModules: ownedModules,
     avatarContext: avatarContext,
     receipt: receipt,
@@ -410,14 +360,6 @@
     claimFromSearch: claimFromSearch,
     returnUrl: returnUrl,
     cancelUrl: cancelUrl,
-    onChange: onChange,
-    catalogCount: function () {
-      return catalogRows().length;
-    },
-    liveCount: function () {
-      return catalogRows().filter(function (row) {
-        return row.live;
-      }).length;
-    }
+    onChange: onChange
   };
 })(window);
