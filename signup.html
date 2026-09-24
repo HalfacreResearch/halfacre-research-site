@@ -161,8 +161,9 @@
         localStorage.setItem("halfacre.session", JSON.stringify(client));
       }
 
-      function go() {
-        window.location.href = "van.html";
+      function go(client) {
+        var id = client && client.id ? String(client.id) : "";
+        window.location.href = id ? "page.html?c=" + encodeURIComponent(id) : "page.html";
       }
 
       function createAccount(body) {
@@ -183,7 +184,7 @@
               throw new Error((pack.data && pack.data.error) || "Could not create the account.");
             }
             saveLocal(pack.data.client);
-            go();
+            go(pack.data.client);
           })
           .catch(function (e) {
             showError(e.message || "Could not create the account.");
