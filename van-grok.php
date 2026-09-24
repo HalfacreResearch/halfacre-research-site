@@ -89,7 +89,7 @@ function format_coming_names(array $rows): string
   return $list;
 }
 
-function format_powerups(array $owned, $avatar): string
+function format_powerups(array $owned, $avatar, string $userId): string
 {
   $names = [];
   if (is_array($avatar) && isset($avatar["powerups"]) && is_array($avatar["powerups"])) {
@@ -114,27 +114,48 @@ function format_powerups(array $owned, $avatar): string
     }
   }
   if (!$names) {
-    return "None yet. The unlock list for charley-van-halfacre is empty. Do not pretend he already owns paid modules.";
+    return "None yet. The unlock list for {$userId} is empty. Do not pretend this client already owns paid modules.";
   }
   return implode("\n", array_map(function ($line) {
     return "- " . $line;
   }, $names));
 }
 
-function system_prompt($catalog, array $owned, bool $sfox, $avatar): string
+function first_name(string $full): string
+{
+  $parts = preg_split("/\s+/", trim($full)) ?: [];
+  $first = isset($parts[0]) ? (string) $parts[0] : "there";
+  if ($first === "") {
+    return "there";
+  }
+  if (strcasecmp($first, "Charley") === 0) {
+    return "Van";
+  }
+  return $first;
+}
+
+function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clientName, string $userId): string
 {
   $pack = is_array($catalog) ? catalog_rows($catalog) : ["live" => [], "coming" => []];
   $shop = format_live_lines($pack["live"], $owned);
   $coming = format_coming_names($pack["coming"]);
   $comingCount = count($pack["coming"]);
-  $power = format_powerups($owned, $avatar);
+  $power = format_powerups($owned, $avatar, $userId);
   $sfoxLine = $sfox ? "sFOX shows connected on this device." : "sFOX is not connected. Keys go in the page box, never chat.";
+  $first = first_name($clientName);
+  $isVan = ($userId === "charley-van-halfacre" || strcasecmp($clientName, "Charley Van Halfacre") === 0);
+  $pageLine = $isVan
+    ? "You are on Charley Van Halfacre's page (/van.html). You may call him Van."
+    : "You are on {$clientName}'s own page (/page.html). This is not Dad's page. Call them {$first}.";
+  $identity = $isVan
+    ? "Client: Charley Van Halfacre. Phone (601) 408-8342. Email cvhalfacre@msn.com.\nAccount userId: charley-van-halfacre."
+    : "Client: {$clientName}. Account userId: {$userId}. Do not use Charley's phone, email, or identity on this page.";
   return <<<TXT
-You are Grok (xAI), embedded full-time on Charley Van Halfacre's Halfacre Research page (/van.html).
+You are Grok (xAI), embedded full-time on this client's Halfacre Research page.
 You are Grok itself — the coach on this page. You are not Dad. You are not a Grok Bot, not a fleet agent, and not VanCoachBot.
 
-Client: Charley Van Halfacre. Phone (601) 408-8342. Email cvhalfacre@msn.com.
-Account userId: charley-van-halfacre (hivemind client + PayPal identity cvhalfacre@msn.com).
+{$pageLine}
+{$identity}
 Speak warm and plain. You are Grok, the coach. Do not call yourself Dad. No Soft HOLD jargon. No DataBazaar or Hermes. No Stripe.
 
 AVATAR POWER-UPS (load these BEFORE you talk — unlock list is source of truth for what he knows):
@@ -142,7 +163,7 @@ AVATAR POWER-UPS (load these BEFORE you talk — unlock list is source of truth 
 
 Job (approved Q1–Q15, 2026-09-23):
 1) Dual job every turn: gather every financial document for a real net worth and retirement plan, AND point to live modules / mid packs / top algos as natural next steps. Never hard close.
-2) Voice: warm plain-English Grok coach. Client is Charley Van Halfacre. You are not Dad.
+2) Voice: warm plain-English Grok coach. Client is {$clientName}. You are not Dad.
 3) First message and every return visit: two poles (zero NW vs Elon-level / trillionaire best-retirement structure) + invite the next upload. Do not open as a shop clerk.
 4) After each upload: deep plan read → update position on the poles → name only LIVE clickable catalog items for the next moves → give as much value as possible → then one next doc or one live item page.
 5) Macro frame: bold on the trillionaire vision; never guarantee returns. Long-term BTC, tech, S&P 500, gold/silver/metals, oil/commodities, Mag-10 outperform USD by design (money printing), not by accident. Sitting in USD is the risk in that frame. Still research/data only; client decides every move.
@@ -191,6 +212,21 @@ $owned = isset($payload["owned"]) && is_array($payload["owned"]) ? array_values(
 $avatar = isset($payload["avatar"]) && is_array($payload["avatar"]) ? $payload["avatar"] : [];
 $sfox = !empty($payload["sfox"]);
 
+$clientName = trim(preg_replace("/[\\r\\n\\t]+/", " ", (string) ($payload["client"] ?? "")) ?? "");
+if (strlen($clientName) > 120) {
+  $clientName = substr($clientName, 0, 120);
+}
+if ($clientName === "") {
+  $clientName = "Charley Van Halfacre";
+}
+$userId = trim(preg_replace("/[^A-Za-z0-9_\\- ]/", "", (string) ($payload["userId"] ?? "")) ?? "");
+if (strlen($userId) > 80) {
+  $userId = substr($userId, 0, 80);
+}
+if ($userId === "") {
+  $userId = "charley-van-halfacre";
+}
+
 $clean = [];
 foreach ($incoming as $item) {
   if (!is_array($item)) {
@@ -222,7 +258,7 @@ if ($key === "") {
 }
 
 $messages = array_merge(
-  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar)]],
+  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, $clientName, $userId)]],
   $clean
 );
 
@@ -242,7 +278,7 @@ if (function_exists("curl_init")) {
     CURLOPT_HTTPHEADER => [
       "Content-Type: application/json",
       "Authorization: Bearer " . $key,
-      "x-grok-conv-id: halfacre-van-page"
+      "x-grok-conv-id: halfacre-page-" . preg_replace("/[^A-Za-z0-9_\\-]/", "", $userId)
     ],
     CURLOPT_POSTFIELDS => $body,
     CURLOPT_RETURNTRANSFER => true,
