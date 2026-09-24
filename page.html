@@ -7,10 +7,10 @@
   <title>Your page</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <link rel="stylesheet" href="client-desk.css?v=1">
+  <link rel="stylesheet" href="client-desk.css?v=5">
 </head>
 <body>
-  <div class="app">
+  <div class="app" data-view="talk">
     <header class="top">
       <div class="brand">
         <p id="who">Your page</p>
@@ -18,9 +18,12 @@
         <p class="sub">Halfacre Research · your page</p>
       </div>
       <nav class="nav" aria-label="Page">
-        <a href="#talk" data-desk="talk">Talk</a>
+        <a href="#talk" data-desk="talk" data-talk="talk">Talk</a>
         <a href="#uploaded" data-desk="uploaded">Uploaded <span id="navUploadsCount">0</span></a>
         <a href="#purchased" data-desk="purchased">Purchased <span id="navBuysCount">0</span></a>
+        <a href="shop.html?kind=research" data-shop="research">Research Modules</a>
+        <a href="shop.html?kind=packs" data-shop="packs">Research Packs</a>
+        <a href="shop.html?kind=bots" data-shop="bots">Trading Bots</a>
       </nav>
       <button class="nav-toggle" id="navToggle" type="button">Menu</button>
     </header>
@@ -34,24 +37,35 @@
       </aside>
 
       <main class="main" id="app" hidden>
-        <section class="card" id="talk">
-          <h2>Grok</h2>
-          <div id="log"></div>
-          <div class="chips" id="chips"></div>
-          <form class="talk" id="form">
-            <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
-            <button class="send" type="submit">Send</button>
-          </form>
-        </section>
+        <div class="view view-talk" data-view-panel="talk">
+          <section class="card" id="talk">
+            <h2>Grok</h2>
+            <div id="log"></div>
+            <div class="chips" id="chips"></div>
+            <form class="talk" id="form">
+              <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
+              <button class="send" type="submit">Send</button>
+            </form>
+          </section>
 
-        <section class="card">
-          <h2>Upload</h2>
-          <p class="sub" style="margin:0 0 12px">Bank, brokerage, exchange, or the last two years of tax returns.</p>
-          <label class="btn file">
-            Add a statement
-            <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
-          </label>
-        </section>
+          <section class="card">
+            <h2>Upload</h2>
+            <p class="sub" style="margin:0 0 12px">Bank, brokerage, exchange, or the last two years of tax returns.</p>
+            <label class="btn file">
+              Add a statement
+              <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
+            </label>
+          </section>
+        </div>
+
+        <div class="view view-sfox" data-view-panel="sfox" hidden>
+          <section class="card" id="sfox">
+            <h2>sFOX</h2>
+            <p class="sub" id="sfoxStatus" style="margin:0 0 12px">Loading…</p>
+            <div id="sfoxBody"></div>
+            <p><button class="btn ghost" type="button" data-desk="talk">Back to talk</button></p>
+          </section>
+        </div>
 
         <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
       </main>
@@ -59,9 +73,15 @@
   </div>
   <p class="empty" id="wait">Opening your page…</p>
 
-  <script src="pay-catalog.js?v=1"></script>
-  <script src="van-grok.js?v=4"></script>
-  <script src="client-desk.js?v=1"></script>
+  <script src="pay-catalog.js?v=2"></script>
+  <script src="client-session.js?v=1"></script>
+  <script src="van-owned.js?v=3"></script>
+  <script src="van-sfox.js?v=4"></script>
+  <script src="van-shop-copy.js?v=1"></script>
+  <script src="van-shop.js?v=2"></script>
+  <script src="van-grok.js?v=6"></script>
+  <script src="client-desk.js?v=5"></script>
+  <script src="client-page.js?v=1"></script>
   <script>
     (function () {
       if (location.hostname === "halfacreresearch.tech") {
@@ -71,166 +91,20 @@
 
       var wait = document.getElementById("wait");
       var app = document.getElementById("app");
+      var session = window.HalfacreSession;
 
-      function sessionClient() {
-        try { return JSON.parse(localStorage.getItem("halfacre.session") || "null"); }
-        catch (e) { return null; }
-      }
-
-      function apply(client) {
-        if (!client || !client.name) {
-          wait.textContent = "We could not open that page. Create your account first.";
-          return;
-        }
-        window.HalfacreClient = client;
-        document.title = client.name;
-        document.getElementById("who").textContent = client.number
-          ? "Client " + client.number
-          : "Your page";
-        document.getElementById("name").textContent = client.name;
+      session.resolve().then(function () {
         wait.hidden = true;
         app.hidden = false;
-        var ready = window.HalfacreDesk
-          ? window.HalfacreDesk.mount({ id: client.id, name: client.name })
-          : Promise.resolve();
-        Promise.resolve(ready).finally(function () {
-          startChat(client);
-        });
-      }
-
-      function startChat(client) {
-        var grok = window.HalfacreGrok;
-        var log = document.getElementById("log");
-        var form = document.getElementById("form");
-        var line = document.getElementById("line");
-        var chips = document.getElementById("chips");
-        var file = document.getElementById("file");
-        var sendBtn = form.querySelector(".send");
-        var history = [];
-
-        function bubble(text, mine) {
-          var el = document.createElement("div");
-          el.className = mine ? "msg me" : "msg";
-          el.textContent = text;
-          log.appendChild(el);
-          el.scrollIntoView({ block: "end" });
+        window.HalfacrePage.bootTalk();
+      }).catch(function () {
+        var id = new URLSearchParams(location.search).get("c") || "";
+        if (!id) {
+          location.replace("signup.html");
+          return;
         }
-
-        function talk(text, silent) {
-          if (!text) return;
-          if (!silent) bubble(text, true);
-          history.push({ role: "user", content: text });
-          sendBtn.disabled = true;
-          var work = grok && grok.reply
-            ? grok.reply(text, null, history)
-            : Promise.resolve("");
-          Promise.resolve(work).then(function (reply) {
-            var out = String(reply || "").trim();
-            if (!out || (grok && grok.isOfflineNote && grok.isOfflineNote(out))) {
-              throw new Error("offline");
-            }
-            bubble(out, false);
-            history.push({ role: "assistant", content: out });
-          }).catch(function () {
-            bubble("Grok is not connected on this page right now.", false);
-          }).finally(function () {
-            sendBtn.disabled = false;
-          });
-        }
-
-        if (grok && grok.starters) {
-          grok.starters.forEach(function (row) {
-            var b = document.createElement("button");
-            b.type = "button";
-            b.className = "chip";
-            b.textContent = row.label;
-            b.onclick = function () { talk(row.send); };
-            chips.appendChild(b);
-          });
-        }
-
-        (function openGrok() {
-          sendBtn.disabled = true;
-          var work = grok && grok.open
-            ? grok.open()
-            : Promise.reject(new Error("offline"));
-          Promise.resolve(work).then(function (reply) {
-            var out = String(reply || "").trim();
-            if (!out) throw new Error("offline");
-            bubble(out, false);
-            history.push({ role: "assistant", content: out });
-          }).catch(function () {
-            bubble("Grok is not connected on this page right now.", false);
-          }).finally(function () {
-            sendBtn.disabled = false;
-          });
-        })();
-
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          var text = line.value.trim();
-          line.value = "";
-          talk(text);
-        });
-
-        file.addEventListener("change", function () {
-          var picked = file.files && file.files[0];
-          if (!picked) return;
-          var desk = window.HalfacreDesk;
-          if (desk && desk.recordUpload) {
-            desk.recordUpload(picked.name, desk.kindFromName(picked.name));
-          }
-          var reader = new FileReader();
-          reader.onload = function () {
-            var raw = String(reader.result || "");
-            var clip = raw.length > 12000 ? raw.slice(0, 12000) + "\n[truncated]" : raw;
-            talk("I uploaded " + picked.name + ".\n\n" + clip);
-          };
-          if (/\.pdf$/i.test(picked.name)) {
-            talk("I uploaded a PDF named " + picked.name + ".");
-          } else {
-            reader.readAsText(picked);
-          }
-          file.value = "";
-        });
-      }
-
-      var id = new URLSearchParams(location.search).get("c") || "";
-      var local = sessionClient();
-
-      if (!id && local && local.id) {
-        location.replace("page.html?c=" + encodeURIComponent(local.id));
-        return;
-      }
-      if (!id) {
-        location.replace("signup.html");
-        return;
-      }
-
-      fetch("client.php?c=" + encodeURIComponent(id))
-        .then(function (res) {
-          return res.json().then(function (data) {
-            return { ok: res.ok, data: data };
-          });
-        })
-        .then(function (pack) {
-          if (pack.ok && pack.data && pack.data.client && pack.data.client.name) {
-            apply(pack.data.client);
-            return;
-          }
-          if (local && local.id === id && local.name) {
-            apply(local);
-            return;
-          }
-          wait.textContent = (pack.data && pack.data.error) || "No page for that account.";
-        })
-        .catch(function () {
-          if (local && local.id === id && local.name) {
-            apply(local);
-            return;
-          }
-          wait.textContent = "Could not open your page. Try creating the account again.";
-        });
+        wait.textContent = "We could not open that page. Create your account first.";
+      });
     })();
   </script>
 </body>

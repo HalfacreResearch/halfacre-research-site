@@ -7,20 +7,23 @@
   <title>Charley Van Halfacre</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <link rel="stylesheet" href="client-desk.css?v=4">
+  <link rel="stylesheet" href="client-desk.css?v=5">
 </head>
 <body>
   <div class="app" data-view="talk">
     <header class="top">
       <div class="brand">
-        <p>Client 1</p>
-        <h1>Charley Van Halfacre</h1>
+        <p id="who">Client 1</p>
+        <h1 id="name">Charley Van Halfacre</h1>
         <p class="sub">Halfacre Research · your page</p>
       </div>
       <nav class="nav" aria-label="Page">
-        <a href="#talk" data-desk="talk">Talk</a>
+        <a href="#talk" data-desk="talk" data-talk="talk">Talk</a>
         <a href="#uploaded" data-desk="uploaded">Uploaded <span id="navUploadsCount">0</span></a>
         <a href="#purchased" data-desk="purchased">Purchased <span id="navBuysCount">0</span></a>
+        <a href="shop.html?kind=research&amp;c=charley-van-halfacre" data-shop="research">Research Modules</a>
+        <a href="shop.html?kind=packs&amp;c=charley-van-halfacre" data-shop="packs">Research Packs</a>
+        <a href="shop.html?kind=bots&amp;c=charley-van-halfacre" data-shop="bots">Trading Bots</a>
       </nav>
       <button class="nav-toggle" id="navToggle" type="button">Menu</button>
     </header>
@@ -69,172 +72,19 @@
     </div>
   </div>
 
-  <script src="pay-catalog.js?v=1"></script>
-  <script src="van-owned.js?v=1"></script>
+  <script src="pay-catalog.js?v=2"></script>
+  <script src="client-session.js?v=1"></script>
+  <script src="van-owned.js?v=3"></script>
   <script src="van-sfox.js?v=4"></script>
+  <script src="van-shop-copy.js?v=1"></script>
+  <script src="van-shop.js?v=2"></script>
   <script src="van-grok.js?v=6"></script>
-  <script src="client-desk.js?v=4"></script>
+  <script src="client-desk.js?v=5"></script>
+  <script src="client-page.js?v=1"></script>
   <script>
-    (function () {
-      window.HalfacreClient = {
-        id: "charley-van-halfacre",
-        name: "Charley Van Halfacre",
-        number: 1
-      };
-
-      var grok = window.HalfacreGrok;
-      var log = document.getElementById("log");
-      var form = document.getElementById("form");
-      var line = document.getElementById("line");
-      var chips = document.getElementById("chips");
-      var file = document.getElementById("file");
-      var sendBtn = form.querySelector(".send");
-      var history = [];
-
-      if (window.HalfacrePay && window.HalfacrePay.load) {
-        window.HalfacrePay.load().then(function () {
-          if (window.VanOwned && window.VanOwned.load) {
-            return window.VanOwned.load();
-          }
-        }).then(function () {
-          if (window.HalfacreDesk) window.HalfacreDesk.refresh();
-        }).catch(function () {
-          if (window.HalfacreDesk) window.HalfacreDesk.refresh();
-        });
-      }
-
-      var deskReady = window.HalfacreDesk
-        ? window.HalfacreDesk.mount({
-            id: "charley-van-halfacre",
-            name: "Charley Van Halfacre"
-          })
-        : Promise.resolve();
-
-      var sfoxReady = window.VanSfox && window.VanSfox.load
-        ? window.VanSfox.load("charley-van-halfacre")
-        : Promise.resolve();
-
-      function bubble(text, mine) {
-        var el = document.createElement("div");
-        el.className = mine ? "msg me" : "msg";
-        el.textContent = text;
-        log.appendChild(el);
-        el.scrollIntoView({ block: "end" });
-      }
-
-      function talk(text, silent) {
-        if (!text) return;
-        if (window.HalfacreDesk && window.HalfacreDesk.showView) {
-          window.HalfacreDesk.showView("talk");
-        }
-        if (!silent) bubble(text, true);
-        history.push({ role: "user", content: text });
-        sendBtn.disabled = true;
-        waitNote();
-        var work = grok && grok.reply
-          ? grok.reply(text, null, history)
-          : Promise.resolve("");
-        Promise.resolve(work).then(function (reply) {
-          var out = String(reply || "").trim();
-          if (!out || (grok && grok.isOfflineNote && grok.isOfflineNote(out))) {
-            throw new Error("offline");
-          }
-          clearWait();
-          bubble(out, false);
-          history.push({ role: "assistant", content: out });
-        }).catch(function () {
-          clearWait();
-          bubble("Grok did not answer just now. Send that again.", false);
-        }).finally(function () {
-          sendBtn.disabled = false;
-        });
-      }
-
-      if (grok && grok.starters) {
-        grok.starters.forEach(function (row) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.className = "chip";
-          b.textContent = row.label;
-          b.onclick = function () { talk(row.send); };
-          chips.appendChild(b);
-        });
-      }
-
-      function waitNote() {
-        var el = document.createElement("div");
-        el.className = "msg wait";
-        el.id = "grokWait";
-        el.textContent = "Grok is thinking…";
-        log.appendChild(el);
-        el.scrollIntoView({ block: "end" });
-      }
-
-      function clearWait() {
-        var el = document.getElementById("grokWait");
-        if (el && el.parentNode) el.parentNode.removeChild(el);
-      }
-
-      function openGrok() {
-        sendBtn.disabled = true;
-        waitNote();
-        var work = grok && grok.open
-          ? grok.open()
-          : Promise.reject(new Error("offline"));
-        Promise.resolve(work).then(function (reply) {
-          var out = String(reply || "").trim();
-          if (!out) throw new Error("offline");
-          clearWait();
-          bubble(out, false);
-          history.push({ role: "assistant", content: out });
-        }).catch(function () {
-          clearWait();
-          bubble("Grok did not answer just now. Send a line and it will try again.", false);
-        }).finally(function () {
-          sendBtn.disabled = false;
-        });
-      }
-
-      Promise.resolve(deskReady).finally(function () {
-        if (window.HalfacreDesk && window.HalfacreDesk.paintSfox) {
-          window.HalfacreDesk.paintSfox();
-        }
-        openGrok();
-      });
-      Promise.resolve(sfoxReady).then(function () {
-        if (window.HalfacreDesk && window.HalfacreDesk.paintSfox) {
-          window.HalfacreDesk.paintSfox();
-        }
-      });
-
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var text = line.value.trim();
-        line.value = "";
-        talk(text);
-      });
-
-      file.addEventListener("change", function () {
-        var picked = file.files && file.files[0];
-        if (!picked) return;
-        var desk = window.HalfacreDesk;
-        if (desk && desk.recordUpload) {
-          desk.recordUpload(picked.name, desk.kindFromName(picked.name));
-        }
-        var reader = new FileReader();
-        reader.onload = function () {
-          var raw = String(reader.result || "");
-          var clip = raw.length > 12000 ? raw.slice(0, 12000) + "\n[truncated]" : raw;
-          talk("I uploaded " + picked.name + ".\n\n" + clip);
-        };
-        if (/\.pdf$/i.test(picked.name)) {
-          talk("I uploaded a PDF named " + picked.name + ".");
-        } else {
-          reader.readAsText(picked);
-        }
-        file.value = "";
-      });
-    })();
+    window.HalfacreSession.resolve().then(function () {
+      window.HalfacrePage.bootTalk();
+    });
   </script>
 </body>
 </html>
