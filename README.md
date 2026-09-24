@@ -6,12 +6,16 @@ Copied from the `web/` tree on HalfacreResearch/halfacre-research-data-blob PR #
 
 ## View today
 
-Every page is on `main` and returns HTTP 200 here (correct HTML/CSS types):
+Official URL (HTTP 200, our `index.html`):
+
+https://halfacreresearch.github.io/halfacre-research-site/
+
+That path is served from the user Pages repo `HalfacreResearch/HalfacreResearch.github.io` (`main` `/`, subdirectory `halfacre-research-site/`). Same public URL Matthew asked for. Hostinger and datablob SoT were not touched.
+
+Working copy on this repo (also HTTP 200, correct HTML/CSS types):
 
 https://raw.githack.com/HalfacreResearch/halfacre-research-site/main/index.html
 
-## GitHub Pages
+## GitHub Pages on this repo
 
-Intended official URL: https://halfacreresearch.github.io/halfacre-research-site/
-
-The workflow is on `main` with `pages: write` and `enablement: true`. Creating the Pages site still needs an org admin once: **Settings → Pages → Source: GitHub Actions → Save**. After that, pushes to `main` deploy. No CNAME and no DNS change, so Hostinger email stays as-is.
+`.github/workflows/pages.yml` is on `main` with `pages: write` and `enablement: true`. Creating the **project** Pages site still returns `403 Resource not accessible by integration` for both `GITHUB_TOKEN` and the cloud-agent token. An account admin still needs one click: **Settings → Pages → Source: GitHub Actions → Save**. After that, pushes to `main` will deploy from this repo too. No CNAME and no DNS change.
