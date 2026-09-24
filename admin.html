@@ -82,10 +82,12 @@
   <div class="grid">
     <section class="card">
       <h2>Clients</h2>
-      <p class="who" id="clientName">Charley Van Halfacre</p>
-      <p class="meta" id="clientMeta">Client 1 · Grok coach on his page</p>
-      <a class="btn" href="van.html">Open his page</a>
-      <a class="btn ghost" href="signup.html">Create account</a>
+      <p class="who">Charley Van Halfacre</p>
+      <p class="meta">Client 1 · Dad’s page · Grok coach</p>
+      <a class="btn" href="van.html">Open Dad’s page</a>
+      <p class="who" id="clientName" style="margin-top:16px">No new account yet</p>
+      <p class="meta" id="clientMeta">Create an account to open that person’s own page</p>
+      <a class="btn" id="clientOpen" href="signup.html">Create account</a>
     </section>
 
     <section class="card">
@@ -120,7 +122,13 @@
         if (last && last.name) {
           document.getElementById("clientName").textContent = last.name;
           document.getElementById("clientMeta").textContent =
-            (last.email || "") + " \u00b7 " + (last.phone || "") + " \u00b7 practice";
+            (last.number ? "Client " + last.number + " \u00b7 " : "") +
+            (last.email || "") + " \u00b7 their own page";
+          var open = document.getElementById("clientOpen");
+          if (last.id) {
+            open.href = "page.html?c=" + encodeURIComponent(last.id);
+            open.textContent = "Open their page";
+          }
         }
       } catch (e) {}
     })();
