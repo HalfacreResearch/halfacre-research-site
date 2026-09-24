@@ -129,7 +129,7 @@ function first_name(string $full): string
   return $first;
 }
 
-function welcome_prompt(string $clientName, string $userId, array $uploads, array $owned, $avatar): string
+function welcome_prompt(string $clientName, string $userId, array $uploads, array $owned, $avatar, string $sfoxHoldings): string
 {
   $first = first_name($clientName);
   $files = format_uploads($uploads);
@@ -147,6 +147,9 @@ Coach them toward uploading documents. Every file must be saved, then tell them 
 
 Already uploaded:
 {$files}
+
+sFOX holdings (live account data, never the key):
+{$sfoxHoldings}
 
 Avatar upgrades they already bought:
 {$power}
@@ -177,10 +180,10 @@ Client: {$clientName}.
 TXT;
 }
 
-function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clientName, string $userId, array $uploads, bool $open): string
+function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clientName, string $userId, array $uploads, bool $open, string $sfoxHoldings): string
 {
   if ($open) {
-    return welcome_prompt($clientName, $userId, $uploads, $owned, $avatar);
+    return welcome_prompt($clientName, $userId, $uploads, $owned, $avatar, $sfoxHoldings);
   }
 
   $first = first_name($clientName);
@@ -210,6 +213,9 @@ Do not speak without this pack. If something is missing, do not guess.
 Uploaded:
 {$files}
 
+sFOX holdings (live account data, never the key):
+{$sfoxHoldings}
+
 Avatar upgrades they bought:
 {$power}
 
@@ -224,7 +230,7 @@ Jobs in order:
 Every upload: make sure it is saved, then tell them what value that just unlocked. Each file makes the picture clearer and lets you offer the next fitting step — one thing, not a list.
 If they confirm they have uploaded everything, you should already have been walking them toward real next steps.
 
-sFOX: {$sfox}. Keys never go in chat.
+sFOX connected: {$sfox}. Keys never go in chat.
 Live items you may name when one fits (do not dump): {$liveLine}
 
 {$second}
@@ -252,6 +258,14 @@ $avatar = isset($payload["avatar"]) && is_array($payload["avatar"]) ? $payload["
 $uploads = isset($payload["uploads"]) && is_array($payload["uploads"]) ? $payload["uploads"] : [];
 $sfox = !empty($payload["sfox"]);
 $open = !empty($payload["open"]);
+$sfoxHoldings = trim((string) ($payload["sfoxHoldings"] ?? ""));
+$sfoxHoldings = preg_replace("/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]+/", "", $sfoxHoldings) ?? "";
+if (strlen($sfoxHoldings) > 2000) {
+  $sfoxHoldings = substr($sfoxHoldings, 0, 2000);
+}
+if ($sfoxHoldings === "") {
+  $sfoxHoldings = $sfox ? "sFOX is connected." : "sFOX is not connected.";
+}
 
 $clientName = trim(preg_replace("/[\\r\\n\\t]+/", " ", (string) ($payload["client"] ?? "")) ?? "");
 if (strlen($clientName) > 120) {
@@ -319,7 +333,7 @@ if ($key === "") {
 }
 
 $messages = array_merge(
-  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, $clientName, $userId, $cleanUploads, $open)]],
+  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, $clientName, $userId, $cleanUploads, $open, $sfoxHoldings)]],
   $clean
 );
 

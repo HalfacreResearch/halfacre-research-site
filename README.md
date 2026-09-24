@@ -6,7 +6,7 @@ The public homepage is signup at `/` (same page as `/signup.html`). Name, email,
 
 Client pages have a nav and sidebar: **Uploaded** (files already given) and **Purchased** (Avatar upgrades). Those lists persist in `client-memory.store.json` on Hostinger.
 
-Matthew pastes Charley’s sFOX API key on `/admin.html`. It stores with Charley’s record in `client-secrets.store.json` on Hostinger. The desk only shows saved + last four characters. The key never goes to chat, Git, Grok, or Charley’s page.
+Matthew pastes Charley’s sFOX API key on `/admin.html`. It stores with Charley’s record in `client-secrets.store.json` on Hostinger. The desk only shows saved + last four characters. `van-sfox.php` uses that key on the server to load balances onto `/van.html`. The key never goes to chat, Git, Grok, or Charley’s page.
 
 `van-grok.secret.php`, `clients.store.json`, `van-unlocks.store.json`, `client-memory.store.json`, and `client-secrets.store.json` stay on Hostinger only. Do not commit them.
 

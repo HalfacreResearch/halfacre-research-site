@@ -7,7 +7,7 @@
   <title>Charley Van Halfacre</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <link rel="stylesheet" href="client-desk.css?v=1">
+  <link rel="stylesheet" href="client-desk.css?v=2">
 </head>
 <body>
   <div class="app">
@@ -19,6 +19,7 @@
       </div>
       <nav class="nav" aria-label="Page">
         <a href="#talk" data-desk="talk">Talk</a>
+        <a href="#sfox" data-desk="sfox">sFOX <span id="navSfoxCount">0</span></a>
         <a href="#uploaded" data-desk="uploaded">Uploaded <span id="navUploadsCount">0</span></a>
         <a href="#purchased" data-desk="purchased">Purchased <span id="navBuysCount">0</span></a>
       </nav>
@@ -34,6 +35,12 @@
       </aside>
 
       <main class="main">
+        <section class="card" id="sfox">
+          <h2>sFOX</h2>
+          <p class="sub" id="sfoxStatus" style="margin:0 0 12px">Loading…</p>
+          <div id="sfoxBody"></div>
+        </section>
+
         <section class="card" id="talk">
           <h2>Grok</h2>
           <div id="log"></div>
@@ -60,7 +67,8 @@
 
   <script src="pay-catalog.js?v=1"></script>
   <script src="van-owned.js?v=1"></script>
-  <script src="van-grok.js?v=4"></script>
+  <script src="van-sfox.js?v=2"></script>
+  <script src="van-grok.js?v=5"></script>
   <script src="client-desk.js?v=1"></script>
   <script>
     (function () {
@@ -96,6 +104,10 @@
             id: "charley-van-halfacre",
             name: "Charley Van Halfacre"
           })
+        : Promise.resolve();
+
+      var sfoxReady = window.VanSfox && window.VanSfox.load
+        ? window.VanSfox.load("charley-van-halfacre")
         : Promise.resolve();
 
       function bubble(text, mine) {
@@ -156,7 +168,7 @@
         });
       }
 
-      Promise.resolve(deskReady).finally(function () {
+      Promise.all([deskReady, sfoxReady]).finally(function () {
         openGrok();
       });
 

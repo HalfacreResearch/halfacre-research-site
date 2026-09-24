@@ -52,7 +52,14 @@
   }
 
   function sfoxConnected() {
-    return global.VanSfox && global.VanSfox.state().connected;
+    return global.VanSfox && global.VanSfox.state && global.VanSfox.state().connected;
+  }
+
+  function sfoxHoldings() {
+    if (global.VanSfox && typeof global.VanSfox.snapshotText === "function") {
+      return global.VanSfox.snapshotText();
+    }
+    return sfoxConnected() ? "sFOX is connected." : "sFOX is not connected.";
   }
 
   function catalogSnapshot() {
@@ -178,6 +185,7 @@
           avatar: avatarNow(),
           uploads: uploadsNow(),
           sfox: sfoxConnected(),
+          sfoxHoldings: sfoxHoldings(),
           open: opening,
           client: who().fullName,
           userId: who().userId || who().fullName
