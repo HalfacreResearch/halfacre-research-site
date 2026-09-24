@@ -152,6 +152,13 @@
 
   <script>
     (function () {
+      // Existing Web client already authorizes www. Apex is not on that client
+      // and Cloud Console cannot add it without a signed-in session.
+      if (location.hostname === "halfacreresearch.tech") {
+        location.replace("https://www.halfacreresearch.tech" + location.pathname + location.search + location.hash);
+        return;
+      }
+
       var CLIENT_ID = "3260604131-hsdpbu9kmn06e449e193kqkuo9e8o9b8.apps.googleusercontent.com";
       var KEY = "halfacre.clients";
       var err = document.getElementById("err");
