@@ -54,7 +54,9 @@
       line-height: 1.45;
       font-size: 15px;
       margin: 0 0 12px;
+      white-space: pre-wrap;
     }
+    .msg.me { border-left: 3px solid var(--btn); }
     .btn, .file {
       display: inline-block;
       background: var(--btn);
@@ -73,11 +75,16 @@
       color: var(--white);
       border: 1px solid #444;
     }
-    form {
-      display: flex;
-      gap: 8px;
-      margin: 0;
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .chip {
+      background: #101010;
+      color: var(--white);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13px;
     }
+    form { display: flex; gap: 8px; margin: 0; }
     input[type="text"] {
       flex: 1;
       min-width: 0;
@@ -96,7 +103,7 @@
       font-weight: 700;
       padding: 0 16px;
     }
-    #log { min-height: 80px; }
+    button.send:disabled { opacity: 0.45; }
   </style>
 </head>
 <body>
@@ -109,9 +116,8 @@
   <div class="wrap">
     <section class="card">
       <h2>Dad</h2>
-      <div id="log">
-        <div class="msg">Two pictures: starting at zero, and the best retirement structure there is. Upload a statement and I’ll put you on the line between them.</div>
-      </div>
+      <div id="log"></div>
+      <div class="chips" id="chips"></div>
       <form id="form">
         <input id="line" type="text" autocomplete="off" placeholder="Talk to Dad">
         <button class="send" type="submit">Send</button>
@@ -120,10 +126,10 @@
 
     <section class="card">
       <h2>Upload</h2>
-      <p class="sub" style="margin:0 0 12px">Bank, brokerage, or tax form. That’s how the plan starts.</p>
+      <p class="sub" style="margin:0 0 12px">Bank, brokerage, or tax form. Dad reads it and places you on the line.</p>
       <label class="btn file">
         Add a statement
-        <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv" hidden>
+        <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
       </label>
     </section>
 
@@ -131,5 +137,82 @@
   </div>
 
   <script src="van-grok.js"></script>
+  <script>
+    (function () {
+      var grok = window.HalfacreGrok;
+      var log = document.getElementById("log");
+      var form = document.getElementById("form");
+      var line = document.getElementById("line");
+      var chips = document.getElementById("chips");
+      var file = document.getElementById("file");
+      var sendBtn = form.querySelector(".send");
+      var history = [];
+
+      function bubble(text, mine) {
+        var el = document.createElement("div");
+        el.className = mine ? "msg me" : "msg";
+        el.textContent = text;
+        log.appendChild(el);
+        el.scrollIntoView({ block: "end" });
+      }
+
+      function talk(text) {
+        if (!text) return;
+        bubble(text, true);
+        history.push({ role: "user", content: text });
+        sendBtn.disabled = true;
+        var work = grok && grok.reply
+          ? grok.reply(text, null, history)
+          : Promise.resolve("Dad is built. This preview host cannot reach the Grok key yet, so I cannot answer live here.");
+        Promise.resolve(work).then(function (reply) {
+          var out = String(reply || "").trim();
+          bubble(out, false);
+          history.push({ role: "assistant", content: out });
+        }).finally(function () {
+          sendBtn.disabled = false;
+        });
+      }
+
+      if (grok && grok.greeting) {
+        var hello = grok.greeting();
+        bubble(hello, false);
+        history.push({ role: "assistant", content: hello });
+        (grok.starters || []).forEach(function (row) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "chip";
+          b.textContent = row.label;
+          b.onclick = function () { talk(row.send); };
+          chips.appendChild(b);
+        });
+      } else {
+        bubble("Hey Van. Two poles: zero net worth, and the full retirement structure. Upload a statement.", false);
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var text = line.value.trim();
+        line.value = "";
+        talk(text);
+      });
+
+      file.addEventListener("change", function () {
+        var picked = file.files && file.files[0];
+        if (!picked) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          var raw = String(reader.result || "");
+          var clip = raw.length > 12000 ? raw.slice(0, 12000) + "\n[truncated]" : raw;
+          talk("I uploaded " + picked.name + ". Read it and place me between the two poles.\n\n" + clip);
+        };
+        if (/\.pdf$/i.test(picked.name)) {
+          talk("I uploaded a PDF named " + picked.name + ". Read what you can and tell me what to upload next. I did not type any passwords.");
+        } else {
+          reader.readAsText(picked);
+        }
+        file.value = "";
+      });
+    })();
+  </script>
 </body>
 </html>
