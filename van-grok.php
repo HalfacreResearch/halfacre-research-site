@@ -5,6 +5,9 @@
  */
 declare(strict_types=1);
 
+@set_time_limit(90);
+@ignore_user_abort(true);
+
 header("Content-Type: application/json; charset=utf-8");
 header("Cache-Control: no-store");
 header("X-Content-Type-Options: nosniff");
