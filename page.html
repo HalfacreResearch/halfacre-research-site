@@ -5,140 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Your page</title>
-  <style>
-    :root {
-      --bg: #0A0A0A;
-      --card: #161616;
-      --line: #2a2a2a;
-      --orange: #F7931A;
-      --white: #FFFFFF;
-      --muted: #9a9a9a;
-      --btn: #39FF14;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--white);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    header { padding: 22px 18px 8px; }
-    header p {
-      margin: 0;
-      color: var(--orange);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    h1 { margin: 8px 0 4px; font-size: 30px; }
-    .sub { margin: 0; color: var(--muted); font-size: 14px; }
-    .wrap { padding: 16px; max-width: 560px; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
-      margin: 0 0 12px;
-    }
-    .card h2 {
-      margin: 0 0 10px;
-      font-size: 13px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--orange);
-    }
-    .msg {
-      background: #101010;
-      border-radius: 12px;
-      padding: 12px 14px;
-      line-height: 1.45;
-      font-size: 15px;
-      margin: 0 0 12px;
-      white-space: pre-wrap;
-    }
-    .msg.me { border-left: 3px solid var(--btn); }
-    .btn, .file {
-      display: inline-block;
-      background: var(--btn);
-      color: #111;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 0;
-      margin: 0 8px 8px 0;
-    }
-    .file { cursor: pointer; }
-    .ghost {
-      background: transparent;
-      color: var(--white);
-      border: 1px solid #444;
-    }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-    .chip {
-      background: #101010;
-      color: var(--white);
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 13px;
-    }
-    form { display: flex; gap: 8px; margin: 0; }
-    input[type="text"] {
-      flex: 1;
-      min-width: 0;
-      background: #101010;
-      color: var(--white);
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 16px;
-    }
-    button.send {
-      background: var(--btn);
-      color: #111;
-      border: 0;
-      border-radius: 10px;
-      font-weight: 700;
-      padding: 0 16px;
-    }
-    button.send:disabled { opacity: 0.45; }
-    .empty { color: var(--muted); padding: 16px; }
-  </style>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <link rel="stylesheet" href="client-desk.css?v=1">
 </head>
 <body>
-  <header>
-    <p id="who">Your page</p>
-    <h1 id="name">Loading…</h1>
-    <p class="sub">Grok is the coach on this page · not Dad</p>
-  </header>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <p id="who">Your page</p>
+        <h1 id="name">Loading…</h1>
+        <p class="sub">Halfacre Research · your page</p>
+      </div>
+      <nav class="nav" aria-label="Page">
+        <a href="#talk" data-desk="talk">Talk</a>
+        <a href="#uploaded" data-desk="uploaded">Uploaded <span id="navUploadsCount">0</span></a>
+        <a href="#purchased" data-desk="purchased">Purchased <span id="navBuysCount">0</span></a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" type="button">Menu</button>
+    </header>
 
-  <div class="wrap" id="app" hidden>
-    <section class="card">
-      <h2>Grok</h2>
-      <div id="log"></div>
-      <div class="chips" id="chips"></div>
-      <form id="form">
-        <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
-        <button class="send" type="submit">Send</button>
-      </form>
-    </section>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <h2 id="sideUploads">Uploaded</h2>
+        <div id="deskUploads"></div>
+        <h2 id="sideBuys">Purchased</h2>
+        <div id="deskBuys"></div>
+      </aside>
 
-    <section class="card">
-      <h2>Upload</h2>
-      <p class="sub" style="margin:0 0 12px">Bank, brokerage, or tax form. Grok reads it and places you on the line.</p>
-      <label class="btn file">
-        Add a statement
-        <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
-      </label>
-    </section>
+      <main class="main" id="app" hidden>
+        <section class="card" id="talk">
+          <h2>Grok</h2>
+          <div id="log"></div>
+          <div class="chips" id="chips"></div>
+          <form class="talk" id="form">
+            <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
+            <button class="send" type="submit">Send</button>
+          </form>
+        </section>
 
-      <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
+        <section class="card">
+          <h2>Upload</h2>
+          <p class="sub" style="margin:0 0 12px">Bank, brokerage, exchange, or the last two years of tax returns.</p>
+          <label class="btn file">
+            Add a statement
+            <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
+          </label>
+        </section>
+
+        <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
+      </main>
+    </div>
   </div>
   <p class="empty" id="wait">Opening your page…</p>
 
-  <script src="van-grok.js"></script>
+  <script src="pay-catalog.js?v=1"></script>
+  <script src="van-grok.js?v=4"></script>
+  <script src="client-desk.js?v=1"></script>
   <script>
     (function () {
       if (location.hostname === "halfacreresearch.tech") {
@@ -167,7 +90,12 @@
         document.getElementById("name").textContent = client.name;
         wait.hidden = true;
         app.hidden = false;
-        startChat(client);
+        var ready = window.HalfacreDesk
+          ? window.HalfacreDesk.mount({ id: client.id, name: client.name })
+          : Promise.resolve();
+        Promise.resolve(ready).finally(function () {
+          startChat(client);
+        });
       }
 
       function startChat(client) {
@@ -179,7 +107,6 @@
         var file = document.getElementById("file");
         var sendBtn = form.querySelector(".send");
         var history = [];
-        var first = String(client.name || "").trim().split(/\s+/)[0] || "there";
 
         function bubble(text, mine) {
           var el = document.createElement("div");
@@ -205,11 +132,7 @@
             bubble(out, false);
             history.push({ role: "assistant", content: out });
           }).catch(function () {
-            var fallback = grok && grok.greeting
-              ? grok.greeting()
-              : "Hey " + first + ". I’m Grok, the coach on this page. Live replies are not connected yet.";
-            bubble(fallback, false);
-            history.push({ role: "assistant", content: fallback });
+            bubble("Grok is not connected on this page right now.", false);
           }).finally(function () {
             sendBtn.disabled = false;
           });
@@ -226,7 +149,22 @@
           });
         }
 
-        talk("Hello. I'm " + client.name + " on my own page, not Dad's page. Greet me by my first name, say you are Grok the coach — not Dad — and ask what I can upload first.", true);
+        (function openGrok() {
+          sendBtn.disabled = true;
+          var work = grok && grok.open
+            ? grok.open()
+            : Promise.reject(new Error("offline"));
+          Promise.resolve(work).then(function (reply) {
+            var out = String(reply || "").trim();
+            if (!out) throw new Error("offline");
+            bubble(out, false);
+            history.push({ role: "assistant", content: out });
+          }).catch(function () {
+            bubble("Grok is not connected on this page right now.", false);
+          }).finally(function () {
+            sendBtn.disabled = false;
+          });
+        })();
 
         form.addEventListener("submit", function (e) {
           e.preventDefault();
@@ -238,14 +176,18 @@
         file.addEventListener("change", function () {
           var picked = file.files && file.files[0];
           if (!picked) return;
+          var desk = window.HalfacreDesk;
+          if (desk && desk.recordUpload) {
+            desk.recordUpload(picked.name, desk.kindFromName(picked.name));
+          }
           var reader = new FileReader();
           reader.onload = function () {
             var raw = String(reader.result || "");
             var clip = raw.length > 12000 ? raw.slice(0, 12000) + "\n[truncated]" : raw;
-            talk("I uploaded " + picked.name + ". Read it and place me between the two poles.\n\n" + clip);
+            talk("I uploaded " + picked.name + ".\n\n" + clip);
           };
           if (/\.pdf$/i.test(picked.name)) {
-            talk("I uploaded a PDF named " + picked.name + ". Read what you can and tell me what to upload next. I did not type any passwords.");
+            talk("I uploaded a PDF named " + picked.name + ".");
           } else {
             reader.readAsText(picked);
           }
