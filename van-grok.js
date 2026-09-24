@@ -1,5 +1,5 @@
 /**
- * On-page Grok (xAI) for /van.html.
+ * On-page Grok (xAI) for /van.html and /page.html.
  *
  * This is Grok itself, embedded full-time. Not a Grok Bot, not a fleet
  * agent, not VanCoachBot. Browser talks to van-grok.php on Hostinger;
@@ -11,10 +11,31 @@
 (function (global) {
   "use strict";
 
-  var FULL_NAME = "Charley Van Halfacre";
-  var FIRST_NAME = "Van";
   var PROXY = "van-grok.php";
   var MODEL = "grok-4.6";
+
+  function firstNameOf(name) {
+    var parts = String(name || "").trim().split(/\s+/);
+    if (!parts[0]) return "there";
+    if (/^charley$/i.test(parts[0])) return "Van";
+    return parts[0];
+  }
+
+  function who() {
+    var c = global.HalfacreClient;
+    if (c && c.name) {
+      return {
+        fullName: String(c.name),
+        firstName: firstNameOf(c.name),
+        userId: String(c.id || c.userId || "")
+      };
+    }
+    return {
+      fullName: "Charley Van Halfacre",
+      firstName: "Van",
+      userId: "charley-van-halfacre"
+    };
+  }
 
   var PASTED_KEY_RE = /(?:^|\s)[A-Za-z0-9_\-]{24,}(?:\s|$)/;
   var SECRET_WORDS_RE =
@@ -30,8 +51,9 @@
     var powerLine = powered.length
       ? "I already have these unlocks on your account: " + powered.join(", ") + ". They stay loaded."
       : "No paid unlocks on this account yet. That is fine. We start from what you upload.";
+    var me = who();
     return [
-      "Hey Van. I’m Grok — the coach on this page. I am not Dad, and I am not a fleet bot.",
+      "Hey " + me.firstName + ". I’m Grok — the coach on this page. I am not Dad, and I am not a fleet bot.",
       "",
       "Two poles. One is zero net worth. The other is an Elon-level financial structure: the most complete retirement portfolio we can build, aimed at a trillionaire path, without a stack of advisors and tax attorneys in the middle. You stay 100% in charge. This page sells research and data. It is not licensed advice.",
       "",
@@ -109,7 +131,7 @@
 
   function offlineNote() {
     return [
-      "Hey Van. I’m Grok on this page. The live xAI path is waiting on a key for van-grok.php — we can still work the plan.",
+      "Hey " + who().firstName + ". I’m Grok on this page. The live xAI path is waiting on a key for van-grok.php — we can still work the plan.",
       "",
       "Two poles: zero net worth, and an Elon-level / trillionaire retirement structure. You stay 100% in charge. Research and data only.",
       "",
@@ -165,10 +187,10 @@
           owned: ownedIds(),
           avatar: (global.VanOwned && global.VanOwned.avatarContext)
             ? global.VanOwned.avatarContext()
-            : { userId: "charley-van-halfacre", powerups: [] },
+            : { userId: who().userId || who().fullName, powerups: [] },
           sfox: sfoxConnected(),
-          client: FULL_NAME,
-          userId: "charley-van-halfacre"
+          client: who().fullName,
+          userId: who().userId || who().fullName
         })
       },
       45000
@@ -194,8 +216,8 @@
   }
 
   global.HalfacreGrok = {
-    fullName: FULL_NAME,
-    firstName: FIRST_NAME,
+    get fullName() { return who().fullName; },
+    get firstName() { return who().firstName; },
     engine: "grok",
     model: MODEL,
     greeting: greeting,
