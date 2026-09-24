@@ -63,7 +63,7 @@ function notify_matthew(array $client): void
     . "Email: {$email}\n"
     . "Phone: {$phone}\n"
     . "Created: {$client["created"]}\n\n"
-    . "Their page: https://www.halfacreresearch.tech/van.html\n";
+    . "Their page: https://www.halfacreresearch.tech/page.html?c=" . $client["id"] . "\n";
   $headers = "From: Halfacre Research <noreply@halfacreresearch.tech>\r\n"
     . "Reply-To: " . MATTHEW . "\r\n"
     . "Content-Type: text/plain; charset=utf-8\r\n";
@@ -100,10 +100,39 @@ foreach ($rows as $row) {
   }
 }
 
+function next_number(array $rows): int
+{
+  $next = 2;
+  foreach ($rows as $row) {
+    if (!is_array($row)) {
+      continue;
+    }
+    $n = isset($row["number"]) ? (int) $row["number"] : 0;
+    if ($n >= $next) {
+      $next = $n + 1;
+    }
+  }
+  return $next;
+}
+
+function with_page(array $client): array
+{
+  $id = (string) ($client["id"] ?? "");
+  $client["page"] = $id !== "" ? "/page.html?c=" . $id : "/signup.html";
+  return $client;
+}
+
 if (is_array($existing)) {
   $existing["name"] = $name;
   $existing["phone"] = $phone;
   $existing["seen"] = gmdate("c");
+  if (empty($existing["id"])) {
+    $existing["id"] = bin2hex(random_bytes(8));
+  }
+  if (empty($existing["number"])) {
+    $existing["number"] = next_number($rows);
+  }
+  $existing = with_page($existing);
   foreach ($rows as $i => $row) {
     if (is_array($row) && strtolower((string) ($row["email"] ?? "")) === $email) {
       $rows[$i] = $existing;
@@ -115,13 +144,14 @@ if (is_array($existing)) {
   exit;
 }
 
-$client = [
+$client = with_page([
   "id" => bin2hex(random_bytes(8)),
+  "number" => next_number($rows),
   "name" => $name,
   "email" => $email,
   "phone" => $phone,
   "created" => gmdate("c")
-];
+]);
 $rows[] = $client;
 write_clients($rows);
 notify_matthew($client);
