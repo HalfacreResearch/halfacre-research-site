@@ -143,7 +143,7 @@
     if (view === "sfox") {
       app.classList.add("show-side");
       if (global.VanSfox && global.VanSfox.load) {
-        global.VanSfox.load(client.id || "charley-van-halfacre").then(paintSfox);
+        global.VanSfox.load(client.id || "charley-van-halfacre", { prices: true }).then(paintSfox);
       } else if (global.VanSfox && global.VanSfox.paint) {
         global.VanSfox.paint();
       }
