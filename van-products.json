@@ -1,9 +1,6 @@
 {
   "client": {
-    "display_name": "Charlie Van Halfacre",
-    "phone": "601-408-8342",
-    "phone_tel": "+16014088342",
-    "email": "cvhalfacre@msn.com"
+    "display_name": "Charlie Van Halfacre"
   },
   "catalog": {
     "open_ended": true,
@@ -64,10 +61,7 @@
     "userId": "charlie-van-halfacre",
     "identity": {
       "display_name": "Charlie Van Halfacre",
-      "email": "cvhalfacre@msn.com",
-      "phone": "601-408-8342",
-      "hivemind_client_id": "charlie-van-halfacre",
-      "pay_identity": "cvhalfacre@msn.com"
+      "hivemind_client_id": "charlie-van-halfacre"
     }
   },
   "pay": {
