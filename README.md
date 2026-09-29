@@ -2,13 +2,19 @@
 
 Public static website for Halfacre Research.
 
-Copied from the `web/` tree on HalfacreResearch/halfacre-research-data-blob PR #4 (head `8dad486`). That PR was not merged. No datablob SoT data is in this repo.
+The public homepage is signup at `/` (same page as `/signup.html`). Name, email, and phone. After create, the client lands on their own page at `/page.html?c=…`, same layout as Charley’s page (`/van.html`). Grok is the coach. Each account has its own page. Google sign-in is off.
 
-## View today
+Client pages have a nav and sidebar: **Uploaded** (files already given) and **Purchased** (Avatar upgrades). Those lists persist in `client-memory.store.json` on Hostinger.
 
-Every page is on `main` and returns HTTP 200 here (correct HTML/CSS types):
+Matthew pastes Charley’s sFOX API key on `/admin.html`. It stores with Charley’s record in `client-secrets.store.json` on Hostinger. The desk only shows saved + last four characters. `van-sfox.php` uses that key on the server to load balances onto `/van.html`. The key never goes to chat, Git, Grok, or Charley’s page.
 
-https://raw.githack.com/HalfacreResearch/halfacre-research-site/main/index.html
+`van-grok.secret.php`, `clients.store.json`, `van-unlocks.store.json`, `client-memory.store.json`, and `client-secrets.store.json` stay on Hostinger only. Do not commit them.
+
+Practice work is on `cursor/van-product-page-70af`. Do not merge to `main` until Matthew approves the pages.
+
+## Run locally
+
+Open the HTML files from this folder, or serve them with any static / PHP host. Live site: https://www.halfacreresearch.tech
 
 ## GitHub Pages
 

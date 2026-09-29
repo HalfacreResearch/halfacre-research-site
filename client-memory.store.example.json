@@ -1,0 +1,7 @@
+{
+  "charley-van-halfacre": {
+    "uploads": [],
+    "purchases": []
+  },
+  "note": "Copy to client-memory.store.json on Hostinger if you need a starter file. Runtime writes that gitignored file."
+}

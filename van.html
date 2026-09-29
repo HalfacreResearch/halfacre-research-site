@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Charley Van Halfacre</title>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <link rel="stylesheet" href="client-desk.css?v=5">
+</head>
+<body>
+  <div class="app" data-view="talk">
+    <header class="top">
+      <div class="brand">
+        <p id="who">Client 1</p>
+        <h1 id="name">Charley Van Halfacre</h1>
+        <p class="sub">Halfacre Research · your page</p>
+      </div>
+      <nav class="nav" aria-label="Page">
+        <a href="#talk" data-desk="talk" data-talk="talk">Talk</a>
+        <a href="#uploaded" data-desk="uploaded">Uploaded <span id="navUploadsCount">0</span></a>
+        <a href="#purchased" data-desk="purchased">Purchased <span id="navBuysCount">0</span></a>
+        <a href="shop.html?kind=research&amp;c=charley-van-halfacre" data-shop="research">Research Modules</a>
+        <a href="shop.html?kind=packs&amp;c=charley-van-halfacre" data-shop="packs">Research Packs</a>
+        <a href="shop.html?kind=bots&amp;c=charley-van-halfacre" data-shop="bots">Trading Bots</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" type="button">Menu</button>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <h2 id="sideUploads">Uploaded</h2>
+        <div id="deskUploads"></div>
+        <h2 id="sideBuys">Purchased</h2>
+        <div id="deskBuys"></div>
+      </aside>
+
+      <main class="main">
+        <div class="view view-talk" data-view-panel="talk">
+          <section class="card" id="talk">
+            <h2>Grok</h2>
+            <div id="log"></div>
+            <div class="chips" id="chips"></div>
+            <form class="talk" id="form">
+              <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
+              <button class="send" type="submit">Send</button>
+            </form>
+          </section>
+
+          <section class="card">
+            <h2>Upload</h2>
+            <p class="sub" style="margin:0 0 12px">Bank, brokerage, exchange, or the last two years of tax returns.</p>
+            <label class="btn file">
+              Add a statement
+              <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
+            </label>
+          </section>
+        </div>
+
+        <div class="view view-sfox" data-view-panel="sfox" hidden>
+          <section class="card" id="sfox">
+            <h2>sFOX</h2>
+            <p class="sub" id="sfoxStatus" style="margin:0 0 12px">Loading…</p>
+            <div id="sfoxBody"></div>
+            <p><button class="btn ghost" type="button" data-desk="talk">Back to talk</button></p>
+          </section>
+        </div>
+
+        <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
+      </main>
+    </div>
+  </div>
+
+  <script src="pay-catalog.js?v=2"></script>
+  <script src="client-session.js?v=1"></script>
+  <script src="van-owned.js?v=3"></script>
+  <script src="van-sfox.js?v=4"></script>
+  <script src="van-shop-copy.js?v=1"></script>
+  <script src="van-shop.js?v=2"></script>
+  <script src="van-grok.js?v=6"></script>
+  <script src="client-desk.js?v=5"></script>
+  <script src="client-page.js?v=1"></script>
+  <script>
+    window.HalfacreSession.resolve().then(function () {
+      window.HalfacrePage.bootTalk();
+    });
+  </script>
+</body>
+</html>

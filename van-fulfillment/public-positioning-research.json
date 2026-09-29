@@ -1,0 +1,19 @@
+{
+  "user_scoped": true,
+  "sku": "public-positioning-research",
+  "name": "Public positioning",
+  "price_usd": 4.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "etf-flow-v2026-09-09",
+    "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+    "series": [
+      "btc-spot-etf-holdings-snapshot"
+    ],
+    "avatar_knowledge": "Spot Bitcoin ETF holdings snapshot (BTC, USD, supply percent).",
+    "download_href": "van-download.php?sku=public-positioning-research",
+    "receipt_href": "van-fulfillment/public-positioning-research.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Products · Halfacre Research</title>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <link rel="stylesheet" href="client-desk.css?v=5">
+</head>
+<body>
+  <div class="app" data-view="shop">
+    <header class="top">
+      <div class="brand">
+        <p id="who">Your page</p>
+        <h1 id="name">Loading…</h1>
+        <p class="sub">Halfacre Research · your page</p>
+      </div>
+      <nav class="nav" aria-label="Page">
+        <a href="page.html" data-talk="talk">Talk</a>
+        <a href="page.html#uploaded" data-talk="uploaded">Uploaded</a>
+        <a href="page.html#purchased" data-talk="purchased">Purchased</a>
+        <a href="shop.html?kind=research" data-shop="research">Research Modules</a>
+        <a href="shop.html?kind=packs" data-shop="packs">Research Packs</a>
+        <a href="shop.html?kind=bots" data-shop="bots">Trading Bots</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" type="button">Menu</button>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <h2 id="sideUploads">Uploaded</h2>
+        <div id="deskUploads"></div>
+        <h2 id="sideBuys">Purchased</h2>
+        <div id="deskBuys"></div>
+      </aside>
+
+      <main class="main shop-main">
+        <div id="shopRoot">Loading…</div>
+        <p><a class="btn ghost" id="backTalk" href="page.html">Back to talk</a></p>
+      </main>
+    </div>
+  </div>
+
+  <script src="pay-catalog.js?v=2"></script>
+  <script src="client-session.js?v=1"></script>
+  <script src="van-owned.js?v=3"></script>
+  <script src="van-sfox.js?v=4"></script>
+  <script src="van-shop-copy.js?v=1"></script>
+  <script src="van-shop.js?v=2"></script>
+  <script src="client-desk.js?v=5"></script>
+  <script src="client-page.js?v=1"></script>
+  <script>
+    window.HalfacrePage.bootShop("list");
+  </script>
+</body>
+</html>

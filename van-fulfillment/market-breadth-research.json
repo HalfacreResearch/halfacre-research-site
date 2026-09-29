@@ -1,0 +1,20 @@
+{
+  "user_scoped": true,
+  "sku": "market-breadth-research",
+  "name": "Market breadth and index mechanics",
+  "price_usd": 4.99,
+  "status": "live",
+  "fulfillment": {
+    "kind": "download",
+    "pack_id": "macro-btc-fg-fred-live-slice",
+    "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+    "series": [
+      "btc-fred-vix-index",
+      "btc-fred-sp-500-index"
+    ],
+    "avatar_knowledge": "FRED VIX and S&P 500 index history for market breadth.",
+    "download_href": "van-download.php?sku=market-breadth-research",
+    "receipt_href": "van-fulfillment/market-breadth-research.json"
+  },
+  "note": "Downloadable after PayPal unlock. The unlock list is source of truth for what the avatar knows. Re-fetch anytime."
+}

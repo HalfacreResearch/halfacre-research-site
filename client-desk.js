@@ -1,0 +1,347 @@
+/**
+ * Sidebar + nav for uploads and purchases on a client page.
+ * Talks to client-memory.php. Does not store file bytes.
+ */
+(function (global) {
+  "use strict";
+
+  var API = "client-memory.php";
+  var state = { uploads: [], purchases: [] };
+  var client = { id: "", name: "" };
+  var view = "talk";
+
+  function trim(value) {
+    return String(value == null ? "" : value).trim();
+  }
+
+  function kindFromName(name) {
+    var n = trim(name).toLowerCase();
+    if (/(tax|1040|w-?2|1099|return)/.test(n)) return "tax";
+    if (/(bank|checking|savings|statement)/.test(n)) return "bank";
+    if (/(coinbase|binance|kraken|sfox|exchange|crypto)/.test(n)) return "exchange";
+    if (/(schwab|fidelity|etrade|broker|robinhood)/.test(n)) return "brokerage";
+    if (/(401k|401|ira|403b|retirement)/.test(n)) return "retirement";
+    return "file";
+  }
+
+  function kindLabel(kind) {
+    var map = {
+      tax: "Tax",
+      bank: "Bank",
+      exchange: "Exchange",
+      brokerage: "Brokerage",
+      retirement: "Retirement",
+      file: "File",
+      module: "Avatar upgrade",
+      sfox: "Exchange"
+    };
+    return map[kind] || "File";
+  }
+
+  function sfoxOn() {
+    var snap = global.VanSfox && global.VanSfox.snapshot ? global.VanSfox.snapshot() : null;
+    return !!(snap && snap.connected && !snap.error);
+  }
+
+  function listEl(id, rows, emptyText, nameKey) {
+    var box = document.getElementById(id);
+    if (!box) return;
+    box.innerHTML = "";
+    if (!rows.length) {
+      var p = document.createElement("p");
+      p.className = "side-empty";
+      p.textContent = emptyText;
+      box.appendChild(p);
+      return;
+    }
+    var ul = document.createElement("ul");
+    ul.className = "side-list";
+    rows.forEach(function (row) {
+      var li = document.createElement("li");
+      var title = document.createElement("span");
+      title.textContent = row[nameKey] || row.name || row.id || "Item";
+      var meta = document.createElement("span");
+      meta.className = "kind";
+      meta.textContent = kindLabel(row.kind || row.tier || "file");
+      li.appendChild(title);
+      li.appendChild(meta);
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+  }
+
+  function sfoxMeta() {
+    var snap = global.VanSfox && global.VanSfox.snapshot ? global.VanSfox.snapshot() : null;
+    if (!snap) return "Exchange";
+    if (snap.error) return "Could not load";
+    if (!snap.connected) return "Not saved yet";
+    if (!snap.holdings.length) return "Connected · no balances";
+    return snap.holdings.length + " holding" + (snap.holdings.length === 1 ? "" : "s");
+  }
+
+  function paintSfox() {
+    var extra = document.getElementById("deskSfox");
+    if (extra) extra.innerHTML = "";
+    paintUploads();
+  }
+
+  function paintUploads() {
+    var box = document.getElementById("deskUploads");
+    if (!box) return;
+    box.innerHTML = "";
+    var hasSfox = sfoxOn();
+    if (!state.uploads.length && !hasSfox) {
+      var p = document.createElement("p");
+      p.className = "side-empty";
+      p.textContent = "Nothing uploaded yet.";
+      box.appendChild(p);
+      return;
+    }
+    var ul = document.createElement("ul");
+    ul.className = "side-list";
+    if (hasSfox) {
+      var sfoxItem = document.createElement("li");
+      sfoxItem.className = "side-click" + (view === "sfox" ? " active" : "");
+      var sfoxTitle = document.createElement("span");
+      sfoxTitle.textContent = "sFOX";
+      var sfoxKind = document.createElement("span");
+      sfoxKind.className = "kind";
+      sfoxKind.id = "deskSfoxMeta";
+      sfoxKind.textContent = sfoxMeta();
+      sfoxItem.appendChild(sfoxTitle);
+      sfoxItem.appendChild(sfoxKind);
+      sfoxItem.addEventListener("click", function () {
+        showView("sfox");
+      });
+      ul.appendChild(sfoxItem);
+    }
+    state.uploads.forEach(function (row) {
+      var li = document.createElement("li");
+      var title = document.createElement("span");
+      title.textContent = row.name || row.id || "Item";
+      var meta = document.createElement("span");
+      meta.className = "kind";
+      meta.textContent = kindLabel(row.kind || "file");
+      li.appendChild(title);
+      li.appendChild(meta);
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+  }
+
+  function showView(name) {
+    view = name === "sfox" ? "sfox" : "talk";
+    var app = document.querySelector(".app");
+    if (app) app.setAttribute("data-view", view);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-view-panel]"), function (panel) {
+      panel.hidden = panel.getAttribute("data-view-panel") !== view;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".nav a"), function (link) {
+      link.classList.toggle("active", link.getAttribute("data-desk") === view);
+    });
+    paintSfox();
+    if (view === "sfox") {
+      app.classList.add("show-side");
+      if (global.VanSfox && global.VanSfox.load) {
+        global.VanSfox.load(client.id || "charley-van-halfacre", { prices: true }).then(paintSfox);
+      } else if (global.VanSfox && global.VanSfox.paint) {
+        global.VanSfox.paint();
+      }
+    }
+    if (view === "talk") {
+      var line = document.getElementById("line");
+      if (line) line.focus();
+    }
+  }
+
+  function shopKindFromPage() {
+    var path = (global.location.pathname || "").toLowerCase();
+    if (path.indexOf("product.html") !== -1) {
+      var id = new URLSearchParams(global.location.search).get("id") || "";
+      if (global.VanShop && global.VanShop.sectionOf && global.HalfacrePay && global.HalfacrePay.findPaid) {
+        var row = global.HalfacrePay.findPaid(id);
+        if (row && global.VanShop.sectionOf) return global.VanShop.sectionOf(row);
+      }
+      return "";
+    }
+    if (path.indexOf("shop.html") === -1) return "";
+    var kind = String(new URLSearchParams(global.location.search).get("kind") || "research").toLowerCase();
+    if (kind === "pack") kind = "packs";
+    if (kind === "bot") kind = "bots";
+    if (kind === "module" || kind === "modules") kind = "research";
+    return kind;
+  }
+
+  function paintShopNav() {
+    var side = document.getElementById("sidebar");
+    if (!side) return;
+    var box = document.getElementById("deskShop");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "deskShop";
+      side.appendChild(box);
+    }
+    var active = shopKindFromPage();
+    var sections = [
+      { id: "research", label: "Research Modules" },
+      { id: "packs", label: "Research Packs" },
+      { id: "bots", label: "Trading Bots" }
+    ];
+    box.innerHTML = "";
+    sections.forEach(function (row) {
+      var h = document.createElement("h2");
+      h.id = "sideShop-" + row.id;
+      var a = document.createElement("a");
+      a.className = "side-section" + (active === row.id ? " active" : "");
+      a.href = (global.HalfacreSession && global.HalfacreSession.shopUrl)
+        ? global.HalfacreSession.shopUrl(row.id)
+        : "shop.html?kind=" + encodeURIComponent(row.id);
+      a.textContent = row.label;
+      h.appendChild(a);
+      box.appendChild(h);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-shop]"), function (link) {
+      link.classList.toggle("active", link.getAttribute("data-shop") === active);
+    });
+  }
+
+  function paint() {
+    paintUploads();
+    listEl("deskBuys", state.purchases, "No Avatar upgrades purchased yet.", "name");
+    paintShopNav();
+    var upCount = document.getElementById("navUploadsCount");
+    var buyCount = document.getElementById("navBuysCount");
+    if (upCount) upCount.textContent = String(state.uploads.length + (sfoxOn() ? 1 : 0));
+    if (buyCount) buyCount.textContent = String(state.purchases.length);
+  }
+
+  function mergePurchases(extra) {
+    var seen = {};
+    var next = [];
+    (state.purchases || []).concat(extra || []).forEach(function (row) {
+      if (!row) return;
+      var id = trim(row.id || row.name);
+      if (!id || seen[id]) return;
+      seen[id] = true;
+      next.push({
+        id: id,
+        name: row.name || row.avatar_upgrade_label || id,
+        kind: row.kind || "module"
+      });
+    });
+    state.purchases = next;
+  }
+
+  function pullOwned() {
+    if (!global.VanOwned || typeof global.VanOwned.ownedModules !== "function") {
+      return;
+    }
+    try {
+      mergePurchases(global.VanOwned.ownedModules());
+    } catch (e) {}
+  }
+
+  function load() {
+    var id = trim(client.id);
+    if (!id) {
+      paint();
+      return Promise.resolve(state);
+    }
+    return fetch(API + "?c=" + encodeURIComponent(id), { cache: "no-store" })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.ok) {
+          state.uploads = Array.isArray(data.uploads) ? data.uploads : [];
+          state.purchases = Array.isArray(data.purchases) ? data.purchases : [];
+        }
+        pullOwned();
+        paint();
+        return state;
+      })
+      .catch(function () {
+        pullOwned();
+        paint();
+        return state;
+      });
+  }
+
+  function recordUpload(fileName, kind) {
+    var name = trim(fileName);
+    if (!name) return Promise.resolve(state);
+    var row = { name: name, kind: kind || kindFromName(name), at: Date.now() };
+    state.uploads = state.uploads.concat([row]);
+    paint();
+    return fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ c: client.id, action: "upload", name: row.name, kind: row.kind })
+    }).then(function (res) { return res.json(); }).then(function (data) {
+      if (data && data.ok && Array.isArray(data.uploads)) state.uploads = data.uploads;
+      if (data && data.ok && Array.isArray(data.purchases)) state.purchases = data.purchases;
+      pullOwned();
+      paint();
+      return state;
+    }).catch(function () { return state; });
+  }
+
+  function bindNav() {
+    var top = document.querySelector(".top");
+    var toggle = document.getElementById("navToggle");
+    if (toggle && top) {
+      toggle.addEventListener("click", function () {
+        top.classList.toggle("open");
+        document.querySelector(".app").classList.toggle("show-side");
+      });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll("[data-desk]"), function (link) {
+      link.addEventListener("click", function (e) {
+        var where = link.getAttribute("data-desk");
+        if (where === "uploaded" || where === "purchased") {
+          e.preventDefault();
+          document.querySelector(".app").classList.add("show-side");
+          var target = document.getElementById(where === "uploaded" ? "sideUploads" : "sideBuys");
+          if (target && target.scrollIntoView) target.scrollIntoView({ block: "start" });
+          return;
+        }
+        if (where === "sfox") {
+          e.preventDefault();
+          showView("sfox");
+          return;
+        }
+        if (where === "talk") {
+          e.preventDefault();
+          showView("talk");
+        }
+      });
+    });
+  }
+
+  function mount(opts) {
+    opts = opts || {};
+    client = {
+      id: trim(opts.id || (global.HalfacreClient && (global.HalfacreClient.id || global.HalfacreClient.userId))),
+      name: trim(opts.name || (global.HalfacreClient && global.HalfacreClient.name))
+    };
+    bindNav();
+    if (global.VanOwned && typeof global.VanOwned.onChange === "function") {
+      global.VanOwned.onChange(function () { pullOwned(); paint(); });
+    }
+    if (opts.view === "shop" || opts.view === "product") {
+      paint();
+    } else {
+      showView("talk");
+    }
+    return load();
+  }
+
+  global.HalfacreDesk = {
+    mount: mount,
+    load: load,
+    refresh: load,
+    recordUpload: recordUpload,
+    kindFromName: kindFromName,
+    showView: showView,
+    paintSfox: paintSfox,
+    state: function () { return state; }
+  };
+})(window);
