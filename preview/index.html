@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="https://www.halfacreresearch.tech/">
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your account</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #000;
+      color: #fff;
+      font-family: Montserrat, "Helvetica Neue", Arial, sans-serif;
+    }
+    .page {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 12px 20px 40px;
+    }
+    .brand {
+      text-align: center;
+      margin: 0 0 28px;
+    }
+    .brand p {
+      margin: 0 0 8px;
+      color: #F7931A;
+      font-size: 13px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+    .card {
+      background: #161616;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 24px 22px 20px;
+    }
+    label {
+      display: block;
+      margin: 0 0 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    input {
+      width: 100%;
+      height: 44px;
+      margin: 0 0 14px;
+      padding: 0 12px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #0A0A0A;
+      color: #fff;
+      font-family: inherit;
+    }
+    input:focus {
+      outline: none;
+      border-color: #F7931A;
+    }
+    .create {
+      width: 100%;
+      height: 44px;
+      margin-top: 4px;
+      border: 0;
+      border-radius: 8px;
+      background: #F7931A;
+      color: #000;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .create:hover { background: #ffa033; }
+    .create:disabled { opacity: 0.55; cursor: wait; }
+    .err {
+      min-height: 18px;
+      margin: 0 0 8px;
+      color: #ff8a8a;
+      font-size: 13px;
+    }
+    .fine {
+      margin: 14px 0 0;
+      color: #9a9a9a;
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: center;
+    }
+    .back {
+      display: block;
+      margin: 18px auto 0;
+      text-align: center;
+      color: #F7931A;
+      font-size: 13px;
+    }
+  </style>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/preview/assets/brand.css">
+</head>
+<body>
+    <div class="ha-preview-tag">Preview</div>
+  <header class="ha-logo-bar">
+    <img class="ha-logo" src="/preview/assets/halfacre-logo-slogan-APPROVED.png" alt="Halfacre Research Institute. Know more. Bank less.">
+  </header>
+<div class="page">
+    <div class="brand">
+      <p>Halfacre Research</p>
+      <h1>Create your account</h1>
+    </div>
+
+    <div class="card">
+      <form id="form">
+        <label for="name">Full name</label>
+        <input id="name" name="name" autocomplete="name" required>
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+
+        <p class="err" id="err"></p>
+        <button class="create" type="submit" id="create">Create account</button>
+      </form>
+    </div>
+
+    <p class="fine">Free to create. After you finish, Grok meets you on your page.</p>
+    <a class="back" href="admin.html">Back to desk</a>
+  </div>
+
+  <script>
+    (function () {
+      if (location.hostname === "halfacreresearch.tech") {
+        location.replace("https://www.halfacreresearch.tech" + location.pathname + location.search + location.hash);
+        return;
+      }
+
+      var KEY = "halfacre.clients";
+      var err = document.getElementById("err");
+      var createBtn = document.getElementById("create");
+
+      function showError(text) {
+        err.textContent = text;
+      }
+
+      function load() {
+        try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+        catch (e) { return []; }
+      }
+
+      function saveLocal(client) {
+        var rows = load();
+        var found = false;
+        rows = rows.map(function (row) {
+          if (row && row.email === client.email) {
+            found = true;
+            return client;
+          }
+          return row;
+        });
+        if (!found) rows.push(client);
+        localStorage.setItem(KEY, JSON.stringify(rows));
+        localStorage.setItem("halfacre.session", JSON.stringify(client));
+      }
+
+      function go(client) {
+        var id = client && client.id ? String(client.id) : "";
+        window.location.href = id ? "page.html?c=" + encodeURIComponent(id) : "page.html";
+      }
+
+      function createAccount(body) {
+        showError("");
+        createBtn.disabled = true;
+        return fetch("signup.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(function (res) {
+            return res.json().then(function (data) {
+              return { ok: res.ok, data: data };
+            });
+          })
+          .then(function (pack) {
+            if (!pack.ok || !pack.data || !pack.data.client) {
+              throw new Error((pack.data && pack.data.error) || "Could not create the account.");
+            }
+            saveLocal(pack.data.client);
+            go(pack.data.client);
+          })
+          .catch(function (e) {
+            showError(e.message || "Could not create the account.");
+            createBtn.disabled = false;
+          });
+      }
+
+      document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        createAccount({
+          name: document.getElementById("name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          phone: document.getElementById("phone").value.trim()
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

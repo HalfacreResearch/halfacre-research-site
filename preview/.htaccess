@@ -1,0 +1,6 @@
+<FilesMatch "^(admin\.html|van\.html|page\.html)$">
+  AuthType Basic
+  AuthName "Halfacre desk"
+  AuthUserFile /home/u263512999/domains/halfacreresearch.tech/.htpasswd
+  Require valid-user
+</FilesMatch>
