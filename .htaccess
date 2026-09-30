@@ -9,3 +9,10 @@
 <FilesMatch "(secret|store)\.(php|json)$">
   Require all denied
 </FilesMatch>
+
+<FilesMatch "^(admin\.html|van\.html|page\.html|van-sfox\.php|client-secrets\.php)$">
+  AuthType Basic
+  AuthName "Halfacre desk"
+  AuthUserFile /home/u263512999/domains/halfacreresearch.tech/.htpasswd
+  Require valid-user
+</FilesMatch>
