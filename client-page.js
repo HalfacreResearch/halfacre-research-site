@@ -164,10 +164,16 @@
   }
 
   function loadSfox(client) {
+    var id = client && client.id;
+    if (!(global.HalfacreSession && global.HalfacreSession.isVanId && global.HalfacreSession.isVanId(id))) {
+      if (global.HalfacreDesk && global.HalfacreDesk.paintSfox) {
+        global.HalfacreDesk.paintSfox();
+      }
+      return Promise.resolve();
+    }
     if (!global.VanSfox || !global.VanSfox.load) {
       return Promise.resolve();
     }
-    var id = (client && client.id) || "charley-van-halfacre";
     return global.VanSfox.load(id).then(function () {
       if (global.HalfacreDesk && global.HalfacreDesk.paintSfox) {
         global.HalfacreDesk.paintSfox();
