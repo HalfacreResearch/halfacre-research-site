@@ -4,6 +4,7 @@ Fear & Greed + FRED + BTC/USD + gold — live-updating (CoS STAMP 2026-09-21; da
 
 - Price: $99 one-shot
 - Checkout: Soft HOLD — not for sale until full bot-economy marketing plan (research + funnels + cost-per-customer acquisition / CAC + self-sustaining daily routines/skills) AND Matthew YES. Thin roster-only plans are REJECTED. Soft HOLD sell also cites: CMO Soft HOLD FULL CLEARED plan (post-reject; research gaps closed; venues+CAC+routines Soft HOLD) — Matthew YES still required.
-- `PACK.zip` SHA256: `bbbe0ccb20b893d3e59f8f6c5fe4f3ff5eb5725239dba7924dd62199644b6624`
+- `PACK.zip` SHA256 (advertised sold / 14/14 live-slice): `5066fbcf6981791e5e609903eada3ab7cf18ab07cfd2bdad654da8bb4af21ea5`
+- Freeze `PACK.zip` SHA256 (2026-09-09): `bbbe0ccb20b893d3e59f8f6c5fe4f3ff5eb5725239dba7924dd62199644b6624`
 
 Unpaid `PACK.zip` is denied by Soft HOLD 403 (`packs/.htaccess` + `dl/.htaccess`). Download is after payment — sell is not unlocked.

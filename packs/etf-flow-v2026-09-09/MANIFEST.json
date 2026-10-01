@@ -3,7 +3,9 @@
   "title": "ETF Flow Pack",
   "freeze": "2026-09-09",
   "price_usd": 149,
-  "pack_zip_sha256": "c107efef4fd705522a528ffdcccaca674cee70b8c69b35b35becc6886aef8c5d",
+  "pack_zip_sha256": "4c0fe17007074cdfaaba5b5e2e4f15f383d3dc457c956d0b7c709971d852b30a",
+  "freeze_pack_zip_sha256": "c107efef4fd705522a528ffdcccaca674cee70b8c69b35b35becc6886aef8c5d",
+  "pack_zip_sha256_note": "pack_zip_sha256 is the advertised sold SHA on the apex storefront (14/14 live-slice). freeze_pack_zip_sha256 is the 2026-09-09 freeze. Git /dl PACK.zip is a Soft HOLD stub and is not either blob.",
   "contents": [
     "Verified MAIN-dump series as CSV + JSON",
     "MANIFEST.json",

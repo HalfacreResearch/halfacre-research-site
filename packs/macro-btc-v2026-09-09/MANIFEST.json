@@ -3,7 +3,9 @@
   "title": "Macro×BTC Pack",
   "freeze": "2026-09-09",
   "price_usd": 99,
-  "pack_zip_sha256": "bbbe0ccb20b893d3e59f8f6c5fe4f3ff5eb5725239dba7924dd62199644b6624",
+  "pack_zip_sha256": "5066fbcf6981791e5e609903eada3ab7cf18ab07cfd2bdad654da8bb4af21ea5",
+  "freeze_pack_zip_sha256": "bbbe0ccb20b893d3e59f8f6c5fe4f3ff5eb5725239dba7924dd62199644b6624",
+  "pack_zip_sha256_note": "pack_zip_sha256 is the advertised sold SHA on the apex storefront (14/14 live-slice). freeze_pack_zip_sha256 is the 2026-09-09 freeze. Git /dl PACK.zip is a Soft HOLD stub and is not either blob.",
   "exclusions": [
     "CPI observation 2025-10-01 YoY -100"
   ],
