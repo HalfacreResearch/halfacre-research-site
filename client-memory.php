@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 
 const STORE = __DIR__ . "/client-memory.store.json";
 const VAN_UNLOCKS = __DIR__ . "/van-unlocks.store.json";
+// Public shop catalog only. Private client/engine notes are in van-products.private.json (HTTP denied).
 const CATALOG = __DIR__ . "/van-products.json";
 const VAN_ID = "charley-van-halfacre";
 

@@ -1,5 +1,5 @@
 /**
- * Shop lists and product pages. Catalog comes from van-products.json via pay-catalog.js.
+ * Shop lists and product pages. Catalog comes from the public van-products.json via pay-catalog.js.
  */
 (function (global) {
   "use strict";

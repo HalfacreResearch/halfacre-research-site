@@ -1,6 +1,6 @@
 /**
  * One-line sales copy for every shop item.
- * Internal fulfillment notes in van-products.json stay off the client page.
+ * Internal fulfillment notes stay in van-products.private.json, not on the client page.
  */
 (function (global) {
   "use strict";

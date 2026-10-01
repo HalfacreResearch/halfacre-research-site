@@ -1,14 +1,19 @@
 <IfModule mod_headers.c>
-  <FilesMatch "\.(html|js|php)$">
+  <FilesMatch "\.(html|js|php|json)$">
     Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
     Header set Pragma "no-cache"
     Header set Expires "0"
   </FilesMatch>
 </IfModule>
 
-<FilesMatch "(secret|store)\.(php|json)$">
+# Private JSON / secret stores: never serve from the web root.
+# Covers *.store.json, *.secret.json, *.private.json, and matching PHP.
+<FilesMatch "(secret|store|private)\.(php|json)$">
   Require all denied
 </FilesMatch>
+<Files "van-products.private.json">
+  Require all denied
+</Files>
 
 <FilesMatch "^(admin\.html|van\.html|van-sfox\.php|client-secrets\.php)$">
   AuthType Basic
