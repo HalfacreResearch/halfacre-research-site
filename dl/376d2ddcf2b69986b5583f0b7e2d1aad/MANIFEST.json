@@ -1,5 +1,7 @@
 {
   "pack": "macro-btc-fg-fred-live-slice",
+  "pack_zip_sha256": "5066fbcf6981791e5e609903eada3ab7cf18ab07cfd2bdad654da8bb4af21ea5",
+  "pack_zip_sha256_note": "Advertised sold SHA on the apex storefront. This folder's PACK.zip is a Soft HOLD stub, not that blob.",
   "built_at_utc": "2026-09-21T23:35:07.190720+00:00",
   "main_tip": "3ace0672e30b462ff9fc7fd6f9db754d8803111f",
   "auto_update_series": [

@@ -3,6 +3,8 @@
   "title": "BTC Spot ETF Flow Pack",
   "freeze_date": "2026-09-09",
   "dump_sha256": "43836c100ec2f02fb62e49ade4d98e3721b14040995c82342d872494067fe211",
+  "pack_zip_sha256": "4c0fe17007074cdfaaba5b5e2e4f15f383d3dc457c956d0b7c709971d852b30a",
+  "pack_zip_sha256_note": "Advertised sold SHA on the apex storefront. This folder's PACK.zip is a Soft HOLD stub, not that blob.",
   "dump_file": "halfacre_raw_database_2026-09-09_verified.sql.gz",
   "not_investment_advice": true,
   "cadence": "frozen until live updater",
