@@ -146,23 +146,30 @@
       }
 
       function saveLocal(client) {
+        var safe = {
+          id: client.id,
+          name: client.name,
+          number: client.number,
+          email: client.email
+        };
         var rows = load();
         var found = false;
         rows = rows.map(function (row) {
-          if (row && row.email === client.email) {
+          if (row && row.email === safe.email) {
             found = true;
-            return client;
+            return safe;
           }
           return row;
         });
-        if (!found) rows.push(client);
+        if (!found) rows.push(safe);
         localStorage.setItem(KEY, JSON.stringify(rows));
-        localStorage.setItem("halfacre.session", JSON.stringify(client));
+        localStorage.setItem("halfacre.session", JSON.stringify(safe));
       }
 
       function go(client) {
-        var id = client && client.id ? String(client.id) : "";
-        window.location.href = id ? "page.html?c=" + encodeURIComponent(id) : "page.html";
+        var page = client && client.page ? String(client.page) : "";
+        if (page.charAt(0) === "/") page = page.slice(1);
+        window.location.href = page || "page.html";
       }
 
       function createAccount(body) {

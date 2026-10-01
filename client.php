@@ -1,9 +1,11 @@
 <?php
 /**
  * Look up one client by id for their own page.
- * Does not list other clients.
+ * Serves data only after a per-client token check.
  */
 declare(strict_types=1);
+
+require_once __DIR__ . "/client-token.php";
 
 header("Content-Type: application/json; charset=utf-8");
 header("Cache-Control: no-store");
@@ -17,35 +19,52 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
 
 const STORE = __DIR__ . "/clients.store.json";
 
-$id = strtolower(trim((string) ($_GET["c"] ?? "")));
-$id = preg_replace("/[^a-f0-9]/", "", $id) ?? "";
+function read_clients(): array
+{
+  if (!is_file(STORE)) {
+    return [];
+  }
+  $raw = file_get_contents(STORE);
+  $data = json_decode(is_string($raw) ? $raw : "", true);
+  return is_array($data) ? $data : [];
+}
+
+client_token_provision_existing(read_clients());
+
+$id = client_token_id((string) ($_GET["c"] ?? ""));
 if (strlen($id) < 8 || strlen($id) > 64) {
-  http_response_code(400);
-  echo json_encode(["ok" => false, "error" => "Missing page id"]);
+  http_response_code(401);
+  echo json_encode(["ok" => false, "error" => "link not valid"]);
   exit;
 }
 
-$rows = [];
-if (is_file(STORE)) {
-  $raw = file_get_contents(STORE);
-  $data = json_decode(is_string($raw) ? $raw : "", true);
-  $rows = is_array($data) ? $data : [];
+$token = client_token_from_request();
+if ($token === "") {
+  http_response_code(401);
+  echo json_encode(["ok" => false, "error" => "link not valid"]);
+  exit;
+}
+
+if (!client_token_verify($id, $token)) {
+  http_response_code(403);
+  echo json_encode(["ok" => false, "error" => "link not valid"]);
+  exit;
 }
 
 $found = null;
-foreach ($rows as $row) {
+foreach (read_clients() as $row) {
   if (!is_array($row)) {
     continue;
   }
-  if (strtolower((string) ($row["id"] ?? "")) === $id) {
+  if (client_token_id((string) ($row["id"] ?? "")) === $id) {
     $found = $row;
     break;
   }
 }
 
 if (!is_array($found)) {
-  http_response_code(404);
-  echo json_encode(["ok" => false, "error" => "No page for that account"]);
+  http_response_code(403);
+  echo json_encode(["ok" => false, "error" => "link not valid"]);
   exit;
 }
 

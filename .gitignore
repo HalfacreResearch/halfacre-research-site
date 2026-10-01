@@ -8,3 +8,4 @@ client-memory.store.json
 .htpasswd
 *.htpasswd
 .live-backups/
+/private/

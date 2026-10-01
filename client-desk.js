@@ -265,13 +265,26 @@
     } catch (e) {}
   }
 
+  function pageToken() {
+    return (global.HalfacreSession && global.HalfacreSession.token)
+      ? trim(global.HalfacreSession.token())
+      : "";
+  }
+
+  function memoryUrl(id) {
+    var url = API + "?c=" + encodeURIComponent(id);
+    var t = pageToken();
+    if (t) url += "&t=" + encodeURIComponent(t);
+    return url;
+  }
+
   function load() {
     var id = trim(client.id);
     if (!id) {
       paint();
       return Promise.resolve(state);
     }
-    return fetch(API + "?c=" + encodeURIComponent(id), { cache: "no-store" })
+    return fetch(memoryUrl(id), { cache: "no-store" })
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data && data.ok) {
@@ -298,7 +311,7 @@
     return fetch(API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ c: client.id, action: "upload", name: row.name, kind: row.kind })
+      body: JSON.stringify({ c: client.id, t: pageToken(), action: "upload", name: row.name, kind: row.kind })
     }).then(function (res) { return res.json(); }).then(function (data) {
       if (data && data.ok && Array.isArray(data.uploads)) state.uploads = data.uploads;
       if (data && data.ok && Array.isArray(data.purchases)) state.purchases = data.purchases;
