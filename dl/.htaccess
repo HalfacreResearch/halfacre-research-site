@@ -1,6 +1,20 @@
-# Soft HOLD sell — deny zip/csv/json under /dl until CoS unpark (Matthew HARD)
-# Dual-compatible: Apache 2.4 Require + Apache 2.2 Deny fallback (Hostinger)
-<FilesMatch "\.(?i:zip|csv|json)$">
+# Pack delivery. Buyers download a zip built on the fly by pack.php,
+# which checks every file against MANIFEST.json before sending.
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+
+# Old bookmark URL /dl/<token>/PACK.zip -> pack.php
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /dl/
+  RewriteRule ^([0-9a-f]{32})/PACK\.zip$ pack.php?t=$1 [L,QSA]
+</IfModule>
+
+# Raw data files are only served inside the zip.
+<FilesMatch "\.(?i:csv|json|zip)$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
@@ -9,9 +23,3 @@
     Deny from all
   </IfModule>
 </FilesMatch>
-
-# Preferred Soft HOLD: Rewrite [F] so PACK.zip is forbidden even if authz is ignored.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteRule (^|/)PACK\.zip$ - [F,L]
-</IfModule>
