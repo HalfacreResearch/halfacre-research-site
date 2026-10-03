@@ -3,127 +3,130 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Create your account</title>
+  <title>Halfacre Research | Where you run your own retirement</title>
+  <meta name="description" content="Halfacre Research. Where you run your own retirement. Our product line is coming soon.">
+  <link rel="canonical" href="https://halfacreresearch.tech/">
+  <link rel="icon" type="image/png" href="/brand/halfacre-logo-black-orange.png">
+  <link rel="apple-touch-icon" href="/brand/halfacre-logo-black-orange.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Halfacre Research">
+  <meta property="og:title" content="Halfacre Research | Where you run your own retirement">
+  <meta property="og:description" content="Halfacre Research. Where you run your own retirement. Our product line is coming soon.">
+  <meta property="og:url" content="https://halfacreresearch.tech/">
+  <meta property="og:image" content="https://halfacreresearch.tech/og-home.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Halfacre Research Institute. Where you run your own retirement.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Halfacre Research | Where you run your own retirement">
+  <meta name="twitter:description" content="Halfacre Research. Where you run your own retirement. Our product line is coming soon.">
+  <meta name="twitter:image" content="https://halfacreresearch.tech/og-home.png">
+  <meta name="twitter:image:alt" content="Halfacre Research Institute. Where you run your own retirement.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
+    html {
+      background: #000000;
+    }
     body {
       margin: 0;
       min-height: 100vh;
-      background: #f4f4f5;
-      color: #111;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      font-family: Montserrat, Helvetica, Arial, sans-serif;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.55;
+      display: flex;
+      flex-direction: column;
     }
-    .page {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 48px 20px 40px;
-    }
-    .brand {
+    a { color: #F7931A; }
+    a:hover { color: #ffb14a; }
+    .stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px 32px;
+      background: #000000;
       text-align: center;
-      margin: 0 0 28px;
     }
-    .brand p {
-      margin: 0 0 8px;
-      color: #666;
-      font-size: 13px;
+    .stack {
+      width: min(560px, 100%);
+      background: #000000;
+    }
+    .logo {
+      display: block;
+      width: min(280px, 70vw);
+      max-width: 300px;
+      height: auto;
+      margin: 0 auto;
+      background: #000000;
     }
     h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 650;
+      margin: 22px 0 0;
+      font-size: clamp(1.3rem, 4.2vw, 1.8rem);
+      font-weight: 600;
       letter-spacing: -0.02em;
+      line-height: 1.25;
     }
-    .card {
-      background: #fff;
-      border: 1px solid #e5e5e5;
-      border-radius: 12px;
-      padding: 24px 22px 20px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    .soon {
+      margin: 16px 0 0;
+      color: #a3a3a3;
+      font-size: 1.05rem;
     }
-    label {
-      display: block;
-      margin: 0 0 6px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #222;
-    }
-    input {
-      width: 100%;
-      height: 44px;
-      margin: 0 0 14px;
-      padding: 0 12px;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
+    .btn {
+      display: inline-block;
+      margin-top: 28px;
+      min-height: 48px;
+      padding: 13px 28px;
+      border-radius: 10px;
+      background: #F7931A;
+      color: #000000;
+      text-decoration: none;
       font-size: 16px;
-      background: #fff;
-      color: #111;
+      font-weight: 700;
+      line-height: 1.3;
     }
-    input:focus {
-      outline: none;
-      border-color: #111;
+    .btn:hover {
+      background: #ffb14a;
+      color: #000000;
     }
-    .create {
-      width: 100%;
-      height: 44px;
-      margin-top: 4px;
-      border: 0;
-      border-radius: 8px;
-      background: #111;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .create:hover { background: #000; }
-    .create:disabled { opacity: 0.55; cursor: wait; }
-    .err {
-      min-height: 18px;
-      margin: 0 0 8px;
-      color: #b42318;
+    .client {
+      margin: 14px auto 0;
+      max-width: 28em;
+      color: #a3a3a3;
       font-size: 13px;
     }
-    .fine {
-      margin: 14px 0 0;
-      color: #777;
-      font-size: 12px;
-      line-height: 1.45;
-      text-align: center;
-    }
-    .back {
-      display: block;
-      margin: 18px auto 0;
-      text-align: center;
-      color: #666;
+    footer {
+      padding: 20px 24px 28px;
+      background: #000000;
+      color: #777777;
       font-size: 13px;
+      text-align: center;
     }
+    footer p { margin: 0 0 8px; }
+    footer .legal { margin: 0; }
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="brand">
-      <p>Halfacre Research</p>
-      <h1>Create your account</h1>
+  <div class="stage">
+    <div class="stack">
+      <img class="logo" src="/brand/halfacre-logo-black-orange.png" width="280" height="262" alt="Halfacre Research Institute">
+      <h1>Where you run your own retirement.</h1>
+      <p class="soon">Our product line is coming soon.</p>
+      <a class="btn" id="start" href="/signup.html">Create an account</a>
+      <p class="client">Already a client? Enter your email on the <a href="/signup.html">signup page</a> and we'll email your private link.</p>
     </div>
-
-    <div class="card">
-      <form id="form">
-        <label for="name">Full name</label>
-        <input id="name" name="name" autocomplete="name" required>
-
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" required>
-
-        <label for="phone">Phone</label>
-        <input id="phone" name="phone" type="tel" autocomplete="tel" required>
-
-        <p class="err" id="err"></p>
-        <button class="create" type="submit" id="create">Create account</button>
-      </form>
-    </div>
-
-    <p class="fine">Free to create. After you finish, Grok meets you on your page.</p>
   </div>
+
+  <footer>
+    <p>© Halfacre Research Institute LLC</p>
+    <p class="legal">This is research and data, not investment, tax, legal, or retirement advice. <a href="/disclaimer.html">Read the full disclaimer</a>.</p>
+    <!-- TODO: add Privacy, Terms, and Refunds links when those pages exist. Do not link pages that are not on the site. -->
+  </footer>
 
   <script>
     (function () {
@@ -132,73 +135,21 @@
         return;
       }
 
-      var KEY = "halfacre.clients";
-      var err = document.getElementById("err");
-      var createBtn = document.getElementById("create");
-
-      function showError(text) {
-        err.textContent = text;
-      }
-
-      function load() {
-        try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-        catch (e) { return []; }
-      }
-
-      function saveLocal(client) {
-        var rows = load();
-        var found = false;
-        rows = rows.map(function (row) {
-          if (row && row.email === client.email) {
-            found = true;
-            return client;
+      function withUtm(href) {
+        var dest = new URL(href, location.origin);
+        var params = new URLSearchParams(location.search);
+        params.forEach(function (value, key) {
+          if (key.slice(0, 4).toLowerCase() === "utm_") {
+            dest.searchParams.set(key, value);
           }
-          return row;
         });
-        if (!found) rows.push(client);
-        localStorage.setItem(KEY, JSON.stringify(rows));
-        localStorage.setItem("halfacre.session", JSON.stringify(client));
+        return dest.pathname + dest.search + dest.hash;
       }
 
-      function go(client) {
-        var id = client && client.id ? String(client.id) : "";
-        window.location.href = id ? "page.html?c=" + encodeURIComponent(id) : "page.html";
+      var links = document.querySelectorAll('a[href*="signup.html"]');
+      for (var i = 0; i < links.length; i++) {
+        links[i].setAttribute("href", withUtm(links[i].getAttribute("href") || "/signup.html"));
       }
-
-      function createAccount(body) {
-        showError("");
-        createBtn.disabled = true;
-        return fetch("signup.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        })
-          .then(function (res) {
-            return res.json().then(function (data) {
-              return { ok: res.ok, data: data };
-            });
-          })
-          .then(function (pack) {
-            if (!pack.ok || !pack.data || !pack.data.client) {
-              throw new Error((pack.data && pack.data.error) || "Could not create the account.");
-            }
-            saveLocal(pack.data.client);
-            go(pack.data.client);
-          })
-          .catch(function (e) {
-            showError(e.message || "Could not create the account.");
-            createBtn.disabled = false;
-          });
-      }
-
-      document.getElementById("form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        createAccount({
-          name: document.getElementById("name").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          phone: document.getElementById("phone").value.trim()
-        });
-      });
     })();
   </script>
 </body>
