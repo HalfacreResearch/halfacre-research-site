@@ -173,6 +173,7 @@ for endpoint in client-grok.php van-grok.php; do
 done
 
 unset HALFACRE_GROK_STUB || true
+export HALFACRE_XAI_ZDR_CONFIRMED=true
 start_site
 start_mock true
 rm -f "${WORKDIR}/private/grok-zdr.store.json"
@@ -192,10 +193,15 @@ if grep -Eqi 'Charley|Van Halfacre|charley-van-halfacre|Jordan Lee|jordan-lee@ex
 else
   check "generic client prompt has no name/email/Van/Charley" 1
 fi
-if grep -q "PENDING ATTORNEYBOT WORDING: Cheerful reminder" "${WORKDIR}/mock.log"; then
-  check "generic open prompt includes upload nudge" 1
+if grep -q "UPLOADS (friendly, optional, never pushy)" "${WORKDIR}/mock.log"; then
+  check "generic open prompt includes upload block" 1
 else
-  check "generic open prompt includes upload nudge" 0 "$(cat "${WORKDIR}/mock.log")"
+  check "generic open prompt includes upload block" 0 "$(cat "${WORKDIR}/mock.log")"
+fi
+if grep -q "HARD STOPS (these override everything above)" "${WORKDIR}/mock.log"; then
+  check "generic open prompt includes hard stops" 1
+else
+  check "generic open prompt includes hard stops" 0 "$(cat "${WORKDIR}/mock.log")"
 fi
 if grep -q "safety_identifier" "${WORKDIR}/mock.log"; then
   check "generic client sent hashed safety_identifier" 1
@@ -214,10 +220,10 @@ if grep -q "Hello-blocked" "${WORKDIR}/mock.log"; then
 else
   check "generic client ZDR false sent no prompt" 1
 fi
-if grep -q "PENDING ATTORNEYBOT WORDING" "${WORKDIR}/mock.log"; then
-  check "generic client ZDR false sent no nudge copy" 0 "$(cat "${WORKDIR}/mock.log")"
+if grep -q "UPLOADS (friendly, optional, never pushy)" "${WORKDIR}/mock.log"; then
+  check "generic client ZDR false sent no upload block" 0 "$(cat "${WORKDIR}/mock.log")"
 else
-  check "generic client ZDR false sent no nudge copy" 1
+  check "generic client ZDR false sent no upload block" 1
 fi
 
 note ""

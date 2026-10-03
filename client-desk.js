@@ -6,7 +6,15 @@
   "use strict";
 
   var API = "client-memory.php";
-  var state = { uploads: [], purchases: [] };
+  var state = {
+    uploads: [],
+    purchases: [],
+    nudges: {
+      upload_reminders_off: false,
+      product_suggestions_off: false,
+      adult_confirmed: false
+    }
+  };
   var client = { id: "", name: "" };
   var view = "talk";
 
@@ -290,6 +298,10 @@
         if (data && data.ok) {
           state.uploads = Array.isArray(data.uploads) ? data.uploads : [];
           state.purchases = Array.isArray(data.purchases) ? data.purchases : [];
+          if (data.nudges && typeof data.nudges === "object") {
+            state.nudges = data.nudges;
+          }
+          paintPrefs();
         }
         pullOwned();
         paint();
@@ -302,17 +314,80 @@
       });
   }
 
-  function recordUpload(fileName, kind) {
-    var name = trim(fileName);
-    if (!name) return Promise.resolve(state);
-    var row = { name: name, kind: kind || kindFromName(name), at: Date.now() };
-    state.uploads = state.uploads.concat([row]);
-    paint();
+  function paintPrefs() {
+    var up = document.getElementById("prefUploadReminders");
+    var pr = document.getElementById("prefProductSuggestions");
+    var upL = document.getElementById("prefUploadLabel");
+    var prL = document.getElementById("prefProductLabel");
+    var nudges = state.nudges || {};
+    if (up) up.checked = !nudges.upload_reminders_off;
+    if (pr) pr.checked = !nudges.product_suggestions_off;
+    if (upL) upL.textContent = nudges.upload_reminders_off ? "Off" : "On";
+    if (prL) prL.textContent = nudges.product_suggestions_off ? "Off" : "On";
+    var gate = document.getElementById("adultGate");
+    if (gate) gate.hidden = !!nudges.adult_confirmed;
+    var label = document.getElementById("aiLabel");
+    if (label && nudges.ai_disclosure_label) label.textContent = nudges.ai_disclosure_label;
+  }
+
+  function savePrefs() {
+    var up = document.getElementById("prefUploadReminders");
+    var pr = document.getElementById("prefProductSuggestions");
     return fetch(API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ c: client.id, t: pageToken(), action: "upload", name: row.name, kind: row.kind })
+      body: JSON.stringify({
+        c: client.id,
+        t: pageToken(),
+        action: "prefs",
+        upload_reminders_off: !(up && up.checked),
+        product_suggestions_off: !(pr && pr.checked)
+      })
     }).then(function (res) { return res.json(); }).then(function (data) {
+      if (data && data.ok && data.nudges) state.nudges = data.nudges;
+      paintPrefs();
+      return state;
+    }).catch(function () { return state; });
+  }
+
+  function confirmAdult() {
+    return fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        c: client.id,
+        t: pageToken(),
+        action: "adult_confirm",
+        adult_confirmed: true
+      })
+    }).then(function (res) { return res.json(); }).then(function (data) {
+      if (data && data.ok && data.nudges) state.nudges = data.nudges;
+      paintPrefs();
+      return state;
+    });
+  }
+
+  function recordUpload(fileName, kind, extra) {
+    var name = trim(fileName);
+    if (!name) return Promise.resolve(state);
+    extra = extra || {};
+    var row = { name: name, kind: kind || kindFromName(name), at: Date.now() };
+    var body = {
+      c: client.id,
+      t: pageToken(),
+      action: "upload",
+      name: row.name,
+      kind: row.kind
+    };
+    if (extra.confirm_sensitive) body.confirm_sensitive = true;
+    return fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(function (res) { return res.json(); }).then(function (data) {
+      if (data && data.hold) {
+        return data;
+      }
       if (data && data.ok && Array.isArray(data.uploads)) state.uploads = data.uploads;
       if (data && data.ok && Array.isArray(data.purchases)) state.purchases = data.purchases;
       pullOwned();
@@ -360,6 +435,18 @@
       name: trim(opts.name || (global.HalfacreClient && global.HalfacreClient.name))
     };
     bindNav();
+    var up = document.getElementById("prefUploadReminders");
+    var pr = document.getElementById("prefProductSuggestions");
+    if (up) up.addEventListener("change", savePrefs);
+    if (pr) pr.addEventListener("change", savePrefs);
+    var adultBtn = document.getElementById("adultConfirmBtn");
+    var adultBox = document.getElementById("adultConfirm");
+    if (adultBtn) {
+      adultBtn.addEventListener("click", function () {
+        if (adultBox && !adultBox.checked) return;
+        confirmAdult();
+      });
+    }
     if (global.VanOwned && typeof global.VanOwned.onChange === "function") {
       global.VanOwned.onChange(function () { pullOwned(); paint(); });
     }
@@ -381,6 +468,8 @@
     load: load,
     refresh: load,
     recordUpload: recordUpload,
+    confirmAdult: confirmAdult,
+    savePrefs: savePrefs,
     kindFromName: kindFromName,
     showView: showView,
     paintSfox: paintSfox,

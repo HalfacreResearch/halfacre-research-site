@@ -100,6 +100,77 @@ function van_purchases(): array
   return $out;
 }
 
+function client_nudge_defaults(): array
+{
+  return [
+    "upload_reminders_off" => false,
+    "product_suggestions_off" => false,
+    "upload_snooze_until" => 0,
+    "upload_reminders_log" => [],
+    "upload_ignored_streak" => 0,
+    "product_suggestions_log" => [],
+    "declined_items" => [],
+    "adult_confirmed" => false,
+    "ai_disclosure_last_at" => 0,
+    "assistant_replies_since_disclosure" => 0,
+    "last_message_at" => 0,
+    "session_started_at" => 0,
+    "welcome_done" => false,
+    "last_upload_reminder_ignored" => false,
+    "last_upload_reminder_session" => 0,
+    "product_declined_this_session" => false
+  ];
+}
+
+function client_nudge_fields_from(array $row): array
+{
+  $out = client_nudge_defaults();
+  foreach ($out as $k => $default) {
+    if (!array_key_exists($k, $row)) {
+      continue;
+    }
+    if (is_array($default)) {
+      $out[$k] = is_array($row[$k]) ? $row[$k] : $default;
+    } elseif (is_bool($default)) {
+      $out[$k] = !empty($row[$k]);
+    } else {
+      $out[$k] = is_numeric($row[$k]) ? (int) $row[$k] : $default;
+    }
+  }
+  return $out;
+}
+
+function client_memory_row(string $key): array
+{
+  $all = read_json(client_memory_store_path());
+  return isset($all[$key]) && is_array($all[$key]) ? $all[$key] : [];
+}
+
+function client_memory_merge(string $key, array $patch): array
+{
+  $all = read_json(client_memory_store_path());
+  if (!isset($all[$key]) || !is_array($all[$key])) {
+    $all[$key] = ["uploads" => [], "purchases" => []];
+  }
+  foreach ($patch as $k => $v) {
+    $all[$key][$k] = $v;
+  }
+  write_store($all);
+  return $all[$key];
+}
+
+function client_nudge_public(array $fields): array
+{
+  return [
+    "upload_reminders_off" => !empty($fields["upload_reminders_off"]),
+    "product_suggestions_off" => !empty($fields["product_suggestions_off"]),
+    "adult_confirmed" => !empty($fields["adult_confirmed"]),
+    "ai_disclosure_label" => function_exists("grok_ai_disclosure_label")
+      ? grok_ai_disclosure_label()
+      : "You're chatting with Grok, an AI from xAI. Not a person. It can be wrong. Not advice."
+  ];
+}
+
 function pack_for(string $key): array
 {
   $all = read_json(client_memory_store_path());
@@ -119,9 +190,11 @@ function pack_for(string $key): array
       }
     }
   }
+  $nudges = client_nudge_fields_from($row);
   return [
     "uploads" => array_values($uploads),
-    "purchases" => array_values($purchases)
+    "purchases" => array_values($purchases),
+    "nudges" => $nudges
   ];
 }
 
@@ -170,7 +243,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     "ok" => true,
     "client" => $key,
     "uploads" => $pack["uploads"],
-    "purchases" => $pack["purchases"]
+    "purchases" => $pack["purchases"],
+    "nudges" => client_nudge_public($pack["nudges"])
   ]);
   exit;
 }
@@ -193,11 +267,40 @@ if (!isset($all[$key]["purchases"]) || !is_array($all[$key]["purchases"])) {
   $all[$key]["purchases"] = [];
 }
 
+if ($action === "prefs") {
+  if (array_key_exists("upload_reminders_off", $payload)) {
+    $all[$key]["upload_reminders_off"] = !empty($payload["upload_reminders_off"]);
+  }
+  if (array_key_exists("product_suggestions_off", $payload)) {
+    $all[$key]["product_suggestions_off"] = !empty($payload["product_suggestions_off"]);
+  }
+  write_store($all);
+}
+
+if ($action === "adult_confirm") {
+  if (empty($payload["adult_confirmed"])) {
+    http_response_code(400);
+    echo json_encode(["ok" => false, "error" => "Adult confirmation is required."]);
+    exit;
+  }
+  $all[$key]["adult_confirmed"] = true;
+  write_store($all);
+}
+
 if ($action === "upload") {
   $name = clean_name((string) ($payload["name"] ?? ""));
   if ($name === "") {
     http_response_code(400);
     echo json_encode(["ok" => false, "error" => "Missing file name"]);
+    exit;
+  }
+  require_once __DIR__ . "/grok-redact.php";
+  if (grok_sensitive_filename($name) && empty($payload["confirm_sensitive"])) {
+    echo json_encode([
+      "ok" => false,
+      "hold" => true,
+      "error" => grok_sensitive_hold_message()
+    ]);
     exit;
   }
   $kind = strtolower(trim((string) ($payload["kind"] ?? "file")));
@@ -247,5 +350,6 @@ echo json_encode([
   "ok" => true,
   "client" => $key,
   "uploads" => $pack["uploads"],
-  "purchases" => $pack["purchases"]
+  "purchases" => $pack["purchases"],
+  "nudges" => client_nudge_public($pack["nudges"])
 ]);

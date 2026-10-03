@@ -30,10 +30,24 @@ function grok_coming_soon_message(): string
 function grok_zdr_ttl(): int
 {
   $raw = getenv("HALFACRE_ZDR_TTL");
+  $n = 900;
   if (is_string($raw) && ctype_digit($raw) && (int) $raw > 0) {
-    return (int) $raw;
+    $n = (int) $raw;
   }
-  return 600;
+  return min($n, 900);
+}
+
+function grok_zdr_operator_confirmed(): bool
+{
+  $raw = getenv("HALFACRE_XAI_ZDR_CONFIRMED");
+  if (is_string($raw) && trim($raw) !== "") {
+    $v = strtolower(trim($raw));
+    return $v === "1" || $v === "true" || $v === "on" || $v === "yes";
+  }
+  if (grok_stub() || grok_zdr_stub_header() !== null) {
+    return true;
+  }
+  return false;
 }
 
 function grok_zdr_cache_path(): string
@@ -224,6 +238,9 @@ function grok_zdr_probe(string $key): bool
 
 function grok_zdr_confirmed(string $key): bool
 {
+  if (!grok_zdr_operator_confirmed()) {
+    return false;
+  }
   $cached = grok_zdr_read_cache();
   if ($cached !== null) {
     return $cached["ok"];

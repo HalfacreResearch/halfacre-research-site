@@ -45,6 +45,13 @@ $banned = [
   "eight-sleeve target" => "/eight-sleeve/i",
   "eight equal sleeves" => "/eight equal sleeves/i",
   "You are an adviser" => "/you are (?:an |a )(?:investment )?advis[oe]r/i",
+  "Bank less" => "/Bank less/i",
+  "just unlocked" => "/just unlocked|what that file just unlocked|value that just unlocked/i",
+  "second training" => "/second training/i",
+  "when their files make them relevant" => "/when their files make them relevant/i",
+  "next fitting step" => "/next fitting step/i",
+  "turns on, configures" => "/turns on, configures/i",
+  "hard-coded dollar price" => "/\\$\\d/",
 ];
 
 $welcome = welcome_prompt(
@@ -110,7 +117,11 @@ $generated = [
 ];
 
 foreach ($generated as $label => $text) {
-  check($label . " is non-empty", is_string($text) && trim($text) !== "");
+  if ($label === "closed_second_training") {
+    check($label . " is empty after AttorneyBot (gate removed)", is_string($text) && trim($text) === "");
+  } else {
+    check($label . " is non-empty", is_string($text) && trim($text) !== "");
+  }
   foreach ($banned as $banName => $pattern) {
     $hit = preg_match($pattern, $text) === 1;
     check($label . " has no " . $banName, !$hit, $hit ? "matched in generated prompt" : "");
@@ -131,15 +142,20 @@ check("second_training has no Test Client label", strpos($second, "Client: Test 
 check("main prompt has no Test Client name", strpos($mainPrompt, "Test Client") === false);
 
 check("open prompt uses welcome_prompt", $openPrompt === $openExpected);
-check("tax-ready prompt includes second_training", strpos($taxReadyPrompt, $second) !== false);
-check("main prompt keeps second training closed", strpos($mainPrompt, $closed) !== false);
+check("tax-ready prompt has no closed second-training gate", $closed === "" || strpos($taxReadyPrompt, $closed) === false);
+check("main prompt has no closed second-training gate", $closed === "" || strpos($mainPrompt, $closed) === false);
+check("welcome has no sfoxHoldings payload", strpos($welcome, "sFOX is not connected.") === false);
+check("main prompt has no sfoxHoldings payload", strpos($mainPrompt, "sFOX is connected.") === false);
+check("tax-ready prompt has no sfoxHoldings payload", strpos($taxReadyPrompt, "sFOX is connected.") === false);
+check("sellable line is nothing for sale yet", strpos($welcome, "(nothing is for sale yet)") !== false);
 
 $required = [
-  "Know more. Bank less." => "/Know more\\. Bank less\\./",
   "not an investment adviser" => "/not an investment adviser/i",
   "verify with a licensed professional" => "/verify with a licensed professional/i",
-  "software the client" => "/software the client/i",
   "Research Modules" => "/Research Modules/",
+  "Never invent checkout" => "/Never invent checkout/i",
+  "Do not paste the catalog" => "/Do not paste the catalog/i",
+  "Never dump sectors or products" => "/Never dump sectors or products/i",
 ];
 
 foreach (["welcome_prompt" => $welcome, "system_prompt main" => $mainPrompt] as $label => $text) {
@@ -157,6 +173,13 @@ $scanFiles = [
 
 $sourceBanned = $banned;
 unset($sourceBanned["You are an adviser"]);
+unset($sourceBanned["Bank less"]);
+unset($sourceBanned["just unlocked"]);
+unset($sourceBanned["second training"]);
+unset($sourceBanned["when their files make them relevant"]);
+unset($sourceBanned["next fitting step"]);
+unset($sourceBanned["turns on, configures"]);
+unset($sourceBanned["hard-coded dollar price"]);
 
 foreach ($scanFiles as $path) {
   check("readable " . basename($path), is_file($path) && is_readable($path), $path);

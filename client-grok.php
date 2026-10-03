@@ -11,6 +11,7 @@ require_once __DIR__ . "/client-token.php";
 require_once __DIR__ . "/client-memory.php";
 require_once __DIR__ . "/van-grok-prompts.php";
 require_once __DIR__ . "/van-grok-xai.php";
+require_once __DIR__ . "/grok-redact.php";
 
 @set_time_limit(90);
 @ignore_user_abort(true);
@@ -104,6 +105,77 @@ function grok_server_avatar(string $userId, array $purchases): array
   return ["userId" => $userId, "powerups" => $powerups];
 }
 
+function grok_finish_turn(string $userId, array $computed, string $reply, string $redactNotice, bool $stub, bool $open = false): array
+{
+  $sellable = grok_sellable_products();
+  $flags = grok_nudge_state_from_compute($computed);
+  $filtered = grok_filter_reply($reply, $flags, $sellable);
+  if (!$filtered["ok"]) {
+    grok_filter_log($filtered["reason"]);
+    $filtered = grok_filter_reply($reply, $flags, $sellable);
+    if (!$filtered["ok"]) {
+      grok_filter_log("strip:" . $filtered["reason"]);
+      $reply = "I can keep helping with general research. I won't add a product or upload nudge here.";
+    } else {
+      $reply = $filtered["text"];
+    }
+  } else {
+    $reply = $filtered["text"];
+  }
+
+  $now = time();
+  $patch = [
+    "last_message_at" => $now,
+    "session_started_at" => (int) ($computed["session_started_at"] ?? $now)
+  ];
+  if (!empty($computed["ai_disclosure_due"])) {
+    $patch["ai_disclosure_last_at"] = $now;
+    $patch["assistant_replies_since_disclosure"] = 0;
+  } else {
+    $cur = client_nudge_fields_from(client_memory_row($userId));
+    $patch["assistant_replies_since_disclosure"] = ((int) ($cur["assistant_replies_since_disclosure"] ?? 0)) + 1;
+  }
+  if ($open || !empty($flags["upload_reminder_allowed_this_turn"])) {
+    $patch["welcome_done"] = true;
+  }
+  if (!empty($computed["upload_reminder_allowed_this_turn"])) {
+    $cur = client_nudge_fields_from(client_memory_row($userId));
+    $log = isset($cur["upload_reminders_log"]) && is_array($cur["upload_reminders_log"])
+      ? $cur["upload_reminders_log"] : [];
+    $log[] = $now;
+    $patch["upload_reminders_log"] = $log;
+    $patch["last_upload_reminder_session"] = (int) ($computed["session_started_at"] ?? $now);
+    $patch["last_upload_reminder_ignored"] = true;
+  }
+  if (!empty($computed["product_suggestion_allowed_this_turn"])) {
+    $cur = isset($cur) ? $cur : client_nudge_fields_from(client_memory_row($userId));
+    $plog = isset($cur["product_suggestions_log"]) && is_array($cur["product_suggestions_log"])
+      ? $cur["product_suggestions_log"] : [];
+    $plog[] = $now;
+    $patch["product_suggestions_log"] = $plog;
+  }
+  client_memory_merge($userId, $patch);
+
+  $out = [
+    "ok" => true,
+    "reply" => $reply,
+    "engine" => "grok",
+    "model" => "grok-4.6",
+    "zdr" => true,
+    "comingSoon" => false,
+    "disclosure" => grok_ai_disclosure_label()
+  ];
+  if ($redactNotice !== "") {
+    $out["redacted"] = $redactNotice;
+    $out["reply"] = $redactNotice . "\n\n" . $reply;
+  }
+  if ($stub) {
+    $out["stub"] = true;
+    $out["reached"] = "xai-call";
+  }
+  return $out;
+}
+
 function grok_page_identity(string $pageId): array
 {
   $record = client_record_for($pageId);
@@ -153,18 +225,10 @@ if (!grok_zdr_confirmed($key)) {
 }
 
 $incoming = isset($payload["messages"]) && is_array($payload["messages"]) ? $payload["messages"] : [];
-$sfox = !empty($payload["sfox"]);
 $open = !empty($payload["open"]);
-$sfoxHoldings = trim((string) ($payload["sfoxHoldings"] ?? ""));
-$sfoxHoldings = preg_replace("/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]+/", "", $sfoxHoldings) ?? "";
-if (strlen($sfoxHoldings) > 2000) {
-  $sfoxHoldings = substr($sfoxHoldings, 0, 2000);
-}
-if ($sfoxHoldings === "") {
-  $sfoxHoldings = $sfox ? "sFOX is connected." : "sFOX is not connected.";
-}
 
 $stored = pack_for($userId);
+$nudgeMem = isset($stored["nudges"]) && is_array($stored["nudges"]) ? $stored["nudges"] : client_nudge_fields_from([]);
 $catalog = grok_server_catalog();
 $owned = [];
 foreach ($stored["purchases"] as $item) {
@@ -194,6 +258,7 @@ foreach ($stored["uploads"] as $row) {
   }
 }
 
+$redactNotice = "";
 $clean = [];
 foreach ($incoming as $item) {
   if (!is_array($item)) {
@@ -207,20 +272,40 @@ foreach ($incoming as $item) {
   if ($content === "" || strlen($content) > 4000) {
     continue;
   }
-  $clean[] = ["role" => $role, "content" => $content];
+  $red = grok_redact_text($content);
+  if ($red["changed"] && $red["notice"] !== "") {
+    $redactNotice = $red["notice"];
+  }
+  $clean[] = ["role" => $role, "content" => $red["text"]];
   if (count($clean) >= 24) {
     break;
   }
 }
 
+$first = grok_first_name((string) ($identity["name"] ?? ""), true);
+$computed = grok_nudge_compute([
+  "zdr_on" => true,
+  "open" => $open,
+  "messages" => $clean,
+  "memory" => $nudgeMem,
+  "checkout_open" => grok_checkout_open(),
+  "paper_mode_available" => grok_paper_mode_available()
+]);
+client_memory_merge($userId, $computed["memory_patch"]);
+
 $nudgeCtx = [
   "zdr" => true,
+  "zdr_on" => true,
   "messages" => $clean,
-  "open" => $open
+  "open" => $open,
+  "first" => $first,
+  "computed" => $computed,
+  "memory" => array_merge($nudgeMem, $computed["memory_patch"]),
+  "sellable_line" => $computed["sellable_line"]
 ];
 
 $messages = array_merge(
-  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, "", $userId, $cleanUploads, $open, $sfoxHoldings, $nudgeCtx)]],
+  [["role" => "system", "content" => system_prompt($catalog, $owned, false, $avatar, $first, $userId, $cleanUploads, $open, "", $nudgeCtx)]],
   $clean
 );
 
@@ -236,16 +321,14 @@ if ($safety !== "") {
 $body = json_encode($payloadOut);
 
 if (grok_stub()) {
-  echo json_encode([
-    "ok" => true,
-    "reply" => "stub: reached xAI-call step",
-    "engine" => "grok",
-    "model" => "grok-4.6",
-    "stub" => true,
-    "reached" => "xai-call",
-    "zdr" => true,
-    "comingSoon" => false
-  ]);
+  echo json_encode(grok_finish_turn(
+    $userId,
+    $computed,
+    "stub: reached xAI-call step",
+    $redactNotice,
+    true,
+    $open
+  ));
   exit;
 }
 
@@ -287,4 +370,23 @@ if ($code >= 400 || $reply === "") {
   exit;
 }
 
-echo json_encode(["ok" => true, "reply" => $reply, "engine" => "grok", "model" => "grok-4.6", "zdr" => true, "comingSoon" => false]);
+$flags = grok_nudge_state_from_compute($computed);
+$firstFilter = grok_filter_reply($reply, $flags, grok_sellable_products());
+if (!$firstFilter["ok"]) {
+  grok_filter_log($firstFilter["reason"]);
+  $retry = grok_http_post($key, is_string($body) ? $body : "{}", "halfacre-page-retry");
+  if (grok_note_real_zdr_header($retry["zdr"])) {
+    $retryData = json_decode((string) $retry["body"], true);
+    if (is_array($retryData) && isset($retryData["choices"][0]["message"]["content"])) {
+      $retryText = trim((string) $retryData["choices"][0]["message"]["content"]);
+      if ($retryText !== "") {
+        $reply = $retryText;
+      }
+    }
+  } else {
+    echo json_encode(grok_coming_soon_payload());
+    exit;
+  }
+}
+
+echo json_encode(grok_finish_turn($userId, $computed, $reply, $redactNotice, false, $open));

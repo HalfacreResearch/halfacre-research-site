@@ -1,6 +1,6 @@
 <?php
 /**
- * Generic client prompts + swappable Grok nudges.
+ * Generic client prompts + AttorneyBot Grok nudges.
  * Does not boot client-grok.php / van-grok.php (those are HTTP handlers).
  */
 declare(strict_types=1);
@@ -57,7 +57,8 @@ $genericPrompt = system_prompt(
     "open" => false,
     "messages" => [["role" => "user", "content" => "Hello."]],
     "upload_enabled" => false,
-    "powerup_enabled" => false
+    "powerup_enabled" => false,
+    "memory" => ["adult_confirmed" => true]
   ]
 );
 
@@ -76,31 +77,36 @@ foreach ($vanNeedles as $needle) {
   }
 }
 check("generic client prompt has no Van/Charley strings", $hitVan === [], implode(", ", $hitVan));
-check("generic client prompt has no display name", strpos($genericPrompt, $genericName) === false);
+check("generic client prompt has no full display name", strpos($genericPrompt, $genericName) === false);
 check("generic client prompt has no email", strpos($genericPrompt, $genericEmail) === false);
 check("generic client prompt has no @", preg_match("/@/", $genericPrompt) !== 1);
 check("generic client prompt is non-empty", trim($genericPrompt) !== "");
+check("generic prompt uses first name when ZDR on", strpos($genericPrompt, "Jordan") !== false);
+check("generic prompt has no sfoxHoldings", strpos($genericPrompt, "sFOX is not connected.") === false);
 
 $uploadOn = grok_nudge_block([
   "zdr" => true,
   "open" => true,
   "force" => "upload",
   "upload_enabled" => true,
-  "powerup_enabled" => false
+  "powerup_enabled" => false,
+  "memory" => ["adult_confirmed" => true]
 ]);
 $uploadOffFlag = grok_nudge_block([
   "zdr" => true,
   "open" => true,
   "force" => "upload",
   "upload_enabled" => false,
-  "powerup_enabled" => false
+  "powerup_enabled" => false,
+  "memory" => ["adult_confirmed" => true]
 ]);
 $uploadOffZdr = grok_nudge_block([
   "zdr" => false,
   "open" => true,
   "force" => "upload",
   "upload_enabled" => true,
-  "powerup_enabled" => false
+  "powerup_enabled" => false,
+  "memory" => ["adult_confirmed" => true]
 ]);
 $powerOn = grok_nudge_block([
   "zdr" => true,
@@ -108,80 +114,54 @@ $powerOn = grok_nudge_block([
   "force" => "powerup",
   "upload_enabled" => false,
   "powerup_enabled" => true,
-  "messages" => [["role" => "user", "content" => "What can I add?"]]
+  "messages" => [["role" => "user", "content" => "What can I add?"]],
+  "memory" => ["adult_confirmed" => true]
 ]);
 $powerOff = grok_nudge_block([
   "zdr" => true,
   "open" => false,
   "force" => "powerup",
   "upload_enabled" => false,
-  "powerup_enabled" => false
+  "powerup_enabled" => false,
+  "messages" => [["role" => "user", "content" => "What can I add?"]],
+  "memory" => ["adult_confirmed" => true]
 ]);
-$distress = grok_nudge_block([
-  "zdr" => true,
+$distress = grok_nudge_compute([
+  "zdr_on" => true,
   "open" => false,
-  "upload_enabled" => true,
-  "powerup_enabled" => true,
-  "messages" => [["role" => "user", "content" => "I lost everything this week and I am in distress."]]
+  "messages" => [["role" => "user", "content" => "I lost everything this week and I am in distress."]],
+  "memory" => ["adult_confirmed" => true, "welcome_done" => true, "last_message_at" => time() - 60],
+  "now" => time()
 ]);
 
-$uploadCopy = grok_nudge_upload_copy();
-$powerCopy = grok_nudge_powerup_copy();
+check("nudge state names upload flag when forced", strpos($uploadOn, "upload_reminder_allowed_this_turn: yes") !== false);
+check("upload flag omitted when disabled", strpos($uploadOffFlag, "upload_reminder_allowed_this_turn: no") !== false);
+check("upload flag no when ZDR is false", strpos($uploadOffZdr, "upload_reminder_allowed_this_turn: no") !== false);
+check("product flag can be forced on", strpos($powerOn, "product_suggestion_allowed_this_turn: yes") !== false);
+check("product flag omitted when disabled", strpos($powerOff, "product_suggestion_allowed_this_turn: no") !== false);
+check("no upload nudge when last user text is loss/distress", empty($distress["upload_reminder_allowed_this_turn"]));
+check("no product nudge when last user text is loss/distress", empty($distress["product_suggestion_allowed_this_turn"]));
 
-check("upload copy is marked PENDING ATTORNEYBOT WORDING", strpos($uploadCopy, "PENDING ATTORNEYBOT WORDING") === 0);
-check("powerup copy is marked PENDING ATTORNEYBOT WORDING", strpos($powerCopy, "PENDING ATTORNEYBOT WORDING") === 0);
-check("upload nudge appears when enabled and ZDR true", strpos($uploadOn, $uploadCopy) !== false);
-check("upload nudge omitted when disabled", $uploadOffFlag === "" || strpos($uploadOffFlag, $uploadCopy) === false);
-check("upload nudge suppressed when ZDR is false", $uploadOffZdr === "" || strpos($uploadOffZdr, $uploadCopy) === false);
-check("powerup nudge appears when enabled", strpos($powerOn, $powerCopy) !== false);
-check("powerup nudge omitted when disabled", $powerOff === "" || strpos($powerOff, $powerCopy) === false);
-check("no nudge when last user text is loss/distress", $distress === "");
-
-$both = grok_nudge_block([
-  "zdr" => true,
+$both = grok_nudge_compute([
+  "zdr_on" => true,
   "open" => true,
-  "upload_enabled" => true,
-  "powerup_enabled" => true
+  "messages" => [["role" => "user", "content" => "Hello."]],
+  "memory" => ["adult_confirmed" => true],
+  "checkout_open" => true,
+  "sellable" => [["id" => "x", "name" => "Hello Research", "description" => "hello topic"]],
+  "now" => time()
 ]);
-$hasUpload = strpos($both, $uploadCopy) !== false;
-$hasPower = strpos($both, $powerCopy) !== false;
-check("open turn includes at most one nudge kind", !($hasUpload && $hasPower));
+check(
+  "open turn includes at most one nudge kind",
+  !(
+    !empty($both["upload_reminder_allowed_this_turn"])
+    && !empty($both["product_suggestion_allowed_this_turn"])
+  )
+);
 
 $catalog = grok_nudge_live_products();
-check("live purchasable catalog is non-empty", $catalog !== []);
-$catalogJson = json_decode((string) file_get_contents($root . "/van-products.json"), true);
-$modules = (is_array($catalogJson) && isset($catalogJson["modules"]) && is_array($catalogJson["modules"]))
-  ? $catalogJson["modules"]
-  : [];
-$byId = [];
-foreach ($modules as $row) {
-  if (is_array($row) && !empty($row["id"])) {
-    $byId[(string) $row["id"]] = $row;
-  }
-}
-
-foreach ($catalog as $item) {
-  $id = $item["id"];
-  $src = $byId[$id] ?? null;
-  check("catalog item {$id} exists in van-products.json", is_array($src));
-  if (!is_array($src)) {
-    continue;
-  }
-  check("catalog item {$id} is live", !empty($src["live"]));
-  check("catalog item {$id} is not free", empty($src["free"]));
-  check("catalog name {$id} matches van-products.json", $item["name"] === (string) $src["name"]);
-  $wantPrice = grok_nudge_price_label($src["price_usd"] ?? null);
-  check("catalog price {$id} matches van-products.json", $item["price_label"] === $wantPrice);
-  check("powerup prompt names {$id}", strpos($powerOn, $item["name"]) !== false);
-  check("powerup prompt prices {$id}", strpos($powerOn, $item["price_label"]) !== false);
-  check("powerup prompt links {$id}", strpos($powerOn, $item["page"]) !== false);
-}
-
-$nudgeSources = $uploadCopy . "\n" . $powerCopy . "\n" . $uploadOn . "\n" . $powerOn;
-foreach (grok_nudge_banned_patterns() as $banName => $pattern) {
-  $hit = preg_match($pattern, $nudgeSources) === 1;
-  check("nudge copy has no {$banName}", !$hit, $hit ? "matched banned phrase in nudge copy" : "");
-}
+check("sellable catalog is empty until sources_cleared", $catalog === []);
+check("sellable line is nothing for sale yet", grok_sellable_line() === "(nothing is for sale yet)");
 
 $welcomeGeneric = welcome_prompt(
   $genericName,
@@ -190,11 +170,13 @@ $welcomeGeneric = welcome_prompt(
   [],
   ["powerups" => []],
   "sFOX is not connected.",
-  ["zdr" => true, "open" => true, "upload_enabled" => true, "powerup_enabled" => false]
+  ["zdr" => true, "open" => true, "upload_enabled" => true, "powerup_enabled" => false, "memory" => ["adult_confirmed" => true]]
 );
-check("welcome for generic client has no display name", strpos($welcomeGeneric, $genericName) === false);
+check("welcome for generic client has no full display name", strpos($welcomeGeneric, $genericName) === false);
 check("welcome for generic client has no Van/Charley", stripos($welcomeGeneric, "Charley") === false && stripos($welcomeGeneric, "Van Halfacre") === false);
-check("welcome includes upload nudge when ZDR true", strpos($welcomeGeneric, $uploadCopy) !== false);
+check("welcome includes upload block when ZDR true", strpos($welcomeGeneric, "UPLOADS (friendly, optional, never pushy)") !== false);
+check("welcome includes AttorneyBot hard stops last", preg_match("/HARD STOPS \\(these override everything above\\):\\s*\\n1\\. No personal advice/s", $welcomeGeneric) === 1);
+check("welcome has no PENDING ATTORNEYBOT WORDING", strpos($welcomeGeneric, "PENDING ATTORNEYBOT WORDING") === false);
 
 $welcomeZdrOff = welcome_prompt(
   $genericName,
@@ -205,7 +187,9 @@ $welcomeZdrOff = welcome_prompt(
   "sFOX is not connected.",
   ["zdr" => false, "open" => true, "upload_enabled" => true, "powerup_enabled" => false]
 );
-check("welcome omits upload nudge when ZDR false", strpos($welcomeZdrOff, $uploadCopy) === false);
+check("welcome omits upload block when ZDR false", strpos($welcomeZdrOff, "UPLOADS (friendly, optional, never pushy)") === false);
+check("welcome uses the client when ZDR false", strpos($welcomeZdrOff, "the client") !== false);
+check("welcome ZDR off has no first name", strpos($welcomeZdrOff, "Jordan") === false);
 
 if (function_exists("client_record_for") && is_string($work) && $work !== "") {
   $row = client_record_for($genericId);

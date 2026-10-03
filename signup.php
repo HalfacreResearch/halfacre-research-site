@@ -230,10 +230,17 @@ if (!signup_rate_allow("ip:" . signup_client_ip())) {
 $name = clean_text((string) ($payload["name"] ?? ""), 120);
 $email = strtolower(clean_text((string) ($payload["email"] ?? ""), 160));
 $phone = clean_text((string) ($payload["phone"] ?? ""), 40);
+$adult = !empty($payload["adult_confirmed"]);
 
 if ($name === "" || $email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL) || $phone === "") {
   http_response_code(400);
   echo json_encode(["ok" => false, "error" => "Name, email, and phone are required."]);
+  exit;
+}
+
+if (!$adult) {
+  http_response_code(400);
+  echo json_encode(["ok" => false, "error" => "You must confirm you are 18 or older."]);
   exit;
 }
 
@@ -273,10 +280,13 @@ $client = [
   "name" => $name,
   "email" => $email,
   "phone" => $phone,
+  "adult_confirmed" => true,
   "created" => gmdate("c")
 ];
 $rows[] = $client;
 write_clients($rows);
+require_once __DIR__ . "/client-memory.php";
+client_memory_merge($id, ["adult_confirmed" => true]);
 $token = client_token_issue($id);
 $handed = $client;
 $handed["page"] = client_token_page($id, $token);

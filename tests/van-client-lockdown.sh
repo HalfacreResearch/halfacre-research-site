@@ -156,6 +156,12 @@ expect_code "client.php valid token c=charley-van-halfacre" 200 "$code" "$(cat "
 code="$(curl_code -X POST -H "Content-Type: application/json" \
   -d "{\"c\":\"van\",\"t\":\"${VAN_TOKEN}\",\"action\":\"upload\",\"name\":\"1040-2024.pdf\",\"kind\":\"tax\"}" \
   "${BASE}/client-memory.php")"
+expect_code "client-memory POST sensitive hold c=van" 200 "$code" "$(cat "${WORKDIR}/body.json")"
+expect_body "memory write holds 1040 until confirm" "hold off on very sensitive" "$(cat "${WORKDIR}/body.json")"
+
+code="$(curl_code -X POST -H "Content-Type: application/json" \
+  -d "{\"c\":\"van\",\"t\":\"${VAN_TOKEN}\",\"action\":\"upload\",\"name\":\"1040-2024.pdf\",\"kind\":\"tax\",\"confirm_sensitive\":true}" \
+  "${BASE}/client-memory.php")"
 expect_code "client-memory POST valid token c=van" 200 "$code" "$(cat "${WORKDIR}/body.json")"
 expect_body "memory write stored upload" "1040-2024.pdf" "$(cat "${WORKDIR}/body.json")"
 

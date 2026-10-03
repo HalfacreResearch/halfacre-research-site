@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="client-desk.css?v=5">
+  <link rel="stylesheet" href="client-desk.css?v=6">
   <link rel="stylesheet" href="page.css?v=3">
 </head>
 <body>
@@ -62,12 +62,22 @@
         <div id="deskNotes">
           <p class="side-empty">No saved notes yet.</p>
         </div>
+        <h2 id="sidePrefs">Reminders</h2>
+        <div id="deskPrefs" class="side-prefs">
+          <label class="pref-toggle"><input type="checkbox" id="prefUploadReminders" checked> Upload reminders: <span id="prefUploadLabel">On</span></label>
+          <label class="pref-toggle"><input type="checkbox" id="prefProductSuggestions" checked> Product suggestions: <span id="prefProductLabel">On</span></label>
+        </div>
       </aside>
 
       <main class="main" id="app" hidden>
         <div class="view view-talk" data-view-panel="talk">
           <section class="card" id="talk">
             <h2>Grok</h2>
+            <p class="ai-label" id="aiLabel">You're chatting with Grok, an AI from xAI. Not a person. It can be wrong. Not advice.</p>
+            <div class="adult-gate" id="adultGate" hidden>
+              <label><input type="checkbox" id="adultConfirm"> I'm 18 or older.</label>
+              <button type="button" class="btn" id="adultConfirmBtn">Confirm</button>
+            </div>
             <div id="log">
               <p class="empty-state" id="talkEmpty">No saved notes yet.</p>
             </div>
@@ -112,9 +122,9 @@
   <script src="van-sfox.js?v=4"></script>
   <script src="van-shop-copy.js?v=1"></script>
   <script src="van-shop.js?v=3"></script>
-  <script src="client-grok.js?v=9"></script>
-  <script src="client-desk.js?v=8"></script>
-  <script src="client-page.js?v=3"></script>
+  <script src="client-grok.js?v=10"></script>
+  <script src="client-desk.js?v=9"></script>
+  <script src="client-page.js?v=4"></script>
   <script src="page.js?v=1"></script>
   <script>
     (function () {

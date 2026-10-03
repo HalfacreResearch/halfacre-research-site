@@ -128,8 +128,7 @@
           messages: scrub(messages),
           c: auth.c,
           t: auth.t,
-          sfox: sfoxConnected(),
-          sfoxHoldings: sfoxHoldings(),
+          sfox: false,
           open: opening
         })
       },
