@@ -7,7 +7,7 @@
   <title>Charley Van Halfacre</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <link rel="stylesheet" href="client-desk.css?v=5">
+  <link rel="stylesheet" href="client-desk.css?v=6">
 </head>
 <body>
   <div class="app" data-view="talk">
@@ -21,6 +21,7 @@
         <a href="#talk" data-desk="talk" data-talk="talk">Talk</a>
         <a href="#uploaded" data-desk="uploaded">Uploaded <span id="navUploadsCount">0</span></a>
         <a href="#purchased" data-desk="purchased">Purchased <span id="navBuysCount">0</span></a>
+        <a href="#btctreasury" data-desk="btctreasury">Treasury</a>
         <a href="shop.html?kind=research&amp;c=charley-van-halfacre" data-shop="research">Research Modules</a>
         <a href="shop.html?kind=packs&amp;c=charley-van-halfacre" data-shop="packs">Research Packs</a>
         <a href="shop.html?kind=bots&amp;c=charley-van-halfacre" data-shop="bots">Trading Bots</a>
@@ -67,6 +68,50 @@
           </section>
         </div>
 
+        <div class="view view-btctreasury" data-view-panel="btctreasury" hidden>
+          <section class="card" id="btctreasury">
+            <h2>BTCTreasuryBot</h2>
+            <p class="sub">Know more. Bank less.</p>
+            <div id="btctreasuryLocked">
+              <p class="pay-note">This planner unlocks after a verified PayPal purchase of BTCTreasuryBot. Halfacre Research is not an investment adviser. This is research and planning software you control — not live trading and not advice.</p>
+              <p><a class="btn" id="btctreasuryPay" href="pay.html?sku=btc-treasury-bot">Open checkout</a></p>
+            </div>
+            <div id="btctreasuryOpen" hidden>
+              <p class="pay-note">Type your own holdings, budget, schedule, and a BTC price. The table is simple arithmetic on those numbers. It is hypothetical, not a forecast or a recommendation to buy or sell. Read the <a href="/disclaimer.html">disclaimer</a>.</p>
+              <form id="btctreasuryForm" class="treasury-form">
+                <label>BTC you already hold
+                  <input id="treasuryHoldings" name="holdings_btc" type="number" min="0" step="any" value="0">
+                </label>
+                <label>USD you may allocate
+                  <input id="treasuryBudget" name="budget_usd" type="number" min="0" step="0.01" value="0">
+                </label>
+                <label>BTC price you want to use (USD)
+                  <input id="treasuryPrice" name="btc_price_usd" type="number" min="0" step="0.01" placeholder="Paste your own number">
+                </label>
+                <label>How often
+                  <select id="treasuryCadence" name="cadence">
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                  </select>
+                </label>
+                <label>Number of periods
+                  <input id="treasuryPeriods" name="periods" type="number" min="1" max="120" value="12">
+                </label>
+                <label>First date (optional)
+                  <input id="treasuryStart" name="start_date" type="date">
+                </label>
+                <p>
+                  <button class="btn" type="submit">Build hypothetical plan</button>
+                  <button class="btn ghost" type="button" id="btctreasuryCsv">Download CSV of this plan</button>
+                </p>
+              </form>
+              <p class="pay-note" id="btctreasuryResultNote">No market data is loaded. If you leave price blank, the schedule still lists your USD allocations.</p>
+              <div id="btctreasurySchedule"></div>
+            </div>
+            <p><button class="btn ghost" type="button" data-desk="talk">Back to talk</button></p>
+          </section>
+        </div>
+
         <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
       </main>
     </div>
@@ -74,13 +119,15 @@
 
   <script src="pay-catalog.js?v=5"></script>
   <script src="client-session.js?v=4"></script>
-  <script src="van-owned.js?v=4"></script>
+  <script src="van-owned.js?v=5"></script>
   <script src="van-sfox.js?v=4"></script>
-  <script src="van-shop-copy.js?v=1"></script>
-  <script src="van-shop.js?v=3"></script>
+  <script src="van-shop-copy.js?v=2"></script>
+  <script src="van-shop.js?v=4"></script>
+  <script src="van-btctreasury-plan.js?v=1"></script>
+  <script src="van-btctreasury.js?v=1"></script>
   <script src="van-grok.js?v=7"></script>
-  <script src="client-desk.js?v=8"></script>
-  <script src="client-page.js?v=2"></script>
+  <script src="client-desk.js?v=9"></script>
+  <script src="client-page.js?v=3"></script>
   <script>
     window.HalfacreSession.resolve().then(function () {
       window.HalfacrePage.bootTalk();

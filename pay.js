@@ -123,9 +123,10 @@
             if (global.HalfacreDesk && global.HalfacreDesk.refresh) {
               global.HalfacreDesk.refresh();
             }
+            var hash = (pack.data && pack.data.sku === "btc-treasury-bot") ? "btctreasury" : "purchased";
             var talk = (global.HalfacreSession && global.HalfacreSession.talkUrl)
-              ? global.HalfacreSession.talkUrl(null, "purchased")
-              : "page.html";
+              ? global.HalfacreSession.talkUrl(null, hash)
+              : "page.html#" + hash;
             global.location.href = talk;
           });
         },

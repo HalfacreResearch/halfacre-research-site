@@ -182,7 +182,7 @@
     "pack-commodities": "The commodities series in one pack — oil, grains, and softs your avatar can talk as a sleeve.",
     "pack-etf-mf": "Spot Bitcoin ETF flow research — who is buying, who is selling, and what that does to BTC.",
     "pack-research-lanes": "The cross-cutting research lanes in one pack — liquidity, breadth, sentiment, flows, and rules.",
-    "btc-treasury-bot": "Assembled Bitcoin treasury bot that can trade the BTC book you already have on sFOX.",
+    "btc-treasury-bot": "Bitcoin treasury and DCA planning tool. You type the numbers; it shows a hypothetical schedule. Not live trading.",
     "crypto-swing-bot": "Assembled swing bot for the crypto book — entries and exits, not a set-and-forget drip.",
     "crypto-long-bot": "Assembled long-only crypto bot for a hold-and-add crypto sleeve.",
     "mag10-long-bot": "Assembled long-only bot for the Magnificent-10 names.",

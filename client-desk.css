@@ -269,6 +269,52 @@ button.send:disabled { opacity: 0.45; }
   text-align: right;
 }
 
+.pay-note {
+  color: var(--muted);
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.pay-note a { color: var(--orange); }
+
+.treasury-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.treasury-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.treasury-form input,
+.treasury-form select {
+  background: #101010;
+  color: var(--white);
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.treasury-form p {
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+}
+
+.treasury-table { margin-top: 8px; }
+
+@media (max-width: 860px) {
+  .treasury-form { grid-template-columns: 1fr; }
+}
+
 .sidebar h2 a.side-section {
   color: inherit;
   text-decoration: none;

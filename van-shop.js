@@ -221,7 +221,11 @@
 
     if (owns(row.id)) {
       card.appendChild(el("p", "product-owned", "This is already on your avatar."));
-      if (row.kind !== "bot" && global.VanOwned && global.VanOwned.downloadUrl) {
+      if (row.id === "btc-treasury-bot") {
+        var openBot = el("a", "btn", "Open BTCTreasuryBot");
+        openBot.href = talkUrl() + "#btctreasury";
+        card.appendChild(openBot);
+      } else if (row.kind !== "bot" && global.VanOwned && global.VanOwned.downloadUrl) {
         var dl = el("a", "btn", "Re-fetch download");
         dl.href = global.VanOwned.downloadUrl(row.id);
         card.appendChild(dl);
