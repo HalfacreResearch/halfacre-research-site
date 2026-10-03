@@ -1,6 +1,7 @@
 <?php
 /**
  * Unlock status for BTCTreasuryBot. Purchase record only — no trading.
+ * Practice-mode UI never calls this for balances. Do not add sFOX or keys here.
  */
 declare(strict_types=1);
 
