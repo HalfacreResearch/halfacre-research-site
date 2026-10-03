@@ -1,6 +1,6 @@
 /**
- * On-page Grok (xAI) for client pages.
- * Browser talks to van-grok.php. The xAI key never ships in this file.
+ * Back-compat Grok client for van.html. Same generic page logic as client-grok.js.
+ * Browser talks to van-grok.php (thin wrapper around client-grok.php).
  */
 (function (global) {
   "use strict";
@@ -11,23 +11,22 @@
   function firstNameOf(name) {
     var parts = String(name || "").trim().split(/\s+/);
     if (!parts[0]) return "there";
-    if (/^charley$/i.test(parts[0])) return "Van";
     return parts[0];
   }
 
   function who() {
     var c = global.HalfacreClient;
-    if (c && c.name) {
+    if (c && (c.id || c.userId || c.name)) {
       return {
-        fullName: String(c.name),
+        fullName: String(c.name || ""),
         firstName: firstNameOf(c.name),
         userId: String(c.id || c.userId || "")
       };
     }
     return {
-      fullName: "Charley Van Halfacre",
-      firstName: "Van",
-      userId: "charley-van-halfacre"
+      fullName: "",
+      firstName: "there",
+      userId: ""
     };
   }
 
@@ -60,72 +59,6 @@
       return global.VanSfox.snapshotText();
     }
     return sfoxConnected() ? "sFOX is connected." : "sFOX is not connected.";
-  }
-
-  function catalogSnapshot() {
-    var rows = (global.HalfacrePay && global.HalfacrePay.products) || [];
-    var live = [];
-    var coming = [];
-    rows.forEach(function (row) {
-      var name = row.product || row.name;
-      if (row.live) {
-        live.push({
-          id: row.id,
-          name: name,
-          price: row.amount || row.price_usd,
-          tier: row.tier || "",
-          buyable: true
-        });
-      } else {
-        coming.push({
-          id: row.id,
-          name: name,
-          price: row.amount || row.price_usd,
-          tier: row.tier || "",
-          buyable: false
-        });
-      }
-    });
-    return { live: live, coming_soon: coming };
-  }
-
-  function ownedIds() {
-    if (global.VanOwned && typeof global.VanOwned.ownedIds === "function") {
-      return global.VanOwned.ownedIds();
-    }
-    var desk = global.HalfacreDesk && global.HalfacreDesk.state
-      ? global.HalfacreDesk.state()
-      : null;
-    if (desk && Array.isArray(desk.purchases)) {
-      return desk.purchases.map(function (row) { return row.id || row.name; }).filter(Boolean);
-    }
-    return [];
-  }
-
-  function uploadsNow() {
-    var desk = global.HalfacreDesk && global.HalfacreDesk.state
-      ? global.HalfacreDesk.state()
-      : null;
-    if (!desk || !Array.isArray(desk.uploads)) {
-      return [];
-    }
-    return desk.uploads.map(function (row) {
-      return { name: row.name || "", kind: row.kind || "file" };
-    });
-  }
-
-  function avatarNow() {
-    if (global.VanOwned && global.VanOwned.avatarContext) {
-      return global.VanOwned.avatarContext();
-    }
-    var desk = global.HalfacreDesk && global.HalfacreDesk.state
-      ? global.HalfacreDesk.state()
-      : null;
-    var powerups = desk && Array.isArray(desk.purchases) ? desk.purchases : [];
-    return {
-      userId: who().userId || who().fullName,
-      powerups: powerups
-    };
   }
 
   function secretBlock() {

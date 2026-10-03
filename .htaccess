@@ -4,7 +4,7 @@
     Header set Pragma "no-cache"
     Header set Expires "0"
   </FilesMatch>
-  <FilesMatch "^(client\.php|client-memory\.php|client-token\.php|van-grok\.php|van-sfox\.php|page\.html|van\.html|van-desk\.html)$">
+  <FilesMatch "^(client\.php|client-memory\.php|client-token\.php|client-grok\.php|van-grok\.php|van-sfox\.php|page\.html|van\.html|van-desk\.html)$">
     Header set X-Robots-Tag "noindex, nofollow"
   </FilesMatch>
 </IfModule>

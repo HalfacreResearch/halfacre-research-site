@@ -2,8 +2,12 @@
 /**
  * System prompts for the client-page Grok proxy.
  * Kept out of the HTTP handler so tests can load them without sending headers.
+ * Client id and display name come from the token/client record only.
+ * Name and email are never interpolated into prompt text.
  */
 declare(strict_types=1);
+
+require_once __DIR__ . "/grok-nudges.php";
 
 function catalog_rows($catalog): array
 {
@@ -83,29 +87,29 @@ function upload_kinds(array $uploads): array
   return $counts;
 }
 
-function first_name(string $full): string
-{
-  $parts = preg_split("/\s+/", trim($full)) ?: [];
-  $first = isset($parts[0]) ? (string) $parts[0] : "there";
-  if ($first === "") {
-    return "there";
-  }
-  if (strcasecmp($first, "Charley") === 0) {
-    return "Van";
-  }
-  return $first;
-}
-
 function grok_closed_second_training(): string
 {
   return "Second training set is closed. Do not open taxes, retirement research, M&A, venture capital, trusts, or wills as live topics until the last 2 years of tax returns, banks, and exchanges are saved.";
 }
 
-function welcome_prompt(string $clientName, string $userId, array $uploads, array $owned, $avatar, string $sfoxHoldings): string
+function grok_append_nudge(string $prompt, array $nudgeCtx): string
 {
+  $block = grok_nudge_block($nudgeCtx);
+  if ($block === "") {
+    return $prompt;
+  }
+  return rtrim($prompt) . "\n\n" . $block;
+}
+
+function welcome_prompt(string $clientName, string $userId, array $uploads, array $owned, $avatar, string $sfoxHoldings, array $nudgeCtx = []): string
+{
+  unset($clientName);
+  if (!array_key_exists("open", $nudgeCtx)) {
+    $nudgeCtx["open"] = true;
+  }
   $files = format_uploads($uploads);
   $power = format_powerups($owned, $avatar, $userId);
-  return <<<TXT
+  $text = <<<TXT
 You are Grok on this Halfacre Research page. Do not use a stored legal name or email. If they give a first name, you may use that.
 Halfacre Research is a research and data company. Brand line, if you use one: Know more. Bank less.
 There is no script. Listen. You decide the next sentence. Warm and helpful. Simple talk. No preaching. No internals.
@@ -130,10 +134,12 @@ Avatar upgrades they already bought:
 Do not speak as if the picture is complete if files are missing. Ask what they can share first.
 You are not an investment adviser, broker-dealer, commodity trading advisor, lawyer, CPA, or tax preparer. You are not registered as one. Never say you are. Never tell them to ignore /disclaimer.html. If a personal money, tax, or legal choice comes up, suggest they verify with a licensed professional — briefly, not preachily.
 TXT;
+  return grok_append_nudge($text, $nudgeCtx);
 }
 
 function second_training(string $clientName): string
 {
+  unset($clientName);
   return <<<TXT
 SECOND TRAINING SET. Load this only because tax returns for the last 2 years, banks, and exchanges are in. Merge with the first set. Do not replace it.
 
@@ -153,10 +159,10 @@ Never scare (audit, death, “you’re behind”).
 TXT;
 }
 
-function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clientName, string $userId, array $uploads, bool $open, string $sfoxHoldings): string
+function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clientName, string $userId, array $uploads, bool $open, string $sfoxHoldings, array $nudgeCtx = []): string
 {
   if ($open) {
-    return welcome_prompt($clientName, $userId, $uploads, $owned, $avatar, $sfoxHoldings);
+    return welcome_prompt($clientName, $userId, $uploads, $owned, $avatar, $sfoxHoldings, $nudgeCtx);
   }
 
   $power = format_powerups($owned, $avatar, $userId);
@@ -176,7 +182,7 @@ function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clie
   }
   $liveLine = $liveNames ? implode(", ", array_slice($liveNames, 0, 12)) : "(none live)";
 
-  return <<<TXT
+  $text = <<<TXT
 You are Grok on this Halfacre Research page. Do not use a stored legal name or email. If they give a first name, you may use that.
 Halfacre Research is a research and data company. Brand line, if you use one: Know more. Bank less.
 There is no script. Listen. You decide the next sentence. Simple talk. No preaching. No internals. Warm and helpful.
@@ -220,4 +226,5 @@ Rules:
 - No performance claims. No promises about results. Describe products factually.
 - If a personal money, tax, or legal choice comes up, suggest they verify with a licensed professional — briefly, not preachily.
 TXT;
+  return grok_append_nudge($text, $nudgeCtx);
 }
