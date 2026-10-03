@@ -1,5 +1,6 @@
 # Hostinger-only secrets — never commit
 van-grok.secret.php
+secrets.key.php
 client-secrets.store.json
 clients.store.json
 client-memory.store.json

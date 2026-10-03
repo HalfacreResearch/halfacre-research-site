@@ -167,7 +167,7 @@
       app.classList.add("show-side");
       var vanId = global.HalfacreSession && global.HalfacreSession.isVanId && global.HalfacreSession.isVanId(client.id);
       if (vanId && global.VanSfox && global.VanSfox.load) {
-        global.VanSfox.load(client.id || "charley-van-halfacre", { prices: true }).then(paintSfox);
+        global.VanSfox.load(client.id, { prices: true }).then(paintSfox);
       } else if (global.VanSfox && global.VanSfox.paint) {
         global.VanSfox.paint();
       }

@@ -1,9 +1,13 @@
 <?php
 /**
  * Live sFOX balances for a client page.
- * Reads the vault key on the server. Never returns the key.
+ * Decrypts the vault key on the server. Never returns the key.
+ * Same emailed page token as client.php / client-memory.php.
  */
 declare(strict_types=1);
+
+require_once __DIR__ . "/client-token.php";
+require_once __DIR__ . "/client-secrets-lib.php";
 
 header("Content-Type: application/json; charset=utf-8");
 header("Cache-Control: no-store");
@@ -22,54 +26,55 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
   exit;
 }
 
-const STORE = __DIR__ . "/client-secrets.store.json";
-const VAN_ID = "charley-van-halfacre";
-const SERVICE = "sfox";
+const SERVICE = HALFACRE_SECRETS_SERVICE;
 const SFOX = "https://api.sfox.com";
 
-function client_key(string $raw): string
-{
-  $raw = strtolower(trim($raw));
-  if ($raw === "" || $raw === "van" || $raw === VAN_ID) {
-    return VAN_ID;
-  }
-  $hex = preg_replace("/[^a-f0-9]/", "", $raw) ?? "";
-  if (strlen($hex) >= 8 && strlen($hex) <= 64) {
-    return $hex;
-  }
-  $safe = preg_replace("/[^a-z0-9_\\-]/", "", $raw) ?? "";
-  return $safe !== "" ? $safe : VAN_ID;
+$rawC = (string) ($_GET["c"] ?? "");
+if (halfacre_secrets_client_id($rawC) === "") {
+  http_response_code(400);
+  echo json_encode(["ok" => false, "error" => "Missing page id"]);
+  exit;
 }
 
-function read_store(): array
-{
-  if (!is_file(STORE)) {
-    return [];
-  }
-  $raw = file_get_contents(STORE);
-  $data = json_decode(is_string($raw) ? $raw : "", true);
-  return is_array($data) ? $data : [];
+$auth = client_require_page_token();
+$client = $auth["id"];
+
+if (!halfacre_secrets_configured()) {
+  halfacre_secrets_refuse_unconfigured();
 }
 
-function vault_key(string $client): string
-{
-  $all = read_store();
-  $row = isset($all[$client]) && is_array($all[$client]) ? $all[$client] : [];
-  $svc = isset($row[SERVICE]) && is_array($row[SERVICE]) ? $row[SERVICE] : [];
-  $key = isset($svc["key"]) ? trim((string) $svc["key"]) : "";
-  return $key;
+try {
+  $all = halfacre_secrets_read();
+} catch (Throwable $e) {
+  halfacre_secrets_refuse_unconfigured();
 }
 
-function vault_hint(string $client): string
-{
-  $all = read_store();
-  $row = isset($all[$client]) && is_array($all[$client]) ? $all[$client] : [];
-  $svc = isset($row[SERVICE]) && is_array($row[SERVICE]) ? $row[SERVICE] : [];
-  return isset($svc["hint"]) ? (string) $svc["hint"] : "";
-}
+$svc = halfacre_secrets_row($all, $client, SERVICE);
+$key = isset($svc["key"]) ? trim((string) $svc["key"]) : "";
+$hint = isset($svc["hint"]) ? (string) $svc["hint"] : "";
 
 function sfox_get(string $path, string $key): array
 {
+  $stub = getenv("HALFACRE_SFOX_STUB");
+  if (is_string($stub) && $stub !== "" && $stub !== "0") {
+    if (str_starts_with($path, "/v1/user/balance")) {
+      return [
+        "ok" => true,
+        "code" => 200,
+        "data" => [
+          [
+            "currency" => "USD",
+            "balance" => 10,
+            "available" => 10,
+            "held" => 0,
+            "trading_wallet" => 0
+          ]
+        ],
+        "error" => ""
+      ];
+    }
+    return ["ok" => false, "code" => 404, "data" => null, "error" => "stub miss"];
+  }
   $url = SFOX . $path;
   if (!function_exists("curl_init")) {
     return ["ok" => false, "code" => 0, "data" => null, "error" => "curl missing"];
@@ -146,10 +151,6 @@ function estimate_usd(string $currency, float $qty, string $key): ?float
   }
   return null;
 }
-
-$client = client_key((string) ($_GET["c"] ?? ""));
-$key = vault_key($client);
-$hint = vault_hint($client);
 
 if ($key === "") {
   echo json_encode([
