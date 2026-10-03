@@ -1,9 +1,12 @@
 <?php
 /**
  * Forever vault for one client’s API keys (sFOX first).
- * Hostinger-only store. GET returns saved + last-4 hint. Never returns the key.
+ * Desk route: Basic Auth. Encrypts at rest outside the web root.
+ * GET returns saved + last-4 hint. Never returns the key.
  */
 declare(strict_types=1);
+
+require_once __DIR__ . "/client-secrets-lib.php";
 
 header("Content-Type: application/json; charset=utf-8");
 header("Cache-Control: no-store");
@@ -14,66 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
   header("Access-Control-Allow-Headers: Content-Type");
   http_response_code(204);
   exit;
-}
-
-const STORE = __DIR__ . "/client-secrets.store.json";
-const VAN_ID = "charley-van-halfacre";
-const SERVICE = "sfox";
-
-function client_key(string $raw): string
-{
-  $raw = strtolower(trim($raw));
-  if ($raw === "" || $raw === "van" || $raw === VAN_ID) {
-    return VAN_ID;
-  }
-  $hex = preg_replace("/[^a-f0-9]/", "", $raw) ?? "";
-  if (strlen($hex) >= 8 && strlen($hex) <= 64) {
-    return $hex;
-  }
-  $safe = preg_replace("/[^a-z0-9_\\-]/", "", $raw) ?? "";
-  return $safe !== "" ? $safe : VAN_ID;
-}
-
-function read_store(): array
-{
-  if (!is_file(STORE)) {
-    return [];
-  }
-  $raw = file_get_contents(STORE);
-  $data = json_decode(is_string($raw) ? $raw : "", true);
-  return is_array($data) ? $data : [];
-}
-
-function write_store(array $data): void
-{
-  $json = json_encode($data, JSON_PRETTY_PRINT);
-  file_put_contents(STORE, $json === false ? "{}\n" : $json . "\n", LOCK_EX);
-  @chmod(STORE, 0600);
-}
-
-function hint_from(string $key): string
-{
-  $clean = preg_replace("/\\s+/", "", $key) ?? "";
-  if (strlen($clean) < 4) {
-    return "••••";
-  }
-  return "••••" . substr($clean, -4);
-}
-
-function status_for(string $client): array
-{
-  $all = read_store();
-  $row = isset($all[$client]) && is_array($all[$client]) ? $all[$client] : [];
-  $svc = isset($row[SERVICE]) && is_array($row[SERVICE]) ? $row[SERVICE] : [];
-  $has = !empty($svc["key"]) && is_string($svc["key"]);
-  return [
-    "ok" => true,
-    "client" => $client,
-    "service" => SERVICE,
-    "saved" => $has,
-    "hint" => $has ? (string) ($svc["hint"] ?? hint_from((string) $svc["key"])) : "",
-    "savedAt" => $has ? (int) ($svc["savedAt"] ?? 0) : 0
-  ];
 }
 
 $keyIn = (string) ($_GET["c"] ?? "");
@@ -89,10 +32,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $keyIn = (string) ($payload["c"] ?? $payload["userId"] ?? "");
 }
 
-$client = client_key($keyIn);
+$client = halfacre_secrets_client_id($keyIn);
+if ($client === "") {
+  http_response_code(400);
+  echo json_encode(["ok" => false, "error" => "Missing page id"]);
+  exit;
+}
+
+if (!halfacre_secrets_configured()) {
+  halfacre_secrets_refuse_unconfigured();
+}
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-  echo json_encode(status_for($client));
+  try {
+    echo json_encode(halfacre_secrets_status($client));
+  } catch (Throwable $e) {
+    halfacre_secrets_refuse_unconfigured();
+  }
   exit;
 }
 
@@ -109,15 +65,24 @@ if (strlen($apiKey) < 12) {
   exit;
 }
 
-$all = read_store();
+try {
+  $all = halfacre_secrets_read();
+} catch (Throwable $e) {
+  halfacre_secrets_refuse_unconfigured();
+}
+
 if (!isset($all[$client]) || !is_array($all[$client])) {
   $all[$client] = [];
 }
-$all[$client][SERVICE] = [
-  "hint" => hint_from($apiKey),
+$all[$client][HALFACRE_SECRETS_SERVICE] = [
+  "hint" => halfacre_secrets_hint($apiKey),
   "savedAt" => (int) round(microtime(true) * 1000),
   "key" => $apiKey
 ];
-write_store($all);
 
-echo json_encode(status_for($client));
+try {
+  halfacre_secrets_write($all);
+  echo json_encode(halfacre_secrets_status($client));
+} catch (Throwable $e) {
+  halfacre_secrets_refuse_unconfigured();
+}

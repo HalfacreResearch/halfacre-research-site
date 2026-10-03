@@ -18,7 +18,7 @@
   Require all denied
 </Files>
 
-<FilesMatch "^(admin\.html|van\.html|van-sfox\.php|client-secrets\.php)$">
+<FilesMatch "^(admin\.html|van\.html|client-secrets\.php)$">
   AuthType Basic
   AuthName "Halfacre desk"
   AuthUserFile /home/u263512999/domains/halfacreresearch.tech/.htpasswd

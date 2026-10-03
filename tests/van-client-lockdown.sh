@@ -53,7 +53,10 @@ expect_body() {
   fi
 }
 
-mkdir -p "${WORKDIR}/private"
+mkdir -p "${WORKDIR}/private" "${WORKDIR}/halfacre-private"
+php -r '
+  file_put_contents($argv[1], "<?php\nconst HALFACRE_SECRETS_KEY = \"" . base64_encode(random_bytes(32)) . "\";\n");
+' "${WORKDIR}/halfacre-private/secrets.key.php"
 cat > "${WORKDIR}/clients.store.json" <<'JSON'
 [
   {
@@ -94,8 +97,12 @@ export HALFACRE_TOKEN_ROOT="${WORKDIR}/private"
 export HALFACRE_CLIENTS_STORE="${WORKDIR}/clients.store.json"
 export HALFACRE_MEMORY_STORE="${WORKDIR}/memory.store.json"
 export HALFACRE_UNLOCKS_STORE="${WORKDIR}/unlocks.store.json"
+export HALFACRE_PRIVATE_DIR="${WORKDIR}/halfacre-private"
+export HALFACRE_SECRETS_KEY_FILE="${WORKDIR}/halfacre-private/secrets.key.php"
+export HALFACRE_SECRETS_STORE="${WORKDIR}/halfacre-private/client-secrets.store.json"
 export HALFACRE_GROK_STUB=1
 export HALFACRE_GROK_RATE_MAX=2
+export HALFACRE_SFOX_STUB=1
 
 php -S "${HOST}:${PORT}" -t "$ROOT" >"${WORKDIR}/php-server.log" 2>&1 &
 SERVER_PID=$!
@@ -143,6 +150,12 @@ for id in van charley-van-halfacre abcdef1234567890; do
     -d "{\"c\":\"${id}\",\"t\":\"${BAD_TOKEN}\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello.\"}]}" \
     "${BASE}/van-grok.php")"
   expect_code "van-grok.php bad token c=${id}" 403 "$code" "$(cat "${WORKDIR}/body.json")"
+
+  code="$(curl_code "${BASE}/van-sfox.php?c=${id}")"
+  expect_code "van-sfox.php missing token c=${id}" 401 "$code" "$(cat "${WORKDIR}/body.json")"
+
+  code="$(curl_code "${BASE}/van-sfox.php?c=${id}&t=${BAD_TOKEN}")"
+  expect_code "van-sfox.php bad token c=${id}" 403 "$code" "$(cat "${WORKDIR}/body.json")"
 done
 
 # --- valid Van token ---
@@ -179,6 +192,22 @@ expect_body "hex client name" "Test Client" "$(cat "${WORKDIR}/body.json")"
 # Van token must not open the hex client
 code="$(curl_code "${BASE}/client.php?c=abcdef1234567890&t=${VAN_TOKEN}")"
 expect_code "van token cannot open hex client" 403 "$code" "$(cat "${WORKDIR}/body.json")"
+
+code="$(curl_code "${BASE}/van-sfox.php")"
+expect_code "van-sfox.php empty c" 400 "$code" "$(cat "${WORKDIR}/body.json")"
+if grep -Eiq 'charley-van-halfacre' "${WORKDIR}/body.json"; then
+  FAIL=$((FAIL + 1))
+  note "FAIL  van-sfox.php empty c fell back to Charley"
+else
+  PASS=$((PASS + 1))
+  note "PASS  van-sfox.php empty c did not fall back to Charley"
+fi
+
+code="$(curl_code "${BASE}/van-sfox.php?c=van&t=${VAN_TOKEN}")"
+expect_code "van-sfox.php valid token c=van" 200 "$code" "$(cat "${WORKDIR}/body.json")"
+
+code="$(curl_code "${BASE}/van-sfox.php?c=abcdef1234567890&t=${VAN_TOKEN}")"
+expect_code "van token cannot open hex van-sfox" 403 "$code" "$(cat "${WORKDIR}/body.json")"
 
 # --- rate limit (HALFACRE_GROK_RATE_MAX=2) ---
 # Two successful stub calls already used the IP/token buckets (the valid van-grok above

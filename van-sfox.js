@@ -78,10 +78,25 @@
     }
   }
 
+  function pageToken() {
+    return (global.HalfacreSession && global.HalfacreSession.token)
+      ? String(global.HalfacreSession.token() || "").trim()
+      : "";
+  }
+
   function load(clientId, opts) {
-    var id = String(clientId || (global.HalfacreClient && global.HalfacreClient.id) || "charley-van-halfacre");
+    var id = String(clientId || (global.HalfacreClient && global.HalfacreClient.id) || "").trim();
     opts = opts || {};
+    if (!id) {
+      snap = { connected: false, hint: "", holdings: [], totalUsd: null, asOf: 0, error: "Missing page id" };
+      paint();
+      return Promise.resolve(snap);
+    }
     var query = API + "?c=" + encodeURIComponent(id);
+    var tok = pageToken();
+    if (tok) {
+      query += "&t=" + encodeURIComponent(tok);
+    }
     if (opts && opts.prices) {
       query += "&prices=1";
     }
