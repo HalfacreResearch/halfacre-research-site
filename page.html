@@ -8,11 +8,30 @@
   <title>Your page</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="client-desk.css?v=5">
+  <link rel="stylesheet" href="page.css?v=1">
 </head>
 <body>
-  <div class="app" data-view="talk">
+  <div class="stage" id="stage">
+    <div class="stage-stack">
+      <img class="logo" src="/brand/halfacre-logo-slogan.svg" width="240" height="219" alt="Halfacre Research Institute — Where you run your own retirement.">
+      <h1 id="stageTitle">Opening your page…</h1>
+      <p id="stageBody" hidden></p>
+      <a class="btn" id="stageBtn" hidden href="/signup.html">Get a new private link</a>
+    </div>
+  </div>
+
+  <div class="app" id="desk" data-view="talk" hidden>
     <header class="top">
+      <a class="logo-link" href="/">
+        <img class="logo" src="/brand/halfacre-logo-slogan.svg" width="112" height="102" alt="Halfacre Research Institute — Where you run your own retirement.">
+      </a>
       <div class="brand">
         <p id="who">Your page</p>
         <h1 id="name">Loading…</h1>
@@ -32,16 +51,26 @@
     <div class="shell">
       <aside class="sidebar" id="sidebar">
         <h2 id="sideUploads">Uploaded</h2>
-        <div id="deskUploads"></div>
+        <div id="deskUploads">
+          <p class="side-empty">No uploads yet. Add a statement when you are ready.</p>
+        </div>
         <h2 id="sideBuys">Purchased</h2>
-        <div id="deskBuys"></div>
+        <div id="deskBuys">
+          <p class="side-empty">No purchases yet. Our product line is coming soon.</p>
+        </div>
+        <h2 id="sideNotes">Notes</h2>
+        <div id="deskNotes">
+          <p class="side-empty">No saved notes yet.</p>
+        </div>
       </aside>
 
       <main class="main" id="app" hidden>
         <div class="view view-talk" data-view-panel="talk">
           <section class="card" id="talk">
             <h2>Grok</h2>
-            <div id="log"></div>
+            <div id="log">
+              <p class="empty-state" id="talkEmpty">No saved notes yet.</p>
+            </div>
             <div class="chips" id="chips"></div>
             <form class="talk" id="form">
               <input id="line" type="text" autocomplete="off" placeholder="Talk to Grok">
@@ -70,7 +99,11 @@
       </main>
     </div>
   </div>
-  <p class="empty" id="wait">Opening your page…</p>
+
+  <footer class="page-foot">
+    <p>© Halfacre Research Institute LLC</p>
+    <p class="legal">This is research and data, not investment, tax, legal, or retirement advice. <a href="/disclaimer.html">Read the full disclaimer</a>.</p>
+  </footer>
 
   <script src="pay-catalog.js?v=5"></script>
   <script src="client-session.js?v=4"></script>
@@ -81,6 +114,7 @@
   <script src="van-grok.js?v=7"></script>
   <script src="client-desk.js?v=8"></script>
   <script src="client-page.js?v=2"></script>
+  <script src="page.js?v=1"></script>
   <script>
     (function () {
       if (location.hostname === "halfacreresearch.tech") {
@@ -88,17 +122,7 @@
         return;
       }
 
-      var wait = document.getElementById("wait");
-      var app = document.getElementById("app");
-      var session = window.HalfacreSession;
-
-      session.resolve().then(function () {
-        wait.hidden = true;
-        app.hidden = false;
-        window.HalfacrePage.bootTalk();
-      }).catch(function (err) {
-        wait.textContent = (err && err.message) || (session && session.checkEmailMessage) || "link not valid";
-      });
+      window.HalfacreClientPage.boot();
     })();
   </script>
 </body>
