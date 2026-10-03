@@ -1,6 +1,6 @@
 /**
  * One client identity for every desk page.
- * Van’s page is Client 1. Everyone else uses page.html?c=.
+ * Van is Client 1. Same emailed token as everyone else. Talk is page.html?c=&t=.
  */
 (function (global) {
   "use strict";
@@ -100,15 +100,20 @@
     };
   }
 
+  function withToken(url) {
+    var next = String(url || "");
+    var tok = currentToken();
+    if (!tok || /[?&]t=/.test(next)) return next;
+    var join = next.indexOf("?") >= 0 ? "&" : "?";
+    return next + join + "t=" + encodeURIComponent(tok);
+  }
+
   function talkUrl(client, hash) {
     var who = client || current();
-    var url;
-    if (!who || isVanId(who.id)) {
-      url = "van.html";
-    } else {
+    var url = "page.html";
+    if (who && who.id) {
       url = "page.html?c=" + encodeURIComponent(who.id);
-      var tok = currentToken();
-      if (tok) url += "&t=" + encodeURIComponent(tok);
+      url = withToken(url);
     }
     if (hash) url += (hash.charAt(0) === "#" ? hash : "#" + hash);
     return url;
@@ -117,10 +122,11 @@
   function withClient(url, client) {
     var who = client || current();
     var next = String(url || "");
-    if (!who || !who.id) return next;
-    var join = next.indexOf("?") >= 0 ? "&" : "?";
-    if (/[?&]c=/.test(next)) return next;
-    return next + join + "c=" + encodeURIComponent(who.id);
+    if (who && who.id && !/[?&]c=/.test(next)) {
+      var join = next.indexOf("?") >= 0 ? "&" : "?";
+      next = next + join + "c=" + encodeURIComponent(who.id);
+    }
+    return withToken(next);
   }
 
   function shopUrl(kind, client) {
@@ -165,21 +171,23 @@
     if (who.name) document.title = who.name;
     Array.prototype.forEach.call(document.querySelectorAll("[data-shop]"), function (link) {
       link.href = shopUrl(link.getAttribute("data-shop"), who);
+      link.referrerPolicy = "no-referrer";
     });
     Array.prototype.forEach.call(document.querySelectorAll("[data-talk]"), function (link) {
       var hash = link.getAttribute("data-talk");
       link.href = talkUrl(who, hash === "talk" ? "" : hash);
+      link.referrerPolicy = "no-referrer";
     });
     var backTalk = document.getElementById("backTalk");
-    if (backTalk) backTalk.href = talkUrl(who);
+    if (backTalk) {
+      backTalk.href = talkUrl(who);
+      backTalk.referrerPolicy = "no-referrer";
+    }
   }
 
   function fetchClient(id) {
-    if (isVanId(id)) {
-      return Promise.resolve(asClient(VAN));
-    }
     var tok = currentToken();
-    if (!tok) {
+    if (!id || !tok) {
       return Promise.reject(new Error("link not valid"));
     }
     return fetch("client.php?c=" + encodeURIComponent(id) + "&t=" + encodeURIComponent(tok), { cache: "no-store" })
@@ -203,33 +211,19 @@
     var local = sessionClient();
     if (t) rememberToken(t);
 
-    if (file === "van.html" && !c) {
-      return Promise.resolve(setClient(VAN));
-    }
-    if (c && isVanId(c)) {
-      return Promise.resolve(setClient(VAN));
-    }
-    if (file === "page.html") {
-      if (!c || !currentToken()) {
+    if (c) {
+      if (!currentToken()) {
         return Promise.reject(new Error(CHECK_EMAIL));
       }
       return fetchClient(c).then(setClient);
     }
-    if (c) {
-      return fetchClient(c).then(setClient);
+    if (file === "page.html") {
+      return Promise.reject(new Error(CHECK_EMAIL));
     }
-    if (local && local.id) {
-      if (file === "shop.html" || file === "product.html") {
-        if (isVanId(local.id)) return Promise.resolve(setClient(VAN));
-        return fetchClient(local.id).then(setClient).catch(function () {
-          return setClient(VAN);
-        });
-      }
+    if (local && local.id && currentToken()) {
+      return fetchClient(local.id).then(setClient);
     }
-    if (file === "shop.html" || file === "product.html") {
-      return Promise.resolve(setClient(VAN));
-    }
-    return Promise.reject(new Error("link not valid"));
+    return Promise.reject(new Error(CHECK_EMAIL));
   }
 
   global.HalfacreSession = {

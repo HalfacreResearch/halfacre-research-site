@@ -310,7 +310,7 @@
   function returnUrl(sku) {
     var talk = (global.HalfacreSession && global.HalfacreSession.talkUrl)
       ? global.HalfacreSession.talkUrl()
-      : "van.html";
+      : "page.html";
     var page = new URL(talk, global.location.href);
     page.searchParams.set("paid", sku);
     return page.href;

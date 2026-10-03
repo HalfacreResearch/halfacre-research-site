@@ -133,7 +133,7 @@
     if (global.HalfacreSession && global.HalfacreSession.talkUrl) {
       return global.HalfacreSession.talkUrl(null, "sfox");
     }
-    return "van.html#sfox";
+    return "page.html#sfox";
   }
 
   function hasSfoxPanel() {

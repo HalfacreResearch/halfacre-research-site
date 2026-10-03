@@ -2,8 +2,12 @@
 /**
  * Hostinger same-origin proxy for on-page Grok (xAI Chat Completions).
  * Put the key in XAI_API_KEY or van-grok.secret.php (not in git).
+ * Access: same emailed client token as page.html / client-memory.php.
  */
 declare(strict_types=1);
+
+require_once __DIR__ . "/client-token.php";
+require_once __DIR__ . "/client-memory.php";
 
 @set_time_limit(90);
 @ignore_user_abort(true);
@@ -249,6 +253,77 @@ Rules:
 TXT;
 }
 
+function grok_stub(): bool
+{
+  $raw = getenv("HALFACRE_GROK_STUB");
+  return is_string($raw) && ($raw === "1" || strtolower($raw) === "true");
+}
+
+function grok_endpoint(): string
+{
+  $raw = getenv("HALFACRE_XAI_URL");
+  if (is_string($raw) && trim($raw) !== "") {
+    return trim($raw);
+  }
+  return "https://api.x.ai/v1/chat/completions";
+}
+
+function grok_rate_max(): int
+{
+  $raw = getenv("HALFACRE_GROK_RATE_MAX");
+  if (is_string($raw) && ctype_digit($raw) && (int) $raw > 0) {
+    return (int) $raw;
+  }
+  return 20;
+}
+
+function grok_server_catalog(): array
+{
+  $data = read_json(client_catalog_path());
+  $rows = isset($data["modules"]) && is_array($data["modules"]) ? $data["modules"] : [];
+  $live = [];
+  $coming = [];
+  foreach ($rows as $row) {
+    if (!is_array($row) || empty($row["name"])) {
+      continue;
+    }
+    $item = [
+      "id" => (string) ($row["id"] ?? ""),
+      "name" => (string) $row["name"],
+      "price" => $row["price_usd"] ?? null,
+      "tier" => (string) ($row["tier"] ?? ""),
+      "buyable" => !empty($row["live"])
+    ];
+    if (!empty($row["live"])) {
+      $live[] = $item;
+    } else {
+      $coming[] = $item;
+    }
+  }
+  return ["live" => $live, "coming_soon" => $coming];
+}
+
+function grok_server_avatar(string $userId, array $purchases): array
+{
+  $names = catalog_names();
+  $powerups = [];
+  foreach ($purchases as $item) {
+    if (!is_array($item)) {
+      continue;
+    }
+    $id = (string) ($item["id"] ?? "");
+    if ($id === "") {
+      continue;
+    }
+    $powerups[] = [
+      "id" => $id,
+      "name" => (string) ($item["name"] ?? $names[$id] ?? $id),
+      "avatar_knowledge" => ""
+    ];
+  }
+  return ["userId" => $userId, "powerups" => $powerups];
+}
+
 $raw = file_get_contents("php://input");
 $payload = json_decode(is_string($raw) ? $raw : "", true);
 if (!is_array($payload)) {
@@ -257,11 +332,21 @@ if (!is_array($payload)) {
   exit;
 }
 
+$auth = client_require_page_token($payload);
+$pageId = $auth["id"];
+$token = $auth["token"];
+
+$rateMax = grok_rate_max();
+$ipBucket = "ip:" . client_client_ip();
+$tokenBucket = "token:" . hash("sha256", $token);
+if (!client_rate_allow($ipBucket, "grok-rate.store.json", $rateMax, 3600)
+  || !client_rate_allow($tokenBucket, "grok-rate.store.json", $rateMax, 3600)) {
+  http_response_code(429);
+  echo json_encode(["ok" => false, "error" => "Try again later."]);
+  exit;
+}
+
 $incoming = isset($payload["messages"]) && is_array($payload["messages"]) ? $payload["messages"] : [];
-$catalog = isset($payload["catalog"]) && is_array($payload["catalog"]) ? $payload["catalog"] : [];
-$owned = isset($payload["owned"]) && is_array($payload["owned"]) ? array_values(array_map("strval", $payload["owned"])) : [];
-$avatar = isset($payload["avatar"]) && is_array($payload["avatar"]) ? $payload["avatar"] : [];
-$uploads = isset($payload["uploads"]) && is_array($payload["uploads"]) ? $payload["uploads"] : [];
 $sfox = !empty($payload["sfox"]);
 $open = !empty($payload["open"]);
 $sfoxHoldings = trim((string) ($payload["sfoxHoldings"] ?? ""));
@@ -273,23 +358,25 @@ if ($sfoxHoldings === "") {
   $sfoxHoldings = $sfox ? "sFOX is connected." : "sFOX is not connected.";
 }
 
-$clientName = trim(preg_replace("/[\\r\\n\\t]+/", " ", (string) ($payload["client"] ?? "")) ?? "");
-if (strlen($clientName) > 120) {
-  $clientName = substr($clientName, 0, 120);
-}
+$record = client_record_for($pageId);
+$clientName = trim((string) (($record["name"] ?? "")));
 if ($clientName === "") {
-  $clientName = "Charley Van Halfacre";
+  $clientName = $pageId === client_van_id() ? "Charley Van Halfacre" : "Client";
 }
-$userId = trim(preg_replace("/[^A-Za-z0-9_\\- ]/", "", (string) ($payload["userId"] ?? "")) ?? "");
-if (strlen($userId) > 80) {
-  $userId = substr($userId, 0, 80);
+$userId = $pageId;
+
+$stored = pack_for($pageId);
+$catalog = grok_server_catalog();
+$owned = [];
+foreach ($stored["purchases"] as $item) {
+  if (is_array($item) && !empty($item["id"])) {
+    $owned[] = (string) $item["id"];
+  }
 }
-if ($userId === "") {
-  $userId = "charley-van-halfacre";
-}
+$avatar = grok_server_avatar($userId, $stored["purchases"]);
 
 $cleanUploads = [];
-foreach ($uploads as $row) {
+foreach ($stored["uploads"] as $row) {
   if (!is_array($row)) {
     continue;
   }
@@ -327,17 +414,6 @@ foreach ($incoming as $item) {
   }
 }
 
-$key = grok_key();
-if ($key === "") {
-  http_response_code(503);
-  echo json_encode([
-    "ok" => false,
-    "error" => "Grok key missing on Hostinger. Set XAI_API_KEY or van-grok.secret.php.",
-    "engine" => "grok"
-  ]);
-  exit;
-}
-
 $messages = array_merge(
   [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, $clientName, $userId, $cleanUploads, $open, $sfoxHoldings)]],
   $clean
@@ -349,11 +425,34 @@ $body = json_encode([
   "stream" => false
 ]);
 
+if (grok_stub()) {
+  echo json_encode([
+    "ok" => true,
+    "reply" => "stub: reached xAI-call step",
+    "engine" => "grok",
+    "model" => "grok-4.6",
+    "stub" => true,
+    "reached" => "xai-call"
+  ]);
+  exit;
+}
+
+$key = grok_key();
+if ($key === "") {
+  http_response_code(503);
+  echo json_encode([
+    "ok" => false,
+    "error" => "Grok key missing on Hostinger. Set XAI_API_KEY or van-grok.secret.php.",
+    "engine" => "grok"
+  ]);
+  exit;
+}
+
 $res = false;
 $code = 0;
 $err = "";
 if (function_exists("curl_init")) {
-  $ch = curl_init("https://api.x.ai/v1/chat/completions");
+  $ch = curl_init(grok_endpoint());
   curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_HTTPHEADER => [
@@ -379,7 +478,7 @@ if (function_exists("curl_init")) {
       "ignore_errors" => true
     ]
   ]);
-  $res = file_get_contents("https://api.x.ai/v1/chat/completions", false, $ctx);
+  $res = file_get_contents(grok_endpoint(), false, $ctx);
   if (isset($http_response_header[0]) && preg_match("/\\s(\\d{3})\\s/", $http_response_header[0], $m)) {
     $code = (int) $m[1];
   }

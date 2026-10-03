@@ -119,7 +119,7 @@
 
   function talkUrl() {
     if (session() && session().talkUrl) return session().talkUrl();
-    return "van.html";
+    return "page.html";
   }
 
   function el(tag, className, text) {
@@ -229,6 +229,8 @@
     } else if (row.live && !row.free) {
       var buy = el("a", "btn", "Buy " + money(row));
       buy.href = payUrl(row);
+      buy.rel = "noreferrer";
+      buy.referrerPolicy = "no-referrer";
       card.appendChild(buy);
     } else if (row.free) {
       var open = el("a", "btn", "Open Codex");

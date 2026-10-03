@@ -458,7 +458,7 @@
     }
     return {
       ok: false,
-      reason: "PayPal not live yet. Set pay.paypal_business for a dynamic _xclick at the listed $4.99 / $29.99 / $149 price, or add a matching hosted checkout link with paypal_confirms_usd and a success URL of van.html?paid={SKU}."
+      reason: "PayPal not live yet. Set pay.paypal_business for a dynamic _xclick at the listed $4.99 / $29.99 / $149 price, or add a matching hosted checkout link with paypal_confirms_usd and a success URL of page.html?c={client}&t={token}&paid={SKU}."
     };
   }
 
