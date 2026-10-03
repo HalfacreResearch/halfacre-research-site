@@ -15,23 +15,22 @@
     return document.getElementById(id);
   }
 
+  function setText(el, text) {
+    if (el && el.textContent !== text) el.textContent = text;
+  }
+
   function applyEmptyCopy() {
     var uploads = byId("deskUploads");
-    if (uploads) {
-      var uploadEmpty = uploads.querySelector(".side-empty");
-      if (uploadEmpty) uploadEmpty.textContent = EMPTY.uploads;
-    }
+    if (uploads) setText(uploads.querySelector(".side-empty"), EMPTY.uploads);
 
     var buys = byId("deskBuys");
-    if (buys) {
-      var buyEmpty = buys.querySelector(".side-empty");
-      if (buyEmpty) buyEmpty.textContent = EMPTY.buys;
-    }
+    if (buys) setText(buys.querySelector(".side-empty"), EMPTY.buys);
 
     var log = byId("log");
     var talkEmpty = byId("talkEmpty");
     if (talkEmpty && log) {
-      talkEmpty.hidden = !!log.querySelector(".msg");
+      var hide = !!log.querySelector(".msg");
+      if (talkEmpty.hidden !== hide) talkEmpty.hidden = hide;
     }
   }
 
