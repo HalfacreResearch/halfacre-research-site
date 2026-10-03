@@ -135,6 +135,38 @@ html, body {
   margin: 0 0 8px;
 }
 
+.side-prefs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pref-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--white);
+  font-size: 13px;
+}
+
+.ai-label {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.adult-gate {
+  margin: 0 0 12px;
+  padding: 10px;
+  border: 1px solid var(--orange);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
 .side-list li.side-click {
   cursor: pointer;
 }

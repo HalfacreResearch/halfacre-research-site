@@ -130,6 +130,11 @@
         <label for="phone">Phone</label>
         <input id="phone" name="phone" type="tel" autocomplete="tel" required>
 
+        <label for="adult" style="display:flex;align-items:flex-start;gap:8px;font-weight:500;margin:4px 0 14px">
+          <input id="adult" name="adult" type="checkbox" required style="width:18px;height:18px;margin:2px 0 0;flex:0 0 auto">
+          <span>I'm 18 or older.</span>
+        </label>
+
         <p class="err" id="err"></p>
         <p class="note" id="note"></p>
         <button class="create" type="submit" id="create">Create account</button>
@@ -193,10 +198,15 @@
 
       document.getElementById("form").addEventListener("submit", function (e) {
         e.preventDefault();
+        if (!document.getElementById("adult").checked) {
+          showError("You must confirm you are 18 or older.");
+          return;
+        }
         createAccount({
           name: document.getElementById("name").value.trim(),
           email: document.getElementById("email").value.trim(),
-          phone: document.getElementById("phone").value.trim()
+          phone: document.getElementById("phone").value.trim(),
+          adult_confirmed: true
         });
       });
     })();

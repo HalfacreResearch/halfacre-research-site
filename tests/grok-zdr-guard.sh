@@ -182,10 +182,33 @@ for mode in false missing; do
 done
 unset HALFACRE_XAI_ZDR || true
 unset HALFACRE_GROK_STUB || true
+export HALFACRE_XAI_ZDR_CONFIRMED=true
 start_site
 
 # Seed a stored filename so we can prove uploads never go to xAI unless ZDR is true.
 printf '%s\n' '{"charley-van-halfacre":{"uploads":[{"name":"Secret-1040-name.pdf","kind":"tax"}],"purchases":[]}}' > "${WORKDIR}/memory.store.json"
+
+# --- two-key gate: operator flag off blocks even if the canary header is true ---
+export HALFACRE_XAI_ZDR_CONFIRMED=false
+start_site
+start_mock true
+rm -f "${WORKDIR}/private/grok-zdr.store.json"
+code="$(curl -sS -o "${WORKDIR}/body.json" -w "%{http_code}" -X POST -H "Content-Type: application/json" \
+  -d "{\"c\":\"van\",\"t\":\"${VAN_TOKEN}\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello-no-operator\"}]}" \
+  "${BASE}/van-grok.php")"
+expect_code "operator ZDR flag false HTTP 200" 200 "$code" "$(cat "${WORKDIR}/body.json")"
+if grep -q "Private AI chat and uploads are coming soon" "${WORKDIR}/body.json"; then
+  check "operator ZDR flag false keeps coming-soon copy" 1
+else
+  check "operator ZDR flag false keeps coming-soon copy" 0 "$(cat "${WORKDIR}/body.json")"
+fi
+if grep -q "Hello-no-operator" "${WORKDIR}/mock.log"; then
+  check "operator ZDR flag false sent no client chat" 0 "$(cat "${WORKDIR}/mock.log")"
+else
+  check "operator ZDR flag false sent no client chat" 1
+fi
+export HALFACRE_XAI_ZDR_CONFIRMED=true
+start_site
 
 # --- live mock: header true sends client content after probe ---
 start_mock true

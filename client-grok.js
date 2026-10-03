@@ -1,38 +1,33 @@
 /**
- * On-page Grok (xAI) for /van.html.
- *
- * This is Grok itself, embedded full-time. Not a Grok Bot, not a fleet
- * agent, not VanCoachBot. Browser talks to van-grok.php on Hostinger;
- * the xAI key never ships in this file.
- *
- * On open, Grok speaks for itself. No scripted briefing.
+ * On-page Grok (xAI) for every client page.
+ * Browser talks to client-grok.php. The xAI key never ships in this file.
+ * Client id and display name come from the token/client record only.
  */
 (function (global) {
   "use strict";
 
-  var PROXY = "van-grok.php";
+  var PROXY = "client-grok.php";
   var MODEL = "grok-4.6";
 
   function firstNameOf(name) {
     var parts = String(name || "").trim().split(/\s+/);
     if (!parts[0]) return "there";
-    if (/^charley$/i.test(parts[0])) return "Van";
     return parts[0];
   }
 
   function who() {
     var c = global.HalfacreClient;
-    if (c && c.name) {
+    if (c && (c.id || c.userId || c.name)) {
       return {
-        fullName: String(c.name),
+        fullName: String(c.name || ""),
         firstName: firstNameOf(c.name),
         userId: String(c.id || c.userId || "")
       };
     }
     return {
-      fullName: "Charley Van Halfacre",
-      firstName: "Van",
-      userId: "charley-van-halfacre"
+      fullName: "",
+      firstName: "there",
+      userId: ""
     };
   }
 
@@ -41,7 +36,7 @@
     /\b(password|passwd|passcode|pin\b|secret[_\s-]?key|private[_\s-]?key|seed[_\s-]?phrase|recovery[_\s-]?phrase|mnemonic|ssn|social security)\b/i;
 
   function greeting() {
-    return "Grok is not connected on this page right now.";
+    return "Grok did not answer just now. Send that again.";
   }
 
   var STARTERS = [
@@ -57,57 +52,26 @@
   }
 
   function sfoxConnected() {
-    return global.VanSfox && global.VanSfox.state().connected;
+    return global.VanSfox && global.VanSfox.state && global.VanSfox.state().connected;
   }
 
-  function catalogSnapshot() {
-    var rows = (global.HalfacrePay && global.HalfacrePay.products) || [];
-    var live = [];
-    var coming = [];
-    rows.forEach(function (row) {
-      var name = row.product || row.name;
-      if (row.live) {
-        live.push({
-          id: row.id,
-          name: name,
-          price: row.amount || row.price_usd,
-          tier: row.tier || "",
-          buyable: true
-        });
-      } else {
-        coming.push({
-          id: row.id,
-          name: name,
-          price: row.amount || row.price_usd,
-          tier: row.tier || "",
-          buyable: false
-        });
-      }
-    });
-    return {
-      live: live,
-      coming_soon: coming,
-      note: "Live research = pay, download, power up. Coming soon / Not ready means data or fulfillment is missing. Only BTCTreasuryBot is live among assembled bots. Unlock list is source of truth for avatar knowledge."
-    };
-  }
-
-  function ownedIds() {
-    if (global.VanOwned && typeof global.VanOwned.ownedIds === "function") {
-      return global.VanOwned.ownedIds();
+  function sfoxHoldings() {
+    if (global.VanSfox && typeof global.VanSfox.snapshotText === "function") {
+      return global.VanSfox.snapshotText();
     }
-    return [];
+    return sfoxConnected() ? "sFOX is connected." : "sFOX is not connected.";
   }
 
   function secretBlock() {
     return [
       "Don’t type a key, password, or PIN in this chat.",
       "",
-      "sFOX has its own box on this page. Paste the API key there. I never need to see it."
+      "If you have an API box on this page, paste the key there. I never need to see it."
     ].join("\n");
   }
 
   function offlineNote() {
-    return "Grok is not connected on this page right now.";
+    return "Grok did not answer just now. Send that again.";
   }
 
   function endpoint() {
@@ -115,10 +79,6 @@
       return global.HALFACRE_GROK_ENDPOINT.trim();
     }
     return PROXY;
-  }
-
-  function nowMode() {
-    return "grok";
   }
 
   function fetchWithTimeout(url, options, ms) {
@@ -144,30 +104,36 @@
     });
   }
 
-  function askGrok(messages, opts) {
+  function pageAuth() {
+    var client = global.HalfacreClient || {};
+    var tok = global.HalfacreSession && global.HalfacreSession.token
+      ? global.HalfacreSession.token()
+      : "";
+    return {
+      c: String(client.id || client.userId || ""),
+      t: String(tok || "")
+    };
+  }
+
+  function askGrokOnce(messages, opts) {
     opts = opts || {};
     var opening = !!opts.open;
+    var auth = pageAuth();
     return fetchWithTimeout(
       endpoint(),
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        referrerPolicy: "no-referrer",
         body: JSON.stringify({
           messages: scrub(messages),
-          catalog: opening ? { live: [], coming_soon: [] } : catalogSnapshot(),
-          owned: opening ? [] : ownedIds(),
-          avatar: opening
-            ? { userId: who().userId || who().fullName, powerups: [] }
-            : ((global.VanOwned && global.VanOwned.avatarContext)
-              ? global.VanOwned.avatarContext()
-              : { userId: who().userId || who().fullName, powerups: [] }),
-          sfox: opening ? false : sfoxConnected(),
-          open: opening,
-          client: who().fullName,
-          userId: who().userId || who().fullName
+          c: auth.c,
+          t: auth.t,
+          sfox: false,
+          open: opening
         })
       },
-      45000
+      60000
     )
       .then(function (res) {
         return res.json().then(function (data) {
@@ -175,6 +141,11 @@
         });
       })
       .then(function (pack) {
+        if (pack.data && pack.data.comingSoon) {
+          comingSoon = true;
+        } else if (pack.data && pack.data.zdr === true) {
+          comingSoon = false;
+        }
         if (pack.data && typeof pack.data.reply === "string" && pack.data.reply.trim()) {
           return pack.data.reply.trim();
         }
@@ -182,26 +153,30 @@
       });
   }
 
-  function createMemory() {
-    return {
-      engine: "grok",
-      notes: []
-    };
+  function askGrok(messages, opts) {
+    return askGrokOnce(messages, opts).catch(function () {
+      return askGrokOnce(messages, opts);
+    });
   }
+
+  var comingSoon = true;
+  var COMING_SOON =
+    "Private AI chat and uploads are coming soon. We're finishing a privacy upgrade first.";
 
   global.HalfacreGrok = {
     get fullName() { return who().fullName; },
     get firstName() { return who().firstName; },
     engine: "grok",
     model: MODEL,
+    isComingSoon: function () { return comingSoon; },
+    comingSoonMessage: COMING_SOON,
     greeting: greeting,
     greetingText: greeting,
     open: function () {
       return askGrok([{ role: "user", content: "Hello." }], { open: true });
     },
     starters: STARTERS,
-    mode: nowMode,
-    createMemory: createMemory,
+    mode: function () { return "grok"; },
     looksLikeSecret: looksLikePastedSecret,
     reply: function (userText, _memory, history) {
       if (looksLikePastedSecret(userText)) {
@@ -215,7 +190,8 @@
       });
     },
     isOfflineNote: function (text) {
-      return String(text || "").indexOf("Grok is not connected on this page right now") !== -1;
+      return String(text || "").indexOf("Grok did not answer just now") !== -1
+        || String(text || "").indexOf("Grok is not connected on this page right now") !== -1;
     }
   };
 })(window);

@@ -199,20 +199,39 @@
         var picked = file.files && file.files[0];
         if (!picked) return;
         var desk = global.HalfacreDesk;
-        if (desk && desk.recordUpload) {
-          desk.recordUpload(picked.name, desk.kindFromName(picked.name));
-        }
-        var reader = new FileReader();
-        reader.onload = function () {
-          var raw = String(reader.result || "");
-          var clip = raw.length > 12000 ? raw.slice(0, 12000) + "\n[truncated]" : raw;
-          talk("I uploaded " + picked.name + ".\n\n" + clip);
+        var holdRe = /1040|w-?2|1099|tax.?return|passport|license|ssn|will|trust/i;
+        var proceed = function (confirmSensitive) {
+          var work = desk && desk.recordUpload
+            ? desk.recordUpload(picked.name, desk.kindFromName(picked.name), {
+              confirm_sensitive: !!confirmSensitive
+            })
+            : Promise.resolve();
+          Promise.resolve(work).then(function (result) {
+            if (result && result.hold) {
+              var msg = result.error || "Your page link has no password. Please hold off on very sensitive documents, or remove the numbers first";
+              if (global.confirm(msg + "\n\nUpload anyway?")) {
+                proceed(true);
+              }
+              return;
+            }
+            var reader = new FileReader();
+            reader.onload = function () {
+              var raw = String(reader.result || "");
+              var clip = raw.length > 12000 ? raw.slice(0, 12000) + "\n[truncated]" : raw;
+              talk("I uploaded " + picked.name + ".\n\n" + clip);
+            };
+            if (/\.pdf$/i.test(picked.name)) {
+              talk("I uploaded a PDF named " + picked.name + ".");
+            } else {
+              reader.readAsText(picked);
+            }
+          });
         };
-        if (/\.pdf$/i.test(picked.name)) {
-          talk("I uploaded a PDF named " + picked.name + ".");
-        } else {
-          reader.readAsText(picked);
+        if (holdRe.test(picked.name) && !global.confirm("Your page link has no password. Please hold off on very sensitive documents, or remove the numbers first\n\nUpload anyway?")) {
+          file.value = "";
+          return;
         }
+        proceed(holdRe.test(picked.name));
         file.value = "";
       });
     }
