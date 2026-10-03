@@ -163,6 +163,29 @@ code="$(curl_code "${BASE}/client-memory.php?c=van&t=${VAN_TOKEN}")"
 expect_code "client-memory GET valid token c=van" 200 "$code" "$(cat "${WORKDIR}/body.json")"
 expect_body "memory read has upload" "1040-2024.pdf" "$(cat "${WORKDIR}/body.json")"
 
+code="$(curl_code -X POST -H "Content-Type: application/json" \
+  -d "{\"c\":\"van\",\"t\":\"${VAN_TOKEN}\",\"action\":\"purchase\",\"id\":\"macro-indicators-research\",\"name\":\"no-pay\"}" \
+  "${BASE}/client-memory.php")"
+expect_code "client-memory POST purchase is denied" 403 "$code" "$(cat "${WORKDIR}/body.json")"
+expect_body "purchase denial copy" "PayPal capture only" "$(cat "${WORKDIR}/body.json")"
+if grep -q "macro-indicators-research" "${WORKDIR}/memory.store.json"; then
+  FAIL=$((FAIL + 1))
+  note "FAIL  purchase action wrote a bought item without PayPal"
+else
+  PASS=$((PASS + 1))
+  note "PASS  purchase action did not write a bought item"
+fi
+
+code="$(curl_code "${BASE}/client-memory.php?c=van&t=${VAN_TOKEN}")"
+expect_code "client-memory GET after denied purchase" 200 "$code" "$(cat "${WORKDIR}/body.json")"
+if grep -q "macro-indicators-research" "${WORKDIR}/body.json"; then
+  FAIL=$((FAIL + 1))
+  note "FAIL  GET purchases still listed the no-pay sku"
+else
+  PASS=$((PASS + 1))
+  note "PASS  GET purchases omitted the no-pay sku"
+fi
+
 # Prove browser-sent uploads/catalog are ignored: send fake owned + uploads.
 code="$(curl_code -X POST -H "Content-Type: application/json" \
   -d "{\"c\":\"van\",\"t\":\"${VAN_TOKEN}\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello.\"}],\"catalog\":{\"live\":[{\"name\":\"FAKE-FROM-BROWSER\"}]},\"owned\":[\"browser-owned\"],\"uploads\":[{\"name\":\"browser-upload.pdf\",\"kind\":\"tax\"}]}" \

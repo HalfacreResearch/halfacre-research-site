@@ -1,8 +1,11 @@
 # Hostinger-only secrets — never commit
 van-grok.secret.php
+paypal.secret.php
 client-secrets.store.json
 clients.store.json
 client-memory.store.json
+paypal-captures.store.json
+paypal-events.store.json
 *.secret.php
 *.store.json
 .htpasswd

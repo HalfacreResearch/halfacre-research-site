@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . "/client-token.php";
+require_once __DIR__ . "/paypal-lib.php";
 
 const VAN_ID = "charley-van-halfacre";
 
@@ -105,23 +106,9 @@ function pack_for(string $key): array
   $all = read_json(client_memory_store_path());
   $row = isset($all[$key]) && is_array($all[$key]) ? $all[$key] : [];
   $uploads = isset($row["uploads"]) && is_array($row["uploads"]) ? $row["uploads"] : [];
-  $purchases = isset($row["purchases"]) && is_array($row["purchases"]) ? $row["purchases"] : [];
-  if ($key === VAN_ID) {
-    $seen = [];
-    foreach ($purchases as $item) {
-      if (is_array($item) && !empty($item["id"])) {
-        $seen[(string) $item["id"]] = true;
-      }
-    }
-    foreach (van_purchases() as $item) {
-      if (!isset($seen[$item["id"]])) {
-        $purchases[] = $item;
-      }
-    }
-  }
   return [
     "uploads" => array_values($uploads),
-    "purchases" => array_values($purchases)
+    "purchases" => paypal_client_purchases($key)
   ];
 }
 
@@ -217,29 +204,12 @@ if ($action === "upload") {
 }
 
 if ($action === "purchase") {
-  $id = clean_name((string) ($payload["id"] ?? $payload["moduleId"] ?? ""));
-  $name = clean_name((string) ($payload["name"] ?? $id));
-  if ($id === "") {
-    http_response_code(400);
-    echo json_encode(["ok" => false, "error" => "Missing purchase id"]);
-    exit;
-  }
-  $exists = false;
-  foreach ($all[$key]["purchases"] as $item) {
-    if (is_array($item) && (string) ($item["id"] ?? "") === $id) {
-      $exists = true;
-      break;
-    }
-  }
-  if (!$exists) {
-    $all[$key]["purchases"][] = [
-      "id" => $id,
-      "name" => $name !== "" ? $name : $id,
-      "kind" => "module",
-      "at" => (int) round(microtime(true) * 1000)
-    ];
-    write_store($all);
-  }
+  http_response_code(403);
+  echo json_encode([
+    "ok" => false,
+    "error" => "Purchases are recorded after PayPal capture only."
+  ]);
+  exit;
 }
 
 $pack = pack_for($key);
