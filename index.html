@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Halfacre Research | Where you run your own retirement</title>
-  <meta name="description" content="Where you run your own retirement. We're building a personal AI for your own retirement, plus research modules and data that keep growing. Research and data, not advice.">
+  <meta name="description" content="Halfacre Research. Where you run your own retirement. Our product line is coming soon.">
   <link rel="canonical" href="https://halfacreresearch.tech/">
   <link rel="icon" type="image/png" href="/brand/halfacre-logo-black-orange.png">
   <link rel="apple-touch-icon" href="/brand/halfacre-logo-black-orange.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Halfacre Research">
   <meta property="og:title" content="Halfacre Research | Where you run your own retirement">
-  <meta property="og:description" content="Where you run your own retirement. We're building a personal AI for your own retirement, plus research modules and data that keep growing.">
+  <meta property="og:description" content="Halfacre Research. Where you run your own retirement. Our product line is coming soon.">
   <meta property="og:url" content="https://halfacreresearch.tech/">
   <meta property="og:image" content="https://halfacreresearch.tech/og-home.png">
   <meta property="og:image:width" content="1200">
@@ -19,162 +19,72 @@
   <meta property="og:image:alt" content="Halfacre Research Institute. Where you run your own retirement.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Halfacre Research | Where you run your own retirement">
-  <meta name="twitter:description" content="Where you run your own retirement. We're building a personal AI for your own retirement, plus research modules and data that keep growing.">
+  <meta name="twitter:description" content="Halfacre Research. Where you run your own retirement. Our product line is coming soon.">
   <meta name="twitter:image" content="https://halfacreresearch.tech/og-home.png">
   <meta name="twitter:image:alt" content="Halfacre Research Institute. Where you run your own retirement.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #000000;
-      --card: #111111;
-      --text: #ffffff;
-      --muted: #a3a3a3;
-      --line: #2a2a2a;
-      --orange: #F7931A;
-    }
     * { box-sizing: border-box; }
     html {
-      scroll-behavior: smooth;
       background: #000000;
     }
     body {
       margin: 0;
+      min-height: 100vh;
       background: #000000;
-      color: var(--text);
+      color: #ffffff;
       font-family: Montserrat, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
       font-size: 17px;
       font-weight: 400;
+      line-height: 1.55;
+      display: flex;
+      flex-direction: column;
     }
-    a { color: var(--orange); }
+    a { color: #F7931A; }
     a:hover { color: #ffb14a; }
-    .skip {
-      position: absolute;
-      left: -999px;
-      top: 8px;
-      background: var(--orange);
-      color: #000;
-      padding: 8px 12px;
-      border-radius: 8px;
-      z-index: 10;
-      font-weight: 600;
-    }
-    .skip:focus { left: 12px; }
-    header.top {
-      padding: 20px 24px 0;
+    .stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px 32px;
       background: #000000;
-    }
-    header.top .inner,
-    .wrap {
-      max-width: 880px;
-      margin: 0 auto;
-      background: #000000;
-    }
-    main.wrap { background: transparent; }
-    .logo-link {
-      display: inline-block;
-      line-height: 0;
-      background: #000000;
-    }
-    .logo-link img {
-      display: block;
-      width: 88px;
-      height: auto;
-      background: #000000;
-    }
-    .hero {
-      padding: 36px 24px 20px;
       text-align: center;
+    }
+    .stack {
+      width: min(560px, 100%);
       background: #000000;
     }
-    .hero-logo {
+    .logo {
       display: block;
-      width: min(280px, 72vw);
+      width: min(280px, 70vw);
       max-width: 300px;
       height: auto;
       margin: 0 auto;
       background: #000000;
     }
-    .hero h1 {
-      margin: 18px 0 0;
-      font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+    h1 {
+      margin: 22px 0 0;
+      font-size: clamp(1.3rem, 4.2vw, 1.8rem);
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1.25;
     }
-    .promise {
-      margin: 18px auto 0;
-      max-width: 34em;
-      font-size: clamp(1rem, 2.2vw, 1.12rem);
-      color: var(--muted);
-      font-weight: 400;
-    }
-    .video-frame {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      margin: 36px 0 0;
-      background: #0a0a0a;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .video-poster,
-    .video-frame iframe,
-    .video-frame video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-    .video-poster {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      color: var(--text);
-      padding: 24px 20px;
-      text-align: center;
-      background: radial-gradient(ellipse at 50% 35%, #1a140c 0%, #0a0a0a 62%);
-    }
-    .play-mark {
-      width: 64px;
-      height: 64px;
-      border: 2px solid var(--orange);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .play-mark span {
-      display: block;
-      width: 0;
-      height: 0;
-      margin-left: 3px;
-      border-style: solid;
-      border-width: 9px 0 9px 15px;
-      border-color: transparent transparent transparent var(--orange);
-    }
-    .video-poster strong {
+    .soon {
+      margin: 16px 0 0;
+      color: #a3a3a3;
       font-size: 1.05rem;
-      font-weight: 600;
-    }
-    .cta-row {
-      display: flex;
-      justify-content: center;
-      margin: 32px 0 0;
     }
     .btn {
       display: inline-block;
+      margin-top: 28px;
       min-height: 48px;
       padding: 13px 28px;
       border-radius: 10px;
-      background: var(--orange);
-      color: #000;
+      background: #F7931A;
+      color: #000000;
       text-decoration: none;
       font-size: 16px;
       font-weight: 700;
@@ -182,110 +92,40 @@
     }
     .btn:hover {
       background: #ffb14a;
-      color: #000;
+      color: #000000;
     }
-    main.wrap { padding: 28px 24px 8px; }
-    section {
-      margin: 0 0 22px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 28px 26px 12px;
-    }
-    section h2 {
-      margin: 0 0 12px;
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-    section p { margin: 0 0 1.05em; color: #e8e8e8; }
-    .fine {
-      margin: 0 0 1.1em;
-      color: var(--muted);
-      font-size: 15px;
+    .client {
+      margin: 14px auto 0;
+      max-width: 28em;
+      color: #a3a3a3;
+      font-size: 13px;
     }
     footer {
-      max-width: 880px;
-      margin: 12px auto 0;
-      padding: 36px 24px 48px;
-      color: var(--muted);
-      font-size: 14px;
-      text-align: center;
+      padding: 20px 24px 28px;
       background: #000000;
+      color: #777777;
+      font-size: 13px;
+      text-align: center;
     }
-    footer .logo-link img { width: 72px; margin: 0 auto 14px; }
     footer p { margin: 0 0 8px; }
-    footer .slogan {
-      color: var(--text);
-      font-weight: 500;
-    }
-    footer .legal { margin-top: 18px; }
-    footer .policies {
-      margin-top: 16px;
-      color: #777;
-    }
-    @media (min-width: 720px) {
-      .hero { padding-top: 48px; }
-      section { padding: 32px 34px 16px; }
-    }
+    footer .legal { margin: 0; }
   </style>
 </head>
 <body>
-  <a class="skip" href="#start">Skip to start</a>
-  <header class="top">
-    <div class="inner">
-      <a class="logo-link" href="/">
-        <img src="/brand/halfacre-logo-black-orange.png" width="88" height="82" alt="Halfacre Research Institute">
-      </a>
-    </div>
-  </header>
-
-  <div class="hero">
-    <div class="wrap">
-      <img class="hero-logo" src="/brand/halfacre-logo-black-orange.png" width="280" height="262" alt="Halfacre Research Institute">
+  <div class="stage">
+    <div class="stack">
+      <img class="logo" src="/brand/halfacre-logo-black-orange.png" width="280" height="262" alt="Halfacre Research Institute">
       <h1>Where you run your own retirement.</h1>
-      <p class="promise">We're building a personal AI for your own retirement, plus research modules and data that keep growing.</p>
-
-      <!-- VIDEO URL: set data-video-url to one YouTube, Vimeo, or .mp4 URL. Leave empty for the poster. -->
-      <div id="hero-video" class="video-frame" data-video-url="" role="img" aria-label="Video coming soon"></div>
-
-      <div class="cta-row">
-        <a class="btn" id="start" href="/signup.html">Create an account</a>
-      </div>
+      <p class="soon">Our product line is coming soon.</p>
+      <a class="btn" id="start" href="/signup.html">Create an account</a>
+      <p class="client">Already a client? Enter your email on the <a href="/signup.html">signup page</a> and we'll email your private link.</p>
     </div>
   </div>
 
-  <main class="wrap">
-    <section>
-      <h2>A new way for the next generation to retire</h2>
-      <p>Retirement used to mean handing the keys to someone else. We're building a page of your own and a personal AI that works from the financial data you upload — so you can run your own retirement.</p>
-      <p>We're finishing a brand-new site and product line. It isn't open to the public yet.</p>
-    </section>
-
-    <section>
-      <h2>What we're building</h2>
-      <p>A personal AI for your own retirement. Research modules you can sit with. Data that keeps growing.</p>
-      <p>That work is underway. No research product is licensed for resale and live today. More is coming soon.</p>
-    </section>
-
-    <section>
-      <h2>Create an account</h2>
-      <p>If you're new, the button starts your account. After you finish, your private page is ready.</p>
-      <p>Already a client? Enter your email on the <a href="/signup.html">signup page</a> and we'll email your private link.</p>
-      <p class="fine">Questions: <a href="mailto:matt@halfacreresearch.tech">matt@halfacreresearch.tech</a></p>
-    </section>
-  </main>
-
   <footer>
-    <a class="logo-link" href="/">
-      <img src="/brand/halfacre-logo-black-orange.png" width="72" height="67" alt="Halfacre Research Institute">
-    </a>
-    <p class="slogan">Where you run your own retirement.</p>
     <p>© Halfacre Research Institute LLC</p>
-    <p><a href="mailto:matt@halfacreresearch.tech">matt@halfacreresearch.tech</a></p>
-    <!-- TODO: add Privacy, Terms, and Refunds links when those pages exist. Do not link pages that are not on the site. -->
-    <p class="policies">Privacy · Terms · Refunds</p>
     <p class="legal">This is research and data, not investment, tax, legal, or retirement advice. <a href="/disclaimer.html">Read the full disclaimer</a>.</p>
+    <!-- TODO: add Privacy, Terms, and Refunds links when those pages exist. Do not link pages that are not on the site. -->
   </footer>
 
   <script>
@@ -293,49 +133,6 @@
       if (location.hostname === "halfacreresearch.tech") {
         location.replace("https://www.halfacreresearch.tech" + location.pathname + location.search + location.hash);
         return;
-      }
-
-      function youtubeId(url) {
-        var m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
-        return m ? m[1] : "";
-      }
-
-      function vimeoId(url) {
-        var m = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
-        return m ? m[1] : "";
-      }
-
-      function showPoster(slot) {
-        slot.setAttribute("role", "img");
-        slot.setAttribute("aria-label", "Video coming soon");
-        slot.innerHTML =
-          '<div class="video-poster">' +
-            '<div class="play-mark" aria-hidden="true"><span></span></div>' +
-            "<strong>Video coming soon</strong>" +
-          "</div>";
-      }
-
-      function mountVideo(slot) {
-        var url = (slot.getAttribute("data-video-url") || "").trim();
-        if (!url) {
-          showPoster(slot);
-          return;
-        }
-        var yt = youtubeId(url);
-        var vim = vimeoId(url);
-        slot.removeAttribute("role");
-        slot.removeAttribute("aria-label");
-        if (yt) {
-          slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + yt +
-            '" title="Halfacre Research" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
-          return;
-        }
-        if (vim) {
-          slot.innerHTML = '<iframe src="https://player.vimeo.com/video/' + vim +
-            '" title="Halfacre Research" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
-          return;
-        }
-        slot.innerHTML = '<video controls playsinline src="' + url.replace(/"/g, "") + '"></video>';
       }
 
       function withUtm(href) {
@@ -349,15 +146,10 @@
         return dest.pathname + dest.search + dest.hash;
       }
 
-      function passUtmToSignupLinks() {
-        var links = document.querySelectorAll('a[href*="signup.html"]');
-        for (var i = 0; i < links.length; i++) {
-          links[i].setAttribute("href", withUtm(links[i].getAttribute("href") || "/signup.html"));
-        }
+      var links = document.querySelectorAll('a[href*="signup.html"]');
+      for (var i = 0; i < links.length; i++) {
+        links[i].setAttribute("href", withUtm(links[i].getAttribute("href") || "/signup.html"));
       }
-
-      mountVideo(document.getElementById("hero-video"));
-      passUtmToSignupLinks();
     })();
   </script>
 </body>
