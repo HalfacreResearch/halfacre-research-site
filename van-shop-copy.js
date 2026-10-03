@@ -222,6 +222,10 @@
   }
 
   function body(row) {
+    var id = trim(row && row.id);
+    if (id === "btc-treasury-bot") {
+      return "A planning calculator you run with your own numbers. Hypothetical schedule and CSV of that plan. Not live trading, not advice, and Halfacre is not an investment adviser.";
+    }
     var kind = trim(row && row.kind);
     if (kind === "pack") return BODY.pack;
     if (kind === "bot") return BODY.bot;
