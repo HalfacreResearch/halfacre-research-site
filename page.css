@@ -104,6 +104,14 @@ a:hover {
   align-items: center;
 }
 
+.nav a[data-desk="uploaded"],
+.nav a[data-desk="purchased"] {
+  display: inline-block;
+  line-height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .nav-toggle {
   display: none;
   font-family: Montserrat, Helvetica, Arial, sans-serif;
