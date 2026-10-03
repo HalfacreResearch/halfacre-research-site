@@ -16,6 +16,33 @@
 
     var sendBtn = form.querySelector(".send");
     var history = [];
+    var fileInput = file;
+    var uploadBtn = document.getElementById("uploadBtn");
+    var uploadHint = document.getElementById("uploadHint");
+    var uploadSoon = document.getElementById("uploadSoon");
+
+    function setComingSoon(on, message) {
+      var msg = message || (grok && grok.comingSoonMessage) ||
+        "Private AI chat and uploads are coming soon. We're finishing a privacy upgrade first.";
+      if (uploadSoon) {
+        uploadSoon.hidden = !on;
+        uploadSoon.textContent = msg;
+      }
+      if (uploadHint) uploadHint.hidden = !!on;
+      if (uploadBtn) {
+        uploadBtn.setAttribute("aria-disabled", on ? "true" : "false");
+        uploadBtn.style.display = on ? "none" : "";
+      }
+      if (fileInput) fileInput.disabled = !!on;
+      if (line) {
+        line.disabled = !!on;
+        line.placeholder = on ? "Private AI chat is coming soon" : "Talk to Grok";
+      }
+      if (sendBtn) sendBtn.disabled = !!on;
+      if (chips) chips.hidden = !!on;
+    }
+
+    setComingSoon(true);
 
     if (global.HalfacrePay && global.HalfacrePay.load) {
       global.HalfacrePay.load().then(function () {
@@ -62,6 +89,10 @@
 
     function talk(text, silent) {
       if (!text) return;
+      if (grok && grok.isComingSoon && grok.isComingSoon()) {
+        setComingSoon(true);
+        return;
+      }
       if (global.HalfacreDesk && global.HalfacreDesk.showView) {
         global.HalfacreDesk.showView("talk");
       }
@@ -74,17 +105,26 @@
         : Promise.resolve("");
       Promise.resolve(work).then(function (reply) {
         var out = String(reply || "").trim();
+        if (grok && grok.isComingSoon && grok.isComingSoon()) {
+          clearWait();
+          setComingSoon(true, out);
+          bubble(out, false);
+          return;
+        }
         if (!out || (grok && grok.isOfflineNote && grok.isOfflineNote(out))) {
           throw new Error("offline");
         }
         clearWait();
+        setComingSoon(false);
         bubble(out, false);
         history.push({ role: "assistant", content: out });
       }).catch(function () {
         clearWait();
         bubble("Grok did not answer just now. Send that again.", false);
       }).finally(function () {
-        sendBtn.disabled = false;
+        if (!(grok && grok.isComingSoon && grok.isComingSoon()) && sendBtn) {
+          sendBtn.disabled = false;
+        }
       });
     }
 
@@ -110,13 +150,21 @@
         var out = String(reply || "").trim();
         if (!out) throw new Error("offline");
         clearWait();
+        if (grok && grok.isComingSoon && grok.isComingSoon()) {
+          setComingSoon(true, out);
+          bubble(out, false);
+          return;
+        }
+        setComingSoon(false);
         bubble(out, false);
         history.push({ role: "assistant", content: out });
       }).catch(function () {
         clearWait();
         bubble("Grok did not answer just now. Send a line and it will try again.", false);
       }).finally(function () {
-        sendBtn.disabled = false;
+        if (!(grok && grok.isComingSoon && grok.isComingSoon()) && sendBtn) {
+          sendBtn.disabled = false;
+        }
       });
     }
 
@@ -134,6 +182,9 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (grok && grok.isComingSoon && grok.isComingSoon()) {
+        return;
+      }
       var text = line.value.trim();
       line.value = "";
       talk(text);
@@ -141,6 +192,10 @@
 
     if (file) {
       file.addEventListener("change", function () {
+        if (grok && grok.isComingSoon && grok.isComingSoon()) {
+          file.value = "";
+          return;
+        }
         var picked = file.files && file.files[0];
         if (!picked) return;
         var desk = global.HalfacreDesk;

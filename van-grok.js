@@ -208,6 +208,11 @@
         });
       })
       .then(function (pack) {
+        if (pack.data && pack.data.comingSoon) {
+          comingSoon = true;
+        } else if (pack.data && pack.data.zdr === true) {
+          comingSoon = false;
+        }
         if (pack.data && typeof pack.data.reply === "string" && pack.data.reply.trim()) {
           return pack.data.reply.trim();
         }
@@ -221,11 +226,17 @@
     });
   }
 
+  var comingSoon = true;
+  var COMING_SOON =
+    "Private AI chat and uploads are coming soon. We're finishing a privacy upgrade first.";
+
   global.HalfacreGrok = {
     get fullName() { return who().fullName; },
     get firstName() { return who().firstName; },
     engine: "grok",
     model: MODEL,
+    isComingSoon: function () { return comingSoon; },
+    comingSoonMessage: COMING_SOON,
     greeting: greeting,
     greetingText: greeting,
     open: function () {

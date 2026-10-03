@@ -9,6 +9,7 @@ declare(strict_types=1);
 require_once __DIR__ . "/client-token.php";
 require_once __DIR__ . "/client-memory.php";
 require_once __DIR__ . "/van-grok-prompts.php";
+require_once __DIR__ . "/van-grok-xai.php";
 
 @set_time_limit(90);
 @ignore_user_abort(true);
@@ -44,21 +45,6 @@ function grok_key(): string
     }
   }
   return "";
-}
-
-function grok_stub(): bool
-{
-  $raw = getenv("HALFACRE_GROK_STUB");
-  return is_string($raw) && ($raw === "1" || strtolower($raw) === "true");
-}
-
-function grok_endpoint(): string
-{
-  $raw = getenv("HALFACRE_XAI_URL");
-  if (is_string($raw) && trim($raw) !== "") {
-    return trim($raw);
-  }
-  return "https://api.x.ai/v1/chat/completions";
 }
 
 function grok_rate_max(): int
@@ -139,6 +125,12 @@ if (!client_rate_allow($ipBucket, "grok-rate.store.json", $rateMax, 3600)
   exit;
 }
 
+$key = grok_key();
+if (!grok_zdr_confirmed($key)) {
+  echo json_encode(grok_coming_soon_payload());
+  exit;
+}
+
 $incoming = isset($payload["messages"]) && is_array($payload["messages"]) ? $payload["messages"] : [];
 $sfox = !empty($payload["sfox"]);
 $open = !empty($payload["open"]);
@@ -151,11 +143,6 @@ if ($sfoxHoldings === "") {
   $sfoxHoldings = $sfox ? "sFOX is connected." : "sFOX is not connected.";
 }
 
-$record = client_record_for($pageId);
-$clientName = trim((string) (($record["name"] ?? "")));
-if ($clientName === "") {
-  $clientName = $pageId === client_van_id() ? "Charley Van Halfacre" : "Client";
-}
 $userId = $pageId;
 
 $stored = pack_for($pageId);
@@ -208,15 +195,20 @@ foreach ($incoming as $item) {
 }
 
 $messages = array_merge(
-  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, $clientName, $userId, $cleanUploads, $open, $sfoxHoldings)]],
+  [["role" => "system", "content" => system_prompt($catalog, $owned, $sfox, $avatar, "", $userId, $cleanUploads, $open, $sfoxHoldings)]],
   $clean
 );
 
-$body = json_encode([
+$payloadOut = [
   "model" => "grok-4.6",
   "messages" => $messages,
   "stream" => false
-]);
+];
+$safety = grok_safety_identifier($userId);
+if ($safety !== "") {
+  $payloadOut["safety_identifier"] = $safety;
+}
+$body = json_encode($payloadOut);
 
 if (grok_stub()) {
   echo json_encode([
@@ -225,12 +217,13 @@ if (grok_stub()) {
     "engine" => "grok",
     "model" => "grok-4.6",
     "stub" => true,
-    "reached" => "xai-call"
+    "reached" => "xai-call",
+    "zdr" => true,
+    "comingSoon" => false
   ]);
   exit;
 }
 
-$key = grok_key();
 if ($key === "") {
   http_response_code(503);
   echo json_encode([
@@ -241,43 +234,17 @@ if ($key === "") {
   exit;
 }
 
-$res = false;
-$code = 0;
-$err = "";
-if (function_exists("curl_init")) {
-  $ch = curl_init(grok_endpoint());
-  curl_setopt_array($ch, [
-    CURLOPT_POST => true,
-    CURLOPT_HTTPHEADER => [
-      "Content-Type: application/json",
-      "Authorization: Bearer " . $key,
-      "x-grok-conv-id: halfacre-page-" . preg_replace("/[^A-Za-z0-9_\\-]/", "", $userId)
-    ],
-    CURLOPT_POSTFIELDS => $body,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT => 45
-  ]);
-  $res = curl_exec($ch);
-  $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  $err = curl_error($ch);
-  curl_close($ch);
-} else {
-  $ctx = stream_context_create([
-    "http" => [
-      "method" => "POST",
-      "header" => "Content-Type: application/json\r\nAuthorization: Bearer " . $key . "\r\nx-grok-conv-id: halfacre-page\r\n",
-      "content" => $body,
-      "timeout" => 45,
-      "ignore_errors" => true
-    ]
-  ]);
-  $res = file_get_contents(grok_endpoint(), false, $ctx);
-  if (isset($http_response_header[0]) && preg_match("/\\s(\\d{3})\\s/", $http_response_header[0], $m)) {
-    $code = (int) $m[1];
-  }
+$out = grok_http_post($key, is_string($body) ? $body : "{}", "halfacre-page");
+if (!grok_note_real_zdr_header($out["zdr"])) {
+  echo json_encode(grok_coming_soon_payload());
+  exit;
 }
 
-if (!is_string($res) || $res === "") {
+$res = $out["body"];
+$code = $out["code"];
+$err = $out["err"];
+
+if ($res === "") {
   http_response_code(502);
   echo json_encode(["ok" => false, "error" => $err !== "" ? $err : "Empty xAI response", "engine" => "grok"]);
   exit;
@@ -295,4 +262,4 @@ if ($code >= 400 || $reply === "") {
   exit;
 }
 
-echo json_encode(["ok" => true, "reply" => $reply, "engine" => "grok", "model" => "grok-4.6"]);
+echo json_encode(["ok" => true, "reply" => $reply, "engine" => "grok", "model" => "grok-4.6", "zdr" => true, "comingSoon" => false]);
