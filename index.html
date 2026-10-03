@@ -3,127 +3,274 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Create your account</title>
+  <title>Halfacre Research</title>
+  <meta name="description" content="Where you run your own retirement. A personal AI on your own financial data, and research across every market you live in. Research and data, not advice.">
+  <link rel="canonical" href="https://halfacreresearch.tech/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Halfacre Research">
+  <meta property="og:title" content="Halfacre Research">
+  <meta property="og:description" content="Where you run your own retirement. A personal AI on your own financial data, and research across every market you live in.">
+  <meta property="og:url" content="https://halfacreresearch.tech/">
+  <meta property="og:image" content="https://halfacreresearch.tech/og-home.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Halfacre Research. Where you run your own retirement.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Halfacre Research">
+  <meta name="twitter:description" content="Where you run your own retirement. A personal AI on your own financial data, and research across every market you live in.">
+  <meta name="twitter:image" content="https://halfacreresearch.tech/og-home.png">
+  <meta name="twitter:image:alt" content="Halfacre Research. Where you run your own retirement.">
   <style>
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      min-height: 100vh;
       background: #f4f4f5;
       color: #111;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+      font-size: 17px;
     }
-    .page {
-      max-width: 420px;
+    a { color: #0b57d0; }
+    .skip {
+      position: absolute;
+      left: -999px;
+      top: 8px;
+      background: #111;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      z-index: 10;
+    }
+    .skip:focus { left: 12px; }
+    header.top {
+      padding: 18px 20px 0;
+    }
+    header.top .inner,
+    .wrap {
+      max-width: 880px;
       margin: 0 auto;
-      padding: 48px 20px 40px;
     }
-    .brand {
-      text-align: center;
-      margin: 0 0 28px;
-    }
-    .brand p {
-      margin: 0 0 8px;
-      color: #666;
-      font-size: 13px;
-    }
-    h1 {
+    .brand-mark {
       margin: 0;
-      font-size: 26px;
-      font-weight: 650;
-      letter-spacing: -0.02em;
-    }
-    .card {
-      background: #fff;
-      border: 1px solid #e5e5e5;
-      border-radius: 12px;
-      padding: 24px 22px 20px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.04);
-    }
-    label {
-      display: block;
-      margin: 0 0 6px;
+      color: #555;
       font-size: 13px;
       font-weight: 600;
-      color: #222;
+      letter-spacing: 0.04em;
     }
-    input {
+    .hero {
+      padding: 28px 20px 12px;
+    }
+    .hero h1 {
+      margin: 10px 0 0;
+      font-size: clamp(1.7rem, 5.4vw, 2.55rem);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .promise {
+      margin: 14px 0 0;
+      max-width: 38em;
+      font-size: clamp(1.02rem, 2.4vw, 1.18rem);
+      color: #333;
+    }
+    .video-frame {
+      position: relative;
       width: 100%;
-      height: 44px;
-      margin: 0 0 14px;
-      padding: 0 12px;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      font-size: 16px;
-      background: #fff;
-      color: #111;
+      aspect-ratio: 16 / 9;
+      margin: 22px 0 0;
+      background: #161616;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,.06);
     }
-    input:focus {
-      outline: none;
-      border-color: #111;
-    }
-    .create {
+    .video-poster,
+    .video-frame iframe,
+    .video-frame video {
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: 44px;
-      margin-top: 4px;
+      height: 100%;
       border: 0;
+    }
+    .video-poster {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #fff;
+      padding: 24px 20px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 50% 20%, #2a2a2c 0%, #161616 62%);
+    }
+    .play-mark {
+      width: 56px;
+      height: 56px;
+      border: 2px solid rgba(255,255,255,.82);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .play-mark span {
+      display: block;
+      width: 0;
+      height: 0;
+      margin-left: 3px;
+      border-style: solid;
+      border-width: 8px 0 8px 14px;
+      border-color: transparent transparent transparent #fff;
+    }
+    .video-poster strong {
+      font-size: 1.15rem;
+      font-weight: 650;
+    }
+    .video-poster p {
+      margin: 0;
+      color: #c8c8c8;
+      font-size: 0.95rem;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      align-items: center;
+      margin: 22px 0 0;
+    }
+    .btn {
+      display: inline-block;
+      min-height: 44px;
+      padding: 11px 18px;
       border-radius: 8px;
       background: #111;
       color: #fff;
+      text-decoration: none;
       font-size: 15px;
       font-weight: 600;
-      cursor: pointer;
+      line-height: 1.3;
     }
-    .create:hover { background: #000; }
-    .create:disabled { opacity: 0.55; cursor: wait; }
-    .err {
-      min-height: 18px;
-      margin: 0 0 8px;
-      color: #b42318;
+    .btn:hover { background: #000; }
+    .btn.ghost {
+      background: #fff;
+      color: #111;
+      border: 1px solid #d0d0d0;
+    }
+    .btn.ghost:hover { border-color: #111; }
+    .btn.hidden { display: none; }
+    main.wrap { padding: 8px 20px 8px; }
+    section {
+      margin: 0 0 28px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 22px 22px 8px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    section h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+    section p { margin: 0 0 1em; color: #222; }
+    .markets {
+      margin: 0 0 1.1em;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .markets li {
+      background: #f4f4f5;
+      border-radius: 999px;
+      padding: 6px 11px;
       font-size: 13px;
+      color: #333;
     }
     .fine {
-      margin: 14px 0 0;
-      color: #777;
-      font-size: 12px;
-      line-height: 1.45;
-      text-align: center;
+      margin: 0 0 1.1em;
+      color: #555;
+      font-size: 15px;
     }
-    .back {
-      display: block;
-      margin: 18px auto 0;
-      text-align: center;
-      color: #666;
-      font-size: 13px;
+    footer {
+      max-width: 880px;
+      margin: 8px auto 0;
+      padding: 22px 20px 40px;
+      color: #555;
+      font-size: 14px;
+    }
+    footer p { margin: 0 0 6px; }
+    footer .legal { margin-top: 14px; color: #666; }
+    @media (min-width: 720px) {
+      .hero { padding-top: 40px; }
+      section { padding: 26px 28px 10px; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="brand">
-      <p>Halfacre Research</p>
-      <h1>Create your account</h1>
+  <a class="skip" href="#start">Skip to start</a>
+  <header class="top">
+    <div class="inner">
+      <p class="brand-mark">Halfacre Research</p>
     </div>
+  </header>
 
-    <div class="card">
-      <form id="form">
-        <label for="name">Full name</label>
-        <input id="name" name="name" autocomplete="name" required>
+  <div class="hero">
+    <div class="wrap">
+      <h1>Where you run your own retirement.</h1>
+      <p class="promise">A personal AI on your own financial data, and research across every market you live in.</p>
 
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" required>
+      <!-- VIDEO URL: set data-video-url to one YouTube, Vimeo, or .mp4 URL. Leave empty for the poster. -->
+      <div id="hero-video" class="video-frame" data-video-url="" role="img" aria-label="Video coming soon"></div>
 
-        <label for="phone">Phone</label>
-        <input id="phone" name="phone" type="tel" autocomplete="tel" required>
-
-        <p class="err" id="err"></p>
-        <button class="create" type="submit" id="create">Create account</button>
-      </form>
+      <div class="cta-row">
+        <a class="btn" id="start" href="/signup.html">Create an account or open your page</a>
+        <a class="btn ghost hidden" id="open-page" href="/page.html">Open my page</a>
+      </div>
     </div>
-
-    <p class="fine">Free to create. After you finish, Grok meets you on your page.</p>
   </div>
+
+  <main class="wrap">
+    <section>
+      <h2>A new way for the next generation to retire</h2>
+      <p>Retirement used to mean handing the keys to someone else. Halfacre is for people who want to keep the keys: a page of your own, a personal AI that works from the numbers you upload, and research you can actually sit with.</p>
+      <p>We’re finishing a brand-new site and product line. It isn’t open to the public yet.</p>
+    </section>
+
+    <section>
+      <h2>Research and data across every market</h2>
+      <p>One desk for the markets people actually live in — not a single-asset shop, and not a pitch for any one trade.</p>
+      <ul class="markets">
+        <li>Stocks</li>
+        <li>Dividends</li>
+        <li>ETFs</li>
+        <li>Mutual funds</li>
+        <li>Metals</li>
+        <li>Commodities</li>
+        <li>Crypto</li>
+        <li>Macro</li>
+        <li>IRA rules</li>
+      </ul>
+      <p>This is research and data. You decide what to do with it.</p>
+    </section>
+
+    <section>
+      <h2>Create an account, or open the page you already have</h2>
+      <p>If you already have a page with us, use the same name, email, and phone you used when you created your account. That same button opens your page. If you’re new, it starts your free account. After you finish, Grok meets you on your page.</p>
+      <p>There is no password login. The same button opens your page if you use the same email.</p>
+      <p class="fine">Questions: <a href="mailto:matt@halfacreresearch.tech">matt@halfacreresearch.tech</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© Halfacre Research Institute LLC</p>
+    <p>Where you run your own retirement.</p>
+    <p><a href="mailto:matt@halfacreresearch.tech">matt@halfacreresearch.tech</a></p>
+    <p class="legal">This is research and data, not investment, tax, legal, or retirement advice. <a href="/disclaimer.html">Read the full disclaimer</a>.</p>
+  </footer>
 
   <script>
     (function () {
@@ -132,73 +279,83 @@
         return;
       }
 
-      var KEY = "halfacre.clients";
-      var err = document.getElementById("err");
-      var createBtn = document.getElementById("create");
-
-      function showError(text) {
-        err.textContent = text;
+      function youtubeId(url) {
+        var m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+        return m ? m[1] : "";
       }
 
-      function load() {
-        try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-        catch (e) { return []; }
+      function vimeoId(url) {
+        var m = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
+        return m ? m[1] : "";
       }
 
-      function saveLocal(client) {
-        var rows = load();
-        var found = false;
-        rows = rows.map(function (row) {
-          if (row && row.email === client.email) {
-            found = true;
-            return client;
+      function showPoster(slot) {
+        slot.setAttribute("role", "img");
+        slot.setAttribute("aria-label", "Video coming soon");
+        slot.innerHTML =
+          '<div class="video-poster">' +
+            '<div class="play-mark" aria-hidden="true"><span></span></div>' +
+            "<strong>Video coming soon</strong>" +
+            "<p>Where you run your own retirement.</p>" +
+          "</div>";
+      }
+
+      function mountVideo(slot) {
+        var url = (slot.getAttribute("data-video-url") || "").trim();
+        if (!url) {
+          showPoster(slot);
+          return;
+        }
+        var yt = youtubeId(url);
+        var vim = vimeoId(url);
+        slot.removeAttribute("role");
+        slot.removeAttribute("aria-label");
+        if (yt) {
+          slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + yt +
+            '" title="Halfacre Research" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+          return;
+        }
+        if (vim) {
+          slot.innerHTML = '<iframe src="https://player.vimeo.com/video/' + vim +
+            '" title="Halfacre Research" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+          return;
+        }
+        slot.innerHTML = '<video controls playsinline src="' + url.replace(/"/g, "") + '"></video>';
+      }
+
+      function withUtm(href) {
+        var dest = new URL(href, location.origin);
+        var params = new URLSearchParams(location.search);
+        params.forEach(function (value, key) {
+          if (key.slice(0, 4).toLowerCase() === "utm_") {
+            dest.searchParams.set(key, value);
           }
-          return row;
         });
-        if (!found) rows.push(client);
-        localStorage.setItem(KEY, JSON.stringify(rows));
-        localStorage.setItem("halfacre.session", JSON.stringify(client));
+        return dest.pathname + dest.search + dest.hash;
       }
 
-      function go(client) {
-        var id = client && client.id ? String(client.id) : "";
-        window.location.href = id ? "page.html?c=" + encodeURIComponent(id) : "page.html";
+      function passUtmToSignupLinks() {
+        var links = document.querySelectorAll('a[href*="signup.html"]');
+        for (var i = 0; i < links.length; i++) {
+          links[i].setAttribute("href", withUtm(links[i].getAttribute("href") || "/signup.html"));
+        }
       }
 
-      function createAccount(body) {
-        showError("");
-        createBtn.disabled = true;
-        return fetch("signup.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        })
-          .then(function (res) {
-            return res.json().then(function (data) {
-              return { ok: res.ok, data: data };
-            });
-          })
-          .then(function (pack) {
-            if (!pack.ok || !pack.data || !pack.data.client) {
-              throw new Error((pack.data && pack.data.error) || "Could not create the account.");
-            }
-            saveLocal(pack.data.client);
-            go(pack.data.client);
-          })
-          .catch(function (e) {
-            showError(e.message || "Could not create the account.");
-            createBtn.disabled = false;
-          });
+      function maybeOpenExistingPage() {
+        var open = document.getElementById("open-page");
+        if (!open) return;
+        try {
+          var session = JSON.parse(localStorage.getItem("halfacre.session") || "null");
+          var id = session && session.id ? String(session.id) : "";
+          if (!id) return;
+          open.href = "/page.html?c=" + encodeURIComponent(id);
+          open.classList.remove("hidden");
+        } catch (e) {}
       }
 
-      document.getElementById("form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        createAccount({
-          name: document.getElementById("name").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          phone: document.getElementById("phone").value.trim()
-        });
-      });
+      mountVideo(document.getElementById("hero-video"));
+      passUtmToSignupLinks();
+      maybeOpenExistingPage();
     })();
   </script>
 </body>
