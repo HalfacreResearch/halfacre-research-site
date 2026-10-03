@@ -6,6 +6,8 @@
  */
 declare(strict_types=1);
 
+require_once __DIR__ . "/client-token.php";
+
 header("Content-Type: application/json; charset=utf-8");
 header("Cache-Control: no-store");
 header("X-Content-Type-Options: nosniff");
@@ -63,7 +65,7 @@ function notify_matthew(array $client): void
     . "Email: {$email}\n"
     . "Phone: {$phone}\n"
     . "Created: {$client["created"]}\n\n"
-    . "Their page: https://www.halfacreresearch.tech/page.html?c=" . $client["id"] . "\n";
+    . "Their page: https://www.halfacreresearch.tech" . $client["page"] . "\n";
   $headers = "From: Halfacre Research <noreply@halfacreresearch.tech>\r\n"
     . "Reply-To: " . MATTHEW . "\r\n"
     . "Content-Type: text/plain; charset=utf-8\r\n";
@@ -89,6 +91,7 @@ if ($name === "" || $email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL) 
 }
 
 $rows = read_clients();
+client_token_provision_existing($rows);
 $existing = null;
 foreach ($rows as $row) {
   if (!is_array($row)) {
@@ -122,6 +125,14 @@ function with_page(array $client): array
   return $client;
 }
 
+function with_private_page(array $client, string $token): array
+{
+  $out = $client;
+  $id = (string) ($client["id"] ?? "");
+  $out["page"] = $id !== "" ? client_token_page($id, $token) : "/signup.html";
+  return $out;
+}
+
 if (is_array($existing)) {
   $existing["name"] = $name;
   $existing["phone"] = $phone;
@@ -140,7 +151,8 @@ if (is_array($existing)) {
     }
   }
   write_clients($rows);
-  echo json_encode(["ok" => true, "created" => false, "client" => $existing]);
+  $token = client_token_issue((string) $existing["id"]);
+  echo json_encode(["ok" => true, "created" => false, "client" => with_private_page($existing, $token)]);
   exit;
 }
 
@@ -154,6 +166,8 @@ $client = with_page([
 ]);
 $rows[] = $client;
 write_clients($rows);
-notify_matthew($client);
+$token = client_token_issue((string) $client["id"]);
+$handed = with_private_page($client, $token);
+notify_matthew($handed);
 
-echo json_encode(["ok" => true, "created" => true, "client" => $client]);
+echo json_encode(["ok" => true, "created" => true, "client" => $handed]);

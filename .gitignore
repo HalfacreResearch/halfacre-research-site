@@ -8,3 +8,6 @@ client-memory.store.json
 .htpasswd
 *.htpasswd
 .live-backups/
+/private/*
+!/private/.htaccess
+# van-products.private.json is committed and HTTP-denied; do not rename it to a public path.

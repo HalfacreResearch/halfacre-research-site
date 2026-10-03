@@ -1,5 +1,7 @@
 /**
- * Loads van-products.json — the one file Matthew/staff edit.
+ * Loads the public shop catalog (van-products.json).
+ * Client names, engine/admin addresses, and internal notes live in
+ * van-products.private.json (HTTP denied). Do not put them here.
  *
  * TWO LAYERS: full intentions (everything we intend to sell) + live
  * (already selling). Only live SKUs are clickable to PayPal.
@@ -12,14 +14,15 @@
  * Do not shrink the visible catalog to seven SKUs.
  *
  * Do not pre-unlock or gift modules. Matthew reimburses Van off-app.
- * Historical Macro $99 / ETF pack NCP links are forbidden. $149 is a
- * valid assembled-system price — never charge it with the old ETF NCP.
+ * Historical Macro $99 / ETF pack hosted-checkout links stay out of
+ * this public file. $149 is a valid assembled-system price — never
+ * charge it with those old pack links.
  *
  * PayPal is Day-1. Card/guest is native PayPal Checkout.
  * Square (Block) is an approved second rail — config stub only until SDK.
- * Live path: NCP at the listed $4.99 / $29.99 / $149 + matching
- * paypal_confirms_usd, or dynamic _xclick when paypal_business is set.
- * No Stripe.
+ * Live path: listed $4.99 / $29.99 / $149 + matching paypal_confirms_usd,
+ * or dynamic _xclick when paypal_business is set.
+ * No Stripe. Do not put hosted checkout ids or payment URLs in this file.
  */
 (function (global) {
   "use strict";
@@ -89,6 +92,147 @@
     return RESEARCH_USD;
   }
 
+  function publicFulfillment(raw) {
+    if (!raw || typeof raw !== "object") {
+      return null;
+    }
+    var out = {};
+    if (trim(raw.kind)) {
+      out.kind = trim(raw.kind);
+    }
+    if (trim(raw.ui_href)) {
+      out.ui_href = trim(raw.ui_href);
+    }
+    if (trim(raw.download_href)) {
+      out.download_href = trim(raw.download_href);
+    }
+    return Object.keys(out).length ? out : null;
+  }
+
+  function publicPay(raw) {
+    var pay = raw && typeof raw === "object" ? raw : {};
+    var sq = pay.square && typeof pay.square === "object" ? pay.square : {};
+    return {
+      rail: "paypal",
+      rails: ["paypal"],
+      stripe: false,
+      basic_usd: asNumber(pay.basic_usd) || RESEARCH_USD,
+      advanced_usd: asNumber(pay.advanced_usd) || SYSTEM_USD,
+      research_usd: asNumber(pay.research_usd) || RESEARCH_USD,
+      pack_usd: asNumber(pay.pack_usd) || PACK_USD,
+      system_usd: asNumber(pay.system_usd) || SYSTEM_USD,
+      tax_usd: asNumber(pay.tax_usd) || TAX_USD,
+      allowed_paid_usd: ALLOWED.slice(),
+      forbidden_pack_usd: FORBIDDEN.slice(),
+      paypal_business: trim(pay.paypal_business),
+      square: {
+        enabled: false,
+        status: trim(sq.status) || "coming_next",
+        application_id: "",
+        location_id: ""
+      }
+    };
+  }
+
+  function publicCatalogMeta(raw) {
+    var catalog = raw && typeof raw === "object" ? raw : {};
+    return {
+      open_ended: catalog.open_ended !== false,
+      layers: catalog.layers,
+      tiers: catalog.tiers,
+      research_usd: catalog.research_usd,
+      pack_usd: catalog.pack_usd,
+      system_usd: catalog.system_usd,
+      tax_usd: catalog.tax_usd,
+      basic_usd: catalog.basic_usd,
+      advanced_usd: catalog.advanced_usd,
+      more_coming: catalog.more_coming,
+      unique_research_skus: catalog.unique_research_skus,
+      theme_packs: catalog.theme_packs,
+      advanced_systems: catalog.advanced_systems,
+      tax_upgrades: catalog.tax_upgrades,
+      live_count: catalog.live_count,
+      coming_soon_count: catalog.coming_soon_count,
+      assembled_bots: catalog.assembled_bots,
+      live_research_from_sot: catalog.live_research_from_sot
+    };
+  }
+
+  function publicPaypalRef(value) {
+    var v = trim(value);
+    if (!v) {
+      return "";
+    }
+    var lower = v.toLowerCase();
+    if (lower.indexOf("paypal.com") !== -1 && lower.indexOf("/ncp/") !== -1) {
+      return "";
+    }
+    if (/^[A-Z]{3}-[A-Z0-9]{8,}$/i.test(v)) {
+      return "";
+    }
+    return v;
+  }
+
+  function publicModule(row) {
+    if (!row || typeof row !== "object") {
+      return {
+        id: "",
+        name: "",
+        description: "",
+        price_usd: RESEARCH_USD,
+        live: false,
+        paypal_link_or_button_id: ""
+      };
+    }
+    return {
+      id: trim(row.id),
+      name: trim(row.name),
+      description: trim(row.description),
+      price_usd: row.price_usd,
+      free: Boolean(row.free),
+      live: isLiveRow(row),
+      status: trim(row.status),
+      kind: trim(row.kind),
+      tier: trim(row.tier),
+      pair: trim(row.pair),
+      department: trim(row.department),
+      departments: asStringList(row.departments),
+      alias: trim(row.alias),
+      paypal_link_or_button_id: publicPaypalRef(row.paypal_link_or_button_id),
+      paypal_confirms_usd: row.paypal_confirms_usd == null ? null : asNumber(row.paypal_confirms_usd),
+      avatar_upgrade_label: trim(row.avatar_upgrade_label),
+      ui_href: trim(row.ui_href),
+      fulfillment: publicFulfillment(row.fulfillment)
+    };
+  }
+
+  function publicOnly(json) {
+    var data = json && typeof json === "object" ? json : {};
+    var founder = data.founder_product || data.founder || null;
+    if (founder && typeof founder === "object") {
+      founder = {
+        id: trim(founder.id),
+        name: trim(founder.name),
+        tier: trim(founder.tier),
+        kind: trim(founder.kind),
+        description: trim(founder.description),
+        price_usd: founder.price_usd,
+        free: Boolean(founder.free),
+        live: isLiveRow(founder),
+        paypal_link_or_button_id: publicPaypalRef(founder.paypal_link_or_button_id),
+        paypal_confirms_usd: founder.paypal_confirms_usd == null ? null : asNumber(founder.paypal_confirms_usd),
+        avatar_upgrade_label: trim(founder.avatar_upgrade_label),
+        ui_href: trim(founder.ui_href)
+      };
+    }
+    return {
+      catalog: publicCatalogMeta(data.catalog),
+      pay: publicPay(data.pay),
+      founder: founder,
+      modules: (data.modules || data.paid_modules || []).map(publicModule)
+    };
+  }
+
   function normalizePaid(row) {
     var price = row.price_usd;
     if (price === null || price === undefined || price === "") {
@@ -115,15 +259,13 @@
       department: department,
       departments: departments,
       alias: trim(row.alias),
-      paypal_link_or_button_id: trim(row.paypal_link_or_button_id),
+      paypal_link_or_button_id: publicPaypalRef(row.paypal_link_or_button_id),
       paypal_confirms_usd: row.paypal_confirms_usd == null ? null : asNumber(row.paypal_confirms_usd),
       avatar_upgrade_label: trim(row.avatar_upgrade_label) || trim(row.name),
       status: live ? "live" : (trim(row.status) || "coming_soon"),
       live: live,
-      fulfillment: row.fulfillment && typeof row.fulfillment === "object" ? row.fulfillment : null,
-      avatar_knowledge: row.fulfillment && row.fulfillment.avatar_knowledge
-        ? trim(row.fulfillment.avatar_knowledge)
-        : "",
+      fulfillment: publicFulfillment(row.fulfillment),
+      avatar_knowledge: "",
       download_href: row.fulfillment && row.fulfillment.download_href
         ? trim(row.fulfillment.download_href)
         : "",
@@ -134,17 +276,9 @@
   }
 
   function paypalKind(value) {
-    var v = trim(value);
-    var ncp;
+    var v = publicPaypalRef(value);
     if (!v) {
       return { kind: "empty", value: "" };
-    }
-    if (/paypal\.com\/ncp\/payment\/PLB-/i.test(v) || /^PLB-[A-Z0-9]+$/i.test(v)) {
-      ncp = v.indexOf("http") === 0 ? v : "https://www.paypal.com/ncp/payment/" + v;
-      if (/PLB-NGZRXTQA93RE|PLB-DN2KVZRLCUML/i.test(ncp)) {
-        return { kind: "pack-ncp", value: ncp };
-      }
-      return { kind: "ncp", value: ncp };
     }
     if (/^https?:\/\//i.test(v)) {
       return { kind: "url", value: v };
@@ -313,24 +447,18 @@
       };
     }
     var kind = paypalKind(line.paypal_link_or_button_id);
-    if (kind.kind === "pack-ncp") {
-      return {
-        ok: false,
-        reason: "Blocked: that PayPal NCP link is the historical Macro $99 or ETF pack SoT. Mint a new NCP at $4.99, $29.99, or $149. Do not reuse those pack IDs."
-      };
-    }
     if (kind.kind !== "empty" && line.paypal_confirms_usd === price) {
       return { ok: true, kind: kind.kind, value: kind.value, amount: priceText };
     }
     if (kind.kind !== "empty") {
       return {
         ok: false,
-        reason: "A PayPal link is set, but paypal_confirms_usd does not match the listed $4.99 / $29.99 / $149 price. Mint a matching NCP link. Do not reuse the historical Macro/ETF pack NCP IDs."
+        reason: "A PayPal link is set, but paypal_confirms_usd does not match the listed $4.99 / $29.99 / $149 price. Use a matching hosted checkout link or pay.paypal_business."
       };
     }
     return {
       ok: false,
-      reason: "PayPal not live yet. Mint a PayPal NCP link per live SKU at $4.99, $29.99, or $149, set paypal_confirms_usd to that price, and point its success URL at van.html?paid={SKU}. Or set pay.paypal_business for a dynamic _xclick at the listed price."
+      reason: "PayPal not live yet. Set pay.paypal_business for a dynamic _xclick at the listed $4.99 / $29.99 / $149 price, or add a matching hosted checkout link with paypal_confirms_usd and a success URL of van.html?paid={SKU}."
     };
   }
 
@@ -390,15 +518,15 @@
         return res.json();
       })
       .then(function (json) {
-        var founder = json.founder_product || json.founder || null;
+        var safe = publicOnly(json);
         cache = {
-          client: json.client || {},
-          account: json.account || {},
-          catalog: json.catalog || { open_ended: true },
-          founder: founder,
-          paid: (json.modules || json.paid_modules || []).map(normalizePaid),
-          pay: json.pay || {},
-          raw: json
+          client: {},
+          account: {},
+          catalog: safe.catalog,
+          founder: safe.founder,
+          paid: safe.modules.map(normalizePaid),
+          pay: safe.pay,
+          raw: safe
         };
         global.HalfacrePay.products = cache.paid;
         global.HalfacrePay.liveProducts = liveProducts();
