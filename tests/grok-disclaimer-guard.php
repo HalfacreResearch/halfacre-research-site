@@ -125,6 +125,11 @@ $openExpected = welcome_prompt(
   ["powerups" => []],
   "sFOX is not connected."
 );
+check("welcome has no stored legal name", strpos($welcome, "Charley Van Halfacre") === false);
+check("welcome has no email", preg_match("/@/", $welcome) !== 1);
+check("second_training has no Test Client label", strpos($second, "Client: Test Client") === false);
+check("main prompt has no Test Client name", strpos($mainPrompt, "Test Client") === false);
+
 check("open prompt uses welcome_prompt", $openPrompt === $openExpected);
 check("tax-ready prompt includes second_training", strpos($taxReadyPrompt, $second) !== false);
 check("main prompt keeps second training closed", strpos($mainPrompt, $closed) !== false);

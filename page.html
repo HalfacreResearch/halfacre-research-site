@@ -78,10 +78,11 @@
             </form>
           </section>
 
-          <section class="card">
+          <section class="card" id="uploadCard">
             <h2>Upload</h2>
-            <p class="sub" style="margin:0 0 12px">Bank, brokerage, exchange, or the last two years of tax returns.</p>
-            <label class="btn file">
+            <p class="sub" id="uploadHint" style="margin:0 0 12px">Bank, brokerage, exchange, or the last two years of tax returns.</p>
+            <p class="sub" id="uploadSoon" hidden>Private AI chat and uploads are coming soon. We're finishing a privacy upgrade first.</p>
+            <label class="btn file" id="uploadBtn">
               Add a statement
               <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt" hidden>
             </label>
@@ -111,9 +112,9 @@
   <script src="van-sfox.js?v=4"></script>
   <script src="van-shop-copy.js?v=1"></script>
   <script src="van-shop.js?v=3"></script>
-  <script src="van-grok.js?v=7"></script>
+  <script src="van-grok.js?v=8"></script>
   <script src="client-desk.js?v=8"></script>
-  <script src="client-page.js?v=2"></script>
+  <script src="client-page.js?v=3"></script>
   <script src="page.js?v=1"></script>
   <script>
     (function () {

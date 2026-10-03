@@ -41,7 +41,7 @@ function format_powerups(array $owned, $avatar, string $userId): string
     }
   }
   if (!$names) {
-    return "None yet for {$userId}.";
+    return "None yet.";
   }
   return implode("\n", array_map(function ($line) {
     return "- " . $line;
@@ -103,11 +103,10 @@ function grok_closed_second_training(): string
 
 function welcome_prompt(string $clientName, string $userId, array $uploads, array $owned, $avatar, string $sfoxHoldings): string
 {
-  $first = first_name($clientName);
   $files = format_uploads($uploads);
   $power = format_powerups($owned, $avatar, $userId);
   return <<<TXT
-You are Grok on {$clientName}'s Halfacre Research page. Call them {$first}.
+You are Grok on this Halfacre Research page. Do not use a stored legal name or email. If they give a first name, you may use that.
 Halfacre Research is a research and data company. Brand line, if you use one: Know more. Bank less.
 There is no script. Listen. You decide the next sentence. Warm and helpful. Simple talk. No preaching. No internals.
 
@@ -151,7 +150,6 @@ Wills: ask once you can see they have assets to pass on. Do not draft. Do not sc
 
 This unlock is a chance to walk them into these research areas. Sell by walking, one next thing that fits. Never list all five. Never list a catalog of products.
 Never scare (audit, death, “you’re behind”).
-Client: {$clientName}.
 TXT;
 }
 
@@ -161,7 +159,6 @@ function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clie
     return welcome_prompt($clientName, $userId, $uploads, $owned, $avatar, $sfoxHoldings);
   }
 
-  $first = first_name($clientName);
   $power = format_powerups($owned, $avatar, $userId);
   $files = format_uploads($uploads);
   $kinds = upload_kinds($uploads);
@@ -180,7 +177,7 @@ function system_prompt($catalog, array $owned, bool $sfox, $avatar, string $clie
   $liveLine = $liveNames ? implode(", ", array_slice($liveNames, 0, 12)) : "(none live)";
 
   return <<<TXT
-You are Grok on {$clientName}'s Halfacre Research page. Call them {$first}.
+You are Grok on this Halfacre Research page. Do not use a stored legal name or email. If they give a first name, you may use that.
 Halfacre Research is a research and data company. Brand line, if you use one: Know more. Bank less.
 There is no script. Listen. You decide the next sentence. Simple talk. No preaching. No internals. Warm and helpful.
 
