@@ -64,7 +64,7 @@ start_site() {
   SITE_PID=""
   local i
   for i in 1 2 3 4 5 6 7 8; do
-    if ! curl -sS -o /dev/null --max-time 1 "${BASE}/van-grok.php" 2>/dev/null; then
+    if ! curl -sS -o /dev/null --max-time 1 "${BASE}/van-grok.php" >/dev/null 2>&1; then
       break
     fi
     sleep 0.15
@@ -78,7 +78,7 @@ start_site() {
       cat "${WORKDIR}/site.log" >&2
       exit 1
     fi
-    if curl -sS -o /dev/null --max-time 1 -X POST -H "Content-Type: application/json" -d '{}' "${BASE}/van-grok.php"; then
+    if curl -sS -o /dev/null --max-time 1 -X POST -H "Content-Type: application/json" -d '{}' "${BASE}/van-grok.php" >/dev/null 2>&1; then
       ready=1
       break
     fi
@@ -185,7 +185,7 @@ unset HALFACRE_GROK_STUB || true
 start_site
 
 # Seed a stored filename so we can prove uploads never go to xAI unless ZDR is true.
-printf '%s\n' '{"van":{"uploads":[{"name":"Secret-1040-name.pdf","kind":"tax"}],"purchases":[]}}' > "${WORKDIR}/memory.store.json"
+printf '%s\n' '{"charley-van-halfacre":{"uploads":[{"name":"Secret-1040-name.pdf","kind":"tax"}],"purchases":[]}}' > "${WORKDIR}/memory.store.json"
 
 # --- live mock: header true sends client content after probe ---
 start_mock true
