@@ -105,6 +105,63 @@ expect_true("second record is idempotent", !empty($second["ok"]) && !empty($seco
 expect_true("client has verified purchase", paypal_has_verified_purchase("abcdef1234567890", "macro-indicators-research"));
 expect_true("other sku not purchased", !paypal_has_verified_purchase("abcdef1234567890", "pack-etf-mf"));
 
+$legacy = paypal_handle_webhook_event([
+  "event_type" => "PAYMENT.CAPTURE.COMPLETED",
+  "resource" => [
+    "id" => "CAP-LEGACY-ETF",
+    "amount" => ["value" => "149.00", "currency_code" => "USD"],
+    "status" => "COMPLETED",
+    "payer" => ["email_address" => "legacy@example.invalid"],
+    "invoice_id" => "PLB-DN2KVZRLCUML",
+    "custom_id" => "abcdef1234567890|pack-etf-mf"
+  ]
+]);
+expect_true("legacy NCP recorded for review", !empty($legacy["ok"]) && ($legacy["review"] ?? "") === "legacy NCP, needs manual review");
+expect_true("legacy NCP does not unlock pack-etf-mf", !paypal_has_verified_purchase("abcdef1234567890", "pack-etf-mf", "legacy@example.invalid"));
+$legacyRows = paypal_json_read(paypal_captures_path());
+$legacyRec = $legacyRows["captures"]["CAP-LEGACY-ETF"] ?? [];
+expect_true(
+  "legacy NCP store text",
+  is_array($legacyRec) && ($legacyRec["review"] ?? "") === "legacy NCP, needs manual review" && ($legacyRec["sku"] ?? "x") === ""
+);
+
+$legacyMacro = paypal_handle_webhook_event([
+  "event_type" => "PAYMENT.CAPTURE.COMPLETED",
+  "resource" => [
+    "id" => "CAP-LEGACY-MACRO",
+    "amount" => ["value" => "99.00", "currency_code" => "USD"],
+    "status" => "COMPLETED",
+    "payer" => ["email_address" => "legacy-macro@example.invalid"],
+    "invoice_id" => "PLB-NGZRXTQA93RE",
+    "custom_id" => "abcdef1234567890|pack-bitcoin-macro"
+  ]
+]);
+expect_true("legacy Macro NCP recorded for review", !empty($legacyMacro["ok"]) && ($legacyMacro["review"] ?? "") === "legacy NCP, needs manual review");
+expect_true("legacy Macro NCP does not unlock pack-bitcoin-macro", !paypal_has_verified_purchase("abcdef1234567890", "pack-bitcoin-macro", "legacy-macro@example.invalid"));
+$legacyMacroRec = (paypal_json_read(paypal_captures_path())["captures"]["CAP-LEGACY-MACRO"] ?? []);
+expect_true(
+  "legacy Macro NCP store text",
+  is_array($legacyMacroRec) && ($legacyMacroRec["review"] ?? "") === "legacy NCP, needs manual review" && ($legacyMacroRec["sku"] ?? "x") === ""
+);
+
+$catalogPack = paypal_handle_webhook_event([
+  "event_type" => "PAYMENT.CAPTURE.COMPLETED",
+  "resource" => [
+    "id" => "CAP-CATALOG-ETF-PACK",
+    "amount" => ["value" => "29.99", "currency_code" => "USD"],
+    "status" => "COMPLETED",
+    "payer" => ["email_address" => "catalog-pack@example.invalid"],
+    "custom_id" => "abcdef1234567890|pack-etf-mf"
+  ]
+]);
+expect_true("catalog $29.99 pack capture unlocks pack-etf-mf", !empty($catalogPack["ok"]) && empty($catalogPack["review"]) && paypal_has_verified_purchase("abcdef1234567890", "pack-etf-mf", "catalog-pack@example.invalid"));
+
+$mail = is_file($work . "/mail.log") ? (string) file_get_contents($work . "/mail.log") : "";
+expect_true(
+  "legacy NCP did not email a download",
+  strpos($mail, "legacy@example.invalid") === false && strpos($mail, "legacy-macro@example.invalid") === false
+);
+
 $exp = time() + 60;
 $sig = paypal_sign_download("pack-etf-mf", "buyer@example.invalid", $exp);
 expect_true("signed link verifies", paypal_verify_download_sig("pack-etf-mf", "buyer@example.invalid", $exp, $sig));

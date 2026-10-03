@@ -57,30 +57,22 @@ Subscribe at least:
 
 Every event is checked with PayPal’s `verify-webhook-signature` API using `PAYPAL_WEBHOOK_ID`. Other event types are ignored.
 
-## Catalog checkout vs no-code links
+## Catalog checkout vs legacy no-code links
 
 `/pay.html?sku=&c=&t=` creates an Orders v2 order **server-side**. The amount is read from `van-products.json` ($4.99 / $29.99 / $149). The browser cannot change the price.
 
-Existing no-code payment links cannot carry the client token:
+Live packs in the catalog are **$29.99**. They are not the historical NCP links:
 
-| Link id | Amount | Recorded SKU |
+| Link id | Historical amount | Do not map to |
 | --- | --- | --- |
-| `PLB-DN2KVZRLCUML` | $149 | `pack-etf-mf` |
-| `PLB-NGZRXTQA93RE` | $99 | `pack-bitcoin-macro` |
+| `PLB-DN2KVZRLCUML` | $149 | `pack-etf-mf` (live $29.99; “Not the historical $149 ETF NCP”) |
+| `PLB-NGZRXTQA93RE` | $99 | `pack-bitcoin-macro` (live $29.99; “Not the historical $99 Macro NCP”) |
 
-The webhook stores those captures by **payer email + order/capture id**. If the payload has no button id and no `custom_id` sku, the capture is logged and **no SKU is unlocked** (a bare $149 could be the ETF no-code link or BTCTreasuryBot).
+Captures from those two links are **verified, logged, and stored** as `review: "legacy NCP, needs manual review"`. They never auto-unlock a catalog SKU and never email a download. Matthew fulfills those by hand.
 
-## How a no-code buyer gets the file
+If a webhook has no button id and no `custom_id` sku, it is logged and **no SKU is unlocked** (a bare $149 could be the ETF NCP or BTCTreasuryBot).
 
-Same mail path as `signup.php` (`mail()` / `HALFACRE_MAIL_LOG` in tests):
-
-1. Webhook records the capture against the PayPal payer email.
-2. Server emails a signed `/van-download.php?sku=&email=&exp=&sig=` link (24 hours).
-3. `van-download.php` still requires a verified capture for that email+sku.
-4. Pack ZIP bytes are read from the existing `dl/<token>/PACK.zip` via PHP (`readfile` / stream). `packs/` and `dl/.htaccess` are not changed.
-5. If `PACK_DELIVERY_ENABLED` is false, the signed link exists but the download returns the sales-hold message.
-
-Whether Hostinger actually delivers that mail is the same unknown as signup mail. Test with a sandbox capture before telling buyers.
+Signed `/van-download.php?sku=&email=&exp=&sig=` links are only for verified **catalog** captures (Orders v2 / `custom_id` client|sku). Pack ZIP bytes, when `PACK_DELIVERY_ENABLED` is true, are read from existing `dl/<token>/PACK.zip` via PHP. `packs/` and `dl/.htaccess` are not changed.
 
 ## Downloads
 

@@ -245,38 +245,113 @@ code="$(curl_code -X POST -H "Content-Type: application/json" \
   "${BASE}/paypal-webhook.php")"
 expect_code "unverified webhook rejected" 400 "$code"
 
-# webhook: verified no-code ETF $149
+# webhook: verified legacy ETF NCP $149 — review only, never unlock or email
 code="$(curl_code -X POST -H "Content-Type: application/json" \
   -H "PayPal-Auth-Algo: SHA256withRSA" \
   -H "PayPal-Cert-Url: https://api.paypal.com/cert" \
-  -H "PayPal-Transmission-Id: good-sig" \
+  -H "PayPal-Transmission-Id: good-sig-etf" \
   -H "PayPal-Transmission-Sig: x" \
   -H "PayPal-Transmission-Time: now" \
-  -d '{"event_type":"PAYMENT.CAPTURE.COMPLETED","resource":{"id":"CAP-NOCODE-ETF","amount":{"value":"149.00","currency_code":"USD"},"status":"COMPLETED","payer":{"email_address":"buyer@example.invalid"},"supplementary_data":{"related_ids":{"order_id":"ORDER-NOCODE"}},"invoice_id":"PLB-DN2KVZRLCUML"}}' \
+  -d '{"event_type":"PAYMENT.CAPTURE.COMPLETED","resource":{"id":"CAP-NOCODE-ETF","amount":{"value":"149.00","currency_code":"USD"},"status":"COMPLETED","payer":{"email_address":"buyer@example.invalid"},"supplementary_data":{"related_ids":{"order_id":"ORDER-NOCODE"}},"invoice_id":"PLB-DN2KVZRLCUML","custom_id":"abcdef1234567890|pack-etf-mf"}}' \
   "${BASE}/paypal-webhook.php")"
-expect_code "verified no-code webhook recorded" 200 "$code"
+expect_code "verified legacy ETF NCP webhook recorded" 200 "$code"
+expect_body "legacy ETF NCP review copy" "legacy NCP, needs manual review"
 
-if grep -q "buyer@example.invalid" "${WORKDIR}/mail.log"; then
+# webhook: verified legacy Macro NCP $99
+code="$(curl_code -X POST -H "Content-Type: application/json" \
+  -H "PayPal-Auth-Algo: SHA256withRSA" \
+  -H "PayPal-Cert-Url: https://api.paypal.com/cert" \
+  -H "PayPal-Transmission-Id: good-sig-macro" \
+  -H "PayPal-Transmission-Sig: x" \
+  -H "PayPal-Transmission-Time: now" \
+  -d '{"event_type":"PAYMENT.CAPTURE.COMPLETED","resource":{"id":"CAP-NOCODE-MACRO","amount":{"value":"99.00","currency_code":"USD"},"status":"COMPLETED","payer":{"email_address":"macro-buyer@example.invalid"},"supplementary_data":{"related_ids":{"order_id":"ORDER-NOCODE-MACRO"}},"invoice_id":"PLB-NGZRXTQA93RE","custom_id":"abcdef1234567890|pack-bitcoin-macro"}}' \
+  "${BASE}/paypal-webhook.php")"
+expect_code "verified legacy Macro NCP webhook recorded" 200 "$code"
+expect_body "legacy Macro NCP review copy" "legacy NCP, needs manual review"
+
+LEGACY_CHECK="$(php -r '
+  $j = json_decode(file_get_contents($argv[1]), true);
+  $etf = $j["captures"]["CAP-NOCODE-ETF"] ?? [];
+  $mac = $j["captures"]["CAP-NOCODE-MACRO"] ?? [];
+  $ok = is_array($etf) && ($etf["review"] ?? "") === "legacy NCP, needs manual review" && ($etf["sku"] ?? "x") === ""
+    && is_array($mac) && ($mac["review"] ?? "") === "legacy NCP, needs manual review" && ($mac["sku"] ?? "x") === "";
+  echo $ok ? "ok" : "bad";
+' "${WORKDIR}/paypal-captures.store.json")"
+if [[ "$LEGACY_CHECK" == "ok" ]]; then
   PASS=$((PASS + 1))
-  note "PASS  no-code buyer was emailed"
+  note "PASS  legacy NCP store is review-only with empty sku"
 else
   FAIL=$((FAIL + 1))
-  note "FAIL  no-code buyer was not emailed"
-  note "      mail: $(cat "${WORKDIR}/mail.log")"
+  note "FAIL  legacy NCP store is not review-only"
+  note "      captures: $(cat "${WORKDIR}/paypal-captures.store.json")"
 fi
 
-# pack delivery still held
-SIGNED="$(php -r '
+if grep -q "legacy_ncp_review" "${WORKDIR}/paypal-events.store.json"; then
+  PASS=$((PASS + 1))
+  note "PASS  legacy NCP was logged"
+else
+  FAIL=$((FAIL + 1))
+  note "FAIL  legacy NCP was not logged"
+fi
+
+if [[ -s "${WORKDIR}/mail.log" ]] && grep -E -q "buyer@example.invalid|macro-buyer@example.invalid" "${WORKDIR}/mail.log"; then
+  FAIL=$((FAIL + 1))
+  note "FAIL  legacy NCP emailed a download"
+  note "      mail: $(cat "${WORKDIR}/mail.log")"
+else
+  PASS=$((PASS + 1))
+  note "PASS  legacy NCP did not email a download"
+fi
+
+LEGACY_SIGNED="$(php -r '
   putenv("HALFACRE_PAYPAL_SECRET=" . $argv[1]);
   require $argv[2] . "/paypal-lib.php";
   $exp = time() + 3600;
   echo "sku=pack-etf-mf&email=buyer@example.invalid&exp=" . $exp . "&sig=" . paypal_sign_download("pack-etf-mf", "buyer@example.invalid", $exp);
 ' "${WORKDIR}/paypal.secret.php" "$ROOT")"
-code="$(curl_code "${BASE}/van-download.php?${SIGNED}")"
-expect_code "pack download held while flag false" 403 "$code"
+code="$(curl_code "${BASE}/van-download.php?${LEGACY_SIGNED}")"
+expect_code "legacy NCP signed link does not unlock pack" 403 "$code"
+expect_body "legacy NCP download denied" "Download denied"
+
+code="$(curl_code "${BASE}/client-memory.php?c=abcdef1234567890&t=${HEX_TOKEN}")"
+expect_code "memory after legacy NCP" 200 "$code"
+if grep -E -q "pack-etf-mf|pack-bitcoin-macro" "${WORKDIR}/body.txt"; then
+  FAIL=$((FAIL + 1))
+  note "FAIL  legacy NCP auto-unlocked a live pack"
+else
+  PASS=$((PASS + 1))
+  note "PASS  legacy NCP did not auto-unlock a live pack"
+fi
+
+# catalog $29.99 pack capture (not the historical NCP)
+code="$(curl_code -X POST -H "Content-Type: application/json" \
+  -H "PayPal-Auth-Algo: SHA256withRSA" \
+  -H "PayPal-Cert-Url: https://api.paypal.com/cert" \
+  -H "PayPal-Transmission-Id: good-sig-pack" \
+  -H "PayPal-Transmission-Sig: x" \
+  -H "PayPal-Transmission-Time: now" \
+  -d '{"event_type":"PAYMENT.CAPTURE.COMPLETED","resource":{"id":"CAP-CATALOG-PACK","amount":{"value":"29.99","currency_code":"USD"},"status":"COMPLETED","payer":{"email_address":"catalog-pack@example.invalid"},"supplementary_data":{"related_ids":{"order_id":"ORDER-CATALOG-PACK"}},"custom_id":"abcdef1234567890|pack-etf-mf"}}' \
+  "${BASE}/paypal-webhook.php")"
+expect_code "verified catalog pack webhook recorded" 200 "$code"
+if grep -q "legacy NCP" "${WORKDIR}/body.txt"; then
+  FAIL=$((FAIL + 1))
+  note "FAIL  catalog pack webhook marked as legacy NCP"
+else
+  PASS=$((PASS + 1))
+  note "PASS  catalog pack webhook is not legacy NCP"
+fi
+
+CATALOG_SIGNED="$(php -r '
+  putenv("HALFACRE_PAYPAL_SECRET=" . $argv[1]);
+  require $argv[2] . "/paypal-lib.php";
+  $exp = time() + 3600;
+  echo "sku=pack-etf-mf&email=catalog-pack@example.invalid&exp=" . $exp . "&sig=" . paypal_sign_download("pack-etf-mf", "catalog-pack@example.invalid", $exp);
+' "${WORKDIR}/paypal.secret.php" "$ROOT")"
+code="$(curl_code "${BASE}/van-download.php?${CATALOG_SIGNED}")"
+expect_code "catalog pack download held while flag false" 403 "$code"
 expect_body "sales hold copy" "not ready"
 
-# enable pack delivery and retry
+# enable pack delivery and retry catalog signed link only
 cat > "${WORKDIR}/paypal.secret.php" <<'PHP'
 <?php
 return [
@@ -287,8 +362,12 @@ return [
   "PACK_DELIVERY_ENABLED" => true
 ];
 PHP
-code="$(curl_code "${BASE}/van-download.php?${SIGNED}")"
-expect_code "pack download streams after flag true" 200 "$code"
+code="$(curl_code "${BASE}/van-download.php?${CATALOG_SIGNED}")"
+expect_code "catalog pack download streams after flag true" 200 "$code"
+
+code="$(curl_code "${BASE}/van-download.php?${LEGACY_SIGNED}")"
+expect_code "legacy NCP still denied after pack delivery on" 403 "$code"
+expect_body "legacy still denied copy" "Download denied"
 
 note ""
 note "Results: ${PASS} passed, ${FAIL} failed"

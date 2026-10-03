@@ -160,20 +160,20 @@ function paypal_sku_name(string $sku): string
   return $name !== "" ? $name : $sku;
 }
 
-function paypal_nocode_skus(): array
+function paypal_legacy_ncp(string $buttonId): ?array
 {
-  return [
+  $map = [
     PAYPAL_NOCODE_ETF => [
-      "sku" => "pack-etf-mf",
       "amount" => "149.00",
-      "label" => "BTC spot ETF flow pack (no-code $149)"
+      "label" => "historical ETF NCP $149"
     ],
     PAYPAL_NOCODE_MACRO => [
-      "sku" => "pack-bitcoin-macro",
       "amount" => "99.00",
-      "label" => "Bitcoin / macro stack pack (no-code $99)"
+      "label" => "historical Macro NCP $99"
     ]
   ];
+  $id = strtoupper(trim($buttonId));
+  return $map[$id] ?? null;
 }
 
 function paypal_pack_file(string $sku): string
@@ -602,6 +602,7 @@ function paypal_record_capture(array $row): array
     "status" => "COMPLETED",
     "source" => (string) ($row["source"] ?? "capture"),
     "button_id" => (string) ($row["button_id"] ?? ""),
+    "review" => (string) ($row["review"] ?? ""),
     "refunded" => false,
     "at" => paypal_now_ms()
   ];
@@ -618,7 +619,8 @@ function paypal_record_capture(array $row): array
     "client_id" => $record["client_id"],
     "payer_email" => $record["payer_email"],
     "amount" => $record["amount"],
-    "source" => $record["source"]
+    "source" => $record["source"],
+    "review" => $record["review"]
   ]);
   return ["ok" => true, "already" => is_array($existing), "record" => $record];
 }
@@ -644,7 +646,16 @@ function paypal_mark_refunded(string $captureId, string $reason): bool
 
 function paypal_active_record(array $row): bool
 {
-  return empty($row["refunded"]) && strtoupper((string) ($row["status"] ?? "")) === "COMPLETED";
+  if (!empty($row["refunded"])) {
+    return false;
+  }
+  if (!empty($row["review"])) {
+    return false;
+  }
+  if (trim((string) ($row["sku"] ?? "")) === "") {
+    return false;
+  }
+  return strtoupper((string) ($row["status"] ?? "")) === "COMPLETED";
 }
 
 function paypal_client_purchases(string $clientId): array
@@ -798,10 +809,10 @@ function paypal_webhook_resource(array $event): array
   $parsed = paypal_parse_custom_id($custom);
   $sku = $parsed["sku"];
   $button = paypal_find_button_id($event);
-  $nocode = paypal_nocode_skus();
   $paid = paypal_money((string) ($amount["value"] ?? "0"));
-  if ($sku === "" && $button !== "" && isset($nocode[$button])) {
-    $sku = $nocode[$button]["sku"];
+  if (paypal_legacy_ncp($button) !== null) {
+    $sku = "";
+    $parsed["client_id"] = "";
   }
   $payer = "";
   if (isset($resource["payer"]["email_address"])) {
@@ -871,16 +882,9 @@ function paypal_request_headers(): array
 
 function paypal_amount_allowed_for_sku(string $sku, string $amount, string $buttonId): bool
 {
+  unset($buttonId);
   $catalog = paypal_sku_price($sku);
-  if ($catalog !== null && paypal_money_eq($amount, $catalog)) {
-    return true;
-  }
-  $nocode = paypal_nocode_skus();
-  if ($buttonId !== "" && isset($nocode[$buttonId])) {
-    $row = $nocode[$buttonId];
-    return $row["sku"] === $sku && paypal_money_eq($amount, $row["amount"]);
-  }
-  return false;
+  return $catalog !== null && paypal_money_eq($amount, $catalog);
 }
 
 function paypal_mail_headers(): string
@@ -976,11 +980,13 @@ function paypal_handle_webhook_event(array $event): array
     return ["ok" => true, "ignored" => true, "type" => $type];
   }
   $res = paypal_webhook_resource($event);
+  $legacy = paypal_legacy_ncp($res["button_id"]);
   if ($type === "CHECKOUT.ORDER.APPROVED") {
     paypal_log("webhook_approved", [
       "order_id" => $res["order_id"],
       "sku" => $res["sku"],
-      "amount" => $res["amount"]
+      "amount" => $res["amount"],
+      "legacy" => $legacy !== null
     ]);
     return ["ok" => true, "type" => $type, "recorded" => false];
   }
@@ -991,6 +997,37 @@ function paypal_handle_webhook_event(array $event): array
     }
     paypal_mark_refunded($id, $type);
     return ["ok" => true, "type" => $type, "refunded" => true];
+  }
+  if ($legacy !== null) {
+    $saved = paypal_record_capture([
+      "capture_id" => $res["capture_id"],
+      "order_id" => $res["order_id"],
+      "sku" => "",
+      "client_id" => "",
+      "payer_email" => $res["payer_email"],
+      "amount" => $res["amount"],
+      "currency" => $res["currency"] !== "" ? $res["currency"] : PAYPAL_CURRENCY,
+      "source" => "webhook-legacy-ncp",
+      "button_id" => $res["button_id"],
+      "review" => "legacy NCP, needs manual review"
+    ]);
+    paypal_log("legacy_ncp_review", [
+      "capture_id" => $res["capture_id"],
+      "order_id" => $res["order_id"],
+      "button_id" => $res["button_id"],
+      "label" => $legacy["label"],
+      "expected_amount" => $legacy["amount"],
+      "amount" => $res["amount"],
+      "payer_email" => $res["payer_email"],
+      "amount_ok" => paypal_money_eq($res["amount"], $legacy["amount"])
+    ]);
+    return [
+      "ok" => true,
+      "type" => $type,
+      "recorded" => $saved["ok"],
+      "already" => $saved["already"],
+      "review" => "legacy NCP, needs manual review"
+    ];
   }
   if ($res["sku"] === "") {
     paypal_log("webhook_unmapped_sku", [
@@ -1018,10 +1055,16 @@ function paypal_handle_webhook_event(array $event): array
     "payer_email" => $res["payer_email"],
     "amount" => $res["amount"],
     "currency" => $res["currency"] !== "" ? $res["currency"] : PAYPAL_CURRENCY,
-    "source" => $res["button_id"] !== "" ? "webhook-nocode" : "webhook",
+    "source" => "webhook",
     "button_id" => $res["button_id"]
   ]);
-  if ($saved["ok"] && !$saved["already"] && $res["client_id"] === "" && $res["payer_email"] !== "") {
+  if (
+    $saved["ok"]
+    && !$saved["already"]
+    && $res["client_id"] === ""
+    && $res["payer_email"] !== ""
+    && paypal_sku_live($res["sku"])
+  ) {
     paypal_email_download_link($res["payer_email"], $res["sku"], $res["order_id"]);
   }
   return ["ok" => true, "type" => $type, "recorded" => $saved["ok"], "already" => $saved["already"]];

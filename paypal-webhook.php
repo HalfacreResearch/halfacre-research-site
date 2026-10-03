@@ -47,4 +47,12 @@ if (empty($result["ok"])) {
   exit;
 }
 
-echo json_encode(["ok" => true, "type" => $result["type"] ?? "", "recorded" => $result["recorded"] ?? false]);
+$out = [
+  "ok" => true,
+  "type" => $result["type"] ?? "",
+  "recorded" => $result["recorded"] ?? false
+];
+if (!empty($result["review"])) {
+  $out["review"] = $result["review"];
+}
+echo json_encode($out);
