@@ -170,25 +170,34 @@
     });
   }
 
+  function pageAuth() {
+    var client = global.HalfacreClient || {};
+    var tok = global.HalfacreSession && global.HalfacreSession.token
+      ? global.HalfacreSession.token()
+      : "";
+    return {
+      c: String(client.id || client.userId || ""),
+      t: String(tok || "")
+    };
+  }
+
   function askGrokOnce(messages, opts) {
     opts = opts || {};
     var opening = !!opts.open;
+    var auth = pageAuth();
     return fetchWithTimeout(
       endpoint(),
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        referrerPolicy: "no-referrer",
         body: JSON.stringify({
           messages: scrub(messages),
-          catalog: catalogSnapshot(),
-          owned: ownedIds(),
-          avatar: avatarNow(),
-          uploads: uploadsNow(),
+          c: auth.c,
+          t: auth.t,
           sfox: sfoxConnected(),
           sfoxHoldings: sfoxHoldings(),
-          open: opening,
-          client: who().fullName,
-          userId: who().userId || who().fullName
+          open: opening
         })
       },
       60000

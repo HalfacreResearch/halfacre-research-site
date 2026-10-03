@@ -2,39 +2,53 @@
 /**
  * Persist upload names and purchases for one client page.
  * Does not store file bytes. Hostinger-only store file.
+ * Functions may be included by other PHP (van-grok.php). Direct HTTP hits run the API.
  */
 declare(strict_types=1);
 
 require_once __DIR__ . "/client-token.php";
 
-header("Content-Type: application/json; charset=utf-8");
-header("Cache-Control: no-store");
-header("X-Content-Type-Options: nosniff");
+const VAN_ID = "charley-van-halfacre";
 
-if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-  header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-  header("Access-Control-Allow-Headers: Content-Type");
-  http_response_code(204);
-  exit;
+function client_memory_is_endpoint(): bool
+{
+  if (PHP_SAPI === "cli") {
+    return false;
+  }
+  $script = basename((string) ($_SERVER["SCRIPT_FILENAME"] ?? ""));
+  return $script === "client-memory.php";
 }
 
-const STORE = __DIR__ . "/client-memory.store.json";
-const VAN_UNLOCKS = __DIR__ . "/van-unlocks.store.json";
-// Public shop catalog only. Private client/engine notes are in van-products.private.json (HTTP denied).
-const CATALOG = __DIR__ . "/van-products.json";
-const VAN_ID = "charley-van-halfacre";
+function client_memory_store_path(): string
+{
+  $override = getenv("HALFACRE_MEMORY_STORE");
+  if (is_string($override) && $override !== "") {
+    return $override;
+  }
+  return __DIR__ . "/client-memory.store.json";
+}
+
+function client_unlocks_store_path(): string
+{
+  $override = getenv("HALFACRE_UNLOCKS_STORE");
+  if (is_string($override) && $override !== "") {
+    return $override;
+  }
+  return __DIR__ . "/van-unlocks.store.json";
+}
+
+function client_catalog_path(): string
+{
+  return __DIR__ . "/van-products.json";
+}
 
 function client_key(string $raw): string
 {
-  $raw = strtolower(trim($raw));
-  if ($raw === "van" || $raw === VAN_ID) {
-    return VAN_ID;
+  $id = client_token_id($raw);
+  if (client_token_id_ok($id)) {
+    return $id;
   }
-  $hex = preg_replace("/[^a-f0-9]/", "", $raw) ?? "";
-  if (strlen($hex) >= 8 && strlen($hex) <= 64) {
-    return $hex;
-  }
-  $safe = preg_replace("/[^a-z0-9_\\-]/", "", $raw) ?? "";
+  $safe = preg_replace("/[^a-z0-9_\\-]/", "", strtolower(trim($raw))) ?? "";
   return $safe;
 }
 
@@ -51,12 +65,12 @@ function read_json(string $path): array
 function write_store(array $data): void
 {
   $json = json_encode($data, JSON_PRETTY_PRINT);
-  file_put_contents(STORE, $json === false ? "{}\n" : $json . "\n", LOCK_EX);
+  file_put_contents(client_memory_store_path(), $json === false ? "{}\n" : $json . "\n", LOCK_EX);
 }
 
 function catalog_names(): array
 {
-  $data = read_json(CATALOG);
+  $data = read_json(client_catalog_path());
   $rows = isset($data["modules"]) && is_array($data["modules"]) ? $data["modules"] : [];
   $map = [];
   foreach ($rows as $row) {
@@ -71,7 +85,7 @@ function catalog_names(): array
 
 function van_purchases(): array
 {
-  $store = read_json(VAN_UNLOCKS);
+  $store = read_json(client_unlocks_store_path());
   $modules = isset($store["modules"]) && is_array($store["modules"]) ? $store["modules"] : [];
   $names = catalog_names();
   $out = [];
@@ -88,7 +102,7 @@ function van_purchases(): array
 
 function pack_for(string $key): array
 {
-  $all = read_json(STORE);
+  $all = read_json(client_memory_store_path());
   $row = isset($all[$key]) && is_array($all[$key]) ? $all[$key] : [];
   $uploads = isset($row["uploads"]) && is_array($row["uploads"]) ? $row["uploads"] : [];
   $purchases = isset($row["purchases"]) && is_array($row["purchases"]) ? $row["purchases"] : [];
@@ -121,7 +135,21 @@ function clean_name(string $name): string
   return $name;
 }
 
-$keyIn = (string) ($_GET["c"] ?? "");
+if (!client_memory_is_endpoint()) {
+  return;
+}
+
+header("Content-Type: application/json; charset=utf-8");
+header("Cache-Control: no-store");
+header("X-Content-Type-Options: nosniff");
+
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+  header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+  header("Access-Control-Allow-Headers: Content-Type");
+  http_response_code(204);
+  exit;
+}
+
 $payload = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $raw = file_get_contents("php://input");
@@ -131,30 +159,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo json_encode(["ok" => false, "error" => "Bad JSON"]);
     exit;
   }
-  $keyIn = (string) ($payload["c"] ?? $payload["userId"] ?? "");
 }
 
-$key = client_key($keyIn);
-if ($key === "") {
-  http_response_code(400);
-  echo json_encode(["ok" => false, "error" => "Missing page id"]);
-  exit;
-}
-
-if ($key !== VAN_ID) {
-  $token = client_token_from_request($payload);
-  $hex = client_token_id($key);
-  if ($token === "") {
-    http_response_code(401);
-    echo json_encode(["ok" => false, "error" => "link not valid"]);
-    exit;
-  }
-  if ($hex === "" || !client_token_verify($hex, $token)) {
-    http_response_code(403);
-    echo json_encode(["ok" => false, "error" => "link not valid"]);
-    exit;
-  }
-}
+$auth = client_require_page_token($payload);
+$key = $auth["id"];
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
   $pack = pack_for($key);
@@ -174,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 }
 
 $action = (string) ($payload["action"] ?? "upload");
-$all = read_json(STORE);
+$all = read_json(client_memory_store_path());
 if (!isset($all[$key]) || !is_array($all[$key])) {
   $all[$key] = ["uploads" => [], "purchases" => []];
 }
