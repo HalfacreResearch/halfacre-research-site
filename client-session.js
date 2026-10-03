@@ -27,8 +27,35 @@
     return v === VAN.id || v === VAN.userId || v === "van" || v === "1";
   }
 
+  var TOKEN_KEY = "halfacre.pageToken";
+  var CHECK_EMAIL = "If this email already has an account, we just sent its private link there.";
+
   function queryC() {
     return trim(new URLSearchParams(global.location.search).get("c"));
+  }
+
+  function queryT() {
+    return trim(new URLSearchParams(global.location.search).get("t"));
+  }
+
+  function sessionToken() {
+    try {
+      return trim(global.sessionStorage.getItem(TOKEN_KEY) || "");
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function rememberToken(token) {
+    var t = trim(token);
+    if (!t) return;
+    try {
+      global.sessionStorage.setItem(TOKEN_KEY, t);
+    } catch (e) {}
+  }
+
+  function currentToken() {
+    return queryT() || sessionToken();
   }
 
   function sessionClient() {
@@ -80,6 +107,8 @@
       url = "van.html";
     } else {
       url = "page.html?c=" + encodeURIComponent(who.id);
+      var tok = currentToken();
+      if (tok) url += "&t=" + encodeURIComponent(tok);
     }
     if (hash) url += (hash.charAt(0) === "#" ? hash : "#" + hash);
     return url;
@@ -149,7 +178,11 @@
     if (isVanId(id)) {
       return Promise.resolve(asClient(VAN));
     }
-    return fetch("client.php?c=" + encodeURIComponent(id), { cache: "no-store" })
+    var tok = currentToken();
+    if (!tok) {
+      return Promise.reject(new Error("link not valid"));
+    }
+    return fetch("client.php?c=" + encodeURIComponent(id) + "&t=" + encodeURIComponent(tok), { cache: "no-store" })
       .then(function (res) {
         return res.json().then(function (data) {
           return { ok: res.ok, data: data };
@@ -159,14 +192,16 @@
         if (pack.ok && pack.data && pack.data.client && pack.data.client.name) {
           return asClient(pack.data.client);
         }
-        throw new Error((pack.data && pack.data.error) || "No page for that account");
+        throw new Error((pack.data && pack.data.error) || "link not valid");
       });
   }
 
   function resolve() {
     var c = queryC();
+    var t = queryT();
     var file = pathName();
     var local = sessionClient();
+    if (t) rememberToken(t);
 
     if (file === "van.html" && !c) {
       return Promise.resolve(setClient(VAN));
@@ -174,21 +209,27 @@
     if (c && isVanId(c)) {
       return Promise.resolve(setClient(VAN));
     }
+    if (file === "page.html") {
+      if (!c || !currentToken()) {
+        return Promise.reject(new Error(CHECK_EMAIL));
+      }
+      return fetchClient(c).then(setClient);
+    }
     if (c) {
       return fetchClient(c).then(setClient);
     }
     if (local && local.id) {
-      if (file === "shop.html" || file === "product.html" || file === "page.html") {
+      if (file === "shop.html" || file === "product.html") {
         if (isVanId(local.id)) return Promise.resolve(setClient(VAN));
-        return fetchClient(local.id).catch(function () {
-          return setClient(local);
-        }).then(setClient);
+        return fetchClient(local.id).then(setClient).catch(function () {
+          return setClient(VAN);
+        });
       }
     }
     if (file === "shop.html" || file === "product.html") {
       return Promise.resolve(setClient(VAN));
     }
-    return Promise.reject(new Error("Missing page id"));
+    return Promise.reject(new Error("link not valid"));
   }
 
   global.HalfacreSession = {
@@ -197,6 +238,8 @@
     current: current,
     setClient: setClient,
     resolve: resolve,
+    token: currentToken,
+    checkEmailMessage: CHECK_EMAIL,
     talkUrl: talkUrl,
     shopUrl: shopUrl,
     productUrl: productUrl,

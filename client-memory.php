@@ -5,6 +5,8 @@
  */
 declare(strict_types=1);
 
+require_once __DIR__ . "/client-token.php";
+
 header("Content-Type: application/json; charset=utf-8");
 header("Cache-Control: no-store");
 header("X-Content-Type-Options: nosniff");
@@ -18,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 
 const STORE = __DIR__ . "/client-memory.store.json";
 const VAN_UNLOCKS = __DIR__ . "/van-unlocks.store.json";
+// Public shop catalog only. Private client/engine notes are in van-products.private.json (HTTP denied).
 const CATALOG = __DIR__ . "/van-products.json";
 const VAN_ID = "charley-van-halfacre";
 
@@ -136,6 +139,21 @@ if ($key === "") {
   http_response_code(400);
   echo json_encode(["ok" => false, "error" => "Missing page id"]);
   exit;
+}
+
+if ($key !== VAN_ID) {
+  $token = client_token_from_request($payload);
+  $hex = client_token_id($key);
+  if ($token === "") {
+    http_response_code(401);
+    echo json_encode(["ok" => false, "error" => "link not valid"]);
+    exit;
+  }
+  if ($hex === "" || !client_token_verify($hex, $token)) {
+    http_response_code(403);
+    echo json_encode(["ok" => false, "error" => "link not valid"]);
+    exit;
+  }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {

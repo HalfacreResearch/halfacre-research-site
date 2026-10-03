@@ -71,14 +71,14 @@
   </div>
   <p class="empty" id="wait">Opening your page…</p>
 
-  <script src="pay-catalog.js?v=2"></script>
-  <script src="client-session.js?v=1"></script>
+  <script src="pay-catalog.js?v=4"></script>
+  <script src="client-session.js?v=3"></script>
   <script src="van-owned.js?v=3"></script>
   <script src="van-sfox.js?v=4"></script>
   <script src="van-shop-copy.js?v=1"></script>
   <script src="van-shop.js?v=2"></script>
   <script src="van-grok.js?v=6"></script>
-  <script src="client-desk.js?v=6"></script>
+  <script src="client-desk.js?v=7"></script>
   <script src="client-page.js?v=2"></script>
   <script>
     (function () {
@@ -95,13 +95,8 @@
         wait.hidden = true;
         app.hidden = false;
         window.HalfacrePage.bootTalk();
-      }).catch(function () {
-        var id = new URLSearchParams(location.search).get("c") || "";
-        if (!id) {
-          location.replace("signup.html");
-          return;
-        }
-        wait.textContent = "We could not open that page. Create your account first.";
+      }).catch(function (err) {
+        wait.textContent = (err && err.message) || (session && session.checkEmailMessage) || "link not valid";
       });
     })();
   </script>

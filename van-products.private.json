@@ -1,0 +1,179 @@
+{
+  "_private": true,
+  "_note": "Not a public file. Apache denies van-products.private.json and *.private.json. Do not copy these values into van-products.json or any public path.",
+  "client": {
+    "display_name": "Charlie Van Halfacre"
+  },
+  "account": {
+    "viewer": "van_client",
+    "owns_all_modules": false,
+    "starting_owned": [],
+    "note": "Unlocks are user-scoped to charlie-van-halfacre. Starting owned is empty. PayPal success appends moduleId. Coming-soon items cannot unlock.",
+    "userId": "charlie-van-halfacre",
+    "identity": {
+      "display_name": "Charlie Van Halfacre",
+      "hivemind_client_id": "charlie-van-halfacre"
+    }
+  },
+  "catalog": {
+    "source": "product-list/HALFACRE_PRODUCT_LIST_BRIEFING.html + advanced trading systems roadmap",
+    "note": "Codex SoT = autotrades-engine (connect \u2192 trade). Hostinger DB export is not a Van blocker. Free Codex module on /van.html#codex. Matthew 2026-09-23 ~06:12\u201306:15 CT: research modules that exist in SoT are clickable \u2014 Van pays, downloads, and powers up his avatar. Unlocks persist on userId charlie-van-halfacre. Non-ready research is Coming soon / Not ready, not vision-only fluff. Only BTCTreasuryBot is live among the 18 assembled bots. Prices: research $4.99, packs $29.99, bots $149, PayPal only. No Stripe.",
+    "codex_sot": "autotrades-engine server/sfoxEngine.ts",
+    "hostinger_db_export_blocker": false,
+    "codex_engines": [
+      "sfoxEngine",
+      "dcaEngine",
+      "rotationEngine"
+    ],
+    "codex_operator": "admin tRPC on autotrades.codexyield.com"
+  },
+  "pay": {
+    "ncp_pattern": "https://www.paypal.com/ncp/payment/{NCP_ID}",
+    "pack_ncp_do_not_use_for_van": {
+      "macro_99": "https://www.paypal.com/ncp/payment/PLB-NGZRXTQA93RE",
+      "etf_149": "https://www.paypal.com/ncp/payment/PLB-DN2KVZRLCUML"
+    },
+    "mint_note": "Mint PayPal NCPs at $4.99 for live research, $29.99 for live theme packs, and $149 for BTCTreasuryBot. Set success URL to van.html?paid={SKU}. Do not reuse historical Macro $99 / ETF $149 pack NCP IDs."
+  },
+  "founder_product": {
+    "description": "Free founder Codex product surface. sFOX API connect is the unlock. Execution SoT is autotrades-engine server/sfoxEngine.ts; dcaEngine and rotationEngine exist; live operator path is admin tRPC on autotrades.codexyield.com. Do not invent a fake engine. Live autotrade is not firing until keys + that scheduler path are wired. BTCTreasuryBot is the $149 assembled bot on this same path."
+  },
+  "modules": {
+    "codex": {
+      "fulfillment": {
+        "avatar_knowledge": "Free Codex founder surface. Unlock = sFOX API connect. Execution SoT: autotrades-engine server/sfoxEngine.ts, dcaEngine, rotationEngine. Operator: admin tRPC on autotrades.codexyield.com. Not firing from /van.html until keys + scheduler are wired."
+      },
+      "description": "Free founder Codex product surface. sFOX API connect is the unlock. Execution SoT is autotrades-engine server/sfoxEngine.ts; dcaEngine and rotationEngine exist; live operator path is admin tRPC on autotrades.codexyield.com. Do not invent a fake engine. Live autotrade is not firing until keys + that scheduler path are wired. BTCTreasuryBot is the $149 assembled bot on this same path."
+    },
+    "macro-indicators-research": {
+      "fulfillment": {
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fred-cpi-inflation",
+          "btc-fred-federal-funds-rate",
+          "btc-fred-treasury-10-year-yield",
+          "btc-fred-treasury-2-year-yield"
+        ],
+        "avatar_knowledge": "FRED CPI, federal funds rate, 10-year and 2-year Treasury yields \u2014 the macro rates stack BTCTreasuryBot considers.",
+        "receipt_href": "van-fulfillment/macro-indicators-research.json"
+      }
+    },
+    "social-sentiment-research": {
+      "fulfillment": {
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fear-greed-daily"
+        ],
+        "avatar_knowledge": "Bitcoin Fear & Greed daily sentiment history.",
+        "receipt_href": "van-fulfillment/social-sentiment-research.json"
+      }
+    },
+    "capital-flows-research": {
+      "fulfillment": {
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-spot-etf-flow-history"
+        ],
+        "avatar_knowledge": "United States spot Bitcoin ETF flow history (IBIT / FBTC / GBTC totals).",
+        "receipt_href": "van-fulfillment/capital-flows-research.json"
+      }
+    },
+    "market-liquidity-research": {
+      "fulfillment": {
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-ibit-daily-volume-history"
+        ],
+        "avatar_knowledge": "IBIT daily close, share volume, and trading value.",
+        "receipt_href": "van-fulfillment/market-liquidity-research.json"
+      }
+    },
+    "cross-asset-research": {
+      "fulfillment": {
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fred-us-dollar-index"
+        ],
+        "avatar_knowledge": "FRED U.S. dollar index versus the Bitcoin/macro stack.",
+        "receipt_href": "van-fulfillment/cross-asset-research.json"
+      }
+    },
+    "market-breadth-research": {
+      "fulfillment": {
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fred-vix-index",
+          "btc-fred-sp-500-index"
+        ],
+        "avatar_knowledge": "FRED VIX and S&P 500 index history for market breadth.",
+        "receipt_href": "van-fulfillment/market-breadth-research.json"
+      }
+    },
+    "rules-restrictions-research": {
+      "fulfillment": {
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-sec-ibit-filing-history"
+        ],
+        "avatar_knowledge": "Bitcoin ETF SEC filing snapshot (issuer, form, latest filing).",
+        "receipt_href": "van-fulfillment/rules-restrictions-research.json"
+      }
+    },
+    "public-positioning-research": {
+      "fulfillment": {
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-spot-etf-holdings-snapshot"
+        ],
+        "avatar_knowledge": "Spot Bitcoin ETF holdings snapshot (BTC, USD, supply percent).",
+        "receipt_href": "van-fulfillment/public-positioning-research.json"
+      }
+    },
+    "pack-bitcoin-macro": {
+      "fulfillment": {
+        "pack_id": "macro-btc-fg-fred-live-slice",
+        "pack_dir": "dl/376d2ddcf2b69986b5583f0b7e2d1aad",
+        "series": [
+          "btc-fear-greed-daily",
+          "btc-fred-cpi-inflation",
+          "btc-fred-federal-funds-rate",
+          "btc-fred-treasury-10-year-yield",
+          "btc-fred-treasury-2-year-yield",
+          "btc-fred-vix-index",
+          "btc-fred-us-dollar-index",
+          "btc-fred-sp-500-index"
+        ],
+        "avatar_knowledge": "Full Macro\u00d7BTC live slice: Fear & Greed plus FRED CPI, fed funds, Treasuries, VIX, dollar index, and S&P 500.",
+        "receipt_href": "van-fulfillment/pack-bitcoin-macro.json"
+      }
+    },
+    "pack-etf-mf": {
+      "fulfillment": {
+        "pack_id": "etf-flow-v2026-09-09",
+        "pack_dir": "dl/929d58db29ff852b574eff9659e53513",
+        "series": [
+          "btc-spot-etf-flow-history",
+          "btc-ibit-daily-volume-history",
+          "btc-spot-etf-holdings-snapshot",
+          "btc-sec-ibit-filing-history"
+        ],
+        "avatar_knowledge": "BTC spot ETF flow pack: flows, IBIT volume, holdings, and SEC filings.",
+        "receipt_href": "van-fulfillment/pack-etf-mf.json"
+      }
+    },
+    "btc-treasury-bot": {
+      "fulfillment": {
+        "avatar_knowledge": "BTCTreasuryBot (formerly Codex): working autotrades / sFOX UI for BTC treasury / bigger-gains crypto."
+      },
+      "description": "LIVE. Formerly Codex. Assembled $149 bot. Working autotrades UI + sFOX connect on /van.html. PayPal $149 when the NCP exists."
+    }
+  }
+}
