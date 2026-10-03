@@ -1,92 +1,80 @@
 {
-  "pack": "etf-flow-v2026-09-09",
-  "title": "BTC Spot ETF Flow Pack",
-  "freeze_date": "2026-09-09",
-  "dump_sha256": "43836c100ec2f02fb62e49ade4d98e3721b14040995c82342d872494067fe211",
-  "dump_file": "halfacre_raw_database_2026-09-09_verified.sql.gz",
-  "not_investment_advice": true,
-  "cadence": "frozen until live updater",
-  "excluded_open_series": [
-    "Bitcoin Daily Technical Factors",
-    "Global Stablecoin Supply",
-    "Global Money Supply",
-    "STH/LTH Holder Supply",
-    "Supply Age Bands",
-    "Miner Net Position Change",
-    "Lightning Daily Channel/Capacity",
-    "Binance BTCUSD Perp Liquidations"
-  ],
-  "series": [
-    {
-      "slug": "btc-spot-etf-flow-history",
-      "human_name": "United States Spot Bitcoin ETF Flow History",
-      "fields": [
-        "date",
-        "totalSpotBitcoinEtfFlowUsdMillions",
-        "ibitFlowUsdMillions",
-        "fbtcFlowUsdMillions",
-        "gbtcFlowUsdMillions"
-      ],
-      "point_count": 682,
-      "date_min": "2024-01-11",
-      "date_max": "2026-09-08",
-      "notes": "",
-      "csv": "csv/btc-spot-etf-flow-history.csv",
-      "json": "json/btc-spot-etf-flow-history.json"
-    },
-    {
-      "slug": "btc-ibit-daily-volume-history",
-      "human_name": "iShares Bitcoin Trust ETF Daily Trading Volume",
-      "fields": [
-        "date",
-        "ibitCloseUsd",
-        "ibitTradingVolumeShares",
-        "ibitTradingValueUsd"
-      ],
-      "point_count": 665,
-      "date_min": "2024-01-11",
-      "date_max": "2026-09-04",
-      "notes": "",
-      "csv": "csv/btc-ibit-daily-volume-history.csv",
-      "json": "json/btc-ibit-daily-volume-history.json"
-    },
-    {
-      "slug": "btc-spot-etf-holdings-snapshot",
-      "human_name": "Spot Bitcoin ETF Holdings Snapshot",
-      "fields": [
-        "date",
-        "spotBitcoinEtfHoldingsBtc",
-        "spotBitcoinEtfHoldingsValueUsd",
-        "spotBitcoinEtfHoldingsSupplyPercent"
-      ],
-      "point_count": 1,
-      "date_min": "2026-08-27",
-      "date_max": "2026-08-27",
-      "notes": "Single-day holdings snapshot.",
-      "csv": "csv/btc-spot-etf-holdings-snapshot.csv",
-      "json": "json/btc-spot-etf-holdings-snapshot.json"
-    },
-    {
-      "slug": "btc-sec-ibit-filing-history",
-      "human_name": "Bitcoin ETF SEC Filing History",
-      "fields": [
-        "date",
-        "issuerName",
-        "ticker",
-        "cik",
-        "totalRecentFilings",
-        "bitcoinEtfFilingCount",
-        "bitcoinEtfRegulatoryEventCount",
-        "latestFilingDate",
-        "latestFilingForm",
-        "latestFilingUrl"
-      ],
-      "point_count": 1,
-      "date_min": "2026-08-06",
-      "date_max": "2026-08-06",
-      "notes": "Snapshot row; nested filings list included in JSON points only (not flattened into CSV columns).",
-      "csv": "csv/btc-sec-ibit-filing-history.csv",
-      "json": "json/btc-sec-ibit-filing-history.json"
-    }
-  ]
+ "built_utc": "2026-10-03T01:21:32+00:00",
+ "series": [
+  {
+   "title": "SEC filing history for the 12 U.S. spot bitcoin ETFs (every form on EDGAR)",
+   "source": "SEC EDGAR submissions API",
+   "source_url": "https://www.sec.gov/edgar/search/",
+   "license": "SEC EDGAR, U.S. government data, public domain",
+   "frequency": "event",
+   "slug": "spot-bitcoin-etf-sec-filings",
+   "fields": [
+    "filing_date",
+    "ticker",
+    "registrant",
+    "cik",
+    "form",
+    "report_date",
+    "accession_number",
+    "document_url"
+   ],
+   "rows": 1259,
+   "first_date": "2013-10-07",
+   "last_date": "2026-08-27",
+   "csv": "csv/spot-bitcoin-etf-sec-filings.csv",
+   "json": "json/spot-bitcoin-etf-sec-filings.json"
+  },
+  {
+   "title": "As-reported financial data from 10-Q and 10-K filings (shares outstanding, net assets, bitcoin held, creations and redemptions, fees, and every other tagged figure)",
+   "source": "SEC EDGAR XBRL company facts API",
+   "source_url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+   "license": "SEC EDGAR, U.S. government data, public domain",
+   "frequency": "quarterly and annual (as filed)",
+   "notes": "Values are exactly as tagged by each issuer. When a figure was restated, the most recently filed value is kept and its accession number is shown. Tags differ between issuers.",
+   "slug": "spot-bitcoin-etf-reported-financials",
+   "fields": [
+    "period_end",
+    "ticker",
+    "cik",
+    "taxonomy",
+    "xbrl_tag",
+    "label",
+    "unit",
+    "period_start",
+    "value",
+    "form",
+    "fiscal_period",
+    "fiscal_year",
+    "filed",
+    "accession_number"
+   ],
+   "rows": 7319,
+   "first_date": "2017-12-31",
+   "last_date": "2026-08-03",
+   "csv": "csv/spot-bitcoin-etf-reported-financials.csv",
+   "json": "json/spot-bitcoin-etf-reported-financials.json"
+  }
+ ],
+ "files": [
+  {
+   "path": "csv/spot-bitcoin-etf-reported-financials.csv",
+   "bytes": 1307731,
+   "sha256": "cb615d6b03cf03c79004f07b519c97248a7f03eee2c534dadbce38999ac7ae96"
+  },
+  {
+   "path": "csv/spot-bitcoin-etf-sec-filings.csv",
+   "bytes": 216738,
+   "sha256": "cbb1aa7ca332cb8a48cd0c354f91d90b5bf8bd10527a544043aafb73916b8ed9"
+  },
+  {
+   "path": "json/spot-bitcoin-etf-reported-financials.json",
+   "bytes": 3159456,
+   "sha256": "084f34784e1eae979439aed3c315eb49d61d825383c95fee0ea21613afa4a4fd"
+  },
+  {
+   "path": "json/spot-bitcoin-etf-sec-filings.json",
+   "bytes": 419659,
+   "sha256": "3235a8a233c8070fe9c11b860169b509839f4349f3ac0a405f58e03a57d0a84f"
+  }
+ ]
 }

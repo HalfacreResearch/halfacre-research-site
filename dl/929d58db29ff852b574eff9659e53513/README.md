@@ -1,43 +1,40 @@
-# Halfacre Research — BTC Spot ETF Flow Pack
+# ETF Flow Pack — Halfacre Research
 
-**Freeze date:** 2026-09-09
+Official SEC records for the 12 U.S. spot bitcoin ETFs (IBIT, FBTC, GBTC, BTC, BITB, ARKB, HODL, BRRR, BTCO, EZBC, BTCW, MSBT): every filing on EDGAR, plus every figure the funds tagged in their 10-Q and 10-K reports (net assets, shares outstanding, units held, creations and redemptions, fees).
 
-What you get: machine-readable CSV and JSON for U.S. spot Bitcoin ETF flow, IBIT daily volume, a holdings snapshot, and an IBIT SEC filing snapshot — extracted from the verified Halfacre Research MAIN database dump.
+Built October 2, 2026 (8:21 PM CT; 2026-10-03 01:21 UTC). This is a one-time snapshot. It does not update automatically.
 
-## Cadence honesty
+## What's inside
 
-This pack is a **frozen snapshot** as of the freeze date above. It will not update until a live updater ships. Do not expect day-by-day refreshes from this zip alone.
+| File (CSV and JSON) | What it is | Rows | First | Last |
+|---|---|---|---|---|
+| `spot-bitcoin-etf-sec-filings` | SEC filing history for the 12 U.S. spot bitcoin ETFs (every form on EDGAR) | 1,259 | 2013-10-07 | 2026-08-27 |
+| `spot-bitcoin-etf-reported-financials` | As-reported financial data from 10-Q and 10-K filings (shares outstanding, net assets, bitcoin held, creations and redemptions, fees, and every other tagged figure) | 7,319 | 2017-12-31 | 2026-08-03 |
 
-## Series included
+Every series comes as `csv/<file>.csv` and `json/<file>.json`. `MANIFEST.json` lists every file with its size and SHA-256 so you can check the download.
 
-- `btc-spot-etf-flow-history` — United States Spot Bitcoin ETF Flow History (682 points; 2024-01-11 → 2026-09-08)
-- `btc-ibit-daily-volume-history` — iShares Bitcoin Trust ETF Daily Trading Volume (665 points; 2024-01-11 → 2026-09-04)
-- `btc-spot-etf-holdings-snapshot` — Spot Bitcoin ETF Holdings Snapshot (1 points; 2026-08-27 → 2026-08-27)
-- `btc-sec-ibit-filing-history` — Bitcoin ETF SEC Filing History (1 points; 2026-08-06 → 2026-08-06)
+## Notes
 
-## What is NOT included
+- Financial values are exactly as each fund tagged them. Tag names differ between issuers; filter by `ticker` and `xbrl_tag`.
+- When a figure was restated, the most recently filed value is kept, with its accession number so you can open the source filing.
+- `document_url` links straight to each filing on sec.gov.
 
-Quality-ledger OPEN series are excluded from this pack (and are not investment products here either):
+## Not included, and why
 
-- Bitcoin Daily Technical Factors
-- Global Stablecoin Supply
-- Global Money Supply
-- STH/LTH Holder Supply
-- Supply Age Bands
-- Miner Net Position Change
-- Lightning Daily Channel/Capacity
-- Binance BTCUSD Perp Liquidations
+- Daily fund-by-fund flow history. The usual public daily flow tables are copyrighted ("all rights reserved") and we do not have permission to resell them. Flows in this pack are the quarterly and annual creation and redemption figures the funds report to the SEC.
+- Daily prices and trading volume: exchange and quote-vendor terms do not allow resale.
+- Third-party holdings trackers: terms unknown, so excluded.
 
-## Files
+## Sources and terms
 
-- `MANIFEST.json` — freeze date, dump audit SHA256, per-series field lists and point counts
-- `csv/` — one CSV per series (date column first)
-- `json/` — one JSON per series (`{meta, points}`)
+- **spot-bitcoin-etf-sec-filings**: SEC EDGAR submissions API (https://www.sec.gov/edgar/search/). Terms: SEC EDGAR, U.S. government data, public domain
+- **spot-bitcoin-etf-reported-financials**: SEC EDGAR XBRL company facts API (https://www.sec.gov/search-filings/edgar-application-programming-interfaces). Terms: SEC EDGAR, U.S. government data, public domain
+  - Note: Values are exactly as tagged by each issuer. When a figure was restated, the most recently filed value is kept and its accession number is shown. Tags differ between issuers.
 
-## Audit
+## Disclosure
 
-Source dump SHA256 (audit label, not a product title): `43836c100ec2f02fb62e49ade4d98e3721b14040995c82342d872494067fe211`
+Data is provided "as is," may contain errors, gaps, revisions, or delays, and is not investment, tax, or legal advice. Nothing in this pack is a recommendation to buy, sell, or hold any security or asset. Your license is personal and non-commercial: you may not resell, redistribute, or publish the raw files as a data product. Some underlying series belong to third parties and carry their own terms (listed above). See our full Disclaimer: https://www.halfacreresearch.tech/disclaimer.html
 
-## Disclaimer
+© 2026 Halfacre Research Institute LLC. Compilation and documentation; underlying public-domain government data remains public domain.
 
-**Not investment advice.** Data is provided for research and tooling. Past flows and filings do not predict future performance. You are responsible for how you use this pack.
+Questions or a problem with your download: matt@halfacreresearch.tech

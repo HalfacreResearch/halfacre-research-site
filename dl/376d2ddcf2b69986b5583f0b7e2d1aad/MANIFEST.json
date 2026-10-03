@@ -1,93 +1,172 @@
 {
-  "pack": "macro-btc-fg-fred-live-slice",
-  "built_at_utc": "2026-09-21T23:35:07.190720+00:00",
-  "main_tip": "3ace0672e30b462ff9fc7fd6f9db754d8803111f",
-  "auto_update_series": [
-    "btc-fear-greed-daily",
-    "btc-fred-cpi-inflation",
-    "btc-fred-federal-funds-rate",
-    "btc-fred-treasury-10-year-yield",
-    "btc-fred-treasury-2-year-yield",
-    "btc-fred-vix-index",
-    "btc-fred-us-dollar-index",
-    "btc-fred-sp-500-index"
-  ],
-  "excluded": [
-    "gold_futures_UNMAPPED",
-    "btc-usd-daily-market_CoinGecko_FAIL"
-  ],
-  "series": [
-    {
-      "slug": "btc-fear-greed-daily",
-      "n_rows": 3151,
-      "max_date": "2026-09-21",
-      "n_new_from_prove": 12,
-      "sha256": "d0438e860f2c19f0cd03bf6ae9b70d465c0102694d06141ba7f15329f18c1972",
-      "auto_update": true,
-      "source": "F&G"
-    },
-    {
-      "slug": "btc-fred-cpi-inflation",
-      "n_rows": 210,
-      "max_date": "2026-08-01",
-      "n_new_from_prove": 1,
-      "sha256": "e2496cefdd980b789e6e8c9a1427b68f4bae00d1976cacaf1a12f19692928508",
-      "auto_update": true,
-      "source": "FRED"
-    },
-    {
-      "slug": "btc-fred-federal-funds-rate",
-      "n_rows": 211,
-      "max_date": "2026-08-01",
-      "n_new_from_prove": 1,
-      "sha256": "3453ad81d8122d28e9a36c08bf052845618871994101c2eb5a0dba530bb9761c",
-      "auto_update": true,
-      "source": "FRED"
-    },
-    {
-      "slug": "btc-fred-treasury-10-year-yield",
-      "n_rows": 16353,
-      "max_date": "2026-09-18",
-      "n_new_from_prove": 9,
-      "sha256": "6c911b28a86688074523b8251313961f467df12eba535fa87c855880d59c4a56",
-      "auto_update": true,
-      "source": "FRED"
-    },
-    {
-      "slug": "btc-fred-treasury-2-year-yield",
-      "n_rows": 12761,
-      "max_date": "2026-09-18",
-      "n_new_from_prove": 9,
-      "sha256": "9369453102e24a113c57d72d98917cb311cb2a176c49b379ae857dc11d1f9bac",
-      "auto_update": true,
-      "source": "FRED"
-    },
-    {
-      "slug": "btc-fred-vix-index",
-      "n_rows": 9410,
-      "max_date": "2026-09-18",
-      "n_new_from_prove": 9,
-      "sha256": "56f44e19b04bbef44342cb58ce43e0c2f76ed867811d8e096bb8f419357f8ce1",
-      "auto_update": true,
-      "source": "FRED"
-    },
-    {
-      "slug": "btc-fred-us-dollar-index",
-      "n_rows": 5402,
-      "max_date": "2026-09-18",
-      "n_new_from_prove": 9,
-      "sha256": "d04bf40c6b4479e779aa0589b8141fd8e8f84b6ca6c15117a40199f555662693",
-      "auto_update": true,
-      "source": "FRED"
-    },
-    {
-      "slug": "btc-fred-sp-500-index",
-      "n_rows": 2624,
-      "max_date": "2026-09-18",
-      "n_new_from_prove": 8,
-      "sha256": "058c8977eefbf31de849851dd21e5aeb9ef0bbbf0b083dfcf1bbed7ad784306a",
-      "auto_update": true,
-      "source": "FRED"
-    }
-  ]
+ "built_utc": "2026-10-03T01:21:32+00:00",
+ "series": [
+  {
+   "title": "Crypto Fear & Greed Index (daily, 0 = extreme fear, 100 = extreme greed)",
+   "source": "Alternative.me Crypto Fear & Greed Index",
+   "source_url": "https://alternative.me/crypto/fear-and-greed-index/",
+   "license": "Alternative.me allows commercial use with attribution shown next to the data. Attribution: Source: Alternative.me Crypto Fear & Greed Index.",
+   "frequency": "daily (UTC dates)",
+   "slug": "crypto-fear-greed-index-daily",
+   "fields": [
+    "date",
+    "fear_greed_index",
+    "classification"
+   ],
+   "rows": 3163,
+   "first_date": "2018-02-01",
+   "last_date": "2026-10-03",
+   "csv": "csv/crypto-fear-greed-index-daily.csv",
+   "json": "json/crypto-fear-greed-index-daily.json"
+  },
+  {
+   "title": "U.S. Treasury 10-year constant maturity yield, percent",
+   "source": "Federal Reserve H.15 Selected Interest Rates, series RIFLGFCY10_N.B",
+   "source_url": "https://www.federalreserve.gov/releases/h15/",
+   "license": "Board of Governors of the Federal Reserve System, Data Download Program (public domain; please cite the Board)",
+   "frequency": "business days",
+   "slug": "us-treasury-10-year-yield-daily",
+   "fields": [
+    "date",
+    "yield_percent"
+   ],
+   "rows": 16173,
+   "first_date": "1962-01-02",
+   "last_date": "2026-10-01",
+   "csv": "csv/us-treasury-10-year-yield-daily.csv",
+   "json": "json/us-treasury-10-year-yield-daily.json"
+  },
+  {
+   "title": "U.S. Treasury 2-year constant maturity yield, percent",
+   "source": "Federal Reserve H.15 Selected Interest Rates, series RIFLGFCY02_N.B",
+   "source_url": "https://www.federalreserve.gov/releases/h15/",
+   "license": "Board of Governors of the Federal Reserve System, Data Download Program (public domain; please cite the Board)",
+   "frequency": "business days",
+   "slug": "us-treasury-2-year-yield-daily",
+   "fields": [
+    "date",
+    "yield_percent"
+   ],
+   "rows": 12581,
+   "first_date": "1976-06-01",
+   "last_date": "2026-10-01",
+   "csv": "csv/us-treasury-2-year-yield-daily.csv",
+   "json": "json/us-treasury-2-year-yield-daily.json"
+  },
+  {
+   "title": "Effective federal funds rate, monthly average, percent",
+   "source": "Federal Reserve H.15 Selected Interest Rates, series RIFSPFF_N.M",
+   "source_url": "https://www.federalreserve.gov/releases/h15/",
+   "license": "Board of Governors of the Federal Reserve System, Data Download Program (public domain; please cite the Board)",
+   "frequency": "monthly",
+   "slug": "fed-funds-effective-rate-monthly",
+   "fields": [
+    "month",
+    "effective_fed_funds_percent"
+   ],
+   "rows": 867,
+   "first_date": "1954-07",
+   "last_date": "2026-09",
+   "csv": "csv/fed-funds-effective-rate-monthly.csv",
+   "json": "json/fed-funds-effective-rate-monthly.json"
+  },
+  {
+   "title": "Nominal broad U.S. dollar index (goods and services), Jan 2006 = 100",
+   "source": "Federal Reserve H.10 Foreign Exchange Rates, series JRXWTFB_N.B",
+   "source_url": "https://www.federalreserve.gov/releases/h10/",
+   "license": "Board of Governors of the Federal Reserve System, Data Download Program (public domain; please cite the Board)",
+   "frequency": "business days",
+   "slug": "us-dollar-broad-index-daily",
+   "fields": [
+    "date",
+    "nominal_broad_dollar_index"
+   ],
+   "rows": 5198,
+   "first_date": "2006-01-02",
+   "last_date": "2026-09-25",
+   "csv": "csv/us-dollar-broad-index-daily.csv",
+   "json": "json/us-dollar-broad-index-daily.json"
+  },
+  {
+   "title": "U.S. CPI-U all items, seasonally adjusted index (1982-84 = 100) and year-over-year change, percent",
+   "source": "U.S. Bureau of Labor Statistics, series CUSR0000SA0",
+   "source_url": "https://www.bls.gov/cpi/",
+   "license": "U.S. government work, public domain (please cite BLS)",
+   "frequency": "monthly",
+   "notes": "Months BLS did not publish are absent, not filled. Year-over-year is blank when the month a year earlier is absent.",
+   "slug": "us-cpi-inflation-monthly",
+   "fields": [
+    "month",
+    "cpi_u_index_sa",
+    "inflation_yoy_percent"
+   ],
+   "rows": 955,
+   "first_date": "1947-01",
+   "last_date": "2026-08",
+   "csv": "csv/us-cpi-inflation-monthly.csv",
+   "json": "json/us-cpi-inflation-monthly.json"
+  }
+ ],
+ "files": [
+  {
+   "path": "csv/crypto-fear-greed-index-daily.csv",
+   "bytes": 70577,
+   "sha256": "183da2637b0563f8201f53f3148686121eb151bf2251a98cb072980aa142c794"
+  },
+  {
+   "path": "csv/fed-funds-effective-rate-monthly.csv",
+   "bytes": 11366,
+   "sha256": "051592a9b20456cb7ee8bb01e0b035c959cdc4e05289c4433430a9e57a0b5616"
+  },
+  {
+   "path": "csv/us-cpi-inflation-monthly.csv",
+   "bytes": 20225,
+   "sha256": "8c4558957d1a07dc507a66fea5e5e9e95fe7bdb1bcb8c4ee120cd2921441c7fe"
+  },
+  {
+   "path": "csv/us-dollar-broad-index-daily.csv",
+   "bytes": 101899,
+   "sha256": "f023a3d4340d115e80a3aaf5f57a8cb132c7f54d962bd9751e7344d35b79bc33"
+  },
+  {
+   "path": "csv/us-treasury-10-year-yield-daily.csv",
+   "bytes": 260275,
+   "sha256": "ff59c94432dbc770a0a31f5909089ce1976a057dae2446667bb3423069bc5b54"
+  },
+  {
+   "path": "csv/us-treasury-2-year-yield-daily.csv",
+   "bytes": 202465,
+   "sha256": "063cb56d53af52ddc9dde0b3ba008a56ae0e0e08d18a2b752a70da4e301d97d0"
+  },
+  {
+   "path": "json/crypto-fear-greed-index-daily.json",
+   "bytes": 292390,
+   "sha256": "12be8663f850e6022cb673dfc5ce357b792285adc37adca626698d37b9d0fa2b"
+  },
+  {
+   "path": "json/fed-funds-effective-rate-monthly.json",
+   "bytes": 63751,
+   "sha256": "b94d891ee7538ca190c9958dd2f347c8cd99791f98e4c30d042e2e4df3c4d96e"
+  },
+  {
+   "path": "json/us-cpi-inflation-monthly.json",
+   "bytes": 91359,
+   "sha256": "9a84735e184c110ea892e5e7f7c7d85a124db95b145d744b2d1114f8d9be9f61"
+  },
+  {
+   "path": "json/us-dollar-broad-index-daily.json",
+   "bytes": 403769,
+   "sha256": "fcfe220df7259ecd0490324e70cc6d2c61c39564fb60f7e83869b6a2211e6d60"
+  },
+  {
+   "path": "json/us-treasury-10-year-yield-daily.json",
+   "bytes": 988449,
+   "sha256": "13f836b6e304005608b09d55f917c77238ed89f32108423ecf2cbcbe1244d8fd"
+  },
+  {
+   "path": "json/us-treasury-2-year-yield-daily.json",
+   "bytes": 768998,
+   "sha256": "c97330bdd9cfcff647a5968da037f3ceca498cf845c4d3acd03d9d6c60429f27"
+  }
+ ]
 }
