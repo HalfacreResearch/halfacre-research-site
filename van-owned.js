@@ -9,7 +9,7 @@
   var VAN_PAGE = "charley-van-halfacre";
   var LEGACY_KEY = "halfacre.van.owned.v1";
   var PENDING_MS = 6 * 60 * 60 * 1000;
-  var UNLOCK_API = "van-unlocks.php";
+  var MEMORY_API = "client-memory.php";
   var ALLOWED = [4.99, 29.99, 149];
 
   var cache = { skus: {} };
@@ -184,14 +184,20 @@
     };
   }
 
+  function pageToken() {
+    return (global.HalfacreSession && global.HalfacreSession.token)
+      ? trim(global.HalfacreSession.token())
+      : "";
+  }
+
   function downloadUrl(id) {
-    var row = findRow(id);
-    var fulfill = (row && row.fulfillment) || {};
-    if (fulfill.download_href) {
-      return fulfill.download_href + (fulfill.download_href.indexOf("?") >= 0 ? "&" : "?") +
-        "userId=" + encodeURIComponent(userId());
-    }
-    return "van-download.php?sku=" + encodeURIComponent(id) + "&userId=" + encodeURIComponent(userId());
+    var sku = trim(id);
+    var who = identity();
+    var url = "van-download.php?sku=" + encodeURIComponent(sku);
+    if (who.userId) url += "&c=" + encodeURIComponent(who.hivemind_client_id || who.userId);
+    var t = pageToken();
+    if (t) url += "&t=" + encodeURIComponent(t);
+    return url;
   }
 
   function markPending(id) {
@@ -233,41 +239,37 @@
     };
   }
 
-  function postUnlock(sku, meta) {
-    var who = identity();
-    return fetch(UNLOCK_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: who.userId,
-        moduleId: sku,
-        amount: (meta && meta.amount) || String(expectedAmount(sku)),
-        tx: (meta && meta.tx) || "",
-        paidAt: (meta && meta.paidAt) || Date.now()
-      }),
-      cache: "no-store"
-    }).then(function (res) {
-      return res.json().then(function (data) {
-        return { ok: res.ok && data && data.ok, data: data };
-      });
-    }).catch(function () {
-      return { ok: false, data: null };
-    });
-  }
-
   function fetchRemote() {
     var who = identity();
-    var url = UNLOCK_API + "?userId=" + encodeURIComponent(who.userId);
+    var id = (global.HalfacreClient && global.HalfacreClient.id) || who.hivemind_client_id || "";
+    var t = pageToken();
+    if (!id || !t) {
+      cache.skus = {};
+      persist();
+      return Promise.resolve(cache);
+    }
+    var url = MEMORY_API + "?c=" + encodeURIComponent(id) + "&t=" + encodeURIComponent(t);
     return fetch(url, { cache: "no-store" }).then(function (res) {
-      if (!res.ok) throw new Error("unlock store unavailable");
+      if (!res.ok) throw new Error("purchase store unavailable");
       return res.json();
     }).then(function (data) {
-      if (data && data.ok && data.modules) {
-        mergeSkus(data.modules);
-        persist();
+      cache.skus = {};
+      if (data && data.ok && Array.isArray(data.purchases)) {
+        data.purchases.forEach(function (row) {
+          if (!row || !row.id) return;
+          cache.skus[row.id] = {
+            amount: row.amount || "",
+            tx: row.capture_id || "",
+            paidAt: row.at || 0,
+            verified: true
+          };
+        });
       }
+      persist();
       return cache;
     }).catch(function () {
+      cache.skus = {};
+      persist();
       return cache;
     });
   }
@@ -276,35 +278,12 @@
     return cache.skus[trim(id)] || null;
   }
 
-  function unlock(id, meta) {
-    var sku = trim(id);
-    if (!isLiveSku(sku)) return { ok: false, error: "Not a live module." };
-    if (owns(sku)) return { ok: true, already: true, sku: sku, receipt: receipt(sku), userId: userId() };
-    var listed = expectedAmount(sku);
-    cache.skus[sku] = {
-      amount: (meta && meta.amount) || String(Number.isFinite(listed) ? listed : 4.99),
-      tx: (meta && meta.tx) || "",
-      paidAt: Date.now(),
-      userId: userId()
-    };
-    persist();
-    postUnlock(sku, cache.skus[sku]);
-    return { ok: true, already: false, sku: sku, receipt: cache.skus[sku], userId: userId() };
+  function unlock() {
+    return { ok: false, error: "Purchases are recorded after PayPal capture only." };
   }
 
-  function claimFromSearch(search) {
-    var query = new URLSearchParams(typeof search === "string" ? search : global.location.search);
-    var sku = trim(query.get("paid") || query.get("item_number") || query.get("cm") || query.get("custom"));
-    if (!sku) return { ok: false, skipped: true };
-    if (!isLiveSku(sku)) return { ok: false, error: "That return is not a live paid module." };
-    if (!amountOk(query.get("amt") || query.get("mc_gross") || query.get("amount"), sku)) {
-      return { ok: false, error: "Return amount did not match that module’s price." };
-    }
-    var evidence = paypalEvidence(query, sku);
-    if (!evidence.ok && !takePending(sku)) {
-      return { ok: false, error: "No PayPal return for that module." };
-    }
-    return unlock(sku, { tx: evidence.tx, amount: evidence.amount || String(expectedAmount(sku)) });
+  function claimFromSearch() {
+    return { ok: false, skipped: true };
   }
 
   function returnUrl(sku) {
@@ -328,8 +307,7 @@
   }
 
   function load() {
-    cache = migrateLegacy();
-    if (!cache.skus || typeof cache.skus !== "object") cache.skus = {};
+    cache = { userId: userId(), identity: identity(), skus: {} };
     persist();
     return fetchRemote().then(function () {
       return { userId: userId(), moduleIds: ownedIds(), modules: ownedModules() };

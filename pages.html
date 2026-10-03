@@ -127,17 +127,17 @@
       <p><a class="go" href="https://www.halfacreresearch.tech/product.html?id=btc-treasury-bot">https://www.halfacreresearch.tech/product.html?id=btc-treasury-bot</a></p>
     </li>
 
-    <li class="missing">
-      <p class="n">08 · Missing<span class="tag">Not on Hostinger</span></p>
-      <h2>Pay page</h2>
-      <p class="note">Buy buttons already point here. pay.html is not on the server. Checkout stops.</p>
-      <p>Would be: https://www.halfacreresearch.tech/pay.html?id={sku}&amp;c={client}</p>
+    <li>
+      <p class="n">08 · Pay</p>
+      <h2>PayPal checkout</h2>
+      <p class="note">Token + sku. Server creates and captures the order. Fail-closed when paypal.secret.php is missing: “checkout not available yet”.</p>
+      <p>Would be: https://www.halfacreresearch.tech/pay.html?sku={sku}&amp;c={client}&amp;t={token}</p>
     </li>
 
-    <li class="missing">
-      <p class="n">09 · Missing<span class="tag">No page</span></p>
-      <h2>Receipt after PayPal</h2>
-      <p class="note">Code expects a return to the talk page with ?paid={sku}. There is no receipt page, and pay.html is what would send them there.</p>
+    <li>
+      <p class="n">09 · After PayPal</p>
+      <h2>Purchased list + download</h2>
+      <p class="note">Bought items come only from a verified capture. Download is van-download.php (token + sku, or a signed email link). ?paid= on the talk page does not mark an item bought.</p>
     </li>
 
     <li class="missing">

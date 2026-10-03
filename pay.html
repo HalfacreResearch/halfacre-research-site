@@ -5,23 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
-  <title>Product · Halfacre Research</title>
+  <title>Pay · Halfacre Research</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <link rel="stylesheet" href="client-desk.css?v=5">
+  <style>
+    #paypal-buttons { margin: 16px 0 8px; min-height: 48px; }
+    .pay-hold {
+      color: #ffb4b4;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+    .pay-note { color: var(--muted); margin: 0 0 12px; line-height: 1.45; }
+    .pay-price { font-size: 28px; margin: 8px 0 16px; color: var(--orange); }
+  </style>
 </head>
 <body>
-  <div class="app" data-view="product">
+  <div class="app" data-view="shop">
     <header class="top">
       <div class="brand">
         <p id="who">Your page</p>
-        <h1 id="name">Loading…</h1>
-        <p class="sub">Halfacre Research · your page</p>
+        <h1 id="name">Checkout</h1>
+        <p class="sub">Know more. Bank less.</p>
       </div>
       <nav class="nav" aria-label="Page">
-        <a href="page.html" data-talk="talk">Talk</a>
-        <a href="page.html#uploaded" data-talk="uploaded">Uploaded</a>
-        <a href="page.html#purchased" data-talk="purchased">Purchased</a>
+        <a href="page.html" data-talk="talk" id="backTalk">Talk</a>
         <a href="shop.html?kind=research" data-shop="research">Research Modules</a>
         <a href="shop.html?kind=packs" data-shop="packs">Research Packs</a>
         <a href="shop.html?kind=bots" data-shop="bots">Trading Bots</a>
@@ -37,8 +45,17 @@
         <div id="deskBuys"></div>
       </aside>
 
-      <main class="main shop-main">
-        <div id="productRoot">Loading…</div>
+      <main class="main">
+        <section class="card">
+          <h2>PayPal checkout</h2>
+          <p id="productName">Loading…</p>
+          <p class="pay-price" id="productPrice"></p>
+          <p class="pay-note" id="productDesc"></p>
+          <p class="pay-hold" id="payStatus">checkout not available yet</p>
+          <div id="paypal-buttons" hidden></div>
+          <p class="pay-note" id="payResult"></p>
+          <p><a class="btn ghost" id="backShop" href="shop.html?kind=research">Back to shop</a></p>
+        </section>
       </main>
     </div>
   </div>
@@ -46,13 +63,7 @@
   <script src="pay-catalog.js?v=5"></script>
   <script src="client-session.js?v=4"></script>
   <script src="van-owned.js?v=5"></script>
-  <script src="van-sfox.js?v=4"></script>
-  <script src="van-shop-copy.js?v=1"></script>
-  <script src="van-shop.js?v=3"></script>
   <script src="client-desk.js?v=8"></script>
-  <script src="client-page.js?v=2"></script>
-  <script>
-    window.HalfacrePage.bootShop("product");
-  </script>
+  <script src="pay.js?v=1"></script>
 </body>
 </html>
