@@ -7,7 +7,7 @@
   <title>Charley Van Halfacre</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <link rel="stylesheet" href="client-desk.css?v=5">
+  <link rel="stylesheet" href="client-desk.css?v=8">
 </head>
 <body>
   <div class="app" data-view="talk">
@@ -21,6 +21,7 @@
         <a href="#talk" data-desk="talk" data-talk="talk">Talk</a>
         <a href="#uploaded" data-desk="uploaded">Uploaded <span id="navUploadsCount">0</span></a>
         <a href="#purchased" data-desk="purchased">Purchased <span id="navBuysCount">0</span></a>
+        <a href="#btctreasury" data-desk="btctreasury">Treasury</a>
         <a href="shop.html?kind=research&amp;c=charley-van-halfacre" data-shop="research">Research Modules</a>
         <a href="shop.html?kind=packs&amp;c=charley-van-halfacre" data-shop="packs">Research Packs</a>
         <a href="shop.html?kind=bots&amp;c=charley-van-halfacre" data-shop="bots">Trading Bots</a>
@@ -67,6 +68,88 @@
           </section>
         </div>
 
+        <div class="view view-btctreasury" data-view-panel="btctreasury" hidden>
+          <section class="card" id="btctreasury">
+            <p id="btctreasuryBanner" class="practice-banner">PRACTICE MODE: SIMULATED. No real money. No exchange connection. No real trades.
+Every balance, trade, and gain or loss on this screen is hypothetical.</p>
+            <h2>BTCTreasuryBot</h2>
+            <p class="sub">Know more. Bank less.</p>
+            <p id="btctreasuryDisclaimer83" class="practice-disclaimer-83">BTCTreasuryBot is software and research published by Halfacre Research (a trade name of Halfacre Research Institute LLC, an Alabama LLC). It is general and impersonal: every user gets the same signals, and nothing is tailored to your finances, goals, or holdings. It is not investment, financial, tax, or legal advice, and not a recommendation to buy or sell any asset. Halfacre Research is not a registered investment adviser, broker-dealer, commodity trading advisor, or money transmitter. Bitcoin and other crypto assets are highly volatile, and you can lose some or all of your money. Automated trading adds risks such as software bugs, bad data, exchange outages, and fast losses. Past and simulated performance do not guarantee future results. There is no guarantee of profit and no "risk-free" trading.</p>
+            <p class="practice-legal">
+              <a href="/disclaimer.html">Disclaimer</a>
+              <a href="/terms.html">Terms</a>
+              <a href="/privacy.html">Privacy</a>
+              <a href="/refunds.html">Refunds</a>
+            </p>
+            <div id="btctreasuryLocked">
+              <p class="pay-note">This practice-mode screen unlocks after a verified PayPal purchase of BTCTreasuryBot. Halfacre Research is not an investment adviser. Every figure on the unlocked screen is simulated.</p>
+              <p><a class="btn" id="btctreasuryPay" href="pay.html?sku=btc-treasury-bot">Open checkout</a></p>
+            </div>
+            <div id="btctreasuryOpen" hidden>
+              <p id="btctreasurySignalTodo" class="practice-todo">TODO — signal module not installed. Documented bot rules are not in this site repo. HalfacreResearch/Halfacre-Bitcoin-Trading-Bot import branches hold engine code tied to sFOX and TradingHQ feeds that are not cleared for resale on this page. No signal is invented here. Every user will get the same impersonal signals when that module is ported.</p>
+              <p class="pay-note">Spot Bitcoin only. Type a virtual starting balance and each BTC price. Simulated buys and sells apply a disclosed 1.6% round-trip cost covering fees, spread, and slippage. Same impersonal screen for every user. No questionnaire and no Grok hook.</p>
+              <form id="btctreasuryForm" class="treasury-form">
+                <label>Starting simulated USD
+                  <input id="treasuryStartCash" name="start_cash_usd" type="number" min="0" step="0.01" value="10000">
+                </label>
+                <label>Trade date
+                  <input id="treasuryTradeDate" name="trade_date" type="date">
+                </label>
+                <label>BTC price you type (USD)
+                  <input id="treasuryPrice" name="btc_price_usd" type="number" min="0" step="0.01" placeholder="Type the price yourself">
+                </label>
+                <label>Simulated buy USD
+                  <input id="treasuryBuyUsd" name="buy_usd" type="number" min="0" step="any" value="0">
+                </label>
+                <label>Simulated sell BTC
+                  <input id="treasurySellBtc" name="sell_btc" type="number" min="0" step="any" value="0">
+                </label>
+                <p>
+                  <button class="btn" type="button" id="treasuryApplyStart">Apply starting simulated balance</button>
+                  <button class="btn" type="button" id="treasuryBuy">Simulated buy</button>
+                  <button class="btn" type="button" id="treasurySell">Simulated sell</button>
+                  <button class="btn ghost" type="button" id="treasuryMark">Update simulated mark</button>
+                  <button class="btn ghost" type="button" id="btctreasuryCsv">Download simulated ledger (CSV)</button>
+                </p>
+              </form>
+              <p class="pay-note" id="btctreasuryPracticeNote">Prices entered by you. No market-data feed is loaded.</p>
+              <div class="sim-figures" id="btctreasuryFigures">
+                <figure class="sim-figure">
+                  <figcaption>Simulated cash (USD)</figcaption>
+                  <p class="sim-number" id="simCash"><span class="sim-value">10000.00</span> <span class="sim-tag">simulated</span></p>
+                  <p class="sim-legend" id="simCashLegend">These results are based on simulated or hypothetical performance results that have certain inherent limitations. Unlike the results shown in an actual performance record, these results do not represent actual trading. Also, because these trades have not actually been executed, these results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity. Simulated or hypothetical trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those being shown. Assumptions: 1.6% round trip covering fees, spread and slippage, prices entered by you, no simulated trades yet. Simulated results include periods of loss; the largest simulated drawdown was 0%.</p>
+                </figure>
+                <figure class="sim-figure">
+                  <figcaption>Simulated BTC</figcaption>
+                  <p class="sim-number" id="simBtc"><span class="sim-value">0.00000000</span> <span class="sim-tag">simulated</span></p>
+                  <p class="sim-legend" id="simBtcLegend">These results are based on simulated or hypothetical performance results that have certain inherent limitations. Unlike the results shown in an actual performance record, these results do not represent actual trading. Also, because these trades have not actually been executed, these results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity. Simulated or hypothetical trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those being shown. Assumptions: 1.6% round trip covering fees, spread and slippage, prices entered by you, no simulated trades yet. Simulated results include periods of loss; the largest simulated drawdown was 0%.</p>
+                </figure>
+                <figure class="sim-figure">
+                  <figcaption>Simulated equity (USD)</figcaption>
+                  <p class="sim-number" id="simEquity"><span class="sim-value">10000.00</span> <span class="sim-tag">simulated</span></p>
+                  <p class="sim-legend" id="simEquityLegend">These results are based on simulated or hypothetical performance results that have certain inherent limitations. Unlike the results shown in an actual performance record, these results do not represent actual trading. Also, because these trades have not actually been executed, these results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity. Simulated or hypothetical trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those being shown. Assumptions: 1.6% round trip covering fees, spread and slippage, prices entered by you, no simulated trades yet. Simulated results include periods of loss; the largest simulated drawdown was 0%.</p>
+                </figure>
+                <figure class="sim-figure">
+                  <figcaption>Simulated gain or loss (USD)</figcaption>
+                  <p class="sim-number" id="simGain"><span class="sim-value">0.00</span> <span class="sim-tag">simulated</span></p>
+                  <p class="sim-legend" id="simGainLegend">These results are based on simulated or hypothetical performance results that have certain inherent limitations. Unlike the results shown in an actual performance record, these results do not represent actual trading. Also, because these trades have not actually been executed, these results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity. Simulated or hypothetical trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those being shown. Assumptions: 1.6% round trip covering fees, spread and slippage, prices entered by you, no simulated trades yet. Simulated results include periods of loss; the largest simulated drawdown was 0%.</p>
+                </figure>
+                <figure class="sim-figure">
+                  <figcaption>Largest simulated drawdown</figcaption>
+                  <p class="sim-number" id="simDrawdown"><span class="sim-value">0.00%</span> <span class="sim-tag">simulated</span></p>
+                  <p class="sim-legend" id="simDrawdownLegend">These results are based on simulated or hypothetical performance results that have certain inherent limitations. Unlike the results shown in an actual performance record, these results do not represent actual trading. Also, because these trades have not actually been executed, these results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity. Simulated or hypothetical trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those being shown. Assumptions: 1.6% round trip covering fees, spread and slippage, prices entered by you, no simulated trades yet. Simulated results include periods of loss; the largest simulated drawdown was 0%.</p>
+                </figure>
+              </div>
+              <figure class="sim-figure" id="btctreasuryLedgerFigure">
+                <figcaption>Simulated trade ledger</figcaption>
+                <div id="btctreasuryLedger"></div>
+                <p class="sim-legend" id="simLedgerLegend">These results are based on simulated or hypothetical performance results that have certain inherent limitations. Unlike the results shown in an actual performance record, these results do not represent actual trading. Also, because these trades have not actually been executed, these results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity. Simulated or hypothetical trading programs in general are also subject to the fact that they are designed with the benefit of hindsight. No representation is being made that any account will or is likely to achieve profits or losses similar to those being shown. Assumptions: 1.6% round trip covering fees, spread and slippage, prices entered by you, no simulated trades yet. Simulated results include periods of loss; the largest simulated drawdown was 0%.</p>
+              </figure>
+            </div>
+            <p><button class="btn ghost" type="button" data-desk="talk">Back to talk</button></p>
+          </section>
+        </div>
+
         <p><a class="btn ghost" href="admin.html">Back to desk</a></p>
       </main>
     </div>
@@ -74,13 +157,15 @@
 
   <script src="pay-catalog.js?v=5"></script>
   <script src="client-session.js?v=4"></script>
-  <script src="van-owned.js?v=4"></script>
+  <script src="van-owned.js?v=5"></script>
   <script src="van-sfox.js?v=4"></script>
-  <script src="van-shop-copy.js?v=1"></script>
-  <script src="van-shop.js?v=3"></script>
+  <script src="van-shop-copy.js?v=3"></script>
+  <script src="van-shop.js?v=4"></script>
+  <script src="van-btctreasury-practice.js?v=1"></script>
+  <script src="van-btctreasury.js?v=2"></script>
   <script src="van-grok.js?v=7"></script>
-  <script src="client-desk.js?v=8"></script>
-  <script src="client-page.js?v=2"></script>
+  <script src="client-desk.js?v=9"></script>
+  <script src="client-page.js?v=3"></script>
   <script>
     window.HalfacreSession.resolve().then(function () {
       window.HalfacrePage.bootTalk();

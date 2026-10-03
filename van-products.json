@@ -3143,7 +3143,7 @@
     {
       "id": "btc-treasury-bot",
       "name": "BTCTreasuryBot",
-      "description": "Assembled $149 Bitcoin treasury bot. Connect a trading book on your page. PayPal $149 when the checkout link is live.",
+      "description": "Assembled $149 Bitcoin treasury bot. Practice-mode simulated spot Bitcoin ledger after a verified PayPal purchase. No exchange connection.",
       "price_usd": 149,
       "live": true,
       "status": "live",

@@ -140,6 +140,15 @@
     return !!document.querySelector('[data-view-panel="sfox"]');
   }
 
+  function hasTreasuryPanel() {
+    return !!document.querySelector('[data-view-panel="btctreasury"]');
+  }
+
+  function isTreasurySku(id) {
+    var sku = trim(id).toLowerCase();
+    return sku === "btc-treasury-bot" || sku === "codex-buy" || sku === "codex-sell";
+  }
+
   function openSfox() {
     if (hasSfoxPanel()) {
       showView("sfox");
@@ -148,12 +157,31 @@
     global.location.href = talkSfoxUrl();
   }
 
+  function talkTreasuryUrl() {
+    if (global.HalfacreSession && global.HalfacreSession.talkUrl) {
+      return global.HalfacreSession.talkUrl(null, "btctreasury");
+    }
+    return "page.html#btctreasury";
+  }
+
+  function openTreasury() {
+    if (hasTreasuryPanel()) {
+      showView("btctreasury");
+      return;
+    }
+    global.location.href = talkTreasuryUrl();
+  }
+
   function showView(name) {
     if (name === "sfox" && !hasSfoxPanel()) {
       global.location.href = talkSfoxUrl();
       return;
     }
-    view = name === "sfox" ? "sfox" : "talk";
+    if (name === "btctreasury" && !hasTreasuryPanel()) {
+      global.location.href = talkTreasuryUrl();
+      return;
+    }
+    view = name === "sfox" || name === "btctreasury" ? name : "talk";
     var app = document.querySelector(".app");
     if (app) app.setAttribute("data-view", view);
     Array.prototype.forEach.call(document.querySelectorAll("[data-view-panel]"), function (panel) {
@@ -170,6 +198,11 @@
         global.VanSfox.load(client.id || "charley-van-halfacre", { prices: true }).then(paintSfox);
       } else if (global.VanSfox && global.VanSfox.paint) {
         global.VanSfox.paint();
+      }
+    }
+    if (view === "btctreasury") {
+      if (global.HalfacreTreasury && global.HalfacreTreasury.refresh) {
+        global.HalfacreTreasury.refresh();
       }
     }
     if (view === "talk") {
@@ -229,9 +262,42 @@
     });
   }
 
+  function paintBuys() {
+    var box = document.getElementById("deskBuys");
+    if (!box) return;
+    box.innerHTML = "";
+    if (!state.purchases.length) {
+      var p = document.createElement("p");
+      p.className = "side-empty";
+      p.textContent = "No Avatar upgrades purchased yet.";
+      box.appendChild(p);
+      return;
+    }
+    var ul = document.createElement("ul");
+    ul.className = "side-list";
+    state.purchases.forEach(function (row) {
+      var li = document.createElement("li");
+      var title = document.createElement("span");
+      title.textContent = row.name || row.id || "Item";
+      var meta = document.createElement("span");
+      meta.className = "kind";
+      meta.textContent = kindLabel(row.kind || row.tier || "file");
+      li.appendChild(title);
+      li.appendChild(meta);
+      if (isTreasurySku(row.id)) {
+        li.className = "side-click" + (view === "btctreasury" ? " active" : "");
+        li.addEventListener("click", function () {
+          openTreasury();
+        });
+      }
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+  }
+
   function paint() {
     paintUploads();
-    listEl("deskBuys", state.purchases, "No Avatar upgrades purchased yet.", "name");
+    paintBuys();
     paintShopNav();
     var upCount = document.getElementById("navUploadsCount");
     var buyCount = document.getElementById("navBuysCount");
@@ -345,6 +411,11 @@
           openSfox();
           return;
         }
+        if (where === "btctreasury") {
+          e.preventDefault();
+          openTreasury();
+          return;
+        }
         if (where === "talk") {
           e.preventDefault();
           showView("talk");
@@ -369,6 +440,8 @@
       var hash = (global.location.hash || "").replace(/^#/, "");
       if (opts.view === "sfox" || hash === "sfox") {
         showView("sfox");
+      } else if (opts.view === "btctreasury" || hash === "btctreasury") {
+        showView("btctreasury");
       } else {
         showView("talk");
       }

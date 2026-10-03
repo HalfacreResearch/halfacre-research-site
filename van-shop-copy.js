@@ -182,7 +182,7 @@
     "pack-commodities": "The commodities series in one pack — oil, grains, and softs your avatar can talk as a sleeve.",
     "pack-etf-mf": "Spot Bitcoin ETF flow research — who is buying, who is selling, and what that does to BTC.",
     "pack-research-lanes": "The cross-cutting research lanes in one pack — liquidity, breadth, sentiment, flows, and rules.",
-    "btc-treasury-bot": "Assembled Bitcoin treasury bot that can trade the BTC book you already have on sFOX.",
+    "btc-treasury-bot": "Practice-mode paper trading for spot Bitcoin. Simulated ledger only. No exchange connection and no keys.",
     "crypto-swing-bot": "Assembled swing bot for the crypto book — entries and exits, not a set-and-forget drip.",
     "crypto-long-bot": "Assembled long-only crypto bot for a hold-and-add crypto sleeve.",
     "mag10-long-bot": "Assembled long-only bot for the Magnificent-10 names.",
@@ -222,6 +222,10 @@
   }
 
   function body(row) {
+    var id = trim(row && row.id);
+    if (id === "btc-treasury-bot") {
+      return "Practice mode only. You type a virtual starting balance and each BTC price. Simulated buys and sells apply a disclosed 1.6% round-trip cost. Same impersonal rules for every user. Not advice, and Halfacre is not an investment adviser.";
+    }
     var kind = trim(row && row.kind);
     if (kind === "pack") return BODY.pack;
     if (kind === "bot") return BODY.bot;

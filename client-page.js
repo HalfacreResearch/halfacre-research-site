@@ -24,6 +24,9 @@
         }
       }).then(function () {
         if (global.HalfacreDesk) global.HalfacreDesk.refresh();
+        if (global.HalfacreTreasury && global.HalfacreTreasury.refresh) {
+          global.HalfacreTreasury.refresh();
+        }
       }).catch(function () {
         if (global.HalfacreDesk) global.HalfacreDesk.refresh();
       });
