@@ -28,6 +28,7 @@
   }
 
   var TOKEN_KEY = "halfacre.pageToken";
+  var CHECK_EMAIL = "If this email already has an account, we just sent its private link there.";
 
   function queryC() {
     return trim(new URLSearchParams(global.location.search).get("c"));
@@ -210,7 +211,7 @@
     }
     if (file === "page.html") {
       if (!c || !currentToken()) {
-        return Promise.reject(new Error("link not valid"));
+        return Promise.reject(new Error(CHECK_EMAIL));
       }
       return fetchClient(c).then(setClient);
     }
@@ -238,6 +239,7 @@
     setClient: setClient,
     resolve: resolve,
     token: currentToken,
+    checkEmailMessage: CHECK_EMAIL,
     talkUrl: talkUrl,
     shopUrl: shopUrl,
     productUrl: productUrl,

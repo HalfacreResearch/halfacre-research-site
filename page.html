@@ -72,7 +72,7 @@
   <p class="empty" id="wait">Opening your page…</p>
 
   <script src="pay-catalog.js?v=4"></script>
-  <script src="client-session.js?v=2"></script>
+  <script src="client-session.js?v=3"></script>
   <script src="van-owned.js?v=3"></script>
   <script src="van-sfox.js?v=4"></script>
   <script src="van-shop-copy.js?v=1"></script>
@@ -95,8 +95,8 @@
         wait.hidden = true;
         app.hidden = false;
         window.HalfacrePage.bootTalk();
-      }).catch(function () {
-        wait.textContent = "link not valid";
+      }).catch(function (err) {
+        wait.textContent = (err && err.message) || (session && session.checkEmailMessage) || "link not valid";
       });
     })();
   </script>

@@ -29,8 +29,6 @@ function read_clients(): array
   return is_array($data) ? $data : [];
 }
 
-client_token_provision_existing(read_clients());
-
 $id = client_token_id((string) ($_GET["c"] ?? ""));
 if (strlen($id) < 8 || strlen($id) > 64) {
   http_response_code(401);
@@ -74,7 +72,6 @@ echo json_encode([
   "client" => [
     "id" => (string) $found["id"],
     "name" => (string) ($found["name"] ?? ""),
-    "number" => $number > 0 ? $number : null,
-    "page" => "/page.html?c=" . $found["id"]
+    "number" => $number > 0 ? $number : null
   ]
 ]);

@@ -83,6 +83,13 @@
       color: #b42318;
       font-size: 13px;
     }
+    .note {
+      min-height: 18px;
+      margin: 0 0 8px;
+      color: #1f6b2c;
+      font-size: 13px;
+      line-height: 1.45;
+    }
     .fine {
       margin: 14px 0 0;
       color: #777;
@@ -118,11 +125,12 @@
         <input id="phone" name="phone" type="tel" autocomplete="tel" required>
 
         <p class="err" id="err"></p>
+        <p class="note" id="note"></p>
         <button class="create" type="submit" id="create">Create account</button>
       </form>
     </div>
 
-    <p class="fine">Free to create. After you finish, Grok meets you on your page.</p>
+    <p class="fine">Free to create. Check your email for the private page link. Do not share it.</p>
     <a class="back" href="admin.html">Back to desk</a>
   </div>
 
@@ -133,44 +141,19 @@
         return;
       }
 
-      var KEY = "halfacre.clients";
+      var CHECK_EMAIL = "If this email already has an account, we just sent its private link there.";
       var err = document.getElementById("err");
+      var note = document.getElementById("note");
       var createBtn = document.getElementById("create");
 
       function showError(text) {
         err.textContent = text;
+        note.textContent = "";
       }
 
-      function load() {
-        try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-        catch (e) { return []; }
-      }
-
-      function saveLocal(client) {
-        var safe = {
-          id: client.id,
-          name: client.name,
-          number: client.number,
-          email: client.email
-        };
-        var rows = load();
-        var found = false;
-        rows = rows.map(function (row) {
-          if (row && row.email === safe.email) {
-            found = true;
-            return safe;
-          }
-          return row;
-        });
-        if (!found) rows.push(safe);
-        localStorage.setItem(KEY, JSON.stringify(rows));
-        localStorage.setItem("halfacre.session", JSON.stringify(safe));
-      }
-
-      function go(client) {
-        var page = client && client.page ? String(client.page) : "";
-        if (page.charAt(0) === "/") page = page.slice(1);
-        window.location.href = page || "page.html";
+      function showCheckEmail(text) {
+        err.textContent = "";
+        note.textContent = text || CHECK_EMAIL;
       }
 
       function createAccount(body) {
@@ -187,11 +170,14 @@
             });
           })
           .then(function (pack) {
-            if (!pack.ok || !pack.data || !pack.data.client) {
+            if (!pack.ok || !pack.data || pack.data.ok !== true) {
               throw new Error((pack.data && pack.data.error) || "Could not create the account.");
             }
-            saveLocal(pack.data.client);
-            go(pack.data.client);
+            if (pack.data.client || pack.data.page) {
+              throw new Error("Could not create the account.");
+            }
+            showCheckEmail(pack.data.message || CHECK_EMAIL);
+            createBtn.disabled = false;
           })
           .catch(function (e) {
             showError(e.message || "Could not create the account.");

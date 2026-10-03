@@ -155,26 +155,7 @@ function client_token_from_request(?array $payload = null): string
 
 function client_token_provision_existing(array $clients): int
 {
-  $made = 0;
-  $rows = client_token_read_hashes();
-  foreach ($clients as $row) {
-    if (!is_array($row)) {
-      continue;
-    }
-    $id = client_token_id((string) ($row["id"] ?? ""));
-    if (strlen($id) < 8) {
-      continue;
-    }
-    $hash = "";
-    if (isset($rows[$id]) && is_array($rows[$id])) {
-      $hash = (string) ($rows[$id]["hash"] ?? "");
-    }
-    if ($hash !== "") {
-      continue;
-    }
-    client_token_issue($id);
-    $made += 1;
-    $rows = client_token_read_hashes();
-  }
-  return $made;
+  // Do not mint tokens without proving inbox ownership. Signup emails the link.
+  unset($clients);
+  return 0;
 }
