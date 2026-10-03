@@ -1,0 +1,69 @@
+# One-shot: builds the two data packs from public sources, verifies the zips,
+# commits the data to this branch, and removes this workflow in the same commit.
+# Runs only on the pack-delivery-real-files branch, never on main.
+name: build-packs
+on:
+  push:
+    branches: [pack-delivery-real-files]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build packs from public sources
+        run: python3 tools/build_packs.py /tmp/out
+      - name: Place data and write buyer docs
+        run: |
+          set -euo pipefail
+          M=dl/376d2ddcf2b69986b5583f0b7e2d1aad
+          E=dl/929d58db29ff852b574eff9659e53513
+          rm -rf $M/csv $M/json $E/csv $E/json
+          cp -r /tmp/out/macro/csv /tmp/out/macro/json /tmp/out/macro/MANIFEST.json $M/
+          cp -r /tmp/out/etf/csv /tmp/out/etf/json /tmp/out/etf/MANIFEST.json $E/
+          python3 tools/write_docs.py
+          git rm -r -q --ignore-unmatch packs $M/PACK.zip $E/PACK.zip
+      - name: Verify zips from pack.php match MANIFEST
+        run: |
+          set -euo pipefail
+          php -l dl/pack.php
+          php -S 127.0.0.1:8765 -t . >/tmp/php.log 2>&1 &
+          sleep 2
+          for t in 376d2ddcf2b69986b5583f0b7e2d1aad 929d58db29ff852b574eff9659e53513; do
+            curl -sf -o /tmp/$t.zip "http://127.0.0.1:8765/dl/pack.php?t=$t"
+            unzip -tq /tmp/$t.zip
+            rm -rf /tmp/x_$t && mkdir /tmp/x_$t && unzip -q /tmp/$t.zip -d /tmp/x_$t
+            python3 - "$t" <<'PY'
+          import hashlib, json, os, sys
+          t = sys.argv[1]
+          root = "/tmp/x_" + t
+          d = os.path.join(root, os.listdir(root)[0])
+          m = json.load(open(d + "/MANIFEST.json"))
+          for f in m["files"]:
+              b = open(d + "/" + f["path"], "rb").read()
+              assert len(b) == f["bytes"] and hashlib.sha256(b).hexdigest() == f["sha256"], f["path"]
+          want = {f["path"] for f in m["files"]} | {"README.md", "DISCLOSURE.md", "MANIFEST.json"}
+          got = {os.path.relpath(os.path.join(r, x), d) for r, _, fs in os.walk(d) for x in fs}
+          assert want == got, want ^ got
+          assert open("dl/%s/MANIFEST.json" % t, "rb").read() == open(d + "/MANIFEST.json", "rb").read()
+          for s in m["series"]:
+              assert s["rows"] > 0, s["slug"]
+          print(t, "OK", len(m["files"]), "files", [(s["slug"], s["rows"], s["first_date"], s["last_date"]) for s in m["series"]])
+          PY
+          done
+          code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8765/dl/pack.php?t=00000000000000000000000000000000")
+          test "$code" = 404
+      - name: Commit data and remove this workflow
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -q .github/workflows/build-packs.yml
+          git add -A dl tools
+          git commit -m "Add pack data built from public sources (Fed, BLS, Alternative.me, SEC EDGAR)"
+          git push origin HEAD:pack-delivery-real-files
