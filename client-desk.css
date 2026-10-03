@@ -309,7 +309,20 @@ button.send:disabled { opacity: 0.45; }
   margin: 4px 0 0;
 }
 
-.treasury-table { margin-top: 8px; }
+.treasury-table { margin-top: 8px; min-width: 640px; }
+
+#btctreasurySchedule {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.app[data-view="btctreasury"] .main {
+  max-width: min(960px, 100%);
+}
+
+.view-btctreasury .card {
+  overflow-x: auto;
+}
 
 @media (max-width: 860px) {
   .treasury-form { grid-template-columns: 1fr; }
