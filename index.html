@@ -6,6 +6,8 @@
   <title>Halfacre Research | Where you run your own retirement</title>
   <meta name="description" content="Where you run your own retirement. We're building a personal AI for your own retirement, plus research modules and data that keep growing. Research and data, not advice.">
   <link rel="canonical" href="https://halfacreresearch.tech/">
+  <link rel="icon" type="image/png" href="/brand/halfacre-logo.png">
+  <link rel="apple-touch-icon" href="/brand/halfacre-logo.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Halfacre Research">
   <meta property="og:title" content="Halfacre Research | Where you run your own retirement">
@@ -14,75 +16,100 @@
   <meta property="og:image" content="https://halfacreresearch.tech/og-home.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Halfacre Research. Where you run your own retirement.">
+  <meta property="og:image:alt" content="Halfacre Research Institute. Where you run your own retirement.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Halfacre Research | Where you run your own retirement">
   <meta name="twitter:description" content="Where you run your own retirement. We're building a personal AI for your own retirement, plus research modules and data that keep growing.">
   <meta name="twitter:image" content="https://halfacreresearch.tech/og-home.png">
-  <meta name="twitter:image:alt" content="Halfacre Research. Where you run your own retirement.">
+  <meta name="twitter:image:alt" content="Halfacre Research Institute. Where you run your own retirement.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #000000;
+      --card: #111111;
+      --text: #ffffff;
+      --muted: #a3a3a3;
+      --line: #2a2a2a;
+      --orange: #F7931A;
+    }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background: #f4f4f5;
-      color: #111;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      line-height: 1.55;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Montserrat, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
       font-size: 17px;
+      font-weight: 400;
     }
-    a { color: #0b57d0; }
+    a { color: var(--orange); }
+    a:hover { color: #ffb14a; }
     .skip {
       position: absolute;
       left: -999px;
       top: 8px;
-      background: #111;
-      color: #fff;
+      background: var(--orange);
+      color: #000;
       padding: 8px 12px;
       border-radius: 8px;
       z-index: 10;
+      font-weight: 600;
     }
     .skip:focus { left: 12px; }
     header.top {
-      padding: 18px 20px 0;
+      padding: 20px 24px 0;
     }
     header.top .inner,
     .wrap {
       max-width: 880px;
       margin: 0 auto;
     }
-    .brand-mark {
-      margin: 0;
-      color: #555;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
+    .logo-link {
+      display: inline-block;
+      line-height: 0;
+    }
+    .logo-link img {
+      display: block;
+      width: 88px;
+      height: auto;
     }
     .hero {
-      padding: 28px 20px 12px;
+      padding: 36px 24px 20px;
+      text-align: center;
+    }
+    .hero-logo {
+      display: block;
+      width: min(280px, 72vw);
+      max-width: 300px;
+      height: auto;
+      margin: 0 auto;
     }
     .hero h1 {
-      margin: 10px 0 0;
-      font-size: clamp(1.7rem, 5.4vw, 2.55rem);
-      font-weight: 650;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
+      margin: 18px 0 0;
+      font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
     }
     .promise {
-      margin: 14px 0 0;
-      max-width: 38em;
-      font-size: clamp(1.02rem, 2.4vw, 1.18rem);
-      color: #333;
+      margin: 18px auto 0;
+      max-width: 34em;
+      font-size: clamp(1rem, 2.2vw, 1.12rem);
+      color: var(--muted);
+      font-weight: 400;
     }
     .video-frame {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      margin: 22px 0 0;
-      background: #161616;
-      border-radius: 12px;
+      margin: 36px 0 0;
+      background: #0a0a0a;
+      border: 1px solid var(--line);
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 1px 2px rgba(0,0,0,.06);
     }
     .video-poster,
     .video-frame iframe,
@@ -98,17 +125,16 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      color: #fff;
+      gap: 14px;
+      color: var(--text);
       padding: 24px 20px;
       text-align: center;
-      background:
-        radial-gradient(ellipse at 50% 20%, #2a2a2c 0%, #161616 62%);
+      background: radial-gradient(ellipse at 50% 35%, #1a140c 0%, #0a0a0a 62%);
     }
     .play-mark {
-      width: 56px;
-      height: 56px;
-      border: 2px solid rgba(255,255,255,.82);
+      width: 64px;
+      height: 64px;
+      border: 2px solid var(--orange);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -120,75 +146,76 @@
       height: 0;
       margin-left: 3px;
       border-style: solid;
-      border-width: 8px 0 8px 14px;
-      border-color: transparent transparent transparent #fff;
+      border-width: 9px 0 9px 15px;
+      border-color: transparent transparent transparent var(--orange);
     }
     .video-poster strong {
-      font-size: 1.15rem;
-      font-weight: 650;
-    }
-    .video-poster p {
-      margin: 0;
-      color: #c8c8c8;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
+      font-weight: 600;
     }
     .cta-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px 12px;
-      align-items: center;
-      margin: 22px 0 0;
+      justify-content: center;
+      margin: 32px 0 0;
     }
     .btn {
       display: inline-block;
-      min-height: 44px;
-      padding: 11px 18px;
-      border-radius: 8px;
-      background: #111;
-      color: #fff;
+      min-height: 48px;
+      padding: 13px 28px;
+      border-radius: 10px;
+      background: var(--orange);
+      color: #000;
       text-decoration: none;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 700;
       line-height: 1.3;
     }
-    .btn:hover { background: #000; }
-    main.wrap { padding: 8px 20px 8px; }
+    .btn:hover {
+      background: #ffb14a;
+      color: #000;
+    }
+    main.wrap { padding: 28px 24px 8px; }
     section {
-      margin: 0 0 28px;
-      background: #fff;
-      border: 1px solid #e5e5e5;
-      border-radius: 12px;
-      padding: 22px 22px 8px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+      margin: 0 0 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 28px 26px 12px;
     }
     section h2 {
-      margin: 0 0 10px;
-      font-size: 1.15rem;
-      font-weight: 650;
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
       letter-spacing: -0.02em;
     }
-    section p { margin: 0 0 1em; color: #222; }
+    section p { margin: 0 0 1.05em; color: #e8e8e8; }
     .fine {
       margin: 0 0 1.1em;
-      color: #555;
+      color: var(--muted);
       font-size: 15px;
     }
     footer {
       max-width: 880px;
-      margin: 8px auto 0;
-      padding: 22px 20px 40px;
-      color: #555;
+      margin: 12px auto 0;
+      padding: 36px 24px 48px;
+      color: var(--muted);
       font-size: 14px;
+      text-align: center;
     }
-    footer p { margin: 0 0 6px; }
-    footer .legal { margin-top: 14px; color: #666; }
+    footer .logo-link img { width: 72px; margin: 0 auto 14px; }
+    footer p { margin: 0 0 8px; }
+    footer .slogan {
+      color: var(--text);
+      font-weight: 500;
+    }
+    footer .legal { margin-top: 18px; }
     footer .policies {
-      margin-top: 14px;
-      color: #888;
+      margin-top: 16px;
+      color: #777;
     }
     @media (min-width: 720px) {
-      .hero { padding-top: 40px; }
-      section { padding: 26px 28px 10px; }
+      .hero { padding-top: 48px; }
+      section { padding: 32px 34px 16px; }
     }
   </style>
 </head>
@@ -196,12 +223,15 @@
   <a class="skip" href="#start">Skip to start</a>
   <header class="top">
     <div class="inner">
-      <p class="brand-mark">Halfacre Research</p>
+      <a class="logo-link" href="/">
+        <img src="/brand/halfacre-logo.png" width="88" height="82" alt="Halfacre Research Institute">
+      </a>
     </div>
   </header>
 
   <div class="hero">
     <div class="wrap">
+      <img class="hero-logo" src="/brand/halfacre-logo.png" width="280" height="262" alt="Halfacre Research Institute">
       <h1>Where you run your own retirement.</h1>
       <p class="promise">We're building a personal AI for your own retirement, plus research modules and data that keep growing.</p>
 
@@ -229,15 +259,18 @@
 
     <section>
       <h2>Create an account</h2>
-      <p>If you're new, the button starts your account. After you finish, Grok meets you on your page.</p>
+      <p>If you're new, the button starts your account. After you finish, your private page is ready.</p>
       <p>Already a client? Enter your email on the <a href="/signup.html">signup page</a> and we'll email your private link.</p>
       <p class="fine">Questions: <a href="mailto:matt@halfacreresearch.tech">matt@halfacreresearch.tech</a></p>
     </section>
   </main>
 
   <footer>
+    <a class="logo-link" href="/">
+      <img src="/brand/halfacre-logo.png" width="72" height="67" alt="Halfacre Research Institute">
+    </a>
+    <p class="slogan">Where you run your own retirement.</p>
     <p>© Halfacre Research Institute LLC</p>
-    <p>Where you run your own retirement.</p>
     <p><a href="mailto:matt@halfacreresearch.tech">matt@halfacreresearch.tech</a></p>
     <!-- TODO: add Privacy, Terms, and Refunds links when those pages exist. Do not link pages that are not on the site. -->
     <p class="policies">Privacy · Terms · Refunds</p>
@@ -268,7 +301,6 @@
           '<div class="video-poster">' +
             '<div class="play-mark" aria-hidden="true"><span></span></div>' +
             "<strong>Video coming soon</strong>" +
-            "<p>Where you run your own retirement.</p>" +
           "</div>";
       }
 
