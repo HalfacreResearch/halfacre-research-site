@@ -1,0 +1,102 @@
+/* Public legal pages. Brand match for index.html / page.css. */
+:root {
+  --bg: #000000;
+  --card: #111111;
+  --line: #2a2a2a;
+  --orange: #F7931A;
+  --white: #ffffff;
+  --muted: #a3a3a3;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: #000000;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #000000;
+  color: #ffffff;
+  font-family: Montserrat, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+a { color: #F7931A; }
+a:hover { color: #ffb14a; }
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+nav {
+  margin: 0 0 22px;
+  font-size: 15px;
+}
+
+.brand {
+  margin: 0 0 28px;
+  text-align: center;
+}
+
+.brand .logo {
+  display: block;
+  width: min(200px, 56vw);
+  height: auto;
+  margin: 0 auto 10px;
+  background: #000000;
+}
+
+.brand .slogan {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+article.legal-page h1 {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+article.legal-page h2 {
+  margin: 1.6em 0 0.55em;
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+article.legal-page p {
+  margin: 0 0 1.1em;
+}
+
+article.legal-page ul {
+  margin: 0 0 1.1em;
+  padding-left: 1.25em;
+}
+
+article.legal-page li {
+  margin: 0 0 0.45em;
+}
+
+article.legal-page li ul {
+  margin: 0.4em 0 0;
+}
+
+footer {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid #2a2a2a;
+  color: #777777;
+  font-size: 13px;
+  text-align: center;
+}
+
+footer p { margin: 0 0 8px; }
+footer .legal { margin: 0; }
