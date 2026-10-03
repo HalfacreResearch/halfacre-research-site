@@ -24,3 +24,10 @@
   AuthUserFile /home/u263512999/domains/halfacreresearch.tech/.htpasswd
   Require valid-user
 </FilesMatch>
+
+# Private client page: gone. 410, not a redirect that names another URL.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^hivemind/charlie-van-halfacre\.html$ - [G,L]
+  RewriteRule ^hivemind/charley-van-halfacre\.html$ - [G,L]
+</IfModule>
